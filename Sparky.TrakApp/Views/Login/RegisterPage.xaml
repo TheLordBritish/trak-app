@@ -1,0 +1,166 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Sparky.TrakApp.Views.Login.RegisterPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Sparky.TrakApp.Controls"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    AutomationId="RegisterPage"
+    mc:Ignorable="d">
+    <ContentPage.Content>
+        <ScrollView Padding="35">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <!--  App logo  -->
+                <Image
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Source="logo.png" />
+                <!--  Subtitle  -->
+                <StackLayout
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2">
+                    <ScrollView
+                        HorizontalOptions="Fill"
+                        HorizontalScrollBarVisibility="Never"
+                        Orientation="Horizontal"
+                        VerticalOptions="Start"
+                        VerticalScrollBarVisibility="Never">
+                        <Label Style="{StaticResource SubtitleLabelStyle}" Text="{extensions:Translate Subtitle}" />
+                    </ScrollView>
+                    <!--  Page title  -->
+                    <Label
+                        Margin="0,20,0,15"
+                        Style="{StaticResource HeaderLabelStyle}"
+                        Text="{extensions:Translate RegisterPageTitle}" />
+                    <!--  Username label and entry box.  -->
+                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPageUsername}" />
+                    <Frame
+                        Padding="0"
+                        BackgroundColor="{StaticResource TrakWhite}"
+                        CornerRadius="0"
+                        HasShadow="False">
+                        <Frame
+                            Margin="1"
+                            Padding="0"
+                            BackgroundColor="{StaticResource TrakPrimaryBlue}"
+                            CornerRadius="0"
+                            HasShadow="False">
+                            <controls:CustomEntry AutomationId="RegisterPageUsernameEntry" Text="{Binding Username}" />
+                        </Frame>
+                    </Frame>
+                    <!--  Email address label and entry box.  -->
+                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPageEmailAddress}" />
+                    <Frame
+                        Padding="0"
+                        BackgroundColor="{StaticResource TrakWhite}"
+                        CornerRadius="0"
+                        HasShadow="False">
+                        <Frame
+                            Margin="1"
+                            Padding="0"
+                            BackgroundColor="{StaticResource TrakPrimaryBlue}"
+                            CornerRadius="0"
+                            HasShadow="False">
+                            <controls:CustomEntry AutomationId="RegisterPageEmailAddressEntry" Text="{Binding EmailAddress}" />
+                        </Frame>
+                    </Frame>
+                    <!--  Password label and entry box.  -->
+                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPagePassword}" />
+                    <Frame
+                        Padding="0"
+                        BackgroundColor="{StaticResource TrakWhite}"
+                        CornerRadius="0"
+                        HasShadow="False">
+                        <Frame
+                            Margin="1"
+                            Padding="0"
+                            BackgroundColor="{StaticResource TrakPrimaryBlue}"
+                            CornerRadius="0"
+                            HasShadow="False">
+                            <controls:CustomEntry
+                                AutomationId="RegisterPagePasswordEntry"
+                                IsPassword="True"
+                                Text="{Binding Password}" />
+                        </Frame>
+                    </Frame>
+                    <!--  Password rules.  -->
+                    <StackLayout>
+                        <Label Text="{extensions:Translate RegisterPagePasswordRulesHeader}" />
+                        <Label Text="- 8 characters" />
+                        <Label Text="- 1 upper case letter" />
+                        <Label Text="- 1 lower case letter" />
+                        <Label Text="- 1 number" />
+                    </StackLayout>
+                    <!--  Confirm password label and entry box.  -->
+                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPageConfirmPassword}" />
+                    <Frame
+                        Padding="0"
+                        BackgroundColor="{StaticResource TrakWhite}"
+                        CornerRadius="0"
+                        HasShadow="False">
+                        <Frame
+                            Margin="1"
+                            Padding="0"
+                            BackgroundColor="{StaticResource TrakPrimaryBlue}"
+                            CornerRadius="0"
+                            HasShadow="False">
+                            <controls:CustomEntry
+                                AutomationId="RegisterPageConfirmPasswordEntry"
+                                IsPassword="True"
+                                Text="{Binding ConfirmPassword}" />
+                        </Frame>
+                    </Frame>
+                    <!--  Sign up button and activity indicator.  -->
+                    <Button
+                        Margin="0,20,0,0"
+                        AutomationId="RegisterPageSignUpButton"
+                        Command="{Binding SignUpCommand}"
+                        Style="{StaticResource ConfirmationButtonStyle}"
+                        Text="{extensions:Translate RegisterPageSignUp}" />
+                    <ActivityIndicator
+                        Margin="0,20,0,0"
+                        IsRunning="{Binding IsBusy}"
+                        IsVisible="{Binding IsBusy}" />
+                    <!--  Privacy policy and terms of use label.  -->
+                    <Label
+                        Margin="0,10"
+                        AutomationId="RegisterPagePrivacyPolicyLabel"
+                        FontSize="Small"
+                        HorizontalOptions="Center"
+                        Text="{extensions:Translate RegisterPagePrivacyPolicyAndTermsOfUse}" />
+                    <!--  Log in label.  -->
+                    <Label
+                        Margin="0,10"
+                        FontSize="Small"
+                        HorizontalOptions="Center">
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span FontSize="Small" Text="{extensions:Translate RegisterPageDontHaveAnAccount}" />
+                                <Span
+                                    AutomationId="RegisterPageLogInLabel"
+                                    FontAttributes="Bold"
+                                    FontSize="Small"
+                                    Text="{extensions:Translate RegisterPageSignUp}">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding LoginCommand}" NumberOfTapsRequired="1" />
+                                    </Span.GestureRecognizers>
+                                </Span>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+            </Grid>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

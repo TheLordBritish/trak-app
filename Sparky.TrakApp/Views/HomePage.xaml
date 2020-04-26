@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Sparky.TrakApp.Views.HomePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <ContentPage.Content>
+        <Grid Padding="35">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <!--  App logo  -->
+            <Image
+                Grid.Row="0"
+                Grid.Column="0"
+                Source="logo.png" />
+            <StackLayout
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2">
+                <ScrollView
+                    Margin="0,-50,0,0"
+                    HorizontalOptions="Fill"
+                    HorizontalScrollBarVisibility="Never"
+                    Orientation="Horizontal"
+                    VerticalOptions="Start"
+                    VerticalScrollBarVisibility="Never">
+                    <Label Style="{StaticResource SubtitleLabelStyle}" Text="{extensions:Translate Subtitle}" />
+                </ScrollView>
+                <!--  Subtitle  -->
+                <Label
+                    Margin="0,20,0,15"
+                    FontSize="Large"
+                    LineHeight="1.2"
+                    Text="Keep track of all your collections here in your library." />
+                <!--  Games list button  -->
+                <Button
+                    Margin="0,10"
+                    Style="{StaticResource HomePageButtonStyle}"
+                    Text="Games" />
+                <!--  Books list button  -->
+                <Button
+                    Margin="0,10"
+                    Style="{StaticResource HomePageButtonStyle}"
+                    Text="Books" />
+                <!--  Anime list button  -->
+                <Button
+                    Margin="0,10"
+                    Style="{StaticResource HomePageButtonStyle}"
+                    Text="Anime" />
+                <!--  Manga list button  -->
+                <Button
+                    Margin="0,10"
+                    Style="{StaticResource HomePageButtonStyle}"
+                    Text="Manga" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

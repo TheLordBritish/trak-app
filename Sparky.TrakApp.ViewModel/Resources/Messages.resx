@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true"></xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>1.3</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="LoginPageLogIn" xml:space="preserve">
+		<value>Log in</value>
+	</data>
+	<data name="LoginPageUsername" xml:space="preserve">
+		<value>Username</value>
+	</data>
+	<data name="LoginPagePassword" xml:space="preserve">
+		<value>Password</value>
+	</data>
+	<data name="LoginPageForgottenPassword" xml:space="preserve">
+		<value>Forgotten password?</value>
+	</data>
+	<data name="LoginPageDontHaveAnAccount" xml:space="preserve">
+		<value>Don't have an account? </value>
+	</data>
+	<data name="LoginPageSignUp" xml:space="preserve">
+		<value>Sign up</value>
+	</data>
+	<data name="Subtitle" xml:space="preserve">
+		<value>Games, Books, Manga, Anime</value>
+	</data>
+	<data name="RegisterPageTitle" xml:space="preserve">
+		<value>Create account</value>
+	</data>
+	<data name="RegisterPageUsername" xml:space="preserve">
+		<value>Username</value>
+	</data>
+	<data name="RegisterPageEmailAddress" xml:space="preserve">
+		<value>Email address</value>
+	</data>
+	<data name="RegisterPagePassword" xml:space="preserve">
+		<value>Password</value>
+	</data>
+	<data name="RegisterPageConfirmPassword" xml:space="preserve">
+		<value>Confirm password</value>
+	</data>
+	<data name="RegisterPageSignUp" xml:space="preserve">
+		<value>Sign up</value>
+	</data>
+	<data name="RegisterPagePrivacyPolicyAndTermsOfUse" xml:space="preserve">
+		<value>Privacy Policy &amp; Terms of Use</value>
+	</data>
+	<data name="RegisterPageDontHaveAnAccount" xml:space="preserve">
+		<value>Dont' have an account? </value>
+	</data>
+	<data name="RegisterPageLogIn" xml:space="preserve">
+		<value>Log in</value>
+	</data>
+	<data name="RegisterPagePasswordRulesHeader" xml:space="preserve">
+		<value>A password must contain:</value>
+	</data>
+	<data name="LoginPageTitle" xml:space="preserve">
+		<value>Log in</value>
+	</data>
+	<data name="VerificationPageTitle" xml:space="preserve">
+		<value>Thank you.</value>
+	</data>
+	<data name="VerificationPageConfirmation" xml:space="preserve">
+		<value>We have now sent you a confirmation email with your verification code.</value>
+	</data>
+	<data name="VerificationPageVerificationCode" xml:space="preserve">
+		<value>Verification code</value>
+	</data>
+	<data name="VerificationPageVerify" xml:space="preserve">
+		<value>Verify</value>
+	</data>
+	<data name="VerificationPageHaventReceivedEmail" xml:space="preserve">
+		<value>Haven't received an email? </value>
+	</data>
+	<data name="VerificationPageSendAgain" xml:space="preserve">
+		<value>Send again</value>
+	</data>
+	<data name="ErrorMessageIncorrectCredentials" xml:space="preserve">
+		<value>Your credentials were incorrect. Please try again.</value>
+	</data>
+	<data name="ErrorMessageApiError" xml:space="preserve">
+		<value>An error occurred making the request. Please try again.</value>
+	</data>
+	<data name="ErrorMessageGeneric" xml:space="preserve">
+		<value>An error occurred making the request.</value>
+	</data>
+</root>

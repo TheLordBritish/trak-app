@@ -18,6 +18,7 @@
             <Color x:Key="TrakPrimaryBlue">#020E2F</Color>
             <Color x:Key="TrakWhite">#FFFFFF</Color>
             <Color x:Key="TrakGrey">#85878A</Color>
+            <Color x:Key="TrakRed">Red</Color>
 
             <!--  Content page styling  -->
             <Style TargetType="ContentPage">
@@ -98,6 +99,14 @@
                 BasedOn="{StaticResource BaseLabelStyle}"
                 TargetType="Label">
                 <Setter Property="FontAttributes" Value="Bold" />
+            </Style>
+
+            <Style
+                x:Key="ValidationLabelStyle"
+                BasedOn="{StaticResource BaseLabelStyle}"
+                TargetType="Label">
+                <Setter Property="FontSize" Value="Small" />
+                <Setter Property="TextColor" Value="{StaticResource TrakRed}" />
             </Style>
 
         </ResourceDictionary>

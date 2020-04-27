@@ -10,5 +10,7 @@ namespace Sparky.TrakApp.Service
         Task<bool> IsVerifiedAsync(string username, string authToken);
 
         Task VerifyAsync(string username, short verificationCode, string authToken);
+
+        Task RegisterAsync(RegistrationRequest registrationRequest);
     }
 }

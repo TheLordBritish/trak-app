@@ -29,13 +29,13 @@ namespace Sparky.TrakApp.ViewModel.Login
 
         private async Task VerifyAsync()
         {
+            IsBusy = true;
+            
             var username = await SecureStorage.GetAsync("username");
             var authToken = await SecureStorage.GetAsync("auth-token");
             
             try
             {
-                IsBusy = true;
-                
                 await _authService.VerifyAsync(username, VerificationCode, authToken);
                 await NavigationService.NavigateAsync("/NavigationPage/HomePage");
             }

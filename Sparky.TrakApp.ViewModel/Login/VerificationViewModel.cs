@@ -5,47 +5,59 @@ using Prism.Commands;
 using Prism.Navigation;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
-using Xamarin.Essentials;
+using Sparky.TrakApp.ViewModel.Resources;
 
 namespace Sparky.TrakApp.ViewModel.Login
 {
     public class VerificationViewModel : BaseViewModel
     {
         private readonly IAuthService _authService;
-        private short _verificationCode;
+        private readonly IStorageService _storageService;
         
-        public VerificationViewModel(INavigationService navigationService, IAuthService authService) : base(navigationService)
+        private short? _verificationCode;
+        private string _errorMessage;
+        
+        public VerificationViewModel(INavigationService navigationService, IAuthService authService, IStorageService storageService) : base(navigationService)
         {
             _authService = authService;
+            _storageService = storageService;
         }
 
         public ICommand VerifyCommand => new DelegateCommand(async () => await VerifyAsync());
         
-        public short VerificationCode
+        public short? VerificationCode
         {
             get => _verificationCode;
             set => SetProperty(ref _verificationCode, value);
         }
 
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set => SetProperty(ref _errorMessage, value);
+        }
+
         private async Task VerifyAsync()
         {
             IsBusy = true;
-            
-            var username = await SecureStorage.GetAsync("username");
-            var authToken = await SecureStorage.GetAsync("auth-token");
+
+            var username = await _storageService.GetUsernameAsync();
+            var authToken = await _storageService.GetAuthTokenAsync();
             
             try
             {
-                await _authService.VerifyAsync(username, VerificationCode, authToken);
+                await _authService.VerifyAsync(username, VerificationCode.GetValueOrDefault(), authToken);
                 await NavigationService.NavigateAsync("/NavigationPage/HomePage");
             }
             catch (ApiException e)
             {
-                // TODO:
+                IsError = true;
+                ErrorMessage = Messages.ErrorMessageApiError;
             }
             catch (Exception e)
             {
-                // TODO:
+                IsError = true;
+                ErrorMessage = Messages.ErrorMessageGeneric;
             }
             finally
             {

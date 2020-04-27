@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -106,6 +107,33 @@ namespace Sparky.TrakApp.Service.Impl
             request.Headers.Authorization = AuthenticationHeaderValue.Parse(authToken);
             
             using var response = await client.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException
+                {
+                    StatusCode = response.StatusCode,
+                    Content = string.Empty
+                };
+            }
+        }
+
+        public async Task RegisterAsync(RegistrationRequest registrationRequest)
+        {
+            // Ensure we use the correct TLS version before making the request.
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
+            
+            var settings = new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameHandling = TypeNameHandling.Objects,
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            };
+
+            var stringContent = new StringContent(JsonConvert.SerializeObject(registrationRequest, settings), Encoding.UTF8, "application/json");
+            
+            using var client = _httpClientFactory.CreateClient("Trak");
+            using var response = await client.PostAsync("auth/users", stringContent);
 
             if (!response.IsSuccessStatusCode)
             {

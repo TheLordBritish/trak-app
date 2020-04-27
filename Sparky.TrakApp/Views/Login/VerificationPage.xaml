@@ -1,90 +1,90 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="Sparky.TrakApp.Views.Login.VerificationPage"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
-    xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
-    AutomationId="VerificationPage">
-    <ContentPage.Content>
-        <StackLayout
-            Padding="35"
-            HorizontalOptions="FillAndExpand"
-            VerticalOptions="FillAndExpand">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" Source="logo.png" />
-            </Grid>
-            <ScrollView
-                Margin="0,-50,0,0"
-                HorizontalOptions="Fill"
-                HorizontalScrollBarVisibility="Never"
-                Orientation="Horizontal"
-                VerticalOptions="Start"
-                VerticalScrollBarVisibility="Never">
-                <Label Style="{StaticResource SubtitleLabelStyle}" Text="{extensions:Translate Subtitle}" />
-            </ScrollView>
-            <Label
-                Margin="0,10,0,0"
-                Style="{StaticResource HeaderLabelStyle}"
-                Text="Thank you." />
-            <Label Text="{extensions:Translate VerificationPageConfirmation}" TextColor="{StaticResource TrakGrey}" />
-            <Label
-                Margin="0,10,0,5"
-                Style="{StaticResource EntryLabelStyle}"
-                Text="{extensions:Translate VerificationPageVerificationCode}" />
-            <Frame
-                Padding="0"
-                BackgroundColor="{StaticResource TrakWhite}"
-                CornerRadius="0"
-                HasShadow="False">
-                <Frame
-                    Margin="1"
-                    Padding="0"
-                    BackgroundColor="{StaticResource TrakPrimaryBlue}"
-                    CornerRadius="0"
-                    HasShadow="False">
-                    <controls:CustomEntry
-                        AutomationId="VerificationPageVerificationCodeEntry"
-                        HorizontalTextAlignment="Center"
-                        Text="{Binding VerificationCode}" />
-                </Frame>
-            </Frame>
-            <Button
-                Margin="0,20,0,0"
-                AutomationId="VerificationPageVerifyButton"
-                Command="{Binding VerifyCommand}"
-                IsVisible="{Binding IsBusy, Converter={StaticResource NegateBooleanConverter}}"
-                Style="{StaticResource ConfirmationButtonStyle}"
-                Text="{extensions:Translate VerificationPageVerify}" />
-            <ActivityIndicator
-                Margin="0,20,0,0"
-                IsRunning="{Binding IsBusy}"
-                IsVisible="{Binding IsBusy}" />
-            <StackLayout VerticalOptions="EndAndExpand">
-                <Label
-                    FontSize="Small"
-                    HorizontalOptions="Center"
-                    HorizontalTextAlignment="End"
-                    VerticalOptions="End">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span Text="{extensions:Translate VerificationPageHaventReceivedEmail}" />
-                            <Span
-                                AutomationId="VerificationPageSendAgainLabel"
-                                FontAttributes="Bold"
-                                Text="{extensions:Translate VerificationPageSendAgain}">
-                                <Span.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding ResendVerificationCommand}" NumberOfTapsRequired="1" />
-                                </Span.GestureRecognizers>
-                            </Span>
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
-            </StackLayout>
-        </StackLayout>
-    </ContentPage.Content>
+  x:Class="Sparky.TrakApp.Views.Login.VerificationPage"
+  xmlns="http://xamarin.com/schemas/2014/forms"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
+  xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
+  AutomationId="VerificationPage">
+  <ContentPage.Content>
+    <StackLayout
+      Padding="35"
+      HorizontalOptions="FillAndExpand"
+      VerticalOptions="FillAndExpand">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Image Grid.Column="0" Source="logo.png" />
+      </Grid>
+      <ScrollView
+        Margin="0,-50,0,0"
+        HorizontalOptions="Fill"
+        HorizontalScrollBarVisibility="Never"
+        Orientation="Horizontal"
+        VerticalOptions="Start"
+        VerticalScrollBarVisibility="Never">
+        <Label Style="{StaticResource SubtitleLabelStyle}" Text="{extensions:Translate Subtitle}" />
+      </ScrollView>
+      <Label
+        Margin="0,10,0,0"
+        Style="{StaticResource HeaderLabelStyle}"
+        Text="Thank you." />
+      <Label Text="{extensions:Translate VerificationPageConfirmation}" TextColor="{StaticResource TrakGrey}" />
+      <Label
+        Margin="0,10,0,5"
+        Style="{StaticResource EntryLabelStyle}"
+        Text="{extensions:Translate VerificationPageVerificationCode}" />
+      <Frame
+        Padding="0"
+        BackgroundColor="{StaticResource TrakWhite}"
+        CornerRadius="0"
+        HasShadow="False">
+        <Frame
+          Margin="1"
+          Padding="0"
+          BackgroundColor="{StaticResource TrakPrimaryBlue}"
+          CornerRadius="0"
+          HasShadow="False">
+          <controls:CustomEntry
+            AutomationId="VerificationPageVerificationCodeEntry"
+            HorizontalTextAlignment="Center"
+            Text="{Binding VerificationCode}" />
+        </Frame>
+      </Frame>
+      <Button
+        Margin="0,20,0,0"
+        AutomationId="VerificationPageVerifyButton"
+        Command="{Binding VerifyCommand}"
+        IsVisible="{Binding IsBusy, Converter={StaticResource NegateBooleanConverter}}"
+        Style="{StaticResource ConfirmationButtonStyle}"
+        Text="{extensions:Translate VerificationPageVerify}" />
+      <ActivityIndicator
+        Margin="0,20,0,0"
+        IsRunning="{Binding IsBusy}"
+        IsVisible="{Binding IsBusy}" />
+      <StackLayout VerticalOptions="EndAndExpand">
+        <Label
+          FontSize="Small"
+          HorizontalOptions="Center"
+          HorizontalTextAlignment="End"
+          VerticalOptions="End">
+          <Label.FormattedText>
+            <FormattedString>
+              <Span Text="{extensions:Translate VerificationPageHaventReceivedEmail}" />
+              <Span
+                AutomationId="VerificationPageSendAgainLabel"
+                FontAttributes="Bold"
+                Text="{extensions:Translate VerificationPageSendAgain}">
+                <Span.GestureRecognizers>
+                  <TapGestureRecognizer Command="{Binding ResendVerificationCommand}" NumberOfTapsRequired="1" />
+                </Span.GestureRecognizers>
+              </Span>
+            </FormattedString>
+          </Label.FormattedText>
+        </Label>
+      </StackLayout>
+    </StackLayout>
+  </ContentPage.Content>
 </ContentPage>

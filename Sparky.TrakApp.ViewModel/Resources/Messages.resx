@@ -127,7 +127,7 @@
 		<value>Password must contain at least one lowercase character.</value>
 	</data>
 	<data name="RegistrationErrorMessagePasswordNumber" xml:space="preserve">
-		<value>Password must contain at least on number.</value>
+		<value>Password must contain at least one number.</value>
 	</data>
 	<data name="RegistrationErrorMessagePasswordWhitespace" xml:space="preserve">
 		<value>Password should not contain any spaces.</value>
@@ -137,5 +137,11 @@
 	</data>
 	<data name="RegistrationErrorMessageConfirmPasswordMismatch" xml:space="preserve">
 		<value>The passwords must match.</value>
+	</data>
+	<data name="LoginErrorMessageUsernameEmpty" xml:space="preserve">
+		<value>No username has been entered.</value>
+	</data>
+	<data name="LoginErrorMessagePasswordEmpty" xml:space="preserve">
+		<value>No password has been entered.</value>
 	</data>
 </root>

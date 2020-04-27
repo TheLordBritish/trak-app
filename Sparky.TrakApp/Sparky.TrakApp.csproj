@@ -53,8 +53,7 @@
   </ItemGroup>
   
   <Target Name="Format XAML" AfterTargets="BeforeBuild">
-    <Exec Command="dotnet tool restore" />
-    <Exec Command="dotnet xstyler -r -d &quot;$(MSBuildProjectDirectory)&quot;" />
+    <Exec Command="xstyler -r -d &quot;$(MSBuildProjectDirectory)&quot;" />
   </Target>
   
 </Project>

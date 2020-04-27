@@ -47,15 +47,23 @@
                     BackgroundColor="{StaticResource TrakPrimaryBlue}"
                     CornerRadius="0"
                     HasShadow="False">
-                    <controls:CustomEntry AutomationId="VerificationPageVerificationCodeEntry" Text="{Binding VerificationCode}" />
+                    <controls:CustomEntry
+                        AutomationId="VerificationPageVerificationCodeEntry"
+                        HorizontalTextAlignment="Center"
+                        Text="{Binding VerificationCode}" />
                 </Frame>
             </Frame>
             <Button
-                Margin="0,20"
+                Margin="0,20,0,0"
                 AutomationId="VerificationPageVerifyButton"
                 Command="{Binding VerifyCommand}"
+                IsVisible="{Binding IsBusy, Converter={StaticResource NegateBooleanConverter}}"
                 Style="{StaticResource ConfirmationButtonStyle}"
                 Text="{extensions:Translate VerificationPageVerify}" />
+            <ActivityIndicator
+                Margin="0,20,0,0"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}" />
             <StackLayout VerticalOptions="EndAndExpand">
                 <Label
                     FontSize="Small"

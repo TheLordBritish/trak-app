@@ -47,10 +47,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Behaviors" />
-  </ItemGroup>
   
   <Target Name="Format XAML" AfterTargets="BeforeBuild">
     <Exec Command="xstyler -r -d &quot;$(MSBuildProjectDirectory)&quot;" />

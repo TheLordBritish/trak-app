@@ -1,27 +1,27 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <ContentView
-  x:Class="Sparky.TrakApp.Controls.EntryControl"
-  xmlns="http://xamarin.com/schemas/2014/forms"
-  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:trak="clr-namespace:Sparky.TrakApp.Controls"
-  x:Name="EntryControlView"
-  mc:Ignorable="d">
-  <ContentView.Content>
-    <Frame
-      Padding="0"
-      BackgroundColor="{StaticResource TrakWhite}"
-      CornerRadius="0"
-      HasShadow="False">
-      <Frame
-        Margin="1"
-        Padding="0"
-        BackgroundColor="{StaticResource TrakPrimaryBlue}"
-        CornerRadius="0"
-        HasShadow="False">
-        <trak:CustomEntry IsPassword="{Binding IsPassword, Source={x:Reference EntryControlView}}" Text="{Binding Text, Source={x:Reference EntryControlView}}" />
-      </Frame>
-    </Frame>
-  </ContentView.Content>
+    x:Class="Sparky.TrakApp.Controls.EntryControl"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:trak="clr-namespace:Sparky.TrakApp.Controls"
+    x:Name="EntryControlView"
+    mc:Ignorable="d">
+    <ContentView.Content>
+        <Frame
+            Padding="0"
+            BackgroundColor="{StaticResource TrakWhite}"
+            CornerRadius="0"
+            HasShadow="False">
+            <Frame
+                Margin="1"
+                Padding="0"
+                BackgroundColor="{StaticResource TrakPrimaryBlue}"
+                CornerRadius="0"
+                HasShadow="False">
+                <trak:CustomEntry IsPassword="{Binding IsPassword, Source={x:Reference EntryControlView}}" Text="{Binding Text, Source={x:Reference EntryControlView}}" />
+            </Frame>
+        </Frame>
+    </ContentView.Content>
 </ContentView>

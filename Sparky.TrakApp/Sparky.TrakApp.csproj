@@ -50,13 +50,13 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\BaseMasterDetailContentPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator></Generator>
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
-  
+
   <Target Name="Format XAML" AfterTargets="BeforeBuild">
-    <Exec Command="xstyler -r -d &quot;$(MSBuildProjectDirectory)&quot;" />
+    <Exec Command="dotnet tool restore" />
+    <Exec Command="dotnet xstyler -r -d &quot;$(MSBuildProjectDirectory)&quot;" />
   </Target>
   
 </Project>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+  x:Class="Sparky.TrakApp.Views.BaseMasterDetailContentPage"
+  xmlns="http://xamarin.com/schemas/2014/forms"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  Title="Menu"
+  BackgroundColor="Transparent">
+  <ContentPage.Content>
+    <Grid Padding="35">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+      <!--  App logo  -->
+      <Image
+        Grid.Row="0"
+        Grid.Column="0"
+        Source="logo.png" />
+    </Grid>
+  </ContentPage.Content>
+</ContentPage>

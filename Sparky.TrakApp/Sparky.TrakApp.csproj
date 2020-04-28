@@ -28,6 +28,9 @@
     <Compile Update="Views\Login\VerificationPage.xaml.cs">
       <DependentUpon>VerificationPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\BaseMasterDetailContentPage.xaml.cs">
+      <DependentUpon>BaseMasterDetailContentPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +48,10 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Login\VerificationPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\BaseMasterDetailContentPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>
   

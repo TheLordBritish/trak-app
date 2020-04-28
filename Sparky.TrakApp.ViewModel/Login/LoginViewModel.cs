@@ -11,13 +11,13 @@ using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
 using Sparky.TrakApp.ViewModel.Resources;
 using Sparky.TrakApp.ViewModel.Validation;
-using Xamarin.Essentials;
 
 namespace Sparky.TrakApp.ViewModel.Login
 {
     public class LoginViewModel : BaseViewModel, IValidate<UserCredentials>
     {
         private readonly IAuthService _authService;
+        private readonly IStorageService _storageService;
         
         private IValidator _validator;
         private Validatables _validatables;
@@ -26,9 +26,10 @@ namespace Sparky.TrakApp.ViewModel.Login
         private Validatable<string> _password;
         private string _errorMessage;
 
-        public LoginViewModel(INavigationService navigationService, IAuthService authService) : base(navigationService)
+        public LoginViewModel(INavigationService navigationService, IAuthService authService, IStorageService storageService) : base(navigationService)
         {
             _authService = authService;
+            _storageService = storageService;
             
             _username = new Validatable<string>(nameof(UserCredentials.Username));
             _password = new Validatable<string>(nameof(UserCredentials.Password));
@@ -96,9 +97,8 @@ namespace Sparky.TrakApp.ViewModel.Login
                     });
 
                     // Store the needed credentials in the store.
-                    await SecureStorage.SetAsync("auth-token", token);
-                    await SecureStorage.SetAsync("username", Username.Value);
-                    await SecureStorage.SetAsync("password", Password.Value);
+                    await _storageService.SetAuthTokenAsync(token);
+                    await _storageService.SetUsernameAsync(Username.Value);
 
                     if (!await _authService.IsVerifiedAsync(Username.Value, token))
                     {
@@ -106,7 +106,7 @@ namespace Sparky.TrakApp.ViewModel.Login
                     }
                     else
                     {
-                        await NavigationService.NavigateAsync("/NavigationPage/HomePage");
+                        await NavigationService.NavigateAsync("/BaseMasterDetailPage/NavigationPage/HomePage");
                     }
                 }
             }

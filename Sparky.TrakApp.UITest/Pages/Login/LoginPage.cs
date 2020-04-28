@@ -6,7 +6,9 @@ namespace Sparky.TrakApp.UITest.Pages.Login
     internal class LoginPage : BasePage
     {
         private readonly Query _usernameEntry;
+        private readonly Query _usernameErrorLabel;
         private readonly Query _passwordEntry;
+        private readonly Query _passwordErrorLabel;
         private readonly Query _errorMessageLabel;
         private readonly Query _forgottenPasswordLabel;
         private readonly Query _loginButton;
@@ -21,7 +23,9 @@ namespace Sparky.TrakApp.UITest.Pages.Login
         public LoginPage()
         {
             _usernameEntry = x => x.Marked("LoginPageUsernameEntry");
+            _usernameErrorLabel = x => x.Marked("LoginPageUsernameErrorLabel");
             _passwordEntry = x => x.Marked("LoginPagePasswordEntry");
+            _passwordErrorLabel = x => x.Marked("LoginPagePasswordErrorLabel");
             _errorMessageLabel = x => x.Marked("LoginPageErrorMessage");
             _forgottenPasswordLabel = x => x.Marked("LoginPageForgottenPasswordLabel");
             _loginButton = x => x.Marked("LoginPageLoginButton");
@@ -52,6 +56,22 @@ namespace Sparky.TrakApp.UITest.Pages.Login
             return this;
         }
 
+        public LoginPage HasUsernameErrorMessage(string errorMessage)
+        {
+            App.WaitForElement(_usernameErrorLabel);
+            Assert.AreEqual(App.Query(_usernameErrorLabel)[0].Text, errorMessage);
+            
+            return this;
+        }
+
+        public LoginPage HasPasswordErrorMessage(string errorMessage)
+        {
+            App.WaitForElement(_passwordErrorLabel);
+            Assert.AreEqual(App.Query(_passwordErrorLabel)[0].Text, errorMessage);
+            
+            return this;
+        }
+        
         public LoginPage HasErrorMessage(string errorMessage)
         {
             App.WaitForElement(_errorMessageLabel);

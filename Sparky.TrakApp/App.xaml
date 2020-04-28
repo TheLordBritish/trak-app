@@ -1,114 +1,114 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <prism:PrismApplication
-    x:Class="Sparky.TrakApp.App"
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:converter="clr-namespace:Sparky.TrakApp.Converter;assembly=Sparky.TrakApp"
-    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:prism="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
-    mc:Ignorable="d">
-    <Application.Resources>
-        <ResourceDictionary>
-            <!--  Converters  -->
-            <converter:NegateBooleanConverter x:Key="NegateBooleanConverter" />
+  x:Class="Sparky.TrakApp.App"
+  xmlns="http://xamarin.com/schemas/2014/forms"
+  xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+  xmlns:converter="clr-namespace:Sparky.TrakApp.Converter;assembly=Sparky.TrakApp"
+  xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+  xmlns:prism="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
+  mc:Ignorable="d">
+  <Application.Resources>
+    <ResourceDictionary>
+      <!--  Converters  -->
+      <converter:NegateBooleanConverter x:Key="NegateBooleanConverter" />
 
-            <!--  Colors  -->
-            <Color x:Key="TrakPrimaryPurple">#CC00F7</Color>
-            <Color x:Key="TrakPrimaryBlue">#020E2F</Color>
-            <Color x:Key="TrakWhite">#FFFFFF</Color>
-            <Color x:Key="TrakGrey">#85878A</Color>
-            <Color x:Key="TrakRed">Red</Color>
+      <!--  Colors  -->
+      <Color x:Key="TrakPrimaryPurple">#CC00F7</Color>
+      <Color x:Key="TrakPrimaryBlue">#020E2F</Color>
+      <Color x:Key="TrakWhite">#FFFFFF</Color>
+      <Color x:Key="TrakGrey">#85878A</Color>
+      <Color x:Key="TrakRed">Red</Color>
 
-            <!--  Content page styling  -->
-            <Style TargetType="ContentPage">
-                <Setter Property="BackgroundColor" Value="Transparent" />
-            </Style>
+      <!--  Content page styling  -->
+      <Style TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+      </Style>
 
-            <!--  Grid styling  -->
-            <Style TargetType="Grid">
-                <Setter Property="BackgroundColor" Value="Transparent" />
-            </Style>
+      <!--  Grid styling  -->
+      <Style TargetType="Grid">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+      </Style>
 
-            <!--  Activity Indicator styling  -->
-            <Style TargetType="ActivityIndicator">
-                <Setter Property="Color" Value="{StaticResource TrakPrimaryPurple}" />
-            </Style>
+      <!--  Activity Indicator styling  -->
+      <Style TargetType="ActivityIndicator">
+        <Setter Property="Color" Value="{StaticResource TrakPrimaryPurple}" />
+      </Style>
 
-            <!--  Button styling  -->
-            <Style x:Key="BaseButtonStyle" TargetType="Button">
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
-            </Style>
+      <!--  Button styling  -->
+      <Style x:Key="BaseButtonStyle" TargetType="Button">
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+      </Style>
 
-            <Style BasedOn="{StaticResource BaseButtonStyle}" TargetType="Button" />
+      <Style BasedOn="{StaticResource BaseButtonStyle}" TargetType="Button" />
 
-            <Style
-                x:Key="HomePageButtonStyle"
-                BasedOn="{StaticResource BaseButtonStyle}"
-                TargetType="Button">
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="BorderWidth" Value="1" />
-                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
-                <Setter Property="FontSize" Value="30" />
-            </Style>
+      <Style
+        x:Key="HomePageButtonStyle"
+        BasedOn="{StaticResource BaseButtonStyle}"
+        TargetType="Button">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
+        <Setter Property="FontSize" Value="30" />
+      </Style>
 
-            <Style
-                x:Key="ConfirmationButtonStyle"
-                BasedOn="{StaticResource BaseButtonStyle}"
-                TargetType="Button">
-                <Setter Property="FontSize" Value="Medium" />
-                <Setter Property="BackgroundColor" Value="{StaticResource TrakGrey}" />
-            </Style>
+      <Style
+        x:Key="ConfirmationButtonStyle"
+        BasedOn="{StaticResource BaseButtonStyle}"
+        TargetType="Button">
+        <Setter Property="FontSize" Value="Medium" />
+        <Setter Property="BackgroundColor" Value="{StaticResource TrakGrey}" />
+      </Style>
 
-            <!--  Entry styling  -->
-            <Style ApplyToDerivedTypes="True" TargetType="Entry">
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-                <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
-                <Setter Property="IsSpellCheckEnabled" Value="False" />
-            </Style>
+      <!--  Entry styling  -->
+      <Style ApplyToDerivedTypes="True" TargetType="Entry">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+        <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+        <Setter Property="IsSpellCheckEnabled" Value="False" />
+      </Style>
 
-            <!--  Label styling  -->
-            <Style x:Key="BaseLabelStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
-                <Setter Property="FontSize" Value="Medium" />
-            </Style>
+      <!--  Label styling  -->
+      <Style x:Key="BaseLabelStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+        <Setter Property="FontSize" Value="Medium" />
+      </Style>
 
-            <Style BasedOn="{StaticResource BaseLabelStyle}" TargetType="Label" />
+      <Style BasedOn="{StaticResource BaseLabelStyle}" TargetType="Label" />
 
-            <Style
-                x:Key="SubtitleLabelStyle"
-                BasedOn="{StaticResource BaseLabelStyle}"
-                TargetType="Label">
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="FontSize" Value="70" />
-                <Setter Property="TextColor" Value="{StaticResource TrakGrey}" />
-            </Style>
+      <Style
+        x:Key="SubtitleLabelStyle"
+        BasedOn="{StaticResource BaseLabelStyle}"
+        TargetType="Label">
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="70" />
+        <Setter Property="TextColor" Value="{StaticResource TrakGrey}" />
+      </Style>
 
-            <Style
-                x:Key="HeaderLabelStyle"
-                BasedOn="{StaticResource BaseLabelStyle}"
-                TargetType="Label">
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="FontSize" Value="30" />
-            </Style>
+      <Style
+        x:Key="HeaderLabelStyle"
+        BasedOn="{StaticResource BaseLabelStyle}"
+        TargetType="Label">
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="30" />
+      </Style>
 
-            <Style
-                x:Key="EntryLabelStyle"
-                BasedOn="{StaticResource BaseLabelStyle}"
-                TargetType="Label">
-                <Setter Property="FontAttributes" Value="Bold" />
-            </Style>
+      <Style
+        x:Key="EntryLabelStyle"
+        BasedOn="{StaticResource BaseLabelStyle}"
+        TargetType="Label">
+        <Setter Property="FontAttributes" Value="Bold" />
+      </Style>
 
-            <Style
-                x:Key="ValidationLabelStyle"
-                BasedOn="{StaticResource BaseLabelStyle}"
-                TargetType="Label">
-                <Setter Property="FontSize" Value="Small" />
-                <Setter Property="TextColor" Value="{StaticResource TrakRed}" />
-            </Style>
+      <Style
+        x:Key="ValidationLabelStyle"
+        BasedOn="{StaticResource BaseLabelStyle}"
+        TargetType="Label">
+        <Setter Property="FontSize" Value="Small" />
+        <Setter Property="TextColor" Value="{StaticResource TrakRed}" />
+      </Style>
 
-        </ResourceDictionary>
-    </Application.Resources>
+    </ResourceDictionary>
+  </Application.Resources>
 </prism:PrismApplication>

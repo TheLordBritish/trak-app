@@ -17,6 +17,17 @@ namespace Sparky.TrakApp.UITest.Tests.Login
         }
 
         [Test]
+        public void LoginPage_WithEmptyCredentials_DisplaysValidationErrorMessages()
+        {
+            new LoginPage()
+                .TapLogin();
+
+            new LoginPage()
+                .HasUsernameErrorMessage("No username has been entered.")
+                .HasPasswordErrorMessage("No password has been entered.");
+        }
+        
+        [Test]
         public void LoginPage_WithIncorrectCredentials_DisplaysUnauthorisedErrorMessage()
         {
             new LoginPage()

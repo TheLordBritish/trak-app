@@ -1,6 +1,7 @@
 ﻿using Prism;
 using Prism.Ioc;
 using Sparky.TrakApp.Service;
+using Sparky.TrakApp.ViewModel;
 using Sparky.TrakApp.ViewModel.Impl;
 using Sparky.TrakApp.ViewModel.Login;
 using Sparky.TrakApp.Views;
@@ -28,6 +29,7 @@ namespace Sparky.TrakApp
             containerRegistry.Register<IStorageService, SecureStorageService>();
             
             // Xamarin pages.
+            containerRegistry.RegisterForNavigation<BaseMasterDetailPage, BaseMasterDetailViewModel>();
             containerRegistry.RegisterForNavigation<NavigationPage>();
             
             // Login pages.
@@ -36,8 +38,7 @@ namespace Sparky.TrakApp
             containerRegistry.RegisterForNavigation<VerificationPage, VerificationViewModel>();
             
             // Home pages
-            containerRegistry.RegisterForNavigation<BaseMasterDetailPage>();
-            containerRegistry.RegisterForNavigation<HomePage>();
+            containerRegistry.RegisterForNavigation<HomePage, HomeViewModel>();
         }
     }
 }

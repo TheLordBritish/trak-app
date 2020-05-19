@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using DryIoc;
 using FluentValidation;
 using Plugin.FluentValidationRules;
 using Prism.Commands;
@@ -105,25 +106,36 @@ namespace Sparky.TrakApp.ViewModel.Login
                 try
                 {
                     // Register the new account.
-                    await _authService.RegisterAsync(new RegistrationRequest
+                    var userCreationResponse = await _authService.RegisterAsync(new RegistrationRequest
                     {
                         Username = Username.Value,
                         EmailAddress = EmailAddress.Value,
                         Password = Password.Value
                     });
 
-                    var token = await _authService.GetTokenAsync(new UserCredentials
+                    // If there are errors with the registration, display them to the user.
+                    if (userCreationResponse.Error)
                     {
-                        Username = Username.Value,
-                        Password = Password.Value
-                    });
-                    
-                    // Store the needed credentials in the store.
-                    await _storageService.SetAuthTokenAsync(token);
-                    await _storageService.SetUsernameAsync(Username.Value);
+                        IsError = true;
+                        ErrorMessage = userCreationResponse.ErrorMessage;
+                    }
+                    else
+                    {
+                        var user = userCreationResponse.Data;
+                        var token = await _authService.GetTokenAsync(new UserCredentials
+                        {
+                            Username = user.Username,
+                            Password = Password.Value
+                        });
+                        
+                        // Store the needed credentials in the store.
+                        await _storageService.SetAuthTokenAsync(token);
+                        await _storageService.SetUserIdAsync(user.Id);
+                        await _storageService.SetUsernameAsync(user.Username);
 
-                    // Navigate to the verification page for the user to verify their account before use.
-                    await NavigationService.NavigateAsync("VerificationPage");   
+                        // Navigate to the verification page for the user to verify their account before use.
+                        await NavigationService.NavigateAsync("VerificationPage");
+                    }
                 }
                 catch (ApiException e)
                 {

@@ -77,7 +77,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         {
             // Arrange
             var navigationServiceMock = new Mock<INavigationService>();
-            navigationServiceMock.Setup(mock => mock.NavigateAsync("/NavigationPage/HomePage"))
+            navigationServiceMock.Setup(mock => mock.NavigateAsync("/BaseNavigationPage/HomePage"))
                 .Returns(Task.FromResult(new Mock<INavigationResult>().Object));
             
             var authServiceMock = new Mock<IAuthService>();

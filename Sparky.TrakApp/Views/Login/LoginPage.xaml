@@ -127,9 +127,9 @@
             <Label
                 Margin="0,5"
                 AutomationId="LoginPageErrorMessage"
-                FontSize="Small"
                 IsEnabled="{Binding IsError}"
                 IsVisible="{Binding IsError}"
+                Style="{StaticResource ValidationLabelStyle}"
                 Text="{Binding ErrorMessage}" />
             <!--  Forgotten password  -->
             <Label

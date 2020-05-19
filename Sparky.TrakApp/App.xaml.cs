@@ -1,12 +1,14 @@
-﻿using Prism;
+﻿using Acr.UserDialogs;
+using Prism;
 using Prism.Ioc;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.ViewModel;
+using Sparky.TrakApp.ViewModel.Games;
 using Sparky.TrakApp.ViewModel.Impl;
 using Sparky.TrakApp.ViewModel.Login;
 using Sparky.TrakApp.Views;
+using Sparky.TrakApp.Views.Games;
 using Sparky.TrakApp.Views.Login;
-using Xamarin.Forms;
 
 namespace Sparky.TrakApp
 {
@@ -27,10 +29,11 @@ namespace Sparky.TrakApp
             // Services
             ServiceRegistry.RegisterTypes(containerRegistry);
             containerRegistry.Register<IStorageService, SecureStorageService>();
+            containerRegistry.RegisterInstance(UserDialogs.Instance);
             
             // Xamarin pages.
             containerRegistry.RegisterForNavigation<BaseMasterDetailPage, BaseMasterDetailViewModel>();
-            containerRegistry.RegisterForNavigation<NavigationPage>();
+            containerRegistry.RegisterForNavigation<BaseNavigationPage>();
             
             // Login pages.
             containerRegistry.RegisterForNavigation<LoginPage, LoginViewModel>();
@@ -39,6 +42,13 @@ namespace Sparky.TrakApp
             
             // Home pages
             containerRegistry.RegisterForNavigation<HomePage, HomeViewModel>();
+            
+            // Game pages
+            containerRegistry.Register<GameUserEntryBacklogListViewModel>();
+            containerRegistry.Register<GameUserEntryInProgressListViewModel>();
+            containerRegistry.Register<GameUserEntryCompletedListViewModel>();
+            containerRegistry.Register<GameUserEntryDroppedListViewModel>();
+            containerRegistry.RegisterForNavigation<GameUserEntriesTabbedPage, GameUserEntriesTabbedViewModel>();
         }
     }
 }

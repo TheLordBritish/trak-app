@@ -207,9 +207,9 @@
                     <Label
                         Margin="0,5"
                         AutomationId="RegisterPageErrorMessage"
-                        FontSize="Small"
                         IsEnabled="{Binding IsError}"
                         IsVisible="{Binding IsError}"
+                        Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding ErrorMessage}" />
                     <!--  Sign up button and activity indicator.  -->
                     <Button
@@ -237,12 +237,12 @@
                         HorizontalOptions="Center">
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span FontSize="Small" Text="{extensions:Translate RegisterPageDontHaveAnAccount}" />
+                                <Span FontSize="Small" Text="{extensions:Translate RegisterPageAlreadyHaveAccount}" />
                                 <Span
                                     AutomationId="RegisterPageLogInLabel"
                                     FontAttributes="Bold"
                                     FontSize="Small"
-                                    Text="{extensions:Translate RegisterPageSignUp}">
+                                    Text="{extensions:Translate RegisterPageLogIn}">
                                     <Span.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding LoginCommand}" NumberOfTapsRequired="1" />
                                     </Span.GestureRecognizers>

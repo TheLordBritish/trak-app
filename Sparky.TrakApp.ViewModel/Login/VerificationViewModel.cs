@@ -47,7 +47,7 @@ namespace Sparky.TrakApp.ViewModel.Login
             try
             {
                 await _authService.VerifyAsync(username, VerificationCode.GetValueOrDefault(), authToken);
-                await NavigationService.NavigateAsync("/NavigationPage/HomePage");
+                await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");
             }
             catch (ApiException e)
             {

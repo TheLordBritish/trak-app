@@ -67,6 +67,7 @@
     <Reference Include="System.Numerics.Vectors" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Acr.UserDialogs" Version="7.1.0.442" />
     <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1422" />
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.657" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.1" />
@@ -84,14 +85,26 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\arrow_right_purple.png" />
     <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-hdpi\splashscreen.xml" />
+    <AndroidResource Include="Resources\drawable-hdpi\star_grey.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\star_white.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\arrow_right_purple.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\splashscreen.xml" />
+    <AndroidResource Include="Resources\drawable-xhdpi\star_grey.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\star_white.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\arrow_right_purple.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\splashscreen.xml" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\star_grey.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\star_white.png" />
+    <AndroidResource Include="Resources\drawable\arrow_right_purple.png" />
     <AndroidResource Include="Resources\drawable\logo.png" />
     <AndroidResource Include="Resources\drawable\splashscreen.xml" />
+    <AndroidResource Include="Resources\drawable\star_grey.png" />
+    <AndroidResource Include="Resources\drawable\star_white.png" />
     <AndroidResource Include="Resources\layout\Tabbar.xml" />
     <AndroidResource Include="Resources\layout\Toolbar.xml" />
     <AndroidResource Include="Resources\values\styles.xml" />

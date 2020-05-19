@@ -1,7 +1,10 @@
-﻿using Android.App;
+﻿using Acr.UserDialogs;
+using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
 using Android.Runtime;
 using Android.OS;
+using Android.Views;
 using Prism;
 using Prism.Ioc;
 
@@ -19,6 +22,11 @@ namespace Sparky.TrakApp.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            UserDialogs.Init(this);
+            
+            Window.AddFlags(WindowManagerFlags.TranslucentNavigation);
+            SetStatusBarColor(Color.Transparent);
+            
             LoadApplication(new App());
         }
 

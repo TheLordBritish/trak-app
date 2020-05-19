@@ -1,0 +1,219 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Sparky.TrakApp.Views.Games.GameUserEntryListPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:common="clr-namespace:Sparky.TrakApp.Controls.Common;assembly=Sparky.TrakApp"
+    xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
+    xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
+    x:Name="GameUserEntryList"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}">
+    <ContentPage.Content>
+        <StackLayout>
+            <!--  Full-page label telling the user that the request returned no results without error.  -->
+            <Label
+                HorizontalOptions="Center"
+                IsVisible="False"
+                VerticalOptions="CenterAndExpand">
+                <Label.Triggers>
+                    <MultiTrigger TargetType="Label">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
+                            <BindingCondition Binding="{Binding IsError}" Value="False" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="IsVisible" Value="True" />
+                    </MultiTrigger>
+                </Label.Triggers>
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{extensions:Translate GameUserEntryListPageEmpty}" />
+                        <Span Text="&quot;" />
+                        <Span
+                            BindingContext="{x:Reference GameUserEntryList}"
+                            FontAttributes="Bold"
+                            FontSize="Medium"
+                            Text="{Binding Title}" />
+                        <Span Text="&quot;" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+
+            <!--  Full page control that is displayed when the page results are empty and an error was returned.  -->
+            <common:FullPageErrorControl
+                ErrorMessage="Uh-oh we goofed"
+                HorizontalOptions="Center"
+                IsRefreshable="True"
+                IsVisible="False"
+                RefreshCommand="{Binding TestOpen}"
+                VerticalOptions="CenterAndExpand">
+                <common:FullPageErrorControl.Triggers>
+                    <MultiTrigger TargetType="common:FullPageErrorControl">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
+                            <BindingCondition Binding="{Binding IsError}" Value="True" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="IsVisible" Value="True" />
+                    </MultiTrigger>
+                </common:FullPageErrorControl.Triggers>
+            </common:FullPageErrorControl>
+
+            <!--  List that is displayed if there are any results returned from the initial request.  -->
+            <controls:InfiniteListView
+                Margin="0,10"
+                HasUnevenRows="True"
+                IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                IsVisible="{Binding IsEmpty, Converter={StaticResource NegateBooleanConverter}}"
+                ItemsSource="{Binding GameUserEntries}"
+                LoadMoreCommand="{Binding LoadGameUserEntriesNextPageCommand}"
+                RefreshAllowed="True"
+                RefreshCommand="{Binding LoadGameUserEntriesCommand}"
+                SelectionMode="None"
+                SeparatorVisibility="None">
+                <controls:InfiniteListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Margin="20" RowSpacing="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <!--  The game image  -->
+                                <Image
+                                    x:Name="GameImage"
+                                    Grid.Row="0"
+                                    Grid.RowSpan="4"
+                                    Grid.Column="0"
+                                    HeightRequest="150"
+                                    Source="{Binding Links[image].Href}"
+                                    WidthRequest="150" />
+                                <ActivityIndicator
+                                    Grid.Row="0"
+                                    Grid.RowSpan="4"
+                                    Grid.Column="0"
+                                    BindingContext="{x:Reference GameImage}"
+                                    IsRunning="{Binding IsLoading}"
+                                    IsVisible="{Binding IsLoading}" />
+                                <!--  The platform name  -->
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    FontSize="Small"
+                                    Text="{Binding PlatformName}" />
+                                <!--  The game title  -->
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Style="{StaticResource HeaderLabelStyle}"
+                                    Text="{Binding GameTitle}" />
+                                <Label
+                                    Grid.Row="2"
+                                    Grid.Column="1"
+                                    Margin="0,10"
+                                    FontSize="Small"
+                                    VerticalTextAlignment="End">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="{Binding GameReleaseDate, StringFormat='{0:MMMM yyyy}'}" />
+                                            <Span Text=", " />
+                                            <Span Text="{Binding PublisherNames}" />
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <!--  The rating  -->
+                                <StackLayout
+                                    Grid.Row="3"
+                                    Grid.Column="1"
+                                    Orientation="Horizontal">
+                                    <Image Source="star_grey.png">
+                                        <Image.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding Rating, Converter={extensions:GreaterThanOrEqual Value=1}}"
+                                                TargetType="Image"
+                                                Value="True">
+                                                <Setter Property="Source" Value="star_white.png" />
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+                                    <Image Source="star_grey.png">
+                                        <Image.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding Rating, Converter={extensions:GreaterThanOrEqual Value=2}}"
+                                                TargetType="Image"
+                                                Value="True">
+                                                <Setter Property="Source" Value="star_white.png" />
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+                                    <Image Source="star_grey.png">
+                                        <Image.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding Rating, Converter={extensions:GreaterThanOrEqual Value=3}}"
+                                                TargetType="Image"
+                                                Value="True">
+                                                <Setter Property="Source" Value="star_white.png" />
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+                                    <Image Source="star_grey.png">
+                                        <Image.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding Rating, Converter={extensions:GreaterThanOrEqual Value=4}}"
+                                                TargetType="Image"
+                                                Value="True">
+                                                <Setter Property="Source" Value="star_white.png" />
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+                                    <Image Source="star_grey.png">
+                                        <Image.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding Rating, Converter={extensions:GreaterThanOrEqual Value=5}}"
+                                                TargetType="Image"
+                                                Value="True">
+                                                <Setter Property="Source" Value="star_white.png" />
+                                            </DataTrigger>
+                                        </Image.Triggers>
+                                    </Image>
+                                </StackLayout>
+                                <!--  Indicator to specify that the user can tap for more info.  -->
+                                <Image
+                                    Grid.Row="0"
+                                    Grid.RowSpan="4"
+                                    Grid.Column="2"
+                                    Source="arrow_right_purple.png"
+                                    VerticalOptions="Start" />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </controls:InfiniteListView.ItemTemplate>
+            </controls:InfiniteListView>
+            <Frame BackgroundColor="{StaticResource TrakGrey}">
+                <Frame
+                    Padding="0"
+                    BackgroundColor="{StaticResource TrakWhite}"
+                    CornerRadius="0"
+                    HasShadow="False">
+                    <Frame
+                        Margin="1"
+                        Padding="0"
+                        BackgroundColor="{StaticResource TrakGrey}"
+                        CornerRadius="0"
+                        HasShadow="False">
+                        <controls:CustomEntry
+                            AutomationId="LoginPageUsernameEntry"
+                            Placeholder="Search"
+                            PlaceholderColor="{StaticResource TrakWhite}"
+                            TextColor="{StaticResource TrakWhite}" />
+                    </Frame>
+                </Frame>
+            </Frame>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

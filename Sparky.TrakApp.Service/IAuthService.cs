@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Sparky.TrakApp.Model.Login;
+using Sparky.TrakApp.Model.Response;
 
 namespace Sparky.TrakApp.Service
 {
@@ -7,10 +8,10 @@ namespace Sparky.TrakApp.Service
     {
         Task<string> GetTokenAsync(UserCredentials userCredentials);
 
-        Task<bool> IsVerifiedAsync(string username, string authToken);
+        Task<UserResponse> GetFromUsernameAsync(string username, string authToken);
 
         Task VerifyAsync(string username, short verificationCode, string authToken);
 
-        Task RegisterAsync(RegistrationRequest registrationRequest);
+        Task<CheckedResponse<UserResponse>> RegisterAsync(RegistrationRequest registrationRequest);
     }
 }

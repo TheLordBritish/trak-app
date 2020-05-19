@@ -6,6 +6,16 @@ namespace Sparky.TrakApp.ViewModel.Impl
 {
     public class SecureStorageService : IStorageService
     {
+        public async Task<long> GetUserIdAsync()
+        {
+            return long.Parse(await SecureStorage.GetAsync("userId"));
+        }
+
+        public async Task SetUserIdAsync(long userId)
+        {
+            await SecureStorage.SetAsync("userId", userId.ToString());
+        }
+
         public async Task<string> GetUsernameAsync()
         {
             return await SecureStorage.GetAsync("username");

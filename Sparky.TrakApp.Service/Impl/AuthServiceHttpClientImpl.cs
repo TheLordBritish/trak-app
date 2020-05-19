@@ -51,7 +51,7 @@ namespace Sparky.TrakApp.Service.Impl
             };
         }
 
-        public async Task<bool> IsVerifiedAsync(string username, string authToken)
+        public async Task<UserResponse> GetFromUsernameAsync(string username, string authToken)
         {
             // Ensure we use the correct TLS version before making the request.
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
@@ -68,7 +68,7 @@ namespace Sparky.TrakApp.Service.Impl
             
             var request = new HttpRequestMessage
             {
-                RequestUri = new Uri(client.BaseAddress, $"auth/users/{username}/verified"),
+                RequestUri = new Uri(client.BaseAddress, $"auth/users/{username}"),
                 Method = HttpMethod.Get
             };
             
@@ -88,8 +88,7 @@ namespace Sparky.TrakApp.Service.Impl
                 };
             }
             
-            var restResponse = JsonConvert.DeserializeObject<RestResponse<bool>>(json, settings);
-            return restResponse != null && restResponse.Data;
+            return JsonConvert.DeserializeObject<UserResponse>(json, settings);
         }
 
         public async Task VerifyAsync(string username, short verificationCode, string authToken)
@@ -118,7 +117,7 @@ namespace Sparky.TrakApp.Service.Impl
             }
         }
 
-        public async Task RegisterAsync(RegistrationRequest registrationRequest)
+        public async Task<CheckedResponse<UserResponse>> RegisterAsync(RegistrationRequest registrationRequest)
         {
             // Ensure we use the correct TLS version before making the request.
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
@@ -143,6 +142,15 @@ namespace Sparky.TrakApp.Service.Impl
                     Content = string.Empty
                 };
             }
+            
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<CheckedResponse<UserResponse>>(json, new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameHandling = TypeNameHandling.Objects,
+                MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
+                DateParseHandling = DateParseHandling.None
+            });
         }
     }
 }

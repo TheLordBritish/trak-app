@@ -20,6 +20,31 @@
                 Grid.Row="0"
                 Grid.Column="0"
                 Source="logo.png" />
+            <StackLayout
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                HorizontalOptions="StartAndExpand"
+                VerticalOptions="StartAndExpand">
+                <!--  Home label  -->
+                <Label
+                    FontSize="48"
+                    Style="{StaticResource HeaderLabelStyle}"
+                    Text="Home">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding LoadHomeCommand}" NumberOfTapsRequired="1" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <!--  Games label  -->
+                <Label
+                    FontSize="48"
+                    Style="{StaticResource HeaderLabelStyle}"
+                    Text="Games">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding LoadGamesCommand}" NumberOfTapsRequired="1" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

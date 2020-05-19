@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Acr.UserDialogs" Version="7.1.0.442" />
     <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1422" />
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.657" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.1" />
@@ -30,6 +31,19 @@
     </Compile>
     <Compile Update="Views\BaseMasterDetailContentPage.xaml.cs">
       <DependentUpon>BaseMasterDetailContentPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Games\GameUserEntryListPage.xaml.cs">
+      <DependentUpon>GameUserEntryListPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Games\GameUserEntriesTabbedPage.xaml.cs">
+      <DependentUpon>GameUserEntriesTabbedPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="BaseNavigationPage.xaml.cs">
+      <DependentUpon>BaseNavigationPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\Common\FullPageErrorControl.xaml.cs">
+      <DependentUpon>FullPageErrorControl.xaml</DependentUpon>
+      <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
 
@@ -51,6 +65,22 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\BaseMasterDetailContentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Games\GameUserEntryListPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Games\GameUserEntriesTabbedPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="BaseNavigationPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\Common\FullPageErrorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>
 

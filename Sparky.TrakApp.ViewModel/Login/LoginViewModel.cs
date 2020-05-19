@@ -96,17 +96,20 @@ namespace Sparky.TrakApp.ViewModel.Login
                         Password = Password.Value
                     });
 
+                    var userResponse = await _authService.GetFromUsernameAsync(Username.Value, token);
+                    
                     // Store the needed credentials in the store.
                     await _storageService.SetAuthTokenAsync(token);
+                    await _storageService.SetUserIdAsync(userResponse.Id);
                     await _storageService.SetUsernameAsync(Username.Value);
 
-                    if (!await _authService.IsVerifiedAsync(Username.Value, token))
+                    if (!userResponse.Verified)
                     {
                         await NavigationService.NavigateAsync("VerificationPage");
                     }
                     else
                     {
-                        await NavigationService.NavigateAsync("/BaseMasterDetailPage/NavigationPage/HomePage");
+                        await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");
                     }
                 }
             }

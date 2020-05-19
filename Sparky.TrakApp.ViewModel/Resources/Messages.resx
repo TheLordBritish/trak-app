@@ -57,9 +57,6 @@
 	<data name="RegisterPagePrivacyPolicyAndTermsOfUse" xml:space="preserve">
 		<value>Privacy Policy &amp; Terms of Use</value>
 	</data>
-	<data name="RegisterPageDontHaveAnAccount" xml:space="preserve">
-		<value>Dont' have an account? </value>
-	</data>
 	<data name="RegisterPageLogIn" xml:space="preserve">
 		<value>Log in</value>
 	</data>
@@ -143,5 +140,29 @@
 	</data>
 	<data name="LoginErrorMessagePasswordEmpty" xml:space="preserve">
 		<value>No password has been entered.</value>
+	</data>
+	<data name="RegisterPageAlreadyHaveAccount" xml:space="preserve">
+		<value>Already have an account?</value>
+	</data>
+	<data name="GameUserEntryListPageEmpty" xml:space="preserve">
+		<value>You currently have no games in </value>
+	</data>
+	<data name="GameUserEntryListPageEmptyServerError" xml:space="preserve">
+		<value>Failed to load your games due to an error on the server.</value>
+	</data>
+	<data name="GameUserEntryListPageEmptyGenericError" xml:space="preserve">
+		<value>Failed to load your games due to an unexpected error.</value>
+	</data>
+	<data name="GameUserEntryListPageBackLogTitle" xml:space="preserve">
+		<value>Backlog</value>
+	</data>
+	<data name="GameUserEntryListPagePlayingTitle" xml:space="preserve">
+		<value>Playing</value>
+	</data>
+	<data name="GameUserEntryListPageCompletedTitle" xml:space="preserve">
+		<value>Completed</value>
+	</data>
+	<data name="GameUserEntryListPageDroppedTitle" xml:space="preserve">
+		<value>Dropped</value>
 	</data>
 </root>

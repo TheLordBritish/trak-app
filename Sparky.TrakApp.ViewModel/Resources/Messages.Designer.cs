@@ -88,6 +88,69 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backlog.
+        /// </summary>
+        public static string GameUserEntryListPageBackLogTitle {
+            get {
+                return ResourceManager.GetString("GameUserEntryListPageBackLogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completed.
+        /// </summary>
+        public static string GameUserEntryListPageCompletedTitle {
+            get {
+                return ResourceManager.GetString("GameUserEntryListPageCompletedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dropped.
+        /// </summary>
+        public static string GameUserEntryListPageDroppedTitle {
+            get {
+                return ResourceManager.GetString("GameUserEntryListPageDroppedTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You currently have no games in .
+        /// </summary>
+        public static string GameUserEntryListPageEmpty {
+            get {
+                return ResourceManager.GetString("GameUserEntryListPageEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load your games due to an unexpected error..
+        /// </summary>
+        public static string GameUserEntryListPageEmptyGenericError {
+            get {
+                return ResourceManager.GetString("GameUserEntryListPageEmptyGenericError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load your games due to an error on the server..
+        /// </summary>
+        public static string GameUserEntryListPageEmptyServerError {
+            get {
+                return ResourceManager.GetString("GameUserEntryListPageEmptyServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Playing.
+        /// </summary>
+        public static string GameUserEntryListPagePlayingTitle {
+            get {
+                return ResourceManager.GetString("GameUserEntryListPagePlayingTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No password has been entered..
         /// </summary>
         public static string LoginErrorMessagePasswordEmpty {
@@ -169,20 +232,20 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Already have an account?.
+        /// </summary>
+        public static string RegisterPageAlreadyHaveAccount {
+            get {
+                return ResourceManager.GetString("RegisterPageAlreadyHaveAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm password.
         /// </summary>
         public static string RegisterPageConfirmPassword {
             get {
                 return ResourceManager.GetString("RegisterPageConfirmPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dont&apos; have an account? .
-        /// </summary>
-        public static string RegisterPageDontHaveAnAccount {
-            get {
-                return ResourceManager.GetString("RegisterPageDontHaveAnAccount", resourceCulture);
             }
         }
         

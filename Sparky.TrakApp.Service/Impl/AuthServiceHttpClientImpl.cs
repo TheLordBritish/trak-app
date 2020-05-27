@@ -16,25 +16,34 @@ namespace Sparky.TrakApp.Service.Impl
     internal class AuthServiceHttpClientImpl : IAuthService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        
+        private readonly JsonSerializerSettings _serializerSettings;
+        private readonly JsonSerializerSettings _deserializerSettings;
+
         public AuthServiceHttpClientImpl(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
-        }
-        
-        public async Task<string> GetTokenAsync(UserCredentials userCredentials)
-        {
             // Ensure we use the correct TLS version before making the request.
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-            
-            var settings = new JsonSerializerSettings
+            // Serialization settings.
+            _serializerSettings = new JsonSerializerSettings
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 TypeNameHandling = TypeNameHandling.Objects,
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             };
-
-            var stringContent = new StringContent(JsonConvert.SerializeObject(userCredentials, settings));
+            // Deserialization settings.
+            _deserializerSettings = new JsonSerializerSettings
+            {
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
+                TypeNameHandling = TypeNameHandling.Objects,
+                MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
+                DateParseHandling = DateParseHandling.None
+            };
+        }
+        
+        public async Task<string> GetTokenAsync(UserCredentials userCredentials)
+        {
+            var stringContent = new StringContent(JsonConvert.SerializeObject(userCredentials, _serializerSettings));
 
             using var client = _httpClientFactory.CreateClient("Trak");
             using var response = await client.PostAsync("auth", stringContent);
@@ -53,30 +62,19 @@ namespace Sparky.TrakApp.Service.Impl
 
         public async Task<UserResponse> GetFromUsernameAsync(string username, string authToken)
         {
-            // Ensure we use the correct TLS version before making the request.
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-
-            var settings = new JsonSerializerSettings
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                TypeNameHandling = TypeNameHandling.Objects,
-                MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
-                DateParseHandling = DateParseHandling.None
-            };
-            
             using var client = _httpClientFactory.CreateClient("Trak");
-            
+
             var request = new HttpRequestMessage
             {
                 RequestUri = new Uri(client.BaseAddress, $"auth/users/{username}"),
                 Method = HttpMethod.Get
             };
-            
+
             request.Headers.Authorization = AuthenticationHeaderValue.Parse(authToken);
-            
+
             using var response =
                 await client.SendAsync(request);
-            
+
             var json = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -87,24 +85,48 @@ namespace Sparky.TrakApp.Service.Impl
                     Content = json
                 };
             }
-            
-            return JsonConvert.DeserializeObject<UserResponse>(json, settings);
+
+            return JsonConvert.DeserializeObject<UserResponse>(json, _deserializerSettings);
         }
 
-        public async Task VerifyAsync(string username, short verificationCode, string authToken)
+        public async Task<CheckedResponse<bool>> VerifyAsync(string username, string verificationCode, string authToken)
         {
-            // Ensure we use the correct TLS version before making the request.
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-            
             using var client = _httpClientFactory.CreateClient("Trak");
-            
+
             var request = new HttpRequestMessage
             {
-                RequestUri = new Uri(client.BaseAddress, $"auth/users/{username}/verify?verification-code={verificationCode}"),
+                RequestUri = new Uri(client.BaseAddress,
+                    $"auth/users/{username}/verify?verification-code={verificationCode}"),
                 Method = HttpMethod.Put
             };
             request.Headers.Authorization = AuthenticationHeaderValue.Parse(authToken);
+
+            using var response = await client.SendAsync(request);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException
+                {
+                    StatusCode = response.StatusCode,
+                    Content = string.Empty
+                };
+            }
             
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<CheckedResponse<bool>>(json, _deserializerSettings);
+        }
+
+        public async Task ReVerifyAsync(string username, string authToken)
+        {
+            using var client = _httpClientFactory.CreateClient("Trak");
+
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri(client.BaseAddress, $"auth/users/{username}/reverify"),
+                Method = HttpMethod.Put
+            };
+            request.Headers.Authorization = AuthenticationHeaderValue.Parse(authToken);
+
             using var response = await client.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
@@ -119,18 +141,9 @@ namespace Sparky.TrakApp.Service.Impl
 
         public async Task<CheckedResponse<UserResponse>> RegisterAsync(RegistrationRequest registrationRequest)
         {
-            // Ensure we use the correct TLS version before making the request.
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
-            
-            var settings = new JsonSerializerSettings
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                TypeNameHandling = TypeNameHandling.Objects,
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            };
+            var stringContent = new StringContent(JsonConvert.SerializeObject(registrationRequest, _serializerSettings),
+                Encoding.UTF8, "application/json");
 
-            var stringContent = new StringContent(JsonConvert.SerializeObject(registrationRequest, settings), Encoding.UTF8, "application/json");
-            
             using var client = _httpClientFactory.CreateClient("Trak");
             using var response = await client.PostAsync("auth/users", stringContent);
 
@@ -142,15 +155,9 @@ namespace Sparky.TrakApp.Service.Impl
                     Content = string.Empty
                 };
             }
-            
+
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<CheckedResponse<UserResponse>>(json, new JsonSerializerSettings
-            {
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
-                TypeNameHandling = TypeNameHandling.Objects,
-                MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
-                DateParseHandling = DateParseHandling.None
-            });
+            return JsonConvert.DeserializeObject<CheckedResponse<UserResponse>>(json, _deserializerSettings);
         }
     }
 }

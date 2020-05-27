@@ -9,10 +9,10 @@ namespace Sparky.TrakApp.ViewModel
     {
         public HomeViewModel(INavigationService navigationService) : base(navigationService)
         {
-            LoadGamesCommand = new DelegateCommand(async () => await LoadGamesAsync());
+            
         }
         
-        public ICommand LoadGamesCommand { get; set; }
+        public ICommand LoadGamesCommand => new DelegateCommand(async () => await LoadGamesAsync());
 
         private async Task LoadGamesAsync()
         {

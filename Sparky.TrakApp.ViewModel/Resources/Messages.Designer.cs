@@ -457,6 +457,51 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Trak.
+        /// </summary>
+        public static string TrakTitle {
+            get {
+                return ResourceManager.GetString("TrakTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The verification code cannot be empty or only contain whitespace..
+        /// </summary>
+        public static string VerificationErrorMessageVerificationCodeEmpty {
+            get {
+                return ResourceManager.GetString("VerificationErrorMessageVerificationCodeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The verification code should only contain letters and numbers..
+        /// </summary>
+        public static string VerificationErrorMessageVerificationCodeInvalidCharacters {
+            get {
+                return ResourceManager.GetString("VerificationErrorMessageVerificationCodeInvalidCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incorrect number of characters. The verification code will be between 1 and 5 characters..
+        /// </summary>
+        public static string VerificationErrorMessageVerificationCodeLength {
+            get {
+                return ResourceManager.GetString("VerificationErrorMessageVerificationCodeLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The verification code cannot contain any spaces..
+        /// </summary>
+        public static string VerificationErrorMessageVerificationCodeWhitespace {
+            get {
+                return ResourceManager.GetString("VerificationErrorMessageVerificationCodeWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We have now sent you a confirmation email with your verification code..
         /// </summary>
         public static string VerificationPageConfirmation {

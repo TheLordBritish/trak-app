@@ -27,8 +27,6 @@ namespace Sparky.TrakApp.Model.Games
         public GameUserEntryStatus Status { get; set; }
         
         public IEnumerable<string> Publishers { get; set; }
-
-        public string PublisherNames => string.Join(", ", Publishers.OrderBy(s => s));
         
         public short Rating { get; set; }
         

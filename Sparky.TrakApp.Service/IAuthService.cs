@@ -10,8 +10,10 @@ namespace Sparky.TrakApp.Service
 
         Task<UserResponse> GetFromUsernameAsync(string username, string authToken);
 
-        Task VerifyAsync(string username, short verificationCode, string authToken);
+        Task<CheckedResponse<bool>> VerifyAsync(string username, string verificationCode, string authToken);
 
+        Task ReVerifyAsync(string username, string authToken);
+        
         Task<CheckedResponse<UserResponse>> RegisterAsync(RegistrationRequest registrationRequest);
     }
 }

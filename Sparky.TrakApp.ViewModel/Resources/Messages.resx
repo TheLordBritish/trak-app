@@ -15,6 +15,9 @@
 	<resheader name="writer">
 		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
 	</resheader>
+	<data name="TrakTitle" xml:space="preserve">
+		<value>Trak</value>
+	</data>
 	<data name="LoginPageLogIn" xml:space="preserve">
 		<value>Log in</value>
 	</data>
@@ -134,6 +137,18 @@
 	</data>
 	<data name="RegistrationErrorMessageConfirmPasswordMismatch" xml:space="preserve">
 		<value>The passwords must match.</value>
+	</data>
+	<data name="VerificationErrorMessageVerificationCodeEmpty" xml:space="preserve">
+		<value>The verification code cannot be empty or only contain whitespace.</value>
+	</data>
+	<data name="VerificationErrorMessageVerificationCodeWhitespace" xml:space="preserve">
+		<value>The verification code cannot contain any spaces.</value>
+	</data>
+	<data name="VerificationErrorMessageVerificationCodeLength" xml:space="preserve">
+		<value>Incorrect number of characters. The verification code will be between 1 and 5 characters.</value>
+	</data>
+	<data name="VerificationErrorMessageVerificationCodeInvalidCharacters" xml:space="preserve">
+		<value>The verification code should only contain letters and numbers.</value>
 	</data>
 	<data name="LoginErrorMessageUsernameEmpty" xml:space="preserve">
 		<value>No username has been entered.</value>

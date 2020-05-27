@@ -63,10 +63,10 @@
                 HasUnevenRows="True"
                 IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                 IsVisible="{Binding IsEmpty, Converter={StaticResource NegateBooleanConverter}}"
-                ItemsSource="{Binding GameUserEntries}"
-                LoadMoreCommand="{Binding LoadGameUserEntriesNextPageCommand}"
+                ItemsSource="{Binding Items}"
+                LoadMoreCommand="{Binding LoadMoreCommand}"
                 RefreshAllowed="True"
-                RefreshCommand="{Binding LoadGameUserEntriesCommand}"
+                RefreshCommand="{Binding RefreshCommand}"
                 SelectionMode="None"
                 SeparatorVisibility="None">
                 <controls:InfiniteListView.ItemTemplate>
@@ -91,7 +91,7 @@
                                     Grid.RowSpan="4"
                                     Grid.Column="0"
                                     HeightRequest="150"
-                                    Source="{Binding Links[image].Href}"
+                                    Source="{Binding ImageUrl}"
                                     WidthRequest="150" />
                                 <ActivityIndicator
                                     Grid.Row="0"
@@ -122,7 +122,7 @@
                                         <FormattedString>
                                             <Span Text="{Binding GameReleaseDate, StringFormat='{0:MMMM yyyy}'}" />
                                             <Span Text=", " />
-                                            <Span Text="{Binding PublisherNames}" />
+                                            <Span Text="{Binding Publishers}" />
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
@@ -207,7 +207,7 @@
                         CornerRadius="0"
                         HasShadow="False">
                         <controls:CustomEntry
-                            AutomationId="LoginPageUsernameEntry"
+                            AutomationId="GameUserEntryListPageSearchEntry"
                             Placeholder="Search"
                             PlaceholderColor="{StaticResource TrakWhite}"
                             TextColor="{StaticResource TrakWhite}" />

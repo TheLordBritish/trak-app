@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Acr.UserDialogs;
 using Prism;
 using Prism.Commands;
@@ -19,56 +19,42 @@ using Xamarin.Essentials;
 
 namespace Sparky.TrakApp.ViewModel.Games
 {
-    public abstract class GameUserEntryListViewModel : BaseViewModel, IActiveAware
+    public abstract class GameUserEntryListViewModel : BaseListViewModel<GameUserEntryViewModel>, IActiveAware
     {
+        private readonly IRestService _restService;
         private readonly IStorageService _storageService;
         private readonly IUserDialogs _userDialogs;
-        private readonly IRestService _restService;
+
+        private bool _hasNext = true;
 
         private bool _isActive;
-        
-        private bool _hasNext = true;
         private Uri _nextPageUri;
-        private bool _isEmpty;
 
-        private ObservableCollection<GameUserEntry> _gameUserEntries;
-        
-        protected GameUserEntryListViewModel(INavigationService navigationService, IStorageService storageService, IUserDialogs userDialogs, IRestService restService, GameUserEntryStatus gameUserEntryStatus) : base(navigationService)
+        protected GameUserEntryListViewModel(INavigationService navigationService, IStorageService storageService,
+            IUserDialogs userDialogs, IRestService restService, GameUserEntryStatus gameUserEntryStatus) : base(
+            navigationService)
         {
             _restService = restService;
             _storageService = storageService;
             _userDialogs = userDialogs;
-            
+
             GameUserEntryStatus = gameUserEntryStatus;
-            GameUserEntries = new ObservableCollection<GameUserEntry>();
-            
-            LoadGameUserEntriesCommand = new DelegateCommand(async () => await LoadUserGameEntriesOnActiveAsync(), () => !IsBusy);
-            LoadGameUserEntriesNextPageCommand = new DelegateCommand(async () => await LoadGameUserEntriesNextPageAsync(), () => !IsBusy && _hasNext);
+
+            // Commands
+            RefreshCommand = new DelegateCommand(async () => await LoadUserGameEntriesAsync(), () => !IsBusy);
+            LoadMoreCommand = new DelegateCommand(async () => await LoadGameUserEntriesNextPageAsync(),
+                () => !IsBusy && _hasNext);
         }
 
-        public ICommand LoadGameUserEntriesCommand { get; set; }
-        
-        public ICommand LoadGameUserEntriesNextPageCommand { get; set; }
-        
         public GameUserEntryStatus GameUserEntryStatus { get; set; }
 
         public bool IsActive
         {
             get => _isActive;
-            set => SetProperty(ref _isActive, value, async () => await LoadUserGameEntriesOnActiveAsync());
+            set => SetProperty(ref _isActive, value, async () => await LoadUserGameEntriesAsync());
         }
 
-        public bool IsEmpty
-        {
-            get => _isEmpty;
-            set => SetProperty(ref _isEmpty, value);
-        }
-        
-        public ObservableCollection<GameUserEntry> GameUserEntries
-        {
-            get => _gameUserEntries;
-            set => SetProperty(ref _gameUserEntries, value);
-        }
+        public event EventHandler IsActiveChanged;
 
         private async Task LoadGameUserEntriesNextPageAsync()
         {
@@ -78,13 +64,13 @@ namespace Sparky.TrakApp.ViewModel.Games
             try
             {
                 // Load the next page of game user entries with the next page URL.
-                var result = await GetGameUserEntriesPageAsync(_nextPageUri.OriginalString);
+                var result = await GetGameUserEntriesAsync(_nextPageUri.OriginalString);
                 foreach (var gameUserEntry in result)
                 {
-                    GameUserEntries.Add(gameUserEntry);
+                    Items.Add(new GameUserEntryViewModel(NavigationService, gameUserEntry));
                 }
             }
-            catch (ApiException e)
+            catch (ApiException)
             {
                 IsError = true;
                 _userDialogs.Toast(new ToastConfig(Messages.GameUserEntryListPageEmptyServerError)
@@ -93,7 +79,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                     .SetDuration(TimeSpan.FromSeconds(5))
                     .SetPosition(ToastPosition.Bottom));
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 IsError = true;
                 _userDialogs.Toast(new ToastConfig(Messages.GameUserEntryListPageEmptyGenericError)
@@ -108,37 +94,39 @@ namespace Sparky.TrakApp.ViewModel.Games
             }
         }
 
-        private async Task LoadUserGameEntriesOnActiveAsync()
+        private async Task LoadUserGameEntriesAsync()
         {
             // If the tab is not being navigated to, then there's no point making a server request.
             if (!_isActive)
             {
                 // Clear the current list when navigating away so it can be freshly reloaded when navigating back.
-                GameUserEntries.Clear();
+                Items.Clear();
                 return;
             }
 
             IsError = false;
             IsBusy = true;
-            
+
             try
             {
                 // Get the ID of the user currently logged in.
                 var userId = await _storageService.GetUserIdAsync();
                 // Make the initial request to load the first page.
                 var enumName = GameUserEntryStatus.GetAttributeValue<EnumMemberAttribute, string>(s => s.Value);
-                
-                GameUserEntries = new ObservableCollection<GameUserEntry>(
-                    await GetGameUserEntriesPageAsync($"api/game-management/v1/game-user-entries?user-id={userId}&status={enumName}&sort=gameTitle"));
 
-                IsEmpty = GameUserEntries.Count == 0;
+                var entries = await GetGameUserEntriesAsync(
+                    $"api/game-management/v1/game-user-entries?user-id={userId}&status={enumName}&sort=gameTitle");
+
+                Items = new ObservableCollection<GameUserEntryViewModel>(entries.Select(x =>
+                    new GameUserEntryViewModel(NavigationService, x)));
+                IsEmpty = Items.Count == 0;
             }
-            catch (ApiException e)
+            catch (ApiException)
             {
                 IsError = true;
                 ErrorMessage = Messages.GameUserEntryListPageEmptyServerError;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 IsError = true;
                 ErrorMessage = Messages.GameUserEntryListPageEmptyGenericError;
@@ -149,15 +137,15 @@ namespace Sparky.TrakApp.ViewModel.Games
             }
         }
 
-        private async Task<IEnumerable<GameUserEntry>> GetGameUserEntriesPageAsync(string url)
+        private async Task<IEnumerable<GameUserEntry>> GetGameUserEntriesAsync(string url)
         {
             // Get the needed variables from the store.
             var authToken = await _storageService.GetAuthTokenAsync();
-            
+
             var page = await _restService.GetAsync<HateoasPage<GameUserEntry>>(url, authToken);
 
             _hasNext = page.HasNext;
-            _nextPageUri = _hasNext ? page.Links["next"].Href : null;
+            _nextPageUri = _hasNext ? page.GetLink("next") : null;
 
             var result = new List<GameUserEntry>();
             // If the page returns doesn't contain any data, then it'll be null and not returned in the response.
@@ -165,10 +153,8 @@ namespace Sparky.TrakApp.ViewModel.Games
             {
                 result.AddRange(page.Embedded?.Data);
             }
-            
+
             return result;
         }
-        
-        public event EventHandler IsActiveChanged;
     }
 }

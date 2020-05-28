@@ -18,7 +18,12 @@ namespace Sparky.TrakApp.Service
                 .HandleTransientHttpError()
                 .Or<TimeoutRejectedException>()
                 .Or<ApiException>()
-                .RetryAsync(3);
+                .WaitAndRetryAsync(new []
+                {
+                    TimeSpan.FromSeconds(3),
+                    TimeSpan.FromSeconds(5),
+                    TimeSpan.FromSeconds(8)
+                });
 
             var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(10);
 

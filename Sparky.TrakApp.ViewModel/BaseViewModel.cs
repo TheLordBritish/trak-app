@@ -3,20 +3,18 @@ using Prism.Navigation;
 
 namespace Sparky.TrakApp.ViewModel
 {
-    public class BaseViewModel : BindableBase, IInitialize, INavigationAware, IDestructible
+    public abstract class BaseViewModel : BindableBase, IInitialize, INavigationAware, IDestructible
     {
-        private string _title;
         private bool _isBusy;
         private bool _isError;
         private string _errorMessage;
+
+        protected BaseViewModel(INavigationService navigationService)
+        {
+            NavigationService = navigationService;
+        }
         
         protected INavigationService NavigationService { get; }
-
-        public string Title
-        {
-            get => _title;
-            set => SetProperty(ref _title, value);
-        }
 
         public bool IsBusy
         {
@@ -34,11 +32,6 @@ namespace Sparky.TrakApp.ViewModel
         {
             get => _errorMessage;
             set => SetProperty(ref _errorMessage, value);
-        }
-
-        public BaseViewModel(INavigationService navigationService)
-        {
-            NavigationService = navigationService;
         }
 
         public virtual void Initialize(INavigationParameters parameters)

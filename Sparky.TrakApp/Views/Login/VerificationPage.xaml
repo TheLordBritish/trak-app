@@ -3,6 +3,7 @@
     x:Class="Sparky.TrakApp.Views.Login.VerificationPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="http://prismlibrary.com"
     xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     AutomationId="VerificationPage">
@@ -45,18 +46,36 @@
                 BackgroundColor="{StaticResource TrakWhite}"
                 CornerRadius="0"
                 HasShadow="False">
+                <Frame.Triggers>
+                    <DataTrigger
+                        Binding="{Binding VerificationCode.IsValid}"
+                        TargetType="Frame"
+                        Value="False">
+                        <Setter Property="BackgroundColor" Value="Red" />
+                    </DataTrigger>
+                </Frame.Triggers>
                 <Frame
                     Margin="1"
                     Padding="0"
                     BackgroundColor="{StaticResource TrakPrimaryBlue}"
                     CornerRadius="0"
                     HasShadow="False">
-                    <controls:CustomEntry
-                        AutomationId="VerificationPageVerificationCodeEntry"
-                        HorizontalTextAlignment="Center"
-                        Text="{Binding VerificationCode}" />
+                    <controls:CustomEntry AutomationId="VerificationPageVerificationCodeEntry" Text="{Binding VerificationCode.Value}">
+                        <controls:CustomEntry.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding ClearValidationCommand}"
+                                CommandParameter="VerificationCode"
+                                EventName="Focused" />
+                        </controls:CustomEntry.Behaviors>
+                    </controls:CustomEntry>
                 </Frame>
             </Frame>
+            <Label
+                AutomationId="VerificationPageVerificationCodeErrorLabel"
+                IsEnabled="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                IsVisible="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                Style="{StaticResource ValidationLabelStyle}"
+                Text="{Binding VerificationCode.FirstError}" />
             <!--  Display error messages if anything went wrong.  -->
             <Label
                 Margin="0,5"

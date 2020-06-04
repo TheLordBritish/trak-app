@@ -31,7 +31,7 @@ namespace Sparky.TrakApp.Service
             serviceCollection
                 .AddHttpClient("Trak", client =>
                 {
-                    client.BaseAddress = new Uri("http://192.168.1.191:8081/");
+                    client.BaseAddress = new Uri("http://192.168.1.191:8080/");
                 })
                 .AddPolicyHandler(retryPolicy)
                 .AddPolicyHandler(timeoutPolicy);

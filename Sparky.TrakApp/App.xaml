@@ -3,7 +3,7 @@
     x:Class="Sparky.TrakApp.App"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:converter="clr-namespace:Sparky.TrakApp.Converter;assembly=Sparky.TrakApp"
+    xmlns:converters="clr-namespace:Sparky.TrakApp.Converters;assembly=Sparky.TrakApp"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
@@ -11,7 +11,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <!--  Converters  -->
-            <converter:NegateBooleanConverter x:Key="NegateBooleanConverter" />
+            <converters:NegateBooleanConverter x:Key="NegateBooleanConverter" />
 
             <!--  Colors  -->
             <Color x:Key="TrakPrimaryPurple">#CC00F7</Color>
@@ -39,26 +39,33 @@
             <Style x:Key="BaseButtonStyle" TargetType="Button">
                 <Setter Property="FontAttributes" Value="Bold" />
                 <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+                <Setter Property="CornerRadius" Value="0" />
             </Style>
 
             <Style BasedOn="{StaticResource BaseButtonStyle}" TargetType="Button" />
 
             <Style
-                x:Key="HomePageButtonStyle"
+                x:Key="PrimaryButtonStyle"
+                BasedOn="{StaticResource BaseButtonStyle}"
+                TargetType="Button">
+                <Setter Property="FontSize" Value="Medium" />
+                <Setter Property="BackgroundColor" Value="{StaticResource TrakGrey}" />
+            </Style>
+
+            <Style
+                x:Key="SecondaryButtonStyle"
                 BasedOn="{StaticResource BaseButtonStyle}"
                 TargetType="Button">
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="BorderWidth" Value="1" />
                 <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
-                <Setter Property="FontSize" Value="30" />
             </Style>
 
             <Style
-                x:Key="ConfirmationButtonStyle"
-                BasedOn="{StaticResource BaseButtonStyle}"
+                x:Key="HomePageButtonStyle"
+                BasedOn="{StaticResource SecondaryButtonStyle}"
                 TargetType="Button">
-                <Setter Property="FontSize" Value="Medium" />
-                <Setter Property="BackgroundColor" Value="{StaticResource TrakGrey}" />
+                <Setter Property="FontSize" Value="30" />
             </Style>
 
             <!--  Entry styling  -->

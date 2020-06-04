@@ -49,6 +49,7 @@ namespace Sparky.TrakApp
             containerRegistry.Register<GameUserEntryCompletedListViewModel>();
             containerRegistry.Register<GameUserEntryDroppedListViewModel>();
             containerRegistry.RegisterForNavigation<GameUserEntriesTabbedPage, GameUserEntriesTabbedViewModel>();
+            containerRegistry.RegisterForNavigation<GamePage, GameViewModel>();
         }
     }
 }

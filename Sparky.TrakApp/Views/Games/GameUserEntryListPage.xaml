@@ -58,142 +58,14 @@
             </common:FullPageErrorControl>
 
             <!--  List that is displayed if there are any results returned from the initial request.  -->
-            <controls:InfiniteListView
+            <common:UserEntryInfiniteListViewControl
                 Margin="0,10"
-                HasUnevenRows="True"
                 IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                 IsVisible="{Binding IsEmpty, Converter={StaticResource NegateBooleanConverter}}"
                 ItemsSource="{Binding Items}"
                 LoadMoreCommand="{Binding LoadMoreCommand}"
-                RefreshAllowed="True"
-                RefreshCommand="{Binding RefreshCommand}"
-                SelectionMode="None"
-                SeparatorVisibility="None">
-                <controls:InfiniteListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <Grid Margin="20" RowSpacing="0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="2*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <!--  The game image  -->
-                                <Image
-                                    x:Name="GameImage"
-                                    Grid.Row="0"
-                                    Grid.RowSpan="4"
-                                    Grid.Column="0"
-                                    HeightRequest="150"
-                                    Source="{Binding ImageUrl}"
-                                    WidthRequest="150" />
-                                <ActivityIndicator
-                                    Grid.Row="0"
-                                    Grid.RowSpan="4"
-                                    Grid.Column="0"
-                                    BindingContext="{x:Reference GameImage}"
-                                    IsRunning="{Binding IsLoading}"
-                                    IsVisible="{Binding IsLoading}" />
-                                <!--  The platform name  -->
-                                <Label
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    FontSize="Small"
-                                    Text="{Binding PlatformName}" />
-                                <!--  The game title  -->
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    Style="{StaticResource HeaderLabelStyle}"
-                                    Text="{Binding GameTitle}" />
-                                <Label
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    Margin="0,10"
-                                    FontSize="Small"
-                                    VerticalTextAlignment="End">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <Span Text="{Binding GameReleaseDate, StringFormat='{0:MMMM yyyy}'}" />
-                                            <Span Text=", " />
-                                            <Span Text="{Binding Publishers}" />
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                                <!--  The rating  -->
-                                <StackLayout
-                                    Grid.Row="3"
-                                    Grid.Column="1"
-                                    Orientation="Horizontal">
-                                    <Image Source="star_grey.png">
-                                        <Image.Triggers>
-                                            <DataTrigger
-                                                Binding="{Binding Rating, Converter={extensions:GreaterThanOrEqual Value=1}}"
-                                                TargetType="Image"
-                                                Value="True">
-                                                <Setter Property="Source" Value="star_white.png" />
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                    </Image>
-                                    <Image Source="star_grey.png">
-                                        <Image.Triggers>
-                                            <DataTrigger
-                                                Binding="{Binding Rating, Converter={extensions:GreaterThanOrEqual Value=2}}"
-                                                TargetType="Image"
-                                                Value="True">
-                                                <Setter Property="Source" Value="star_white.png" />
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                    </Image>
-                                    <Image Source="star_grey.png">
-                                        <Image.Triggers>
-                                            <DataTrigger
-                                                Binding="{Binding Rating, Converter={extensions:GreaterThanOrEqual Value=3}}"
-                                                TargetType="Image"
-                                                Value="True">
-                                                <Setter Property="Source" Value="star_white.png" />
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                    </Image>
-                                    <Image Source="star_grey.png">
-                                        <Image.Triggers>
-                                            <DataTrigger
-                                                Binding="{Binding Rating, Converter={extensions:GreaterThanOrEqual Value=4}}"
-                                                TargetType="Image"
-                                                Value="True">
-                                                <Setter Property="Source" Value="star_white.png" />
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                    </Image>
-                                    <Image Source="star_grey.png">
-                                        <Image.Triggers>
-                                            <DataTrigger
-                                                Binding="{Binding Rating, Converter={extensions:GreaterThanOrEqual Value=5}}"
-                                                TargetType="Image"
-                                                Value="True">
-                                                <Setter Property="Source" Value="star_white.png" />
-                                            </DataTrigger>
-                                        </Image.Triggers>
-                                    </Image>
-                                </StackLayout>
-                                <!--  Indicator to specify that the user can tap for more info.  -->
-                                <Image
-                                    Grid.Row="0"
-                                    Grid.RowSpan="4"
-                                    Grid.Column="2"
-                                    Source="arrow_right_purple.png"
-                                    VerticalOptions="Start" />
-                            </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </controls:InfiniteListView.ItemTemplate>
-            </controls:InfiniteListView>
+                RefreshCommand="{Binding RefreshCommand}" />
+
             <Frame BackgroundColor="{StaticResource TrakGrey}">
                 <Frame
                     Padding="0"

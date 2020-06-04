@@ -14,12 +14,13 @@ using Sparky.TrakApp.Model.Games;
 using Sparky.TrakApp.Model.Response;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
+using Sparky.TrakApp.ViewModel.Common;
 using Sparky.TrakApp.ViewModel.Resources;
 using Xamarin.Essentials;
 
 namespace Sparky.TrakApp.ViewModel.Games
 {
-    public abstract class GameUserEntryListViewModel : BaseListViewModel<GameUserEntryViewModel>, IActiveAware
+    public abstract class GameUserEntryListViewModel : BaseListViewModel<ListItemViewModel>, IActiveAware
     {
         private readonly IRestService _restService;
         private readonly IStorageService _storageService;
@@ -67,7 +68,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                 var result = await GetGameUserEntriesAsync(_nextPageUri.OriginalString);
                 foreach (var gameUserEntry in result)
                 {
-                    Items.Add(new GameUserEntryViewModel(NavigationService, gameUserEntry));
+                    Items.Add(CreateListItemViewModelFromGameUserEntry(gameUserEntry));
                 }
             }
             catch (ApiException)
@@ -117,8 +118,8 @@ namespace Sparky.TrakApp.ViewModel.Games
                 var entries = await GetGameUserEntriesAsync(
                     $"api/game-management/v1/game-user-entries?user-id={userId}&status={enumName}&sort=gameTitle");
 
-                Items = new ObservableCollection<GameUserEntryViewModel>(entries.Select(x =>
-                    new GameUserEntryViewModel(NavigationService, x)));
+                Items = new ObservableCollection<ListItemViewModel>(entries.Select(CreateListItemViewModelFromGameUserEntry));
+                
                 IsEmpty = Items.Count == 0;
             }
             catch (ApiException)
@@ -155,6 +156,33 @@ namespace Sparky.TrakApp.ViewModel.Games
             }
 
             return result;
+        }
+
+        private ListItemViewModel CreateListItemViewModelFromGameUserEntry(GameUserEntry gameUserEntry)
+        {
+            return new ListItemViewModel
+            {
+                ImageUrl = gameUserEntry.GetLink("image"),
+                Header = gameUserEntry.PlatformName,
+                ItemTitle = gameUserEntry.GameTitle,
+                ItemSubTitle =
+                    $"{gameUserEntry.GameReleaseDate:MMMM yyyy}, {string.Join(", ", gameUserEntry.Publishers)}",
+                ShowRating = true,
+                Rating = gameUserEntry.Rating,
+                TapCommand = new DelegateCommand(async () =>
+                {
+                    var parameters = new NavigationParameters
+                    {
+                        {"game-url", gameUserEntry.GetLink("gameInfo")},
+                        {"platform-url", gameUserEntry.GetLink("platform")},
+                        {"in-library", true},
+                        {"rating", gameUserEntry.Rating},
+                        {"status", gameUserEntry.Status}
+                    };
+
+                    await NavigationService.NavigateAsync("GamePage", parameters);
+                })
+            };
         }
     }
 }

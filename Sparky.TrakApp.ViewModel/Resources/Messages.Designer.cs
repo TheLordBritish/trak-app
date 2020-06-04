@@ -61,6 +61,33 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backlog.
+        /// </summary>
+        public static string Backlog {
+            get {
+                return ResourceManager.GetString("Backlog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Completed.
+        /// </summary>
+        public static string Completed {
+            get {
+                return ResourceManager.GetString("Completed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dropped.
+        /// </summary>
+        public static string Dropped {
+            get {
+                return ResourceManager.GetString("Dropped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred making the request. Please try again..
         /// </summary>
         public static string ErrorMessageApiError {
@@ -84,6 +111,51 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         public static string ErrorMessageIncorrectCredentials {
             get {
                 return ResourceManager.GetString("ErrorMessageIncorrectCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add to library.
+        /// </summary>
+        public static string GamePageAddToLibrary {
+            get {
+                return ResourceManager.GetString("GamePageAddToLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currently in:.
+        /// </summary>
+        public static string GamePageCurrentlyIn {
+            get {
+                return ResourceManager.GetString("GamePageCurrentlyIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load the selected game..
+        /// </summary>
+        public static string GamePageErrorMessage {
+            get {
+                return ResourceManager.GetString("GamePageErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        public static string GamePageOptions {
+            get {
+                return ResourceManager.GetString("GamePageOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Similar Games:.
+        /// </summary>
+        public static string GamePageSimilarGames {
+            get {
+                return ResourceManager.GetString("GamePageSimilarGames", resourceCulture);
             }
         }
         
@@ -228,6 +300,15 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         public static string LoginPageUsername {
             get {
                 return ResourceManager.GetString("LoginPageUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Playing.
+        /// </summary>
+        public static string Playing {
+            get {
+                return ResourceManager.GetString("Playing", resourceCulture);
             }
         }
         

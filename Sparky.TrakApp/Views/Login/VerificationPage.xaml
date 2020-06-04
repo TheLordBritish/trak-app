@@ -90,7 +90,7 @@
                 AutomationId="VerificationPageVerifyButton"
                 Command="{Binding VerifyCommand}"
                 IsVisible="{Binding IsBusy, Converter={StaticResource NegateBooleanConverter}}"
-                Style="{StaticResource ConfirmationButtonStyle}"
+                Style="{StaticResource PrimaryButtonStyle}"
                 Text="{extensions:Translate VerificationPageVerify}" />
             <ActivityIndicator
                 Margin="0,20,0,0"

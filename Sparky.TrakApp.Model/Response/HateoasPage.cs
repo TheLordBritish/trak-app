@@ -2,11 +2,8 @@
 
 namespace Sparky.TrakApp.Model.Response
 {
-    public class HateoasPage<T> : HateoasResource where T : HateoasResource
+    public class HateoasPage<T> : HateoasCollection<T> where T : HateoasResource
     {
-        [JsonProperty("_embedded")]
-        public HateoasResourceCollection<T> Embedded { get; set; }
-        
         [JsonProperty("page")]
         public HateoasPageData PageData { get; set; }
 

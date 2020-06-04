@@ -2,7 +2,7 @@
 using System.Globalization;
 using Xamarin.Forms;
 
-namespace Sparky.TrakApp.Converter
+namespace Sparky.TrakApp.Converters
 {
     public class NegateBooleanConverter : IValueConverter
     {

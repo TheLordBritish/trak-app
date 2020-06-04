@@ -4,6 +4,9 @@ namespace Sparky.TrakApp.Model.Games
 {
     public enum GameUserEntryStatus
     {
+        [EnumMember(Value = "NONE")]
+        None,
+        
         [EnumMember(Value = "WISH_LIST")]
         WishList,
         

@@ -2,7 +2,7 @@
 
 namespace Sparky.TrakApp.Model.Response
 {
-    public class HateoasResourceCollection<T> where T : HateoasResource
+    public class HateoasResources<T> where T : HateoasResource
     {
         public IEnumerable<T> Data { get; set; }
     }

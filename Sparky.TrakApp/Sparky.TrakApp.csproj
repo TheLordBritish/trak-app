@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.1.0.442" />
+    <PackageReference Include="MagicGradients" Version="1.1.0" />
     <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1422" />
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.657" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.1" />
@@ -45,12 +46,21 @@
       <DependentUpon>FullPageErrorControl.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Games\GamePage.xaml.cs">
+      <DependentUpon>GamePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\Common\RatingUserControl.xaml.cs">
+      <DependentUpon>RatingUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\Common\UserEntryInfiniteListViewControl.xaml.cs">
+      <DependentUpon>UserEntryInfiniteListViewControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Controls\Common\UserEntryItemTemplateControl.xaml.cs">
+      <DependentUpon>UserEntryItemTemplateControl.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Controls\EntryControl.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Views\BaseMasterDetailPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -79,6 +89,22 @@
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\Common\FullPageErrorControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Games\GamePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\Common\RatingUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\Common\UserEntryInfiniteListViewControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Controls\Common\UserEntryItemTemplateControl.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>

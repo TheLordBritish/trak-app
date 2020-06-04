@@ -180,4 +180,31 @@
 	<data name="GameUserEntryListPageDroppedTitle" xml:space="preserve">
 		<value>Dropped</value>
 	</data>
+	<data name="Backlog" xml:space="preserve">
+		<value>Backlog</value>
+	</data>
+	<data name="Playing" xml:space="preserve">
+		<value>Playing</value>
+	</data>
+	<data name="Completed" xml:space="preserve">
+		<value>Completed</value>
+	</data>
+	<data name="Dropped" xml:space="preserve">
+		<value>Dropped</value>
+	</data>
+	<data name="GamePageErrorMessage" xml:space="preserve">
+		<value>Failed to load the selected game.</value>
+	</data>
+	<data name="GamePageCurrentlyIn" xml:space="preserve">
+		<value>Currently in:</value>
+	</data>
+	<data name="GamePageSimilarGames" xml:space="preserve">
+		<value>Similar Games:</value>
+	</data>
+	<data name="GamePageAddToLibrary" xml:space="preserve">
+		<value>Add to library</value>
+	</data>
+	<data name="GamePageOptions" xml:space="preserve">
+		<value>Options</value>
+	</data>
 </root>

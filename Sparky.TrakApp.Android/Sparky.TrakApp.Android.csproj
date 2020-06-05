@@ -39,6 +39,8 @@
     <AndroidUseSharedRuntime>true</AndroidUseSharedRuntime>
     <EmbedAssembliesIntoApk>false</EmbedAssembliesIntoApk>
     <AndroidKeyStore>false</AndroidKeyStore>
+    <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
+    <AndroidHttpClientHandlerType>System.Net.Http.HttpClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -56,6 +58,7 @@
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidLinkMode>SdkOnly</AndroidLinkMode>
     <AndroidSupportedAbis />
+    <AndroidHttpClientHandlerType>System.Net.Http.HttpClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -71,6 +74,8 @@
     <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1422" />
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.657" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.1" />
+    <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
+    <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
@@ -85,42 +90,75 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\arrow_left_purple.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\arrow_left_white.png" />
     <AndroidResource Include="Resources\drawable-hdpi\arrow_right_purple.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\hamburger.png" />
     <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\no_image_purple.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\no_image_white.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\refresh_purple.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\refresh_white.png" />
     <AndroidResource Include="Resources\drawable-hdpi\splashscreen.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\star_grey.png" />
     <AndroidResource Include="Resources\drawable-hdpi\star_white.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\arrow_left_purple.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\arrow_left_white.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\arrow_right_purple.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\hamburger.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\logo.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\no_image_purple.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\no_image_white.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\refresh_purple.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\refresh_white.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\splashscreen.xml" />
     <AndroidResource Include="Resources\drawable-xhdpi\star_grey.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\star_white.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\arrow_left_purple.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\arrow_left_white.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\arrow_right_purple.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\hamburger.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\logo.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\no_image_purple.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\no_image_white.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\refresh_purple.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\refresh_white.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\splashscreen.xml" />
     <AndroidResource Include="Resources\drawable-xxhdpi\star_grey.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\star_white.png" />
+    <AndroidResource Include="Resources\drawable\arrow_left_purple.png" />
+    <AndroidResource Include="Resources\drawable\arrow_left_white.png" />
     <AndroidResource Include="Resources\drawable\arrow_right_purple.png" />
+    <AndroidResource Include="Resources\drawable\hamburger.png" />
     <AndroidResource Include="Resources\drawable\logo.png" />
+    <AndroidResource Include="Resources\drawable\no_image_purple.png" />
+    <AndroidResource Include="Resources\drawable\no_image_white.png" />
+    <AndroidResource Include="Resources\drawable\refresh_purple.png" />
+    <AndroidResource Include="Resources\drawable\refresh_white.png" />
     <AndroidResource Include="Resources\drawable\splashscreen.xml" />
     <AndroidResource Include="Resources\drawable\star_grey.png" />
     <AndroidResource Include="Resources\drawable\star_white.png" />
     <AndroidResource Include="Resources\layout\Tabbar.xml" />
     <AndroidResource Include="Resources\layout\Toolbar.xml" />
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_foreground.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\ic_launcher_round.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_foreground.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\ic_launcher_round.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_foreground.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher_round.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_foreground.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_round.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_foreground.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
-    <AndroidResource Include="Resources\mipmap-anydpi-v26\icon.xml" />
-    <AndroidResource Include="Resources\mipmap-anydpi-v26\icon_round.xml" />
-    <AndroidResource Include="Resources\mipmap-hdpi\icon.png" />
-    <AndroidResource Include="Resources\mipmap-hdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\icon.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\icon.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\icon.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\icon.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
+    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />
+    <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher_round.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Sparky.TrakApp\Sparky.TrakApp.csproj">

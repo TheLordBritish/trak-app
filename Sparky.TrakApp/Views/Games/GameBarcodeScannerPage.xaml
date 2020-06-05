@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Sparky.TrakApp.Views.Games.GameBarcodeScannerPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
+    xmlns:forms="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+    Title="Barcode">
+    <ContentPage.Content>
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <forms:ZXingScannerView
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                HorizontalOptions="FillAndExpand"
+                IsAnalyzing="{Binding IsBusy, Converter={StaticResource NegateBooleanConverter}}"
+                IsScanning="True"
+                Result="{Binding Result, Mode=TwoWay}"
+                ScanResultCommand="{Binding ScanCommand}"
+                VerticalOptions="FillAndExpand" />
+            <forms:ZXingDefaultOverlay
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                BottomText="{extensions:Translate GameBarcodeScannerPageInstructions}" />
+            <ActivityIndicator
+                Grid.Row="0"
+                HeightRequest="100"
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center"
+                WidthRequest="100" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

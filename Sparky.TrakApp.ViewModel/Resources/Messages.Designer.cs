@@ -70,11 +70,11 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Completed.
+        ///   Looks up a localized string similar to Done.
         /// </summary>
-        public static string Completed {
+        public static string Done {
             get {
-                return ResourceManager.GetString("Completed", resourceCulture);
+                return ResourceManager.GetString("Done", resourceCulture);
             }
         }
         
@@ -111,6 +111,42 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         public static string ErrorMessageIncorrectCredentials {
             get {
                 return ResourceManager.GetString("ErrorMessageIncorrectCredentials", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred scanning the barcode. Please try again..
+        /// </summary>
+        public static string GameBarcodeScannerPageApiError {
+            get {
+                return ResourceManager.GetString("GameBarcodeScannerPageApiError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred scanning the barcode..
+        /// </summary>
+        public static string GameBarcodeScannerPageGenericError {
+            get {
+                return ResourceManager.GetString("GameBarcodeScannerPageGenericError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Place the red line over the barcode you&apos;d like to scan..
+        /// </summary>
+        public static string GameBarcodeScannerPageInstructions {
+            get {
+                return ResourceManager.GetString("GameBarcodeScannerPageInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t find the scanned barcode in our library. Would you like to make a request?.
+        /// </summary>
+        public static string GameBarcodeScannerPageMakeARequest {
+            get {
+                return ResourceManager.GetString("GameBarcodeScannerPageMakeARequest", resourceCulture);
             }
         }
         
@@ -160,33 +196,6 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Backlog.
-        /// </summary>
-        public static string GameUserEntryListPageBackLogTitle {
-            get {
-                return ResourceManager.GetString("GameUserEntryListPageBackLogTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Completed.
-        /// </summary>
-        public static string GameUserEntryListPageCompletedTitle {
-            get {
-                return ResourceManager.GetString("GameUserEntryListPageCompletedTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dropped.
-        /// </summary>
-        public static string GameUserEntryListPageDroppedTitle {
-            get {
-                return ResourceManager.GetString("GameUserEntryListPageDroppedTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You currently have no games in .
         /// </summary>
         public static string GameUserEntryListPageEmpty {
@@ -210,15 +219,6 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         public static string GameUserEntryListPageEmptyServerError {
             get {
                 return ResourceManager.GetString("GameUserEntryListPageEmptyServerError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Playing.
-        /// </summary>
-        public static string GameUserEntryListPagePlayingTitle {
-            get {
-                return ResourceManager.GetString("GameUserEntryListPagePlayingTitle", resourceCulture);
             }
         }
         
@@ -300,6 +300,15 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         public static string LoginPageUsername {
             get {
                 return ResourceManager.GetString("LoginPageUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
             }
         }
         
@@ -633,6 +642,15 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         public static string VerificationPageVerify {
             get {
                 return ResourceManager.GetString("VerificationPageVerify", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

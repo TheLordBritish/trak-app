@@ -168,26 +168,14 @@
 	<data name="GameUserEntryListPageEmptyGenericError" xml:space="preserve">
 		<value>Failed to load your games due to an unexpected error.</value>
 	</data>
-	<data name="GameUserEntryListPageBackLogTitle" xml:space="preserve">
-		<value>Backlog</value>
-	</data>
-	<data name="GameUserEntryListPagePlayingTitle" xml:space="preserve">
-		<value>Playing</value>
-	</data>
-	<data name="GameUserEntryListPageCompletedTitle" xml:space="preserve">
-		<value>Completed</value>
-	</data>
-	<data name="GameUserEntryListPageDroppedTitle" xml:space="preserve">
-		<value>Dropped</value>
-	</data>
 	<data name="Backlog" xml:space="preserve">
 		<value>Backlog</value>
 	</data>
 	<data name="Playing" xml:space="preserve">
 		<value>Playing</value>
 	</data>
-	<data name="Completed" xml:space="preserve">
-		<value>Completed</value>
+	<data name="Done" xml:space="preserve">
+		<value>Done</value>
 	</data>
 	<data name="Dropped" xml:space="preserve">
 		<value>Dropped</value>
@@ -206,5 +194,23 @@
 	</data>
 	<data name="GamePageOptions" xml:space="preserve">
 		<value>Options</value>
+	</data>
+	<data name="GameBarcodeScannerPageInstructions" xml:space="preserve">
+		<value>Place the red line over the barcode you'd like to scan.</value>
+	</data>
+	<data name="GameBarcodeScannerPageMakeARequest" xml:space="preserve">
+		<value>Can't find the scanned barcode in our library. Would you like to make a request?</value>
+	</data>
+	<data name="GameBarcodeScannerPageApiError" xml:space="preserve">
+		<value>An error occurred scanning the barcode. Please try again.</value>
+	</data>
+	<data name="GameBarcodeScannerPageGenericError" xml:space="preserve">
+		<value>An error occurred scanning the barcode.</value>
+	</data>
+	<data name="Yes" xml:space="preserve">
+		<value>Yes</value>
+	</data>
+	<data name="No" xml:space="preserve">
+		<value>No</value>
 	</data>
 </root>

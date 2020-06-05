@@ -13,6 +13,7 @@
     <ContentView.Content>
         <controls:InfiniteListView
             HasUnevenRows="True"
+            IsPullToRefreshEnabled="True"
             IsRefreshing="{Binding IsRefreshing, Source={x:Reference UserEntryInfiniteListViewControlView}, Mode=OneWay}"
             ItemsSource="{Binding ItemsSource, Source={x:Reference UserEntryInfiniteListViewControlView}}"
             LoadMoreCommand="{Binding LoadMoreCommand, Source={x:Reference UserEntryInfiniteListViewControlView}}"

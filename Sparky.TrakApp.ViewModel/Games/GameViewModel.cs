@@ -15,38 +15,38 @@ using Sparky.TrakApp.ViewModel.Common;
 namespace Sparky.TrakApp.ViewModel.Games
 {
     /// <summary>
-    /// The <see cref="GameViewModel"/> is a simple view model that is associated with the game page view.
-    /// Its responsibility is to display all the information for a given game and respond to events such as adding,
-    /// moving or removing a game from a users' collection. 
+    ///     The <see cref="GameViewModel" /> is a simple view model that is associated with the game page view.
+    ///     Its responsibility is to display all the information for a given game and respond to events such as adding,
+    ///     moving or removing a game from a users' collection.
     /// </summary>
     public class GameViewModel : BaseViewModel
     {
-        private readonly IStorageService _storageService;
         private readonly IRestService _restService;
+        private readonly IStorageService _storageService;
+        private string _description;
+        private string _gameTitle;
 
         private Uri _gameUrl;
-        private Uri _platformUrl;
+        private string _genreNames;
 
         private Uri _imageUrl;
-        private string _platformNames;
-        private string _gameTitle;
-        private DateTime _releaseDate;
-        private string _publisherNames;
         private bool _inLibrary;
+        private string _platformNames;
+        private Uri _platformUrl;
+        private string _publisherNames;
         private short _rating;
-        private string _genreNames;
-        private string _description;
-        private GameUserEntryStatus _status;
+        private DateTime _releaseDate;
         private ObservableCollection<ListItemViewModel> _similarGames;
+        private GameUserEntryStatus _status;
 
         /// <summary>
-        /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
-        /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
-        /// should be handled by the framework.
+        ///     Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
+        ///     The constructors should never be invoked outside of the Prism DI framework. All instantiation
+        ///     should be handled by the framework.
         /// </summary>
-        /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
-        /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
-        /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
+        /// <param name="navigationService">The <see cref="INavigationService" /> instance to inject.</param>
+        /// <param name="storageService">The <see cref="IStorageService" /> instance to inject.</param>
+        /// <param name="restService">The <see cref="IRestService" /> instance to inject.</param>
         public GameViewModel(INavigationService navigationService, IStorageService storageService,
             IRestService restService) : base(navigationService)
         {
@@ -62,13 +62,13 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// A <see cref="ICommand"/> that is invoked by the view when the refresh button is tapped when an error is
-        /// thrown. When called, the command will propagate the request and call the <see cref="LoadGameInfoAsync"/> method.
+        ///     A <see cref="ICommand" /> that is invoked by the view when the refresh button is tapped when an error is
+        ///     thrown. When called, the command will propagate the request and call the <see cref="LoadGameInfoAsync" /> method.
         /// </summary>
         public ICommand LoadGameInfoCommand => new DelegateCommand(async () => await LoadGameInfoAsync());
 
         /// <summary>
-        /// A <see cref="Uri"/> that contains the URL of the image that is associated with the game within this view model.
+        ///     A <see cref="Uri" /> that contains the URL of the image that is associated with the game within this view model.
         /// </summary>
         public Uri ImageUrl
         {
@@ -77,8 +77,8 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// A <see cref="string"/> that contains a comma-separated list of all platforms associated with the game within
-        /// the view model.
+        ///     A <see cref="string" /> that contains a comma-separated list of all platforms associated with the game within
+        ///     the view model.
         /// </summary>
         public string PlatformNames
         {
@@ -87,7 +87,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// A <see cref="string"/> that represents the name of the game.
+        ///     A <see cref="string" /> that represents the name of the game.
         /// </summary>
         public string GameTitle
         {
@@ -96,7 +96,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// A <see cref="DateTime"/> that represents the release date of the game within the view model.
+        ///     A <see cref="DateTime" /> that represents the release date of the game within the view model.
         /// </summary>
         public DateTime ReleaseDate
         {
@@ -105,8 +105,8 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// A <see cref="string"/> that contains a comma-separated list of all publishers associated with the game within
-        /// the view model.
+        ///     A <see cref="string" /> that contains a comma-separated list of all publishers associated with the game within
+        ///     the view model.
         /// </summary>
         public string PublisherNames
         {
@@ -115,9 +115,9 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// A <see cref="bool"/> that is used to represent whether the game being displayed is currently within the logged in
-        /// users library. If this game is within the users library, additional information such as rating and status will
-        /// be displayed.
+        ///     A <see cref="bool" /> that is used to represent whether the game being displayed is currently within the logged in
+        ///     users library. If this game is within the users library, additional information such as rating and status will
+        ///     be displayed.
         /// </summary>
         public bool InLibrary
         {
@@ -126,8 +126,9 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// A <see cref="short"/> that represents the current user rating of the game. If the game being displayed isn't within
-        /// the users collection, this value will be set to 0.
+        ///     A <see cref="short" /> that represents the current user rating of the game. If the game being displayed isn't
+        ///     within
+        ///     the users collection, this value will be set to 0.
         /// </summary>
         public short Rating
         {
@@ -136,8 +137,8 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// A <see cref="string"/> that contains a comma-separated list of all genres associated with the game within
-        /// the view model.
+        ///     A <see cref="string" /> that contains a comma-separated list of all genres associated with the game within
+        ///     the view model.
         /// </summary>
         public string GenreNames
         {
@@ -146,7 +147,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// A <see cref="string"/> that represents the description of the game.
+        ///     A <see cref="string" /> that represents the description of the game.
         /// </summary>
         public string Description
         {
@@ -155,8 +156,8 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// A <see cref="GameUserEntryStatus"/> that represents the current status of the game. If the game being
-        /// displayed isn't within the users collection, the status will be set to <see cref="GameUserEntryStatus.None"/>.
+        ///     A <see cref="GameUserEntryStatus" /> that represents the current status of the game. If the game being
+        ///     displayed isn't within the users collection, the status will be set to <see cref="GameUserEntryStatus.None" />.
         /// </summary>
         public GameUserEntryStatus Status
         {
@@ -165,8 +166,8 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// A <see cref="ObservableCollection{T}"/> that is used to represent a short collection of games that
-        /// are within the same genre as the one that is being loaded by the user. 
+        ///     A <see cref="ObservableCollection{T}" /> that is used to represent a short collection of games that
+        ///     are within the same genre as the one that is being loaded by the user.
         /// </summary>
         public ObservableCollection<ListItemViewModel> SimilarGames
         {
@@ -175,13 +176,13 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// Private method that is invoked by the <see cref="LoadGameInfoCommand"/> when activated by the associated
-        /// view. This method will attempt to retrieve the game information from the url provided by the <see cref="NavigationParameters"/>
-        /// and populate all of the information within this view model with data from the returned <see cref="GameInfo"/>.
-        ///
-        /// If any errors occur during the API requests, the exceptions are caught and the errors the IsError boolean to true.
+        ///     Private method that is invoked by the <see cref="LoadGameInfoCommand" /> when activated by the associated
+        ///     view. This method will attempt to retrieve the game information from the url provided by the
+        ///     <see cref="NavigationParameters" />
+        ///     and populate all of the information within this view model with data from the returned <see cref="GameInfo" />.
+        ///     If any errors occur during the API requests, the exceptions are caught and the errors the IsError boolean to true.
         /// </summary>
-        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
+        /// <returns>A <see cref="Task" /> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task LoadGameInfoAsync()
         {
             // We're going to make some requests, so we're busy and remove any current errors.
@@ -208,7 +209,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                 var games = await _restService.GetAsync<HateoasPage<GameInfo>>(
                     genres.Embedded.Data.First().GetLink("gameInfos").OriginalString, token);
 
-                await AttemptSimilarGamesListAsync(games.Embedded.Data.Where(x => x.Id != gameInfo.Id));
+                CreateSimilarGamesList(games.Embedded.Data.Where(x => x.Id != gameInfo.Id));
             }
             catch (ApiException)
             {
@@ -225,11 +226,11 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// Overriden method that is automatically invoked when the page is navigated to. Its purpose is to retrieve
-        /// values from the <see cref="NavigationParameters"/> before invoking <see cref="LoadGameInfoAsync"/> to
-        /// load and display additional information to the view.
+        ///     Overriden method that is automatically invoked when the page is navigated to. Its purpose is to retrieve
+        ///     values from the <see cref="NavigationParameters" /> before invoking <see cref="LoadGameInfoAsync" /> to
+        ///     load and display additional information to the view.
         /// </summary>
-        /// <param name="parameters">The <see cref="NavigationParameters"/>, which contains information for display purposes.</param>
+        /// <param name="parameters">The <see cref="NavigationParameters" />, which contains information for display purposes.</param>
         public override async void OnNavigatedTo(INavigationParameters parameters)
         {
             // Retrieve the url we're going to use to retrieve the base game data.
@@ -245,13 +246,13 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// Private method that is invoked within the <see cref="LoadGameInfoAsync"/> method. Its purpose
-        /// is to call the <see cref="IRestService"/> to retrieve the <see cref="GameInfo"/> data and populate
-        /// the fields on the view model from the returned data.
+        ///     Private method that is invoked within the <see cref="LoadGameInfoAsync" /> method. Its purpose
+        ///     is to call the <see cref="IRestService" /> to retrieve the <see cref="GameInfo" /> data and populate
+        ///     the fields on the view model from the returned data.
         /// </summary>
-        /// <param name="uri">The uri to call to retrieve the <see cref="GameInfo"/> data.</param>
+        /// <param name="uri">The uri to call to retrieve the <see cref="GameInfo" /> data.</param>
         /// <param name="token">The authentication token to attach to the request.</param>
-        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
+        /// <returns>A <see cref="Task" /> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task<GameInfo> AttemptGameInfoAsync(Uri uri, string token)
         {
             var gameInfo = await _restService.GetAsync<GameInfo>(uri.OriginalString, token);
@@ -266,17 +267,15 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// Private method that is invoked within the <see cref="LoadGameInfoAsync"/> method. Its purpose
-        /// is to convert the provided <see cref="IEnumerable{T}"/> of <see cref="GameInfo"/> instances into
-        /// <see cref="ListItemViewModel"/> instances for displaying within the list on the game page view.
+        ///     Private method that is invoked within the <see cref="LoadGameInfoAsync" /> method. Its purpose
+        ///     is to convert the provided <see cref="IEnumerable{T}" /> of <see cref="GameInfo" /> instances into
+        ///     <see cref="ListItemViewModel" /> instances for displaying within the list on the game page view.
         /// </summary>
-        /// <param name="games">The <see cref="IEnumerable{T}"/> to convert into <see cref="ListItemViewModel"/> instances.</param>
-        /// <returns>A <see cref="Task{T}"/> which returns the <see cref="GameInfo"/> retrieved from the API request.</returns>
-        private async Task AttemptSimilarGamesListAsync(IEnumerable<GameInfo> games)
+        /// <param name="games">The <see cref="IEnumerable{T}" /> to convert into <see cref="ListItemViewModel" /> instances.</param>
+        private void CreateSimilarGamesList(IEnumerable<GameInfo> games)
         {
             var similarGames = new ObservableCollection<ListItemViewModel>();
             foreach (var game in games)
-            {
                 similarGames.Add(new ListItemViewModel
                 {
                     ImageUrl = game.GetLink("image"),
@@ -284,21 +283,21 @@ namespace Sparky.TrakApp.ViewModel.Games
                     ItemTitle = game.Title,
                     ItemSubTitle = $"{game.ReleaseDate:MMMM yyyy}, {string.Join(", ", game.Publishers)}"
                 });
-            }
 
             SimilarGames = similarGames;
         }
 
         /// <summary>
-        /// Private method that is invoked within the <see cref="LoadGameInfoAsync"/> method. Its purpose
-        /// is to load platform data either associated with the provided <see cref="GameInfo"/> instance,
-        /// or to call the <see cref="IRestService"/> to retrieve it, depending on whether the <see cref="Uri"/>
-        /// is populated with a valid value. The information is then populated on the view model.
+        ///     Private method that is invoked within the <see cref="LoadGameInfoAsync" /> method. Its purpose
+        ///     is to load platform data either associated with the provided <see cref="GameInfo" /> instance,
+        ///     or to call the <see cref="IRestService" /> to retrieve it, depending on whether the <see cref="Uri" />
+        ///     is populated with a valid value. The information is then populated on the view model.
         /// </summary>
-        /// <param name="uri">The uri to call to retrieve the <see cref="Platform"/> data.</param>
-        /// <param name="gameInfo">The current <see cref="GameInfo"/> being displayed to the view.</param>
-        /// /// <param name="token">The authentication token to attach to the request.</param>
-        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
+        /// <param name="uri">The uri to call to retrieve the <see cref="Platform" /> data.</param>
+        /// <param name="gameInfo">The current <see cref="GameInfo" /> being displayed to the view.</param>
+        /// ///
+        /// <param name="token">The authentication token to attach to the request.</param>
+        /// <returns>A <see cref="Task" /> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task AttemptPlatformDataAsync(Uri uri, GameInfo gameInfo, string token)
         {
             if (!string.IsNullOrEmpty(uri.OriginalString))

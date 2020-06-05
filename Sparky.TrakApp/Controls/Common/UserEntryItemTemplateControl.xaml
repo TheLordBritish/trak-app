@@ -32,9 +32,11 @@
                 Grid.Row="0"
                 Grid.RowSpan="4"
                 Grid.Column="0"
-                Aspect="AspectFit"
+                Aspect="Fill"
                 HeightRequest="150"
-                Source="{Binding ImageUrl}" />
+                Source="{Binding ImageUrl}"
+                VerticalOptions="Start"
+                WidthRequest="150" />
             <ActivityIndicator
                 Grid.Row="0"
                 Grid.RowSpan="4"
@@ -47,6 +49,7 @@
             <Label
                 Grid.Row="0"
                 Grid.Column="1"
+                Margin="5,0,0,0"
                 FontSize="Small"
                 Text="{Binding Header}" />
 
@@ -54,6 +57,10 @@
             <Label
                 Grid.Row="1"
                 Grid.Column="1"
+                Margin="5,0,0,0"
+                FontSize="Large"
+                LineBreakMode="WordWrap"
+                MaxLines="2"
                 Style="{StaticResource HeaderLabelStyle}"
                 Text="{Binding ItemTitle}" />
 
@@ -61,33 +68,17 @@
             <Label
                 Grid.Row="2"
                 Grid.Column="1"
-                Margin="0,10"
+                Margin="5,10,0,10"
                 FontSize="Small"
                 Text="{Binding ItemSubTitle}" />
 
             <!--  The rating  -->
-            <StackLayout
+            <common:RatingUserControl
                 Grid.Row="3"
                 Grid.Column="1"
+                Margin="5,0,0,0"
                 IsVisible="{Binding ShowRating}"
-                Orientation="Horizontal">
-                <Label
-                    FontSize="Small"
-                    IsVisible="False"
-                    Text="Not rated yet:"
-                    TextColor="{StaticResource TrakGrey}"
-                    VerticalOptions="Center">
-                    <Label.Triggers>
-                        <DataTrigger
-                            Binding="{Binding Rating}"
-                            TargetType="Label"
-                            Value="0">
-                            <Setter Property="IsVisible" Value="True" />
-                        </DataTrigger>
-                    </Label.Triggers>
-                </Label>
-                <common:RatingUserControl Rating="{Binding Rating}" />
-            </StackLayout>
+                Rating="{Binding Rating}" />
 
             <!--  Indicator to specify that the user can tap for more info.  -->
             <Image

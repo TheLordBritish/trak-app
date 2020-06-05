@@ -12,10 +12,15 @@
         <!--  Full-page label telling the user that the request returned no results without error.  -->
         <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
             <Label Text="{Binding ErrorMessage, Source={x:Reference FullPageErrorControlView}}" />
-            <Button
-                Command="{Binding RefreshCommand, Source={x:Reference FullPageErrorControlView}}"
+            <Image
+                HeightRequest="125"
                 IsVisible="{Binding IsRefreshable, Source={x:Reference FullPageErrorControlView}}"
-                Text="Refresh" />
+                Source="refresh_purple.png"
+                WidthRequest="125">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding RefreshCommand, Source={x:Reference FullPageErrorControlView}}" />
+                </Image.GestureRecognizers>
+            </Image>
         </StackLayout>
     </ContentView.Content>
 </ContentView>

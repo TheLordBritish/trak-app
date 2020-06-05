@@ -1,10 +1,10 @@
 ﻿using Acr.UserDialogs;
 using Prism;
 using Prism.Ioc;
+using Sparky.TrakApp.Impl;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.ViewModel;
 using Sparky.TrakApp.ViewModel.Games;
-using Sparky.TrakApp.ViewModel.Impl;
 using Sparky.TrakApp.ViewModel.Login;
 using Sparky.TrakApp.Views;
 using Sparky.TrakApp.Views.Games;
@@ -28,6 +28,7 @@ namespace Sparky.TrakApp
         {
             // Services
             ServiceRegistry.RegisterTypes(containerRegistry);
+            containerRegistry.Register<IFormsDevice, XamarinFormsDevice>();
             containerRegistry.Register<IStorageService, SecureStorageService>();
             containerRegistry.RegisterInstance(UserDialogs.Instance);
             
@@ -49,6 +50,8 @@ namespace Sparky.TrakApp
             containerRegistry.Register<GameUserEntryCompletedListViewModel>();
             containerRegistry.Register<GameUserEntryDroppedListViewModel>();
             containerRegistry.RegisterForNavigation<GameUserEntriesTabbedPage, GameUserEntriesTabbedViewModel>();
+            containerRegistry.RegisterForNavigation<GameLibraryTabbedPage>();
+            containerRegistry.RegisterForNavigation<GameBarcodeScannerPage, GameBarcodeScannerViewModel>();
             containerRegistry.RegisterForNavigation<GamePage, GameViewModel>();
         }
     }

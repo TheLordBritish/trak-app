@@ -69,6 +69,7 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Aspect="AspectFill"
+                        HeightRequest="300"
                         Source="{Binding ImageUrl}" />
                     <magicGradients:GradientView
                         Grid.Row="0"
@@ -120,6 +121,7 @@
                     <Label
                         Grid.Row="2"
                         Grid.Column="0"
+                        Grid.ColumnSpan="2"
                         Padding="20,0"
                         Style="{StaticResource HeaderLabelStyle}"
                         Text="{Binding GameTitle}" />
@@ -149,7 +151,8 @@
                             <Label
                                 IsVisible="False"
                                 Text="Not rated yet:"
-                                TextColor="{StaticResource TrakGrey}">
+                                TextColor="{StaticResource TrakGrey}"
+                                VerticalTextAlignment="Center">
                                 <Label.Triggers>
                                     <DataTrigger
                                         Binding="{Binding Rating}"
@@ -220,7 +223,7 @@
                             </Label>
                             <Label
                                 Grid.Column="2"
-                                Text="{extensions:Translate Completed}"
+                                Text="{extensions:Translate Done}"
                                 TextColor="{StaticResource TrakGrey}">
                                 <Label.Triggers>
                                     <DataTrigger
@@ -246,7 +249,7 @@
                             </Label>
                         </Grid>
                         <Label
-                            Margin="0,15,0,0"
+                            Margin="0,15,0,10"
                             FontSize="Large"
                             Style="{StaticResource HeaderLabelStyle}"
                             Text="{extensions:Translate GamePageSimilarGames}" />

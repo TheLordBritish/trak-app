@@ -51,8 +51,7 @@ namespace Sparky.TrakApp.ViewModel.Games
 
         private async Task AddGameAsync()
         {
-            var result = await NavigationService.NavigateAsync("GameLibraryTabbedPage?createTab=GameBarcodeScannerPage");
-            int i = 0;
+            await NavigationService.NavigateAsync("GameLibraryTabbedPage?createTab=GameBarcodeScannerPage");
         }
 
         public GameUserEntryStatus GameUserEntryStatus { get; set; }
@@ -63,8 +62,11 @@ namespace Sparky.TrakApp.ViewModel.Games
             set => SetProperty(ref _isActive, value, async () => await LoadUserGameEntriesAsync());
         }
 
+        // Disabled as not used but has to be declared to implement IActiveAware.
+        #pragma warning disable 067
         public event EventHandler IsActiveChanged;
-
+        #pragma warning restore 067
+        
         private async Task LoadGameUserEntriesNextPageAsync()
         {
             IsError = false;

@@ -69,6 +69,12 @@ namespace Sparky.TrakApp.ViewModel.Login
         public ICommand LoginCommand => new DelegateCommand(async () => await LoginAsync());
 
         /// <summary>
+        /// Command that is invoked by the view when the forgotten password label is tapped. When called,
+        /// the command will propagate the request and call the <see cref="ForgottenPasswordAsync"/> method.
+        /// </summary>
+        public ICommand ForgottenPasswordCommand => new DelegateCommand(async () => await ForgottenPasswordAsync());
+        
+        /// <summary>
         /// Command that is invoked by the view when the register label is tapped. When called, the command
         /// will propagate the request and call the <see cref="RegisterAsync"/> method.
         /// </summary>
@@ -157,7 +163,7 @@ namespace Sparky.TrakApp.ViewModel.Login
             catch (ApiException e)
             {
                 IsError = true;
-                ErrorMessage = e.StatusCode == HttpStatusCode.Unauthorized
+                ErrorMessage = e.StatusCode == HttpStatusCode.Unauthorized || e.StatusCode == HttpStatusCode.Forbidden
                     ? Messages.ErrorMessageIncorrectCredentials
                     : Messages.ErrorMessageApiError;
             }
@@ -206,6 +212,16 @@ namespace Sparky.TrakApp.ViewModel.Login
             }
         }
 
+        /// <summary>
+        /// Invoked when the <see cref="ForgottenPasswordCommand"/> is invoked by the view. All the method
+        /// will do is navigate to the forgotten password page.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
+        private async Task ForgottenPasswordAsync()
+        {
+            await NavigationService.NavigateAsync("ForgottenPasswordPage");
+        }
+        
         /// <summary>
         /// Invoked when the user <see cref="RegisterCommand"/> is invoked by the view. All the method will do is
         /// navigate to the register page.

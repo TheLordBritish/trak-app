@@ -82,7 +82,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _loginViewModel.Password.Value = "Password";
             
             _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<UserCredentials>()))
-                .Throws(new ApiException {StatusCode = HttpStatusCode.Forbidden});
+                .Throws(new ApiException {StatusCode = HttpStatusCode.Conflict});
             
             // Act
             _loginViewModel.LoginCommand.Execute(null);
@@ -179,6 +179,20 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 Times.Once);
         }
 
+        [Test]
+        public void ForgottenPasswordCommand_WithNoData_NavigatesToForgottenPasswordPage()
+        {
+            // Arrange
+            _navigationService.Setup(mock => mock.NavigateAsync("ForgottenPasswordPage"))
+                .ReturnsAsync(new Mock<INavigationResult>().Object);
+            
+            // Act
+            _loginViewModel.ForgottenPasswordCommand.Execute(null);
+            
+            // Assert
+            _navigationService.Verify(n => n.NavigateAsync("ForgottenPasswordPage"), Times.Once);
+        }
+        
         [Test]
         public void RegisterCommand_WithNoData_NavigatesToRegisterPage()
         {

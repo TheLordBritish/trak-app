@@ -213,4 +213,25 @@
 	<data name="No" xml:space="preserve">
 		<value>No</value>
 	</data>
+	<data name="ForgottenPasswordPageInstructions" xml:space="preserve">
+		<value>Please enter the email address associated with your account.</value>
+	</data>
+	<data name="ForgottenPasswordPageEmailAddress" xml:space="preserve">
+		<value>Email address</value>
+	</data>
+	<data name="ForgottenPasswordPageSend" xml:space="preserve">
+		<value>Send</value>
+	</data>
+	<data name="ForgottenPasswordErrorMessageEmailAddressEmpty" xml:space="preserve">
+		<value>The email address cannot be empty or only contain whitespace.</value>
+	</data>
+	<data name="ForgottenPasswordErrorMessageEmailAddressWhitespace" xml:space="preserve">
+		<value>The email address cannot contain any spaces.</value>
+	</data>
+	<data name="ForgottenPasswordErrorMessageEmailAddressInvalid" xml:space="preserve">
+		<value>The email address is invalid.</value>
+	</data>
+	<data name="ForgottenPasswordSuccessfulEmail" xml:space="preserve">
+		<value>An email has been sent to {0} containing your new randomly generated password.</value>
+	</data>
 </root>

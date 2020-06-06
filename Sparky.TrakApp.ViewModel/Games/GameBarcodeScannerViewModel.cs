@@ -109,16 +109,16 @@ namespace Sparky.TrakApp.ViewModel.Games
 
             // Check to see if the barcode scanned matches any stored in the server.
             // If it doesn't, it'll throw an exception.
-            var gamePlatformXref =
-                await _restService.GetAsync<GamePlatformXref>(
-                    "api/game-management/v1/game-platforms/barcode/" + Result.Text, token);
+            var gameBarcode =
+                await _restService.GetAsync<GameBarcode>(
+                    "api/game-management/v1/game-barcodes/barcode/" + Result.Text, token);
 
             // Set the needed parameters to correctly load the game page for the 
             // given barcode.
             var parameters = new NavigationParameters
             {
-                {"game-url", gamePlatformXref.GetLink("gameInfo")},
-                {"platform-url", gamePlatformXref.GetLink("platform")},
+                {"game-url", gameBarcode.GetLink("gameInfo")},
+                {"platform-url", gameBarcode.GetLink("platform")},
                 {"in-library", false}
             };
 

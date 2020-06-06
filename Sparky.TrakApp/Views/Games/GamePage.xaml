@@ -183,6 +183,8 @@
                         <Label
                             Margin="0,5,0,0"
                             FontSize="Large"
+                            IsEnabled="{Binding InLibrary}"
+                            IsVisible="{Binding InLibrary}"
                             Style="{StaticResource HeaderLabelStyle}"
                             Text="{extensions:Translate GamePageCurrentlyIn}" />
                         <Grid

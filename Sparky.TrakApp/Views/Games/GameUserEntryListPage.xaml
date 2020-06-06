@@ -4,7 +4,6 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:common="clr-namespace:Sparky.TrakApp.Controls.Common;assembly=Sparky.TrakApp"
-    xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     x:Name="GameUserEntryList"
     BackgroundColor="{StaticResource TrakPrimaryBlue}">
@@ -40,11 +39,11 @@
 
             <!--  Full page control that is displayed when the page results are empty and an error was returned.  -->
             <common:FullPageErrorControl
-                ErrorMessage="Uh-oh we goofed"
+                ErrorMessage="{extensions:Translate GameUserEntryListPageEmptyServerError}"
                 HorizontalOptions="Center"
                 IsRefreshable="True"
                 IsVisible="False"
-                RefreshCommand="{Binding TestOpen}"
+                RefreshCommand="{Binding RefreshCommand}"
                 VerticalOptions="CenterAndExpand">
                 <common:FullPageErrorControl.Triggers>
                     <MultiTrigger TargetType="common:FullPageErrorControl">
@@ -59,33 +58,19 @@
 
             <!--  List that is displayed if there are any results returned from the initial request.  -->
             <common:UserEntryInfiniteListViewControl
-                Margin="0,10"
+                Margin="20"
                 IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                 IsVisible="{Binding IsEmpty, Converter={StaticResource NegateBooleanConverter}}"
                 ItemsSource="{Binding Items}"
                 LoadMoreCommand="{Binding LoadMoreCommand}"
                 RefreshCommand="{Binding RefreshCommand}" />
 
-            <Frame BackgroundColor="{StaticResource TrakGrey}">
-                <Frame
-                    Padding="0"
-                    BackgroundColor="{StaticResource TrakWhite}"
-                    CornerRadius="0"
-                    HasShadow="False">
-                    <Frame
-                        Margin="1"
-                        Padding="0"
-                        BackgroundColor="{StaticResource TrakGrey}"
-                        CornerRadius="0"
-                        HasShadow="False">
-                        <controls:CustomEntry
-                            AutomationId="GameUserEntryListPageSearchEntry"
-                            Placeholder="Search"
-                            PlaceholderColor="{StaticResource TrakWhite}"
-                            TextColor="{StaticResource TrakWhite}" />
-                    </Frame>
-                </Frame>
-            </Frame>
+            <Button
+                Margin="20,50"
+                Command="{Binding AddGameCommand}"
+                IsVisible="{Binding IsError, Converter={StaticResource NegateBooleanConverter}}"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Text="Add game" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

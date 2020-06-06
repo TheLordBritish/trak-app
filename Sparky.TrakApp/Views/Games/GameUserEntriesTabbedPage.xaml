@@ -9,9 +9,9 @@
     Title="Games"
     BarBackgroundColor="{StaticResource TrakPrimaryBlue}">
     <TabbedPage.Children>
-        <games:GameUserEntryListPage Title="{extensions:Translate GameUserEntryListPageBackLogTitle}" BindingContext="{Binding BacklogViewModel}" />
-        <games:GameUserEntryListPage Title="{extensions:Translate GameUserEntryListPagePlayingTitle}" BindingContext="{Binding InProgressViewModel}" />
-        <games:GameUserEntryListPage Title="{extensions:Translate GameUserEntryListPageCompletedTitle}" BindingContext="{Binding CompletedViewModel}" />
-        <games:GameUserEntryListPage Title="{extensions:Translate GameUserEntryListPageDroppedTitle}" BindingContext="{Binding DroppedViewModel}" />
+        <games:GameUserEntryListPage Title="{extensions:Translate Backlog}" BindingContext="{Binding BacklogViewModel}" />
+        <games:GameUserEntryListPage Title="{extensions:Translate Playing}" BindingContext="{Binding InProgressViewModel}" />
+        <games:GameUserEntryListPage Title="{extensions:Translate Done}" BindingContext="{Binding CompletedViewModel}" />
+        <games:GameUserEntryListPage Title="{extensions:Translate Dropped}" BindingContext="{Binding DroppedViewModel}" />
     </TabbedPage.Children>
 </TabbedPage>

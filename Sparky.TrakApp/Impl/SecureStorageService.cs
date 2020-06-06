@@ -2,7 +2,7 @@
 using Sparky.TrakApp.Service;
 using Xamarin.Essentials;
 
-namespace Sparky.TrakApp.ViewModel.Impl
+namespace Sparky.TrakApp.Impl
 {
     public class SecureStorageService : IStorageService
     {

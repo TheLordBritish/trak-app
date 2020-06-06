@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Acr.UserDialogs;
 using Prism;
 using Prism.Commands;
@@ -16,7 +17,6 @@ using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
 using Sparky.TrakApp.ViewModel.Common;
 using Sparky.TrakApp.ViewModel.Resources;
-using Xamarin.Essentials;
 
 namespace Sparky.TrakApp.ViewModel.Games
 {
@@ -47,6 +47,13 @@ namespace Sparky.TrakApp.ViewModel.Games
                 () => !IsBusy && _hasNext);
         }
 
+        public ICommand AddGameCommand => new DelegateCommand(async () => await AddGameAsync());
+
+        private async Task AddGameAsync()
+        {
+            await NavigationService.NavigateAsync("GameLibraryTabbedPage?createTab=GameBarcodeScannerPage");
+        }
+
         public GameUserEntryStatus GameUserEntryStatus { get; set; }
 
         public bool IsActive
@@ -55,8 +62,11 @@ namespace Sparky.TrakApp.ViewModel.Games
             set => SetProperty(ref _isActive, value, async () => await LoadUserGameEntriesAsync());
         }
 
+        // Disabled as not used but has to be declared to implement IActiveAware.
+        #pragma warning disable 067
         public event EventHandler IsActiveChanged;
-
+        #pragma warning restore 067
+        
         private async Task LoadGameUserEntriesNextPageAsync()
         {
             IsError = false;
@@ -75,7 +85,7 @@ namespace Sparky.TrakApp.ViewModel.Games
             {
                 IsError = true;
                 _userDialogs.Toast(new ToastConfig(Messages.GameUserEntryListPageEmptyServerError)
-                    .SetBackgroundColor(ColorConverters.FromHex("#FF0000"))
+                    .SetBackgroundColor(Color.Red)
                     .SetMessageTextColor(Color.White)
                     .SetDuration(TimeSpan.FromSeconds(5))
                     .SetPosition(ToastPosition.Bottom));
@@ -84,7 +94,7 @@ namespace Sparky.TrakApp.ViewModel.Games
             {
                 IsError = true;
                 _userDialogs.Toast(new ToastConfig(Messages.GameUserEntryListPageEmptyGenericError)
-                    .SetBackgroundColor(ColorConverters.FromHex("#FF0000"))
+                    .SetBackgroundColor(Color.Red)
                     .SetMessageTextColor(Color.White)
                     .SetDuration(TimeSpan.FromSeconds(5))
                     .SetPosition(ToastPosition.Bottom));

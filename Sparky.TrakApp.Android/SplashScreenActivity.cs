@@ -2,7 +2,7 @@
 
 namespace Sparky.TrakApp.Droid
 {
-    [Activity(Label = "Trak",  Icon = "@mipmap/icon", Theme = "@style/SplashScreen", MainLauncher = true, NoHistory = true)]
+    [Activity(Label = "Trak",  Icon = "@mipmap/ic_launcher", Theme = "@style/SplashScreen", MainLauncher = true, NoHistory = true)]
     public class SplashScreenActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnResume()

@@ -39,6 +39,7 @@ namespace Sparky.TrakApp
             // Login pages.
             containerRegistry.RegisterForNavigation<LoginPage, LoginViewModel>();
             containerRegistry.RegisterForNavigation<RegisterPage, RegisterViewModel>();
+            containerRegistry.RegisterForNavigation<ForgottenPasswordPage, ForgottenPasswordViewModel>();
             containerRegistry.RegisterForNavigation<VerificationPage, VerificationViewModel>();
             
             // Home pages

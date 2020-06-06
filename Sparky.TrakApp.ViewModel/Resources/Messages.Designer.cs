@@ -115,6 +115,69 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The email address cannot be empty or only contain whitespace..
+        /// </summary>
+        public static string ForgottenPasswordErrorMessageEmailAddressEmpty {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordErrorMessageEmailAddressEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The email address is invalid..
+        /// </summary>
+        public static string ForgottenPasswordErrorMessageEmailAddressInvalid {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordErrorMessageEmailAddressInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The email address cannot contain any spaces..
+        /// </summary>
+        public static string ForgottenPasswordErrorMessageEmailAddressWhitespace {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordErrorMessageEmailAddressWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email address.
+        /// </summary>
+        public static string ForgottenPasswordPageEmailAddress {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordPageEmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the email address associated with your account..
+        /// </summary>
+        public static string ForgottenPasswordPageInstructions {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordPageInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send.
+        /// </summary>
+        public static string ForgottenPasswordPageSend {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordPageSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An email has been sent to {0} containing your new randomly generated password..
+        /// </summary>
+        public static string ForgottenPasswordSuccessfulEmail {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordSuccessfulEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred scanning the barcode. Please try again..
         /// </summary>
         public static string GameBarcodeScannerPageApiError {

@@ -139,6 +139,21 @@ namespace Sparky.TrakApp.Service.Impl
             }
         }
 
+        public async Task ResetPasswordAsync(string emailAddress)
+        {
+            using var client = _httpClientFactory.CreateClient("Trak");
+            using var response = await client.PutAsync($"auth/users/reset-password?email-address={emailAddress}", null);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException
+                {
+                    StatusCode = response.StatusCode,
+                    Content = string.Empty
+                };
+            }
+        }
+
         public async Task<CheckedResponse<UserResponse>> RegisterAsync(RegistrationRequest registrationRequest)
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(registrationRequest, _serializerSettings),

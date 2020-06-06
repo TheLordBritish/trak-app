@@ -10,7 +10,7 @@
     <PackageReference Include="Plugin.FluentValidationRules" Version="1.0.6" />
     <PackageReference Include="Polly" Version="7.2.1" />
     <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1422" />
-    <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
+    <PackageReference Include="Xamarin.Forms" Version="4.6.0.847" />
     <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
   </ItemGroup>
 

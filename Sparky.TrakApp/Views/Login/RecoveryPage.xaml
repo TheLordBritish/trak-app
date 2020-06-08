@@ -1,15 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage
-    x:Class="Sparky.TrakApp.Views.Login.RegisterPage"
+    x:Class="Sparky.TrakApp.Views.Login.RecoveryPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="http://prismlibrary.com"
-    xmlns:controls="clr-namespace:Sparky.TrakApp.Controls"
-    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-    xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    AutomationId="RegisterPage"
-    mc:Ignorable="d">
+    xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
+    xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp">
     <ContentPage.Content>
         <ScrollView Padding="35">
             <Grid>
@@ -22,12 +18,14 @@
                     <ColumnDefinition Width="2*" />
                     <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
+
                 <!--  App logo  -->
                 <Image
                     Grid.Row="0"
                     Grid.Column="0"
                     Margin="0,75,0,10"
                     Source="logo.png" />
+
                 <!--  Subtitle  -->
                 <ScrollView
                     Grid.Row="1"
@@ -41,17 +39,26 @@
                     VerticalScrollBarVisibility="Never">
                     <Label Style="{StaticResource SubtitleLabelStyle}" Text="{extensions:Translate Subtitle}" />
                 </ScrollView>
+
                 <StackLayout
                     Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="2">
+
+                    <!--  Reset instructions  -->
+                    <Label
+                        Margin="0,10,0,0"
+                        Text="{extensions:Translate RecoveryPageInstructions}"
+                        TextColor="{StaticResource TrakGrey}" />
+
                     <!--  Page title  -->
                     <Label
                         Margin="0,20,0,15"
                         Style="{StaticResource HeaderLabelStyle}"
-                        Text="{extensions:Translate RegisterPageTitle}" />
+                        Text="{extensions:Translate RecoveryPageTitle}" />
+
                     <!--  Username label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPageUsername}" />
+                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RecoveryPageUsername}" />
                     <Frame
                         Padding="0"
                         BackgroundColor="{StaticResource TrakWhite}"
@@ -71,7 +78,7 @@
                             BackgroundColor="{StaticResource TrakPrimaryBlue}"
                             CornerRadius="0"
                             HasShadow="False">
-                            <controls:CustomEntry AutomationId="RegisterPageUsernameEntry" Text="{Binding Username.Value}">
+                            <controls:CustomEntry AutomationId="RecoveryPageUsernameEntry" Text="{Binding Username.Value}">
                                 <controls:CustomEntry.Behaviors>
                                     <behaviors:EventToCommandBehavior
                                         Command="{Binding ClearValidationCommand}"
@@ -81,13 +88,15 @@
                             </controls:CustomEntry>
                         </Frame>
                     </Frame>
+                    <!--  Username validation errors  -->
                     <Label
                         IsEnabled="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         IsVisible="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding Username.FirstError}" />
-                    <!--  Email address label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPageEmailAddress}" />
+
+                    <!--  Recovery token label and entry box.  -->
+                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RecoveryPageRecoveryToken}" />
                     <Frame
                         Padding="0"
                         BackgroundColor="{StaticResource TrakWhite}"
@@ -95,7 +104,7 @@
                         HasShadow="False">
                         <Frame.Triggers>
                             <DataTrigger
-                                Binding="{Binding EmailAddress.IsValid}"
+                                Binding="{Binding RecoveryToken.IsValid}"
                                 TargetType="Frame"
                                 Value="False">
                                 <Setter Property="BackgroundColor" Value="Red" />
@@ -107,23 +116,25 @@
                             BackgroundColor="{StaticResource TrakPrimaryBlue}"
                             CornerRadius="0"
                             HasShadow="False">
-                            <controls:CustomEntry AutomationId="RegisterPageEmailAddressEntry" Text="{Binding EmailAddress.Value}">
+                            <controls:CustomEntry AutomationId="RecoveryPageRecoveryTokenEntry" Text="{Binding RecoveryToken.Value}">
                                 <controls:CustomEntry.Behaviors>
                                     <behaviors:EventToCommandBehavior
                                         Command="{Binding ClearValidationCommand}"
-                                        CommandParameter="EmailAddress"
+                                        CommandParameter="RecoveryToken"
                                         EventName="Focused" />
                                 </controls:CustomEntry.Behaviors>
                             </controls:CustomEntry>
                         </Frame>
                     </Frame>
+                    <!--  Recovery token validation errors  -->
                     <Label
-                        IsEnabled="{Binding EmailAddress.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        IsVisible="{Binding EmailAddress.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        IsEnabled="{Binding RecoveryToken.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        IsVisible="{Binding RecoveryToken.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
-                        Text="{Binding EmailAddress.FirstError}" />
+                        Text="{Binding RecoveryToken.FirstError}" />
+
                     <!--  Password label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPagePassword}" />
+                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RecoveryPagePassword}" />
                     <Frame
                         Padding="0"
                         BackgroundColor="{StaticResource TrakWhite}"
@@ -144,7 +155,7 @@
                             CornerRadius="0"
                             HasShadow="False">
                             <controls:CustomEntry
-                                AutomationId="RegisterPagePasswordEntry"
+                                AutomationId="RecoveryPagePasswordEntry"
                                 IsPassword="True"
                                 Text="{Binding Password.Value}">
                                 <controls:CustomEntry.Behaviors>
@@ -156,6 +167,7 @@
                             </controls:CustomEntry>
                         </Frame>
                     </Frame>
+                    <!--  Password validation errors  -->
                     <Label
                         IsEnabled="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         IsVisible="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
@@ -172,7 +184,7 @@
                     </StackLayout>
 
                     <!--  Confirm password label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPageConfirmPassword}" />
+                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RecoveryPageConfirmPassword}" />
                     <Frame
                         Padding="0"
                         BackgroundColor="{StaticResource TrakWhite}"
@@ -193,7 +205,7 @@
                             CornerRadius="0"
                             HasShadow="False">
                             <controls:CustomEntry
-                                AutomationId="RegisterPageConfirmPasswordEntry"
+                                AutomationId="RecoveryPageConfirmPasswordEntry"
                                 IsPassword="True"
                                 Text="{Binding ConfirmPassword.Value}">
                                 <controls:CustomEntry.Behaviors>
@@ -205,38 +217,43 @@
                             </controls:CustomEntry>
                         </Frame>
                     </Frame>
+                    <!--  Confirm password validation errors  -->
                     <Label
                         IsEnabled="{Binding ConfirmPassword.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         IsVisible="{Binding ConfirmPassword.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding ConfirmPassword.FirstError}" />
+
                     <!--  Display error messages if anything went wrong.  -->
                     <Label
                         Margin="0,5"
-                        AutomationId="RegisterPageErrorMessage"
+                        AutomationId="RecoveryPageErrorMessage"
                         IsEnabled="{Binding IsError}"
                         IsVisible="{Binding IsError}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding ErrorMessage}" />
-                    <!--  Sign up button and activity indicator.  -->
+
+                    <!--  Recover button and activity indicator.  -->
                     <Button
                         Margin="0,20,0,0"
-                        AutomationId="RegisterPageSignUpButton"
-                        Command="{Binding RegisterCommand}"
+                        AutomationId="RecoveryPageRecoverButton"
+                        Command="{Binding RecoverCommand}"
                         IsVisible="{Binding IsBusy, Converter={StaticResource NegateBooleanConverter}}"
                         Style="{StaticResource PrimaryButtonStyle}"
-                        Text="{extensions:Translate RegisterPageSignUp}" />
+                        Text="{extensions:Translate RecoveryPageRecover}" />
                     <ActivityIndicator
                         Margin="0,20,0,0"
                         IsRunning="{Binding IsBusy}"
                         IsVisible="{Binding IsBusy}" />
+
                     <!--  Privacy policy and terms of use label.  -->
                     <Label
                         Margin="0,10"
-                        AutomationId="RegisterPagePrivacyPolicyLabel"
+                        AutomationId="RecoveryPagePrivacyPolicyLabel"
                         FontSize="Small"
                         HorizontalOptions="Center"
-                        Text="{extensions:Translate RegisterPagePrivacyPolicyAndTermsOfUse}" />
+                        Text="{extensions:Translate RecoveryPagePrivacyPolicyAndTermsOfUse}" />
+
                     <!--  Log in label.  -->
                     <Label
                         Margin="0,10"
@@ -244,12 +261,12 @@
                         HorizontalOptions="Center">
                         <Label.FormattedText>
                             <FormattedString>
-                                <Span FontSize="Small" Text="{extensions:Translate RegisterPageAlreadyHaveAccount}" />
+                                <Span FontSize="Small" Text="{extensions:Translate RecoveryPageRememberedPassword}" />
                                 <Span
-                                    AutomationId="RegisterPageLogInLabel"
+                                    AutomationId="RecoveryPageLogInLabel"
                                     FontAttributes="Bold"
                                     FontSize="Small"
-                                    Text="{extensions:Translate RegisterPageLogIn}">
+                                    Text="{extensions:Translate RecoveryPageLogIn}">
                                     <Span.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding LoginCommand}" NumberOfTapsRequired="1" />
                                     </Span.GestureRecognizers>

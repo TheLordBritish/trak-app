@@ -1,5 +1,4 @@
 ﻿using System;
-using Acr.UserDialogs;
 using Moq;
 using NUnit.Framework;
 using Prism.Navigation;
@@ -14,7 +13,6 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
     {
         private Mock<INavigationService> _navigationService;
         private Mock<IAuthService> _authService;
-        private Mock<IUserDialogs> _userDialogs;
 
         private ForgottenPasswordViewModel _forgottenPasswordViewModel;
 
@@ -23,35 +21,34 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         {
             _navigationService = new Mock<INavigationService>();
             _authService = new Mock<IAuthService>();
-            _userDialogs = new Mock<IUserDialogs>();
-            
-            _forgottenPasswordViewModel = new ForgottenPasswordViewModel(_navigationService.Object, _authService.Object, _userDialogs.Object);
+
+            _forgottenPasswordViewModel = new ForgottenPasswordViewModel(_navigationService.Object, _authService.Object);
         }
 
         [Test]
-        public void ResetPasswordCommand_WithInvalidEmailAddress_doesntCallAuthService()
+        public void SendCommand_WithInvalidEmailAddress_doesntCallAuthService()
         {
             // Arrange
             _forgottenPasswordViewModel.EmailAddress.Value = "invalid";
             
             // Act
-            _forgottenPasswordViewModel.ResetPasswordCommand.Execute(null);
+            _forgottenPasswordViewModel.SendCommand.Execute(null);
             
             // Assert
-            _authService.Verify(a => a.ResetPasswordAsync(It.IsAny<string>()), Times.Never());
+            _authService.Verify(a => a.RequestRecoveryAsync(It.IsAny<string>()), Times.Never());
         }
 
         [Test]
-        public void ResetPasswordCommand_ThrowsApiException_SetsErrorMessageAsApiError()
+        public void SendCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {
             // Arrange
             _forgottenPasswordViewModel.EmailAddress.Value = "test.email@test.com";
 
-            _authService.Setup(a => a.ResetPasswordAsync(It.IsAny<string>()))
+            _authService.Setup(a => a.RequestRecoveryAsync(It.IsAny<string>()))
                 .Throws(new ApiException());
             
             // Act
-            _forgottenPasswordViewModel.ResetPasswordCommand.Execute(null);
+            _forgottenPasswordViewModel.SendCommand.Execute(null);
             
             // Assert
             Assert.IsTrue(_forgottenPasswordViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
@@ -60,16 +57,16 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         }
 
         [Test]
-        public void ResetPasswordCommand_ThrowsNonApiException_SetErrorMessageAsGenericError()
+        public void SendCommand_ThrowsNonApiException_SetErrorMessageAsGenericError()
         {
             // Arrange
             _forgottenPasswordViewModel.EmailAddress.Value = "test.email@test.com";
             
-            _authService.Setup(a => a.ResetPasswordAsync(It.IsAny<string>()))
+            _authService.Setup(a => a.RequestRecoveryAsync(It.IsAny<string>()))
                 .Throws(new Exception());
             
             // Act
-            _forgottenPasswordViewModel.ResetPasswordCommand.Execute(null);
+            _forgottenPasswordViewModel.SendCommand.Execute(null);
             
             // Assert
             Assert.IsTrue(_forgottenPasswordViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
@@ -78,23 +75,37 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         }
 
         [Test]
-        public void ResetPaswordCommand_WithValidRequest_DisplaysAlertToUser()
+        public void SendCommand_WithValidRequest_NavigatesToRecoveryPage()
         {
             // Arrange
             _forgottenPasswordViewModel.EmailAddress.Value = "test.email@test.com";
             
-            _authService.Setup(a => a.ResetPasswordAsync(It.IsAny<string>()))
+            _authService.Setup(a => a.RequestRecoveryAsync(It.IsAny<string>()))
                 .Verifiable();
             
-            _userDialogs.Setup(u => u.AlertAsync(It.IsAny<AlertConfig>(), null))
+            _navigationService.Setup(mock => mock.NavigateAsync("RecoveryPage"))
                 .Verifiable();
             
             // Act
-            _forgottenPasswordViewModel.ResetPasswordCommand.Execute(null);
+            _forgottenPasswordViewModel.SendCommand.Execute(null);
             
             // Assert
             _authService.Verify();
-            _userDialogs.Verify();
+            _navigationService.Verify();
+        }
+
+        [Test]
+        public void RecoveryCommand_WithNoData_NavigatesToRecoveryPage()
+        {
+            // Arrange
+            _navigationService.Setup(mock => mock.NavigateAsync("RecoveryPage"))
+                .ReturnsAsync(new Mock<INavigationResult>().Object);
+
+            // Act
+            _forgottenPasswordViewModel.RecoveryCommand.Execute(null);
+            
+            // Assert
+            _navigationService.Verify(n => n.NavigateAsync("RecoveryPage"), Times.Once);
         }
     }
 }

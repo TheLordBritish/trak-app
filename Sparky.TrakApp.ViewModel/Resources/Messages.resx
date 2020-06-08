@@ -63,8 +63,20 @@
 	<data name="RegisterPageLogIn" xml:space="preserve">
 		<value>Log in</value>
 	</data>
-	<data name="RegisterPagePasswordRulesHeader" xml:space="preserve">
+	<data name="PasswordRulesHeader" xml:space="preserve">
 		<value>A password must contain:</value>
+	</data>
+	<data name="PasswordRuleOne" xml:space="preserve">
+		<value>- 8 characters</value>
+	</data>
+	<data name="PasswordRuleTwo" xml:space="preserve">
+		<value>- 1 upper case letter</value>
+	</data>
+	<data name="PasswordRuleThree" xml:space="preserve">
+		<value>- 1 lower case letter</value>
+	</data>
+	<data name="PasswordRuleFour" xml:space="preserve">
+		<value>- 1 number</value>
 	</data>
 	<data name="LoginPageTitle" xml:space="preserve">
 		<value>Log in</value>
@@ -231,7 +243,82 @@
 	<data name="ForgottenPasswordErrorMessageEmailAddressInvalid" xml:space="preserve">
 		<value>The email address is invalid.</value>
 	</data>
-	<data name="ForgottenPasswordSuccessfulEmail" xml:space="preserve">
-		<value>An email has been sent to {0} containing your new randomly generated password.</value>
+	<data name="RecoveryPageInstructions" xml:space="preserve">
+		<value>An email has been sent to your email containing your recovery token. Please enter it in the input below along with your username and new password.</value>
+	</data>
+	<data name="RecoveryPageTitle" xml:space="preserve">
+		<value>Recover account</value>
+	</data>
+	<data name="RecoveryPageUsername" xml:space="preserve">
+		<value>Username</value>
+	</data>
+	<data name="RecoveryPageRecoveryToken" xml:space="preserve">
+		<value>Recovery token</value>
+	</data>
+	<data name="RecoveryPagePassword" xml:space="preserve">
+		<value>Password</value>
+	</data>
+	<data name="RecoveryPageConfirmPassword" xml:space="preserve">
+		<value>Confirm password</value>
+	</data>
+	<data name="RecoveryPageRecover" xml:space="preserve">
+		<value>Recover</value>
+	</data>
+	<data name="RecoveryPageRememberedPassword" xml:space="preserve">
+		<value>Remembered your password? </value>
+	</data>
+	<data name="RecoveryPageLogIn" xml:space="preserve">
+		<value>Log in</value>
+	</data>
+	<data name="RecoveryPagePrivacyPolicyAndTermsOfUse" xml:space="preserve">
+		<value>Privacy Policy &amp; Terms of Use</value>
+	</data>
+	<data name="RecoveryErrorMessageUsernameEmpty" xml:space="preserve">
+		<value>Username cannot be empty or only contain whitespace.</value>
+	</data>
+	<data name="RecoveryErrorMessageUsernameWhitespace" xml:space="preserve">
+		<value>Username cannot contain any spaces.</value>
+	</data>
+	<data name="RecoveryErrorMessageUsernameLength" xml:space="preserve">
+		<value>Username must be between 1 and 255 characters.</value>
+	</data>
+	<data name="RecoveryErrorMessageUsernameInvalidCharacters" xml:space="preserve">
+		<value>The username can only contain letters, numbers, under-scores and hyphens.</value>
+	</data>
+	<data name="RecoveryErrorMessageRecoveryTokenEmpty" xml:space="preserve">
+		<value>Recovery token cannot be empty or only contain whitespace.</value>
+	</data>
+	<data name="RecoveryErrorMessageRecoveryTokenWhitespace" xml:space="preserve">
+		<value>Recovery token cannot contain any spaces.</value>
+	</data>
+	<data name="RecoveryErrorMessageRecoveryTokenLength" xml:space="preserve">
+		<value>Recovery token must be exactly 30 characters long.</value>
+	</data>
+	<data name="RecoveryErrorMessageRecoveryTokenAlphanumeric" xml:space="preserve">
+		<value>Recovery token should only contain alphanumeric characters.</value>
+	</data>
+	<data name="RecoveryErrorMessagePasswordEmpty" xml:space="preserve">
+		<value>Password cannot be empty or only contain whitespace.</value>
+	</data>
+	<data name="RecoveryErrorMessagePasswordMinimumLength" xml:space="preserve">
+		<value>Password must be at least 8 characters.</value>
+	</data>
+	<data name="RecoveryErrorMessagePasswordUppercaseCharacter" xml:space="preserve">
+		<value>Password must contain at least one uppercase character.</value>
+	</data>
+	<data name="RecoveryErrorMessagePasswordLowercaseCharacter" xml:space="preserve">
+		<value>Password must contain at least one lowercase character.</value>
+	</data>
+	<data name="RecoveryErrorMessagePasswordNumber" xml:space="preserve">
+		<value>Password must contain at least one number.</value>
+	</data>
+	<data name="RecoveryErrorMessagePasswordWhitespace" xml:space="preserve">
+		<value>Password should not contain any spaces.</value>
+	</data>
+	<data name="RecoveryErrorMessageConfirmPasswordEmpty" xml:space="preserve">
+		<value>Confirm password cannot be empty or only contain whitespace.</value>
+	</data>
+	<data name="RecoveryErrorMessageConfirmPasswordMismatch" xml:space="preserve">
+		<value>The passwords must match.</value>
 	</data>
 </root>

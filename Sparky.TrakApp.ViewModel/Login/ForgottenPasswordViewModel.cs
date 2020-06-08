@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using Acr.UserDialogs;
 using FluentValidation;
 using Plugin.FluentValidationRules;
 using Prism.Commands;
@@ -24,8 +23,7 @@ namespace Sparky.TrakApp.ViewModel.Login
     public class ForgottenPasswordViewModel : BaseViewModel, IValidate<ForgottenPasswordDetails>
     {
         private readonly IAuthService _authService;
-        private readonly IUserDialogs _userDialogs;
-        
+
         private IValidator _validator;
         private Validatables _validatables;
 
@@ -38,12 +36,10 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// </summary>
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="authService"> The <see cref="IAuthService"/> instance to inject.</param>
-        /// <param name="userDialogs"> The <see cref="IUserDialogs"/> instance to inject.</param>
-        public ForgottenPasswordViewModel(INavigationService navigationService, IAuthService authService, IUserDialogs userDialogs) : base(navigationService)
+        public ForgottenPasswordViewModel(INavigationService navigationService, IAuthService authService) : base(navigationService)
         {
             _authService = authService;
-            _userDialogs = userDialogs;
-            
+
             _emailAddress = new Validatable<string>(nameof(ForgottenPasswordDetails.EmailAddress));
 
             SetupForValidation();
@@ -59,10 +55,16 @@ namespace Sparky.TrakApp.ViewModel.Login
         
         /// <summary>
         /// Command that is invoked by the view when the send button is tapped. When called, the command
-        /// will propagate the request and call the <see cref="ResetPasswordAsync"/> method.
+        /// will propagate the request and call the <see cref="SendAsync"/> method.
         /// </summary>
-        public ICommand ResetPasswordCommand => new DelegateCommand(async () => await ResetPasswordAsync());
+        public ICommand SendCommand => new DelegateCommand(async () => await SendAsync());
         
+        /// <summary>
+        /// Command that is invoked by the view when the already have recovery token label is tapped. When
+        /// called, the command will propagate the request and call the <see cref="RecoveryAsync"/> method.
+        /// </summary>
+        public ICommand RecoveryCommand => new DelegateCommand(async () => await RecoveryAsync());
+
         /// <summary>
         /// A <see cref="Validatable{T}"/> that contains the currently populated email address with
         /// additional validation information.
@@ -109,16 +111,16 @@ namespace Sparky.TrakApp.ViewModel.Login
         }
         
         /// <summary>
-        /// Private method that is invoked by the <see cref="ResetPasswordCommand"/> when activated by the associated
+        /// Private method that is invoked by the <see cref="SendCommand"/> when activated by the associated
         /// view. This method will validate the email address on the view, and if valid attempt to send a password
-        /// reset email to the specified address. If the request is successful, an alert is displayed to the user
-        /// to follow the instructions within the email.
+        /// reset email to the specified address. If the request is successful, the user is navigated to the recovery
+        /// page with further details.
         ///
         /// If any errors occur during validation or the email request, the exceptions are caught and the errors are
         /// displayed to the user through the ErrorMessage parameter and setting the IsError boolean to true.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ResetPasswordAsync()
+        private async Task SendAsync()
         {
             IsError = false;
             IsBusy = true;
@@ -130,7 +132,7 @@ namespace Sparky.TrakApp.ViewModel.Login
             {
                 if (validationResult.IsValidOverall)
                 {
-                    await AttemptResetPasswordAsync(EmailAddress.Value);
+                    await AttemptSendAsync(EmailAddress.Value);
                 }
             }
             catch (ApiException)
@@ -148,23 +150,23 @@ namespace Sparky.TrakApp.ViewModel.Login
                 IsBusy = false;
             }
         }
+        
+        private async Task RecoveryAsync()
+        {
+            await NavigationService.NavigateAsync("RecoveryPage");
+        }
 
         /// <summary>
-        /// Private method that is invoked by the <see cref="ResetPasswordAsync"/> method. All this method
-        /// will do is call off to the reset password method on the <see cref="IAuthService"/> and display
-        /// an alert to the user when the request was successful.
+        /// Private method that is invoked by the <see cref="SendAsync"/> method. All this method
+        /// will do is call off to the recover method on the <see cref="IAuthService"/> and navigate
+        /// the user to the recovery page.
         /// </summary>
         /// <param name="emailAddress">The email address to send the password reset email to.</param>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task AttemptResetPasswordAsync(string emailAddress)
+        private async Task AttemptSendAsync(string emailAddress)
         {
-            await _authService.ResetPasswordAsync(emailAddress);
-            // Create an alert to let the user know that the email request was successful.
-            var alertConfig = new AlertConfig()
-                .SetTitle(Messages.TrakTitle)
-                .SetMessage(string.Format(Messages.ForgottenPasswordSuccessfulEmail, emailAddress));
-
-            await _userDialogs.AlertAsync(alertConfig);
+            await _authService.RequestRecoveryAsync(emailAddress);
+            await NavigationService.NavigateAsync("RecoveryPage");
         }
     }
 }

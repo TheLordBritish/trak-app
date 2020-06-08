@@ -128,7 +128,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _registerViewModel.RegisterCommand.Execute(null);
 
             // Assert
-            Assert.IsTrue(_registerViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
+            Assert.IsTrue(_registerViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
             Assert.AreEqual(Messages.ErrorMessageGeneric, _registerViewModel.ErrorMessage,
                 "The error message is incorrect.");
         }
@@ -148,6 +148,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             // Act
             _registerViewModel.RegisterCommand.Execute(null);
             
+            // Assert
             Assert.IsTrue(_registerViewModel.IsError, "vm.IsError should be true if the user response has an error.");
             Assert.AreEqual("error", _registerViewModel.ErrorMessage, "The error message is incorrect.");
             

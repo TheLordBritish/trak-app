@@ -139,6 +139,21 @@ namespace Sparky.TrakApp.Service.Impl
             }
         }
 
+        public async Task RequestRecoveryAsync(string emailAddress)
+        {
+            using var client = _httpClientFactory.CreateClient("Trak");
+            using var response = await client.PutAsync($"auth/users/recover?email-address={emailAddress}", null);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException
+                {
+                    StatusCode = response.StatusCode,
+                    Content = string.Empty
+                };
+            }
+        }
+
         public async Task<CheckedResponse<UserResponse>> RegisterAsync(RegistrationRequest registrationRequest)
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(registrationRequest, _serializerSettings),
@@ -156,6 +171,27 @@ namespace Sparky.TrakApp.Service.Impl
                 };
             }
 
+            var json = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<CheckedResponse<UserResponse>>(json, _deserializerSettings);
+        }
+
+        public async Task<CheckedResponse<UserResponse>> RecoverAsync(RecoveryRequest recoveryRequest)
+        {
+            var stringContent = new StringContent(JsonConvert.SerializeObject(recoveryRequest, _serializerSettings),
+                Encoding.UTF8, "application/json");
+            
+            using var client = _httpClientFactory.CreateClient("Trak");
+            using var response = await client.PutAsync("auth/users", stringContent);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException
+                {
+                    StatusCode = response.StatusCode,
+                    Content = string.Empty
+                };
+            }
+            
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<CheckedResponse<UserResponse>>(json, _deserializerSettings);
         }

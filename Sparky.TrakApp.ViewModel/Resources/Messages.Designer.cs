@@ -115,6 +115,60 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The email address cannot be empty or only contain whitespace..
+        /// </summary>
+        public static string ForgottenPasswordErrorMessageEmailAddressEmpty {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordErrorMessageEmailAddressEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The email address is invalid..
+        /// </summary>
+        public static string ForgottenPasswordErrorMessageEmailAddressInvalid {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordErrorMessageEmailAddressInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The email address cannot contain any spaces..
+        /// </summary>
+        public static string ForgottenPasswordErrorMessageEmailAddressWhitespace {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordErrorMessageEmailAddressWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email address.
+        /// </summary>
+        public static string ForgottenPasswordPageEmailAddress {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordPageEmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter the email address associated with your account..
+        /// </summary>
+        public static string ForgottenPasswordPageInstructions {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordPageInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send.
+        /// </summary>
+        public static string ForgottenPasswordPageSend {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordPageSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error occurred scanning the barcode. Please try again..
         /// </summary>
         public static string GameBarcodeScannerPageApiError {
@@ -313,11 +367,290 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to - 1 number.
+        /// </summary>
+        public static string PasswordRuleFour {
+            get {
+                return ResourceManager.GetString("PasswordRuleFour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - 8 characters.
+        /// </summary>
+        public static string PasswordRuleOne {
+            get {
+                return ResourceManager.GetString("PasswordRuleOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A password must contain:.
+        /// </summary>
+        public static string PasswordRulesHeader {
+            get {
+                return ResourceManager.GetString("PasswordRulesHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - 1 lower case letter.
+        /// </summary>
+        public static string PasswordRuleThree {
+            get {
+                return ResourceManager.GetString("PasswordRuleThree", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to - 1 upper case letter.
+        /// </summary>
+        public static string PasswordRuleTwo {
+            get {
+                return ResourceManager.GetString("PasswordRuleTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Playing.
         /// </summary>
         public static string Playing {
             get {
                 return ResourceManager.GetString("Playing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm password cannot be empty or only contain whitespace..
+        /// </summary>
+        public static string RecoveryErrorMessageConfirmPasswordEmpty {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessageConfirmPasswordEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The passwords must match..
+        /// </summary>
+        public static string RecoveryErrorMessageConfirmPasswordMismatch {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessageConfirmPasswordMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password cannot be empty or only contain whitespace..
+        /// </summary>
+        public static string RecoveryErrorMessagePasswordEmpty {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessagePasswordEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one lowercase character..
+        /// </summary>
+        public static string RecoveryErrorMessagePasswordLowercaseCharacter {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessagePasswordLowercaseCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must be at least 8 characters..
+        /// </summary>
+        public static string RecoveryErrorMessagePasswordMinimumLength {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessagePasswordMinimumLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one number..
+        /// </summary>
+        public static string RecoveryErrorMessagePasswordNumber {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessagePasswordNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password must contain at least one uppercase character..
+        /// </summary>
+        public static string RecoveryErrorMessagePasswordUppercaseCharacter {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessagePasswordUppercaseCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password should not contain any spaces..
+        /// </summary>
+        public static string RecoveryErrorMessagePasswordWhitespace {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessagePasswordWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recovery token should only contain alphanumeric characters..
+        /// </summary>
+        public static string RecoveryErrorMessageRecoveryTokenAlphanumeric {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessageRecoveryTokenAlphanumeric", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recovery token cannot be empty or only contain whitespace..
+        /// </summary>
+        public static string RecoveryErrorMessageRecoveryTokenEmpty {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessageRecoveryTokenEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recovery token must be exactly 30 characters long..
+        /// </summary>
+        public static string RecoveryErrorMessageRecoveryTokenLength {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessageRecoveryTokenLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recovery token cannot contain any spaces..
+        /// </summary>
+        public static string RecoveryErrorMessageRecoveryTokenWhitespace {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessageRecoveryTokenWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username cannot be empty or only contain whitespace..
+        /// </summary>
+        public static string RecoveryErrorMessageUsernameEmpty {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessageUsernameEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The username can only contain letters, numbers, under-scores and hyphens..
+        /// </summary>
+        public static string RecoveryErrorMessageUsernameInvalidCharacters {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessageUsernameInvalidCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username must be between 1 and 255 characters..
+        /// </summary>
+        public static string RecoveryErrorMessageUsernameLength {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessageUsernameLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username cannot contain any spaces..
+        /// </summary>
+        public static string RecoveryErrorMessageUsernameWhitespace {
+            get {
+                return ResourceManager.GetString("RecoveryErrorMessageUsernameWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm password.
+        /// </summary>
+        public static string RecoveryPageConfirmPassword {
+            get {
+                return ResourceManager.GetString("RecoveryPageConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An email has been sent to your email containing your recovery token. Please enter it in the input below along with your username and new password..
+        /// </summary>
+        public static string RecoveryPageInstructions {
+            get {
+                return ResourceManager.GetString("RecoveryPageInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in.
+        /// </summary>
+        public static string RecoveryPageLogIn {
+            get {
+                return ResourceManager.GetString("RecoveryPageLogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string RecoveryPagePassword {
+            get {
+                return ResourceManager.GetString("RecoveryPagePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Privacy Policy &amp; Terms of Use.
+        /// </summary>
+        public static string RecoveryPagePrivacyPolicyAndTermsOfUse {
+            get {
+                return ResourceManager.GetString("RecoveryPagePrivacyPolicyAndTermsOfUse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recover.
+        /// </summary>
+        public static string RecoveryPageRecover {
+            get {
+                return ResourceManager.GetString("RecoveryPageRecover", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recovery token.
+        /// </summary>
+        public static string RecoveryPageRecoveryToken {
+            get {
+                return ResourceManager.GetString("RecoveryPageRecoveryToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remembered your password? .
+        /// </summary>
+        public static string RecoveryPageRememberedPassword {
+            get {
+                return ResourceManager.GetString("RecoveryPageRememberedPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recover account.
+        /// </summary>
+        public static string RecoveryPageTitle {
+            get {
+                return ResourceManager.GetString("RecoveryPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        public static string RecoveryPageUsername {
+            get {
+                return ResourceManager.GetString("RecoveryPageUsername", resourceCulture);
             }
         }
         
@@ -363,15 +696,6 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         public static string RegisterPagePassword {
             get {
                 return ResourceManager.GetString("RegisterPagePassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A password must contain:.
-        /// </summary>
-        public static string RegisterPagePasswordRulesHeader {
-            get {
-                return ResourceManager.GetString("RegisterPagePasswordRulesHeader", resourceCulture);
             }
         }
         

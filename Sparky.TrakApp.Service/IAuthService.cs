@@ -13,7 +13,11 @@ namespace Sparky.TrakApp.Service
         Task<CheckedResponse<bool>> VerifyAsync(string username, string verificationCode, string authToken);
 
         Task ReVerifyAsync(string username, string authToken);
+
+        Task RequestRecoveryAsync(string emailAddress);
         
         Task<CheckedResponse<UserResponse>> RegisterAsync(RegistrationRequest registrationRequest);
+
+        Task<CheckedResponse<UserResponse>> RecoverAsync(RecoveryRequest recoveryRequest);
     }
 }

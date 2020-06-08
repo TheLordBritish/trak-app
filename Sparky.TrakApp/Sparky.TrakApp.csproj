@@ -65,6 +65,12 @@
     <Compile Update="Views\Games\GameLibraryTabbedPage.xaml.cs">
       <DependentUpon>GameLibraryTabbedPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Login\ForgottenPasswordPage.xaml.cs">
+      <DependentUpon>ForgottenPasswordPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Login\RecoveryPage.xaml.cs">
+      <DependentUpon>RecoveryPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -120,6 +126,14 @@
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Games\GameLibraryTabbedPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Login\ForgottenPasswordPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Login\RecoveryPage.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>

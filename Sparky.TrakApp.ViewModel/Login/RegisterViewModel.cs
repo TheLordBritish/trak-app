@@ -57,9 +57,9 @@ namespace Sparky.TrakApp.ViewModel.Login
 
         /// <summary>
         /// Command that is invoked each time that a validatable field on the view is changed, which
-        /// for the <see cref="RegisterViewModel"/> is the verification code. When the view is changed,
-        /// the name is passed through and the request propagated to the <see cref="ClearValidation"/>
-        /// methods.
+        /// for the <see cref="RegisterViewModel"/> is the username, email address, password and confirm
+        /// password code. When the view is changed, the name is passed through and the request propagated
+        /// to the <see cref="ClearValidation"/> method.
         /// </summary>
         public ICommand ClearValidationCommand => new DelegateCommand<string>(ClearValidation);
 

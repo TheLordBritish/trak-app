@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Prism.Navigation;
+using Sparky.TrakApp.Common;
 
 namespace Sparky.TrakApp.ViewModel
 {
@@ -13,7 +14,8 @@ namespace Sparky.TrakApp.ViewModel
     public abstract class BaseListViewModel<T> : BaseViewModel where T : class
     {
         private bool _isEmpty;
-        private ObservableCollection<T> _items;
+        private bool _isRefreshing;
+        private ObservableRangeCollection<T> _items;
         
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
@@ -23,7 +25,8 @@ namespace Sparky.TrakApp.ViewModel
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         protected BaseListViewModel(INavigationService navigationService) : base(navigationService)
         {
-            Items = new ObservableCollection<T>();
+            Items = new ObservableRangeCollection<T>();
+            IsEmpty = true;
         }
 
         /// <summary>
@@ -48,11 +51,21 @@ namespace Sparky.TrakApp.ViewModel
         }
 
         /// <summary>
+        /// Used to specify whether the list that is bound to this view model is currently refreshing
+        /// its list. Set to false by default.
+        /// </summary>
+        public bool IsRefreshing
+        {
+            get => _isRefreshing;
+            set => SetProperty(ref _isRefreshing, value);
+        }
+        
+        /// <summary>
         /// An <see cref="ObservableCollection{T}"/> of items that is used to represent each individual item
         /// within the list page that this view model is bound to. By default before loading it is set to an
         /// empty instantiated list.
         /// </summary>
-        public ObservableCollection<T> Items
+        public ObservableRangeCollection<T> Items
         {
             get => _items;
             set => SetProperty(ref _items, value);

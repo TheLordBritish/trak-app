@@ -300,7 +300,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// <returns>A <see cref="Task" /> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task AttemptPlatformDataAsync(Uri uri, GameInfo gameInfo, string token)
         {
-            if (!string.IsNullOrEmpty(uri.OriginalString))
+            if (uri != null && !string.IsNullOrEmpty(uri.OriginalString))
             {
                 var platform = await _restService.GetAsync<Platform>(uri.OriginalString, token);
                 PlatformNames = platform.Name;

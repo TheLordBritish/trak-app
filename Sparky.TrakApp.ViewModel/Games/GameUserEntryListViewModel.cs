@@ -25,11 +25,9 @@ namespace Sparky.TrakApp.ViewModel.Games
         private readonly IRestService _restService;
         private readonly IStorageService _storageService;
         private readonly IUserDialogs _userDialogs;
-
-        private bool _hasNext = true;
-
+        
         private bool _isActive;
-        private Uri _nextPageUri;
+        private Uri _nextUri;
 
         protected GameUserEntryListViewModel(INavigationService navigationService, IStorageService storageService,
             IUserDialogs userDialogs, IRestService restService, GameUserEntryStatus gameUserEntryStatus) : base(
@@ -44,14 +42,14 @@ namespace Sparky.TrakApp.ViewModel.Games
             // Commands
             RefreshCommand = new DelegateCommand(async () => await LoadUserGameEntriesAsync(), () => !IsBusy);
             LoadMoreCommand = new DelegateCommand(async () => await LoadGameUserEntriesNextPageAsync(),
-                () => !IsBusy && _hasNext);
+                () => !IsBusy && _nextUri != null);
         }
 
         public ICommand AddGameCommand => new DelegateCommand(async () => await AddGameAsync());
 
         private async Task AddGameAsync()
         {
-            await NavigationService.NavigateAsync("GameLibraryTabbedPage?createTab=GameBarcodeScannerPage");
+            await NavigationService.NavigateAsync("GameLibraryTabbedPage?createTab=GameLibraryListPage&createTab=GameBarcodeScannerPage");
         }
 
         public GameUserEntryStatus GameUserEntryStatus { get; set; }
@@ -75,11 +73,8 @@ namespace Sparky.TrakApp.ViewModel.Games
             try
             {
                 // Load the next page of game user entries with the next page URL.
-                var result = await GetGameUserEntriesAsync(_nextPageUri.OriginalString);
-                foreach (var gameUserEntry in result)
-                {
-                    Items.Add(CreateListItemViewModelFromGameUserEntry(gameUserEntry));
-                }
+                var result = await GetGameUserEntriesAsync(_nextUri.OriginalString);
+                Items.AddRange(result.Select(CreateListItemViewModelFromGameUserEntry));
             }
             catch (ApiException)
             {
@@ -107,11 +102,12 @@ namespace Sparky.TrakApp.ViewModel.Games
 
         private async Task LoadUserGameEntriesAsync()
         {
+            // Clear the current list when navigating away so it can be freshly reloaded when navigating back.
+            Items.Clear();
+            
             // If the tab is not being navigated to, then there's no point making a server request.
             if (!_isActive)
             {
-                // Clear the current list when navigating away so it can be freshly reloaded when navigating back.
-                Items.Clear();
                 return;
             }
 
@@ -128,7 +124,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                 var entries = await GetGameUserEntriesAsync(
                     $"api/game-management/v1/game-user-entries?user-id={userId}&status={enumName}&sort=gameTitle");
 
-                Items = new ObservableCollection<ListItemViewModel>(entries.Select(CreateListItemViewModelFromGameUserEntry));
+                Items.AddRange(entries.Select(CreateListItemViewModelFromGameUserEntry));
                 
                 IsEmpty = Items.Count == 0;
             }
@@ -154,9 +150,8 @@ namespace Sparky.TrakApp.ViewModel.Games
             var authToken = await _storageService.GetAuthTokenAsync();
 
             var page = await _restService.GetAsync<HateoasPage<GameUserEntry>>(url, authToken);
-
-            _hasNext = page.HasNext;
-            _nextPageUri = _hasNext ? page.GetLink("next") : null;
+            
+            _nextUri = page.GetLink("next");
 
             var result = new List<GameUserEntry>();
             // If the page returns doesn't contain any data, then it'll be null and not returned in the response.

@@ -58,7 +58,8 @@
 
             <!--  List that is displayed if there are any results returned from the initial request.  -->
             <common:UserEntryInfiniteListViewControl
-                Margin="20"
+                HorizontalOptions="StartAndExpand"
+                VerticalOptions="StartAndExpand"
                 IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                 IsVisible="{Binding IsEmpty, Converter={StaticResource NegateBooleanConverter}}"
                 ItemsSource="{Binding Items}"

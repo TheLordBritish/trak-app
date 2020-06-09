@@ -4,7 +4,6 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:common="clr-namespace:Sparky.TrakApp.Controls.Common;assembly=Sparky.TrakApp"
-    xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:games="clr-namespace:Sparky.TrakApp.Model.Games;assembly=Sparky.TrakApp.Model"
     xmlns:magicGradients="clr-namespace:MagicGradients;assembly=MagicGradients">
@@ -95,7 +94,7 @@
                         Grid.Row="1"
                         Grid.Column="0"
                         Margin="20,0"
-                        LineBreakMode="HeadTruncation"
+                        LineBreakMode="TailTruncation"
                         MaxLines="1"
                         Text="{Binding PlatformNames}"
                         VerticalTextAlignment="Center" />
@@ -257,15 +256,13 @@
                             Text="{extensions:Translate GamePageSimilarGames}" />
 
                         <!--  List that is displayed if there are any results returned from the initial request.  -->
-                        <controls:BindableStackLayout ItemsSource="{Binding SimilarGames}">
-                            <controls:BindableStackLayout.ItemTemplate>
+                        <StackLayout BindableLayout.ItemsSource="{Binding SimilarGames}">
+                            <BindableLayout.ItemTemplate>
                                 <DataTemplate>
-                                    <ViewCell>
-                                        <common:UserEntryItemTemplateControl />
-                                    </ViewCell>
+                                    <common:UserEntryItemTemplateControl Margin="0,10" />
                                 </DataTemplate>
-                            </controls:BindableStackLayout.ItemTemplate>
-                        </controls:BindableStackLayout>
+                            </BindableLayout.ItemTemplate>
+                        </StackLayout>
                     </StackLayout>
                 </Grid>
             </ScrollView>

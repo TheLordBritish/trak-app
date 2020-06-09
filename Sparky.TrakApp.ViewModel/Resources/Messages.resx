@@ -321,4 +321,19 @@
 	<data name="RecoveryErrorMessageConfirmPasswordMismatch" xml:space="preserve">
 		<value>The passwords must match.</value>
 	</data>
+	<data name="GameLibraryListPageInstructions" xml:space="preserve">
+		<value>Use the entry above to search for games.</value>
+	</data>
+	<data name="GameLibraryListPageCantFindGame" xml:space="preserve">
+		<value>Can't find what you're looking for?</value>
+	</data>
+	<data name="GameLibraryListPageEmptyServerError" xml:space="preserve">
+		<value>Failed to load games due to an error on the server.</value>
+	</data>
+	<data name="GameLibraryListPageEmptyGenericError" xml:space="preserve">
+		<value>Failed to load games due to an unexpected error.</value>
+	</data>
+	<data name="GameLibraryListPageMakeARequest" xml:space="preserve">
+		<value>Make a request</value>
+	</data>
 </root>

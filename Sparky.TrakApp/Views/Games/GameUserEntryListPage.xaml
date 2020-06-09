@@ -59,12 +59,12 @@
             <!--  List that is displayed if there are any results returned from the initial request.  -->
             <common:UserEntryInfiniteListViewControl
                 HorizontalOptions="StartAndExpand"
-                VerticalOptions="StartAndExpand"
                 IsRefreshing="{Binding IsBusy, Mode=OneWay}"
                 IsVisible="{Binding IsEmpty, Converter={StaticResource NegateBooleanConverter}}"
                 ItemsSource="{Binding Items}"
                 LoadMoreCommand="{Binding LoadMoreCommand}"
-                RefreshCommand="{Binding RefreshCommand}" />
+                RefreshCommand="{Binding RefreshCommand}"
+                VerticalOptions="StartAndExpand" />
 
             <Button
                 Margin="20,50"

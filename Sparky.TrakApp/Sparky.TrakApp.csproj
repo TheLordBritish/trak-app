@@ -71,6 +71,9 @@
     <Compile Update="Views\Login\RecoveryPage.xaml.cs">
       <DependentUpon>RecoveryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Games\GameLibraryListPage.xaml.cs">
+      <DependentUpon>GameLibraryListPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -134,6 +137,10 @@
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Login\RecoveryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Games\GameLibraryListPage.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>

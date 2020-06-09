@@ -12,6 +12,7 @@
         <ResourceDictionary>
             <!--  Converters  -->
             <converters:NegateBooleanConverter x:Key="NegateBooleanConverter" />
+            <converters:StringEmptyConverter x:Key="StringEmptyConverter" />
 
             <!--  Colors  -->
             <Color x:Key="TrakPrimaryPurple">#CC00F7</Color>
@@ -73,6 +74,7 @@
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="HorizontalOptions" Value="FillAndExpand" />
                 <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+                <Setter Property="PlaceholderColor" Value="{StaticResource TrakGrey}" />
                 <Setter Property="IsSpellCheckEnabled" Value="False" />
             </Style>
 

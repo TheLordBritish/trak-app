@@ -11,7 +11,7 @@ namespace Sparky.TrakApp.Model.Response
 
         public Uri GetLink(string link)
         {
-            return Links[link].Href;
+            return Links.ContainsKey(link) ? Links[link].Href : null;
         }
     }
 }

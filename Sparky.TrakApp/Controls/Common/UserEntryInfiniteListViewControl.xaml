@@ -12,19 +12,19 @@
     mc:Ignorable="d">
     <ContentView.Content>
         <controls:InfiniteListView
-            HasUnevenRows="True"
             IsPullToRefreshEnabled="True"
             IsRefreshing="{Binding IsRefreshing, Source={x:Reference UserEntryInfiniteListViewControlView}, Mode=OneWay}"
             ItemsSource="{Binding ItemsSource, Source={x:Reference UserEntryInfiniteListViewControlView}}"
             LoadMoreCommand="{Binding LoadMoreCommand, Source={x:Reference UserEntryInfiniteListViewControlView}}"
             RefreshAllowed="True"
             RefreshCommand="{Binding RefreshCommand, Source={x:Reference UserEntryInfiniteListViewControlView}}"
+            RowHeight="180"
             SelectionMode="None"
             SeparatorVisibility="None">
             <controls:InfiniteListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <common:UserEntryItemTemplateControl Margin="0,10" />
+                        <common:UserEntryItemTemplateControl Margin="0,10" Padding="20,10" />
                     </ViewCell>
                 </DataTemplate>
             </controls:InfiniteListView.ItemTemplate>

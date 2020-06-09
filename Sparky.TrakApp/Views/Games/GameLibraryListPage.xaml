@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Sparky.TrakApp.Views.Games.GameLibraryListPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="http://prismlibrary.com"
+    xmlns:common="clr-namespace:Sparky.TrakApp.Controls.Common;assembly=Sparky.TrakApp"
+    xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
+    xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
+    Title="Library">
+    <ContentPage.Content>
+        <StackLayout>
+            <!--  Search entry field  -->
+            <Frame
+                Margin="10"
+                Padding="0"
+                BackgroundColor="{StaticResource TrakWhite}"
+                CornerRadius="0"
+                HasShadow="False">
+                <Frame
+                    Margin="1"
+                    Padding="0"
+                    BackgroundColor="{StaticResource TrakPrimaryBlue}"
+                    CornerRadius="0"
+                    HasShadow="False">
+                    <controls:CustomEntry
+                        AutomationId="GameLibraryListPageSearchEntry"
+                        Placeholder="Search here..."
+                        Text="{Binding Search}">
+                        <controls:CustomEntry.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding RefreshCommand}"
+                                CommandParameter="True"
+                                EventName="Unfocused" />
+                        </controls:CustomEntry.Behaviors>
+                    </controls:CustomEntry>
+                </Frame>
+            </Frame>
+
+            <!--  A list of all games that match the given query.  -->
+            <RefreshView
+                Command="{Binding RefreshCommand}"
+                CommandParameter="True"
+                IsRefreshing="{Binding IsRefreshing}">
+                <CollectionView
+                    ItemsSource="{Binding Items}"
+                    RemainingItemsThreshold="0"
+                    RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
+                    <CollectionView.EmptyView>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Label
+                                Grid.Row="0"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                VerticalOptions="EndAndExpand">
+                                <Label.Triggers>
+                                    <!--  Displays instructions when a search has yet to be done.  -->
+                                    <MultiTrigger TargetType="Label">
+                                        <MultiTrigger.Conditions>
+                                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
+                                            <BindingCondition Binding="{Binding Search, Converter={StaticResource StringEmptyConverter}}" Value="True" />
+                                            <BindingCondition Binding="{Binding IsError}" Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Text" Value="{extensions:Translate GameLibraryListPageInstructions}" />
+                                    </MultiTrigger>
+                                    <!--  Displayed if the search query returned an empty result.  -->
+                                    <MultiTrigger TargetType="Label">
+                                        <MultiTrigger.Conditions>
+                                            <BindingCondition Binding="{Binding Search, Converter={StaticResource StringEmptyConverter}}" Value="False" />
+                                            <BindingCondition Binding="{Binding IsBusy}" Value="False" />
+                                            <BindingCondition Binding="{Binding IsError}" Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Text" Value="{extensions:Translate GameLibraryListPageCantFindGame}" />
+                                    </MultiTrigger>
+                                    <!--  Displayed if the page is empty and failed to make the request.  -->
+                                    <MultiTrigger TargetType="Label">
+                                        <MultiTrigger.Conditions>
+                                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
+                                            <BindingCondition Binding="{Binding IsError}" Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="Text" Value="{Binding ErrorMessage}" />
+                                    </MultiTrigger>
+                                </Label.Triggers>
+                            </Label>
+                            <!--  Button to make a new game request.  -->
+                            <Button
+                                Grid.Row="1"
+                                Margin="20,10"
+                                IsVisible="False"
+                                Style="{StaticResource PrimaryButtonStyle}"
+                                Text="{extensions:Translate GameLibraryListPageMakeARequest}"
+                                VerticalOptions="StartAndExpand">
+                                <Button.Triggers>
+                                    <MultiTrigger TargetType="Button">
+                                        <MultiTrigger.Conditions>
+                                            <BindingCondition Binding="{Binding Search, Converter={StaticResource StringEmptyConverter}}" Value="False" />
+                                            <BindingCondition Binding="{Binding IsBusy}" Value="False" />
+                                            <BindingCondition Binding="{Binding IsError}" Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="IsVisible" Value="True" />
+                                    </MultiTrigger>
+                                </Button.Triggers>
+                            </Button>
+                        </Grid>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <common:UserEntryItemTemplateControl Margin="20,10" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

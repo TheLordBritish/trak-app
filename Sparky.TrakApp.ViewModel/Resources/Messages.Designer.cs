@@ -205,6 +205,51 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t find what you&apos;re looking for?.
+        /// </summary>
+        public static string GameLibraryListPageCantFindGame {
+            get {
+                return ResourceManager.GetString("GameLibraryListPageCantFindGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load games due to an unexpected error..
+        /// </summary>
+        public static string GameLibraryListPageEmptyGenericError {
+            get {
+                return ResourceManager.GetString("GameLibraryListPageEmptyGenericError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to load games due to an error on the server..
+        /// </summary>
+        public static string GameLibraryListPageEmptyServerError {
+            get {
+                return ResourceManager.GetString("GameLibraryListPageEmptyServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use the entry above to search for games..
+        /// </summary>
+        public static string GameLibraryListPageInstructions {
+            get {
+                return ResourceManager.GetString("GameLibraryListPageInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make a request.
+        /// </summary>
+        public static string GameLibraryListPageMakeARequest {
+            get {
+                return ResourceManager.GetString("GameLibraryListPageMakeARequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to library.
         /// </summary>
         public static string GamePageAddToLibrary {

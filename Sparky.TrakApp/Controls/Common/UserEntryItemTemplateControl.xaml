@@ -10,7 +10,7 @@
     x:Name="UserEntryItemTemplateControlView"
     mc:Ignorable="d">
     <ContentView.Content>
-        <Grid RowSpacing="0">
+        <Grid HeightRequest="150" RowSpacing="0">
             <Grid.GestureRecognizers>
                 <TapGestureRecognizer Command="{Binding TapCommand}" NumberOfTapsRequired="1" />
             </Grid.GestureRecognizers>
@@ -21,7 +21,7 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -44,7 +44,6 @@
                 BindingContext="{x:Reference ListViewItemImage}"
                 IsRunning="{Binding IsLoading}"
                 IsVisible="{Binding IsLoading}" />
-
             <!--  The header above the title  -->
             <Label
                 Grid.Row="0"
@@ -59,7 +58,7 @@
                 Grid.Column="1"
                 Margin="5,0,0,0"
                 FontSize="Large"
-                LineBreakMode="WordWrap"
+                LineBreakMode="TailTruncation"
                 MaxLines="2"
                 Style="{StaticResource HeaderLabelStyle}"
                 Text="{Binding ItemTitle}" />

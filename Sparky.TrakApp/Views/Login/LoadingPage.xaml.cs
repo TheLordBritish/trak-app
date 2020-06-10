@@ -2,9 +2,9 @@
 
 namespace Sparky.TrakApp.Views.Login
 {
-    public partial class LoginPage
+    public partial class LoadingPage
     {
-        public LoginPage()
+        public LoadingPage()
         {
             InitializeComponent();
             BackgroundImageSource = ImageSource.FromFile("background.png");

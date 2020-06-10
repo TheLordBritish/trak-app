@@ -45,7 +45,7 @@ namespace Sparky.TrakApp.Service.Impl
         {
             var stringContent = new StringContent(JsonConvert.SerializeObject(userCredentials, _serializerSettings));
 
-            using var client = _httpClientFactory.CreateClient("Trak");
+            using var client = _httpClientFactory.CreateClient("TrakAuth");
             using var response = await client.PostAsync("auth", stringContent);
 
             if (response.IsSuccessStatusCode)
@@ -62,7 +62,7 @@ namespace Sparky.TrakApp.Service.Impl
 
         public async Task<UserResponse> GetFromUsernameAsync(string username, string authToken)
         {
-            using var client = _httpClientFactory.CreateClient("Trak");
+            using var client = _httpClientFactory.CreateClient("TrakAuth");
 
             var request = new HttpRequestMessage
             {
@@ -91,7 +91,7 @@ namespace Sparky.TrakApp.Service.Impl
 
         public async Task<CheckedResponse<bool>> VerifyAsync(string username, string verificationCode, string authToken)
         {
-            using var client = _httpClientFactory.CreateClient("Trak");
+            using var client = _httpClientFactory.CreateClient("TrakAuth");
 
             var request = new HttpRequestMessage
             {
@@ -118,7 +118,7 @@ namespace Sparky.TrakApp.Service.Impl
 
         public async Task ReVerifyAsync(string username, string authToken)
         {
-            using var client = _httpClientFactory.CreateClient("Trak");
+            using var client = _httpClientFactory.CreateClient("TrakAuth");
 
             var request = new HttpRequestMessage
             {
@@ -141,7 +141,7 @@ namespace Sparky.TrakApp.Service.Impl
 
         public async Task RequestRecoveryAsync(string emailAddress)
         {
-            using var client = _httpClientFactory.CreateClient("Trak");
+            using var client = _httpClientFactory.CreateClient("TrakAuth");
             using var response = await client.PutAsync($"auth/users/recover?email-address={emailAddress}", null);
             
             if (!response.IsSuccessStatusCode)
@@ -159,7 +159,7 @@ namespace Sparky.TrakApp.Service.Impl
             var stringContent = new StringContent(JsonConvert.SerializeObject(registrationRequest, _serializerSettings),
                 Encoding.UTF8, "application/json");
 
-            using var client = _httpClientFactory.CreateClient("Trak");
+            using var client = _httpClientFactory.CreateClient("TrakAuth");
             using var response = await client.PostAsync("auth/users", stringContent);
 
             if (!response.IsSuccessStatusCode)
@@ -180,7 +180,7 @@ namespace Sparky.TrakApp.Service.Impl
             var stringContent = new StringContent(JsonConvert.SerializeObject(recoveryRequest, _serializerSettings),
                 Encoding.UTF8, "application/json");
             
-            using var client = _httpClientFactory.CreateClient("Trak");
+            using var client = _httpClientFactory.CreateClient("TrakAuth");
             using var response = await client.PutAsync("auth/users", stringContent);
             
             if (!response.IsSuccessStatusCode)

@@ -21,7 +21,7 @@ namespace Sparky.TrakApp
         protected override async void OnInitialized()
         {
             InitializeComponent();
-            await NavigationService.NavigateAsync(nameof(LoginPage));
+            await NavigationService.NavigateAsync("LoadingPage");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -37,6 +37,7 @@ namespace Sparky.TrakApp
             containerRegistry.RegisterForNavigation<BaseNavigationPage>();
             
             // Login pages.
+            containerRegistry.RegisterForNavigation<LoadingPage, LoadingViewModel>();
             containerRegistry.RegisterForNavigation<LoginPage, LoginViewModel>();
             containerRegistry.RegisterForNavigation<RegisterPage, RegisterViewModel>();
             containerRegistry.RegisterForNavigation<ForgottenPasswordPage, ForgottenPasswordViewModel>();

@@ -249,6 +249,7 @@ namespace Sparky.TrakApp.ViewModel.Login
                 await _storageService.SetAuthTokenAsync(token);
                 await _storageService.SetUserIdAsync(user.Id);
                 await _storageService.SetUsernameAsync(user.Username);
+                await _storageService.SetPasswordAsync(password);
 
                 // Navigate to the verification page for the user to verify their account before use.
                 await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");

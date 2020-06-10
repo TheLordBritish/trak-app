@@ -70,6 +70,69 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anime.
+        /// </summary>
+        public static string BaseMasterDetailContentPageAnime {
+            get {
+                return ResourceManager.GetString("BaseMasterDetailContentPageAnime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Books.
+        /// </summary>
+        public static string BaseMasterDetailContentPageBooks {
+            get {
+                return ResourceManager.GetString("BaseMasterDetailContentPageBooks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Games.
+        /// </summary>
+        public static string BaseMasterDetailContentPageGames {
+            get {
+                return ResourceManager.GetString("BaseMasterDetailContentPageGames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string BaseMasterDetailContentPageHome {
+            get {
+                return ResourceManager.GetString("BaseMasterDetailContentPageHome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log out.
+        /// </summary>
+        public static string BaseMasterDetailContentPageLogout {
+            get {
+                return ResourceManager.GetString("BaseMasterDetailContentPageLogout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manga.
+        /// </summary>
+        public static string BaseMasterDetailContentPageManga {
+            get {
+                return ResourceManager.GetString("BaseMasterDetailContentPageManga", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string BaseMasterDetailContentPageSettings {
+            get {
+                return ResourceManager.GetString("BaseMasterDetailContentPageSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Done.
         /// </summary>
         public static string Done {

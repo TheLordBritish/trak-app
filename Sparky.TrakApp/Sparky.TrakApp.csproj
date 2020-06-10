@@ -45,7 +45,6 @@
     </Compile>
     <Compile Update="Controls\Common\FullPageErrorControl.xaml.cs">
       <DependentUpon>FullPageErrorControl.xaml</DependentUpon>
-      <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Games\GamePage.xaml.cs">
       <DependentUpon>GamePage.xaml</DependentUpon>
@@ -74,6 +73,9 @@
     <Compile Update="Views\Games\GameLibraryListPage.xaml.cs">
       <DependentUpon>GameLibraryListPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Login\LoadingPage.xaml.cs">
+      <DependentUpon>LoadingPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -94,55 +96,45 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Games\GameUserEntryListPage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Games\GameUserEntriesTabbedPage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="BaseNavigationPage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\Common\FullPageErrorControl.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Games\GamePage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\Common\RatingUserControl.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\Common\UserEntryInfiniteListViewControl.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\Common\UserEntryItemTemplateControl.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Games\GameBarcodeScannerPage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Games\GameLibraryTabbedPage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Login\ForgottenPasswordPage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Login\RecoveryPage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Games\GameLibraryListPage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Login\LoadingPage.xaml">
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
 

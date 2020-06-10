@@ -26,6 +26,16 @@ namespace Sparky.TrakApp.Impl
             await SecureStorage.SetAsync("username", username);
         }
 
+        public async Task<string> GetPasswordAsync()
+        {
+            return await SecureStorage.GetAsync("password");
+        }
+
+        public async Task SetPasswordAsync(string password)
+        {
+            await SecureStorage.SetAsync("password", password);
+        }
+
         public async Task<string> GetAuthTokenAsync()
         {
             return await SecureStorage.GetAsync("auth-token");

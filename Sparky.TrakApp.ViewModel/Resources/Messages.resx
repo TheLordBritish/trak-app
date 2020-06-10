@@ -336,4 +336,25 @@
 	<data name="GameLibraryListPageMakeARequest" xml:space="preserve">
 		<value>Make a request</value>
 	</data>
+	<data name="BaseMasterDetailContentPageHome" xml:space="preserve">
+		<value>Home</value>
+	</data>
+	<data name="BaseMasterDetailContentPageBooks" xml:space="preserve">
+		<value>Books</value>
+	</data>
+	<data name="BaseMasterDetailContentPageAnime" xml:space="preserve">
+		<value>Anime</value>
+	</data>
+	<data name="BaseMasterDetailContentPageManga" xml:space="preserve">
+		<value>Manga</value>
+	</data>
+	<data name="BaseMasterDetailContentPageGames" xml:space="preserve">
+		<value>Games</value>
+	</data>
+	<data name="BaseMasterDetailContentPageSettings" xml:space="preserve">
+		<value>Settings</value>
+	</data>
+	<data name="BaseMasterDetailContentPageLogout" xml:space="preserve">
+		<value>Log out</value>
+	</data>
 </root>

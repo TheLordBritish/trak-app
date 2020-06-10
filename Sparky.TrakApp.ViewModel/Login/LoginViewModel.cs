@@ -201,6 +201,7 @@ namespace Sparky.TrakApp.ViewModel.Login
             await _storageService.SetAuthTokenAsync(token);
             await _storageService.SetUserIdAsync(userResponse.Id);
             await _storageService.SetUsernameAsync(username);
+            await _storageService.SetPasswordAsync(password);
 
             if (!userResponse.Verified)
             {

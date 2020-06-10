@@ -36,6 +36,13 @@ namespace Sparky.TrakApp.Service
                 .AddPolicyHandler(retryPolicy)
                 .AddPolicyHandler(timeoutPolicy);
 
+            serviceCollection
+                .AddHttpClient("TrakAuth", client =>
+                {
+                    client.BaseAddress = new Uri("http://192.168.1.191:8080/");
+                })
+                .AddPolicyHandler(timeoutPolicy);
+            
             var serviceProvider = serviceCollection.BuildServiceProvider();
             
             // Services

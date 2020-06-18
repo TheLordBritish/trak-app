@@ -76,6 +76,9 @@
     <Compile Update="Views\Login\LoadingPage.xaml.cs">
       <DependentUpon>LoadingPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\Games\GameRequestPage.xaml.cs">
+      <DependentUpon>GameRequestPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -135,6 +138,10 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Login\LoadingPage.xaml">
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\Games\GameRequestPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>
 

@@ -1,6 +1,8 @@
-﻿using Acr.UserDialogs;
+﻿using System.Reactive.Concurrency;
+using Acr.UserDialogs;
 using Prism;
 using Prism.Ioc;
+using ReactiveUI;
 using Sparky.TrakApp.Impl;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.ViewModel;
@@ -31,6 +33,7 @@ namespace Sparky.TrakApp
             containerRegistry.Register<IFormsDevice, XamarinFormsDevice>();
             containerRegistry.Register<IStorageService, SecureStorageService>();
             containerRegistry.RegisterInstance(UserDialogs.Instance);
+            containerRegistry.RegisterInstance(typeof(IScheduler), RxApp.MainThreadScheduler);
             
             // Xamarin pages.
             containerRegistry.RegisterForNavigation<BaseMasterDetailPage, BaseMasterDetailViewModel>();
@@ -55,6 +58,7 @@ namespace Sparky.TrakApp
             containerRegistry.RegisterForNavigation<GameUserEntriesTabbedPage, GameUserEntriesTabbedViewModel>();
             containerRegistry.RegisterForNavigation<GameLibraryTabbedPage>();
             containerRegistry.RegisterForNavigation<GameLibraryListPage, GameLibraryListViewModel>();
+            containerRegistry.RegisterForNavigation<GameRequestPage, GameRequestViewModel>();
             containerRegistry.RegisterForNavigation<GameBarcodeScannerPage, GameBarcodeScannerViewModel>();
             containerRegistry.RegisterForNavigation<GamePage, GameViewModel>();
         }

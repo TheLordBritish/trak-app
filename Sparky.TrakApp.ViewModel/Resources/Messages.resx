@@ -357,4 +357,25 @@
 	<data name="BaseMasterDetailContentPageLogout" xml:space="preserve">
 		<value>Log out</value>
 	</data>
+	<data name="GameRequestPageTitle" xml:space="preserve">
+		<value>Title</value>
+	</data>
+	<data name="GameRequestPageAdditionalNotes" xml:space="preserve">
+		<value>Additional notes</value>
+	</data>
+	<data name="GameRequestPageSubmit" xml:space="preserve">
+		<value>Submit</value>
+	</data>
+	<data name="GameRequestPageRequestComplete" xml:space="preserve">
+		<value>Thank you for your request. An admin will add the request game to the library as soon as possible. You will receive a notification when the request has been completed.</value>
+	</data>
+	<data name="GameRequestErrorMessageTitleEmpty" xml:space="preserve">
+		<value>The title cannot be empty or only contain whitespace.</value>
+	</data>
+	<data name="GameRequestErrorMessageTitleMaxLength" xml:space="preserve">
+		<value>The title cannot exceed 255 characters.</value>
+	</data>
+	<data name="GameRequestErrorMessageNotesMaxLength" xml:space="preserve">
+		<value>The notes cannot exceed 2048 characters.</value>
+	</data>
 </root>

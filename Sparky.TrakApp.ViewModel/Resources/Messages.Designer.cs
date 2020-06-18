@@ -358,6 +358,69 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The notes cannot exceed 2048 characters..
+        /// </summary>
+        public static string GameRequestErrorMessageNotesMaxLength {
+            get {
+                return ResourceManager.GetString("GameRequestErrorMessageNotesMaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The title cannot be empty or only contain whitespace..
+        /// </summary>
+        public static string GameRequestErrorMessageTitleEmpty {
+            get {
+                return ResourceManager.GetString("GameRequestErrorMessageTitleEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The title cannot exceed 255 characters..
+        /// </summary>
+        public static string GameRequestErrorMessageTitleMaxLength {
+            get {
+                return ResourceManager.GetString("GameRequestErrorMessageTitleMaxLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Additional notes.
+        /// </summary>
+        public static string GameRequestPageAdditionalNotes {
+            get {
+                return ResourceManager.GetString("GameRequestPageAdditionalNotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thank you for your request. An admin will add the request game to the library as soon as possible. You will receive a notification when the request has been completed..
+        /// </summary>
+        public static string GameRequestPageRequestComplete {
+            get {
+                return ResourceManager.GetString("GameRequestPageRequestComplete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Submit.
+        /// </summary>
+        public static string GameRequestPageSubmit {
+            get {
+                return ResourceManager.GetString("GameRequestPageSubmit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string GameRequestPageTitle {
+            get {
+                return ResourceManager.GetString("GameRequestPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You currently have no games in .
         /// </summary>
         public static string GameUserEntryListPageEmpty {

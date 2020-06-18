@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Acr.UserDialogs;
 using Prism.Commands;
 using Prism.Navigation;
@@ -52,6 +53,8 @@ namespace Sparky.TrakApp.ViewModel.Games
             LoadMoreCommand = new DelegateCommand(async () => await LoadGamesNextPageAsync(),
                 () => !IsBusy && _nextUri != null);
         }
+        
+        public ICommand RequestCommand => new DelegateCommand(async () => await RequestAsync());
         
         /// <summary>
         /// A <see cref="string"/> that contains the currently populated user defined query to search
@@ -118,6 +121,11 @@ namespace Sparky.TrakApp.ViewModel.Games
                 }
             }
         }
+
+        private async Task RequestAsync()
+        {
+            await NavigationService.NavigateAsync("GameRequestPage");
+        } 
 
         /// <summary>
         /// Private method that is invoked when the <see cref="LoadMoreCommand"/> is called by the view. It's

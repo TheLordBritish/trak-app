@@ -78,6 +78,14 @@
                 <Setter Property="IsSpellCheckEnabled" Value="False" />
             </Style>
 
+            <!--  Editor styling  -->
+            <Style ApplyToDerivedTypes="True" TargetType="Editor">
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+                <Setter Property="PlaceholderColor" Value="{StaticResource TrakGrey}" />
+            </Style>
+
             <!--  Label styling  -->
             <Style x:Key="BaseLabelStyle" TargetType="Label">
                 <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />

@@ -90,6 +90,7 @@
                             <Button
                                 Grid.Row="1"
                                 Margin="20,10"
+                                Command="{Binding RequestCommand}"
                                 IsVisible="False"
                                 Style="{StaticResource PrimaryButtonStyle}"
                                 Text="{extensions:Translate GameLibraryListPageMakeARequest}"

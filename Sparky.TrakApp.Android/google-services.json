@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "490184411089",
+    "firebase_url": "https://trak-939a3.firebaseio.com",
+    "project_id": "trak-939a3",
+    "storage_bucket": "trak-939a3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:490184411089:android:b67cc4cdf0b616b29302f0",
+        "android_client_info": {
+          "package_name": "com.sparky.trak"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "490184411089-nj48437is84e2pq9g1u6lpu0hv9069vg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnK0_g-4jk_FGdDxGDSp_CbnA0qFeD41I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "490184411089-nj48437is84e2pq9g1u6lpu0hv9069vg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

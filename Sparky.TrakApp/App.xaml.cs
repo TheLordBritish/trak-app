@@ -1,4 +1,5 @@
-﻿using System.Reactive.Concurrency;
+﻿using System;
+using System.Reactive.Concurrency;
 using Acr.UserDialogs;
 using Prism;
 using Prism.Ioc;
@@ -23,6 +24,18 @@ namespace Sparky.TrakApp
         protected override async void OnInitialized()
         {
             InitializeComponent();
+
+            // Get the storage service.
+            var storageService = Container.Resolve<IStorageService>();
+
+            // We need to check if a unique device ID has been generated, if not generate one and persist it.
+            // It'll be used for push notification purposes.
+            var deviceId = await storageService.GetDeviceIdAsync();
+            if (deviceId.Equals(Guid.Empty))
+            {
+                await storageService.SetDeviceIdAsync(Guid.NewGuid());
+            }
+            
             await NavigationService.NavigateAsync("LoadingPage");
         }
 

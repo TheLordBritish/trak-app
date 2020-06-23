@@ -14,6 +14,7 @@ namespace Sparky.TrakApp.ViewModel.Login
     {
         private readonly IStorageService _storageService;
         private readonly IAuthService _authService;
+        private readonly IRestService _restService;
         
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
@@ -23,10 +24,12 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
         /// <param name="authService">The <see cref="IAuthService"/> instance to inject.</param>
-        public LoadingViewModel(INavigationService navigationService, IStorageService storageService, IAuthService authService) : base(navigationService)
+        /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
+        public LoadingViewModel(INavigationService navigationService, IStorageService storageService, IAuthService authService, IRestService restService) : base(navigationService)
         {
             _storageService = storageService;
             _authService = authService;
+            _restService = restService;
         }
 
         /// <summary>
@@ -54,6 +57,15 @@ namespace Sparky.TrakApp.ViewModel.Login
                 
                 // We got a valid token, so store it.
                 await _storageService.SetAuthTokenAsync(token);
+                
+                // Need to ensure the correct details are registered for push notifications.
+                await _restService.PostAsync("api/notification-management/v1/notifications/register",
+                    new NotificationRegistrationRequest
+                    {
+                        UserId = await _storageService.GetUserIdAsync(),
+                        DeviceGuid = (await _storageService.GetDeviceIdAsync()).ToString(),
+                        Token = await _storageService.GetNotificationTokenAsync()
+                    }, token);
                 
                 // Need to get details to check if they're verified, if they're not they can go back
                 // to the login page.

@@ -13,6 +13,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         private Mock<INavigationService> _navigationService;
         private Mock<IStorageService> _storageService;
         private Mock<IAuthService> _authService;
+        private Mock<IRestService> _restService;
 
         private LoadingViewModel _loadingViewModel;
 
@@ -22,8 +23,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _navigationService = new Mock<INavigationService>();
             _storageService = new Mock<IStorageService>();
             _authService = new Mock<IAuthService>();
-
-            _loadingViewModel = new LoadingViewModel(_navigationService.Object, _storageService.Object, _authService.Object);
+            _restService = new Mock<IRestService>();
+            
+            _loadingViewModel = new LoadingViewModel(_navigationService.Object, _storageService.Object, _authService.Object, _restService.Object);
         }
 
         [Test]
@@ -65,6 +67,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _storageService.Setup(mock => mock.SetAuthTokenAsync(It.IsAny<string>()))
                 .Verifiable();
 
+            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<NotificationRegistrationRequest>(), It.IsAny<string>()))
+                .Verifiable();
+            
             _authService.Setup(mock => mock.GetFromUsernameAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new UserResponse {Id = 1, Username = "username", Verified = false});
             
@@ -75,6 +80,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _loadingViewModel.OnNavigatedTo(null);
             
             // Assert
+            _storageService.Verify();
+            _restService.Verify();
             _navigationService.Verify(mock => mock.NavigateAsync("/LoginPage"), Times.Once);
         }
         
@@ -94,6 +101,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _storageService.Setup(mock => mock.SetAuthTokenAsync(It.IsAny<string>()))
                 .Verifiable();
 
+            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<NotificationRegistrationRequest>(), It.IsAny<string>()))
+                .Verifiable();
+            
             _authService.Setup(mock => mock.GetFromUsernameAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new UserResponse {Id = 1, Username = "username", Verified = true});
             
@@ -104,6 +114,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _loadingViewModel.OnNavigatedTo(null);
             
             // Assert
+            _storageService.Verify();
+            _restService.Verify();
             _navigationService.Verify(mock => mock.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage"), Times.Once);
         }
     }

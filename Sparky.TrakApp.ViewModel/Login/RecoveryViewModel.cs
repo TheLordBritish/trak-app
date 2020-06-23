@@ -24,6 +24,7 @@ namespace Sparky.TrakApp.ViewModel.Login
     {
         private readonly IAuthService _authService;
         private readonly IStorageService _storageService;
+        private readonly IRestService _restService;
 
         private Validatable<string> _username;
         private Validatable<string> _recoveryToken;
@@ -41,12 +42,14 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// <param name="navigationService">The <see cref="INavigationService" /> instance to inject.</param>
         /// <param name="authService">The <see cref="IAuthService" /> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService" /> instance to inject.</param>
+        /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
         public RecoveryViewModel(INavigationService navigationService, IAuthService authService,
-            IStorageService storageService) : base(navigationService)
+            IStorageService storageService, IRestService restService) : base(navigationService)
         {
             _authService = authService;
             _storageService = storageService;
-
+            _restService = restService;
+            
             Username = new Validatable<string>(nameof(RecoveryDetails.Username));
             RecoveryToken = new Validatable<string>(nameof(RecoveryDetails.RecoveryToken));
             Password = new Validatable<string>(nameof(RecoveryDetails.Password));
@@ -251,6 +254,15 @@ namespace Sparky.TrakApp.ViewModel.Login
                 await _storageService.SetUsernameAsync(user.Username);
                 await _storageService.SetPasswordAsync(password);
 
+                // Need to ensure the correct details are registered for push notifications.
+                await _restService.PostAsync("api/notification-management/v1/notifications/register",
+                    new NotificationRegistrationRequest
+                    {
+                        UserId = await _storageService.GetUserIdAsync(),
+                        DeviceGuid = (await _storageService.GetDeviceIdAsync()).ToString(),
+                        Token = await _storageService.GetNotificationTokenAsync()
+                    }, token);
+                
                 // Navigate to the verification page for the user to verify their account before use.
                 await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");
             }

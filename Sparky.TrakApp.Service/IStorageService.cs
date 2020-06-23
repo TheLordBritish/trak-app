@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Sparky.TrakApp.Service
 {
@@ -19,5 +20,13 @@ namespace Sparky.TrakApp.Service
         Task<string> GetAuthTokenAsync();
 
         Task SetAuthTokenAsync(string authToken);
+
+        Task<string> GetNotificationTokenAsync();
+
+        Task SetNotificationTokenAsync(string notificationToken);
+
+        Task<Guid> GetDeviceIdAsync();
+
+        Task SetDeviceIdAsync(Guid deviceId);
     }
 }

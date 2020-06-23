@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Sparky.TrakApp.Service;
 using Xamarin.Essentials;
 
@@ -44,6 +45,27 @@ namespace Sparky.TrakApp.Impl
         public async Task SetAuthTokenAsync(string authToken)
         {
             await SecureStorage.SetAsync("auth-token", authToken);
+        }
+
+        public async Task<string> GetNotificationTokenAsync()
+        {
+            return await SecureStorage.GetAsync("notification-token");
+        }
+
+        public async Task SetNotificationTokenAsync(string notificationToken)
+        {
+            await SecureStorage.SetAsync("notification-token", notificationToken);
+        }
+
+        public async Task<Guid> GetDeviceIdAsync()
+        {
+            var deviceId = await SecureStorage.GetAsync("device-id");
+            return !string.IsNullOrEmpty(deviceId) ? Guid.Parse(deviceId) : Guid.Empty;
+        }
+
+        public async Task SetDeviceIdAsync(Guid deviceId)
+        {
+            await SecureStorage.SetAsync("device-id", deviceId.ToString());
         }
     }
 }

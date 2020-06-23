@@ -101,5 +101,31 @@ namespace Sparky.TrakApp.Service.Impl
             // Only de-serialize the response on a successful call. 
             return JsonConvert.DeserializeObject<T>(json, _deserializerSettings);
         }
+
+        public async Task DeleteAsync(string url, string authToken)
+        {
+            // Create the client to send the requests to.
+            using var client = _httpClientFactory.CreateClient("Trak");
+            
+            // Specify the URI and that the request is a delete request..
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri(client.BaseAddress, url),
+                Method = HttpMethod.Delete
+            };
+            
+            // Ensure we send up the JWT auth.
+            request.Headers.Authorization = AuthenticationHeaderValue.Parse(authToken);
+            
+            using var response = await client.SendAsync(request);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException
+                {
+                    StatusCode = response.StatusCode
+                };
+            }
+        }
     }
 }

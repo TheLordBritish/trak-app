@@ -17,6 +17,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         private Mock<IAuthService> _authService;
         private Mock<IStorageService> _storageService;
         private Mock<INavigationService> _navigationService;
+        private Mock<IRestService> _restService;
 
         private RegisterViewModel _registerViewModel;
 
@@ -26,8 +27,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _authService = new Mock<IAuthService>();
             _storageService = new Mock<IStorageService>();
             _navigationService = new Mock<INavigationService>();
+            _restService = new Mock<IRestService>();
             
-            _registerViewModel = new RegisterViewModel(_navigationService.Object, _authService.Object, _storageService.Object);
+            _registerViewModel = new RegisterViewModel(_navigationService.Object, _authService.Object, _storageService.Object, _restService.Object);
         }
 
         [Test]
@@ -180,7 +182,12 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .Verifiable();
             _storageService.Setup(mock => mock.SetUsernameAsync(It.IsAny<string>()))
                 .Verifiable();
-
+            _storageService.Setup(mock => mock.SetPasswordAsync(It.IsAny<string>()))
+                .Verifiable();
+            
+            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<NotificationRegistrationRequest>(), It.IsAny<string>()))
+                .Verifiable();
+            
             _navigationService.Setup(mock => mock.NavigateAsync("VerificationPage"))
                 .ReturnsAsync(new Mock<INavigationResult>().Object);
             
@@ -192,6 +199,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 "vm.IsError should be false if registration was successful.");
 
             _storageService.Verify();
+            _restService.Verify();
             _navigationService.Verify(s => s.NavigateAsync("VerificationPage"), Times.Once);
         }
         

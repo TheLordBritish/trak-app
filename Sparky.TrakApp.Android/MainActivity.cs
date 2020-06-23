@@ -1,6 +1,7 @@
 ﻿using Acr.UserDialogs;
 using Android.App;
 using Android.Content.PM;
+using Android.Gms.Common;
 using Android.Graphics;
 using Android.Runtime;
 using Android.OS;
@@ -10,9 +11,12 @@ using Prism.Ioc;
 
 namespace Sparky.TrakApp.Droid
 {
-    [Activity(Label = "Trak", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme")]
+    [Activity(Label = "Trak", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", ScreenOrientation = ScreenOrientation.Portrait)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        internal static readonly string CHANNEL_ID = "my_notification_channel";
+        internal static readonly int NOTIFICATION_ID = 100;
+        
         protected override void OnCreate(Bundle savedInstanceState)
         {
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -25,8 +29,12 @@ namespace Sparky.TrakApp.Droid
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             UserDialogs.Init(this);
             
-            Window.AddFlags(WindowManagerFlags.TranslucentNavigation);
-            SetStatusBarColor(Color.Transparent);
+            // We only want to generate a notification channel for push notifications if google play is available
+            // on the device running it. 
+            if (GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this) == ConnectionResult.Success)
+            {
+                CreateNotificationChannel();
+            }
             
             LoadApplication(new App());
         }
@@ -38,8 +46,27 @@ namespace Sparky.TrakApp.Droid
             
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
-    }
+        
+        private void CreateNotificationChannel()
+        {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.O)
+            {
+                // Notification channels are new in API 26 (and not a part of the
+                // support library). There is no need to create a notification 
+                // channel on older versions of Android.
+                return;
+            }
 
+            var channel = new NotificationChannel(CHANNEL_ID, "FCM Notifications", NotificationImportance.Default)
+            {
+                Description = "Firebase Cloud Messages appear in this channel"
+            };
+
+            var notificationManager = (NotificationManager) GetSystemService(NotificationService);
+            notificationManager.CreateNotificationChannel(channel);
+        }
+    }
+    
     public class AndroidInitializer : IPlatformInitializer
     {
         public void RegisterTypes(IContainerRegistry containerRegistry)

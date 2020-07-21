@@ -13,6 +13,11 @@ namespace Sparky.TrakApp.Model.Games
         
         public DateTime? ReleaseDate { get; set; }
         
-        public long Version { get; set; }
+        public long? Version { get; set; }
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

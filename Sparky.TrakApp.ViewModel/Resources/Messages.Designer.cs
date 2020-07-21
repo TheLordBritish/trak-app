@@ -61,6 +61,24 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The platform cannot be empty..
+        /// </summary>
+        public static string AddGameErrorMessagePlatformNull {
+            get {
+                return ResourceManager.GetString("AddGameErrorMessagePlatformNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The status cannot be empty..
+        /// </summary>
+        public static string AddGameErrorMessageStatusNone {
+            get {
+                return ResourceManager.GetString("AddGameErrorMessageStatusNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backlog.
         /// </summary>
         public static string Backlog {

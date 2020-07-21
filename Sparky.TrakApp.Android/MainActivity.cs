@@ -8,6 +8,7 @@ using Android.OS;
 using Android.Views;
 using Prism;
 using Prism.Ioc;
+using Rg.Plugins.Popup.Services;
 
 namespace Sparky.TrakApp.Droid
 {
@@ -25,7 +26,9 @@ namespace Sparky.TrakApp.Droid
             base.OnCreate(savedInstanceState);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
+            
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             UserDialogs.Init(this);
             
@@ -37,6 +40,18 @@ namespace Sparky.TrakApp.Droid
             }
             
             LoadApplication(new App());
+        }
+
+        public override async void OnBackPressed()
+        {
+            if (Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed))
+            {
+                await PopupNavigation.Instance.PopAsync();
+            }
+            else
+            {
+                base.OnBackPressed();
+            }
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)

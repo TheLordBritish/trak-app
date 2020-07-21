@@ -179,7 +179,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                     var parameters = new NavigationParameters
                     {
                         {"game-url", gameUserEntry.GetLink("gameInfo")},
-                        {"platform-url", gameUserEntry.GetLink("platform")},
+                        {"platform-id", gameUserEntry.PlatformId},
                         {"in-library", true},
                         {"rating", gameUserEntry.Rating},
                         {"status", gameUserEntry.Status}

@@ -15,7 +15,7 @@ namespace Sparky.TrakApp.Model.Games
         
         public string GameTitle { get; set; }
         
-        public DateTime GameReleaseDate { get; set; }
+        public DateTime? GameReleaseDate { get; set; }
         
         public long PlatformId { get; set; }
         

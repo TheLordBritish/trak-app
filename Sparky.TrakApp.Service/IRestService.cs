@@ -8,6 +8,8 @@ namespace Sparky.TrakApp.Service
 
         Task<T> PostAsync<T>(string url, T requestBody, string authToken);
 
+        Task<T> PutAsync<T>(string url, T requestBody, string authToken);
+        
         Task DeleteAsync(string url, string authToken);
     }
 }

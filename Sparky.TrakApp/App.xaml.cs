@@ -3,6 +3,7 @@ using System.Reactive.Concurrency;
 using Acr.UserDialogs;
 using Prism;
 using Prism.Ioc;
+using Prism.Plugin.Popups;
 using ReactiveUI;
 using Sparky.TrakApp.Impl;
 using Sparky.TrakApp.Service;
@@ -41,6 +42,8 @@ namespace Sparky.TrakApp
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterPopupNavigationService();
+
             // Services
             ServiceRegistry.RegisterTypes(containerRegistry);
             containerRegistry.Register<IFormsDevice, XamarinFormsDevice>();
@@ -74,6 +77,8 @@ namespace Sparky.TrakApp
             containerRegistry.RegisterForNavigation<GameRequestPage, GameRequestViewModel>();
             containerRegistry.RegisterForNavigation<GameBarcodeScannerPage, GameBarcodeScannerViewModel>();
             containerRegistry.RegisterForNavigation<GamePage, GameViewModel>();
+            containerRegistry.RegisterForNavigation<AddGamePage, AddGameViewModel>();
+            containerRegistry.RegisterForNavigation<GameOptionsPage, GameOptionsViewModel>();
         }
     }
 }

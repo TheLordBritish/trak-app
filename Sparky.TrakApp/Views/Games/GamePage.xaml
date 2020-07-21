@@ -6,9 +6,10 @@
     xmlns:common="clr-namespace:Sparky.TrakApp.Controls.Common;assembly=Sparky.TrakApp"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:games="clr-namespace:Sparky.TrakApp.Model.Games;assembly=Sparky.TrakApp.Model"
+    xmlns:games1="clr-namespace:Sparky.TrakApp.Views.Games;assembly=Sparky.TrakApp"
     xmlns:magicGradients="clr-namespace:MagicGradients;assembly=MagicGradients">
     <ContentPage.Content>
-        <StackLayout>
+        <Grid>
             <!--  Full page control that is displayed when there's an error reported by the view model.  -->
             <common:FullPageErrorControl
                 ErrorMessage="{extensions:Translate GamePageErrorMessage}"
@@ -38,6 +39,7 @@
 
             <ScrollView
                 HorizontalOptions="FillAndExpand"
+                IsClippedToBounds="True"
                 IsVisible="False"
                 VerticalOptions="FillAndExpand">
                 <ScrollView.Triggers>
@@ -96,7 +98,7 @@
                         Margin="20,0"
                         LineBreakMode="TailTruncation"
                         MaxLines="1"
-                        Text="{Binding PlatformNames}"
+                        Text="{Binding Platforms, Converter={StaticResource IEnumerableToStringConverter}}"
                         VerticalTextAlignment="Center" />
 
                     <!--  Add to library/game user entry options  -->
@@ -104,6 +106,7 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Margin="20,0"
+                        Command="{Binding ShowGameOptionsCommand}"
                         Style="{StaticResource SecondaryButtonStyle}"
                         Text="{extensions:Translate GamePageAddToLibrary}">
                         <Button.Triggers>
@@ -136,7 +139,7 @@
                                 <FormattedString>
                                     <Span Text="{Binding ReleaseDate, StringFormat='{0:MMMM yyyy}'}" />
                                     <Span Text=", " />
-                                    <Span Text="{Binding PublisherNames}" />
+                                    <Span Text="{Binding Publishers, Converter={StaticResource IEnumerableToStringConverter}}" />
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -169,7 +172,7 @@
                             Margin="0,5"
                             LineBreakMode="HeadTruncation"
                             MaxLines="1"
-                            Text="{Binding GenreNames}"
+                            Text="{Binding Genres, Converter={StaticResource IEnumerableToStringConverter}}"
                             TextColor="{StaticResource TrakGrey}" />
 
                         <!--  The description of the game.  -->
@@ -266,7 +269,6 @@
                     </StackLayout>
                 </Grid>
             </ScrollView>
-
-        </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

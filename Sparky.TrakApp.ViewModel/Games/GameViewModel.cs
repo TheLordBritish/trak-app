@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ImTools;
 using Prism.Commands;
 using Prism.Navigation;
 using Sparky.TrakApp.Model.Games;
@@ -27,13 +28,15 @@ namespace Sparky.TrakApp.ViewModel.Games
         private string _gameTitle;
 
         private Uri _gameUrl;
-        private string _genreNames;
+        private IEnumerable<Genre> _genres;
 
         private Uri _imageUrl;
         private bool _inLibrary;
-        private string _platformNames;
-        private Uri _platformUrl;
-        private string _publisherNames;
+        private long _gameId;
+        private long _platformId;
+        private IEnumerable<Platform> _allPlatforms;
+        private IEnumerable<Platform> _platforms;
+        private IEnumerable<Publisher> _publishers;
         private short _rating;
         private DateTime _releaseDate;
         private ObservableCollection<ListItemViewModel> _similarGames;
@@ -47,12 +50,11 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// <param name="navigationService">The <see cref="INavigationService" /> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService" /> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService" /> instance to inject.</param>
-        public GameViewModel(INavigationService navigationService, IStorageService storageService,
-            IRestService restService) : base(navigationService)
+        public GameViewModel(INavigationService navigationService, IStorageService storageService, IRestService restService) : base(navigationService)
         {
             _storageService = storageService;
             _restService = restService;
-
+            
             // Default values
             Status = GameUserEntryStatus.None;
 
@@ -61,6 +63,8 @@ namespace Sparky.TrakApp.ViewModel.Games
             SimilarGames = new ObservableCollection<ListItemViewModel>();
         }
 
+        public ICommand ShowGameOptionsCommand => new DelegateCommand(async () => await ShowGameOptions());
+        
         /// <summary>
         ///     A <see cref="ICommand" /> that is invoked by the view when the refresh button is tapped when an error is
         ///     thrown. When called, the command will propagate the request and call the <see cref="LoadGameInfoAsync" /> method.
@@ -77,13 +81,13 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        ///     A <see cref="string" /> that contains a comma-separated list of all platforms associated with the game within
-        ///     the view model.
+        /// A <see cref="IEnumerable{T}" /> that contains all the platforms for the given game, or a single platform if
+        /// it is already in the users library.
         /// </summary>
-        public string PlatformNames
+        public IEnumerable<Platform> Platforms
         {
-            get => _platformNames;
-            set => SetProperty(ref _platformNames, value);
+            get => _platforms;
+            set => SetProperty(ref _platforms, value);
         }
 
         /// <summary>
@@ -108,10 +112,10 @@ namespace Sparky.TrakApp.ViewModel.Games
         ///     A <see cref="string" /> that contains a comma-separated list of all publishers associated with the game within
         ///     the view model.
         /// </summary>
-        public string PublisherNames
+        public IEnumerable<Publisher> Publishers
         {
-            get => _publisherNames;
-            set => SetProperty(ref _publisherNames, value);
+            get => _publishers;
+            set => SetProperty(ref _publishers, value);
         }
 
         /// <summary>
@@ -140,10 +144,10 @@ namespace Sparky.TrakApp.ViewModel.Games
         ///     A <see cref="string" /> that contains a comma-separated list of all genres associated with the game within
         ///     the view model.
         /// </summary>
-        public string GenreNames
+        public IEnumerable<Genre> Genres
         {
-            get => _genreNames;
-            set => SetProperty(ref _genreNames, value);
+            get => _genres;
+            set => SetProperty(ref _genres, value);
         }
 
         /// <summary>
@@ -175,6 +179,33 @@ namespace Sparky.TrakApp.ViewModel.Games
             set => SetProperty(ref _similarGames, value);
         }
 
+        private async Task ShowGameOptions()
+        {
+            if (InLibrary)
+            {
+                var parameters = new NavigationParameters
+                {
+                    {"game-url", _gameUrl},
+                    {"game-id", _gameId},
+                    {"platform-id", _platformId},
+                    {"status", Status}
+                };
+                
+                await NavigationService.NavigateAsync("GameOptionsPage", parameters);
+            }
+            else
+            {
+                var parameters = new NavigationParameters
+                {
+                    {"game-url", _gameUrl},
+                    {"platforms", _allPlatforms},
+                    {"game-id", _gameId}
+                };
+                
+                await NavigationService.NavigateAsync("AddGamePage", parameters);
+            }
+        }
+        
         /// <summary>
         ///     Private method that is invoked by the <see cref="LoadGameInfoCommand" /> when activated by the associated
         ///     view. This method will attempt to retrieve the game information from the url provided by the
@@ -195,16 +226,28 @@ namespace Sparky.TrakApp.ViewModel.Games
                 var token = await _storageService.GetAuthTokenAsync();
 
                 // Retrieve the game and set some game information on the view.
-                var gameInfo = await AttemptGameInfoAsync(_gameUrl, token);
+                var gameInfo = await _restService.GetAsync<GameInfo>(_gameUrl.OriginalString, token);
+                _gameId = gameInfo.Id;
+                ImageUrl = gameInfo.GetLink("image");
+                GameTitle = gameInfo.Title;
+                ReleaseDate = gameInfo.ReleaseDate;
+                Description = gameInfo.Description;
 
+                var publishers =
+                    await _restService.GetAsync<HateoasCollection<Publisher>>(
+                        gameInfo.GetLink("publishers").OriginalString, token);
+
+                Publishers = publishers.Embedded.Data;
+                
                 // Load the platform data from either the supplied platform uri or the platform data with the game info.
-                await AttemptPlatformDataAsync(_platformUrl, gameInfo, token);
+                await AttemptPlatformDataAsync(gameInfo.GetLink("platforms"), token);
 
                 // Retrieve all of the genres the game is and display the names to the user.
                 var genres =
                     await _restService.GetAsync<HateoasCollection<Genre>>(gameInfo.GetLink("genres").OriginalString,
                         token);
 
+                Genres = genres.Embedded.Data;
                 // Grab the first genre and load some game information from it.
                 var games = await _restService.GetAsync<HateoasPage<GameInfo>>(
                     genres.Embedded.Data.First().GetLink("gameInfos").OriginalString, token);
@@ -235,7 +278,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         {
             // Retrieve the url we're going to use to retrieve the base game data.
             _gameUrl = parameters["game-url"] as Uri;
-            _platformUrl = parameters["platform-url"] as Uri;
+            _platformId = parameters["platform-id"] as long? ?? 0L;
 
             // This information will only be valid if the user clicked on a game entry from their own collection.
             InLibrary = parameters["in-library"] as bool? ?? false;
@@ -243,27 +286,6 @@ namespace Sparky.TrakApp.ViewModel.Games
             Status = parameters["status"] as GameUserEntryStatus? ?? GameUserEntryStatus.None;
 
             await LoadGameInfoAsync();
-        }
-
-        /// <summary>
-        ///     Private method that is invoked within the <see cref="LoadGameInfoAsync" /> method. Its purpose
-        ///     is to call the <see cref="IRestService" /> to retrieve the <see cref="GameInfo" /> data and populate
-        ///     the fields on the view model from the returned data.
-        /// </summary>
-        /// <param name="uri">The uri to call to retrieve the <see cref="GameInfo" /> data.</param>
-        /// <param name="token">The authentication token to attach to the request.</param>
-        /// <returns>A <see cref="Task" /> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task<GameInfo> AttemptGameInfoAsync(Uri uri, string token)
-        {
-            var gameInfo = await _restService.GetAsync<GameInfo>(uri.OriginalString, token);
-            ImageUrl = gameInfo.GetLink("image");
-            GameTitle = gameInfo.Title;
-            ReleaseDate = gameInfo.ReleaseDate;
-            PublisherNames = string.Join(", ", gameInfo.Publishers);
-            GenreNames = string.Join(", ", gameInfo.Genres);
-            Description = gameInfo.Description;
-
-            return gameInfo;
         }
 
         /// <summary>
@@ -288,27 +310,20 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        ///     Private method that is invoked within the <see cref="LoadGameInfoAsync" /> method. Its purpose
-        ///     is to load platform data either associated with the provided <see cref="GameInfo" /> instance,
-        ///     or to call the <see cref="IRestService" /> to retrieve it, depending on whether the <see cref="Uri" />
-        ///     is populated with a valid value. The information is then populated on the view model.
+        /// Private method that is invoked within the <see cref="LoadGameInfoAsync" /> method. Its purpose
+        /// is to load all of the platform data associated with the provided <see cref="GameInfo" /> instance,
         /// </summary>
         /// <param name="uri">The uri to call to retrieve the <see cref="Platform" /> data.</param>
-        /// <param name="gameInfo">The current <see cref="GameInfo" /> being displayed to the view.</param>
-        /// ///
         /// <param name="token">The authentication token to attach to the request.</param>
         /// <returns>A <see cref="Task" /> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task AttemptPlatformDataAsync(Uri uri, GameInfo gameInfo, string token)
+        private async Task AttemptPlatformDataAsync(Uri uri, string token)
         {
-            if (uri != null && !string.IsNullOrEmpty(uri.OriginalString))
-            {
-                var platform = await _restService.GetAsync<Platform>(uri.OriginalString, token);
-                PlatformNames = platform.Name;
-            }
-            else
-            {
-                PlatformNames = string.Join(", ", gameInfo.Platforms);
-            }
+            // We'll need to store all of the platforms for the game so that it can be passed to the popup pages when adding a new
+            // game to the users library.
+            var platforms = await _restService.GetAsync<HateoasCollection<Platform>>(uri.OriginalString, token);
+            _allPlatforms = platforms.Embedded.Data;
+
+            Platforms = InLibrary ? new[] {_allPlatforms.First(p => p.Id == _platformId)} : _allPlatforms;
         }
     }
 }

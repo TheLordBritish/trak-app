@@ -102,6 +102,43 @@ namespace Sparky.TrakApp.Service.Impl
             return JsonConvert.DeserializeObject<T>(json, _deserializerSettings);
         }
 
+        public async Task<T> PutAsync<T>(string url, T requestBody, string authToken)
+        {
+            // Create the client to send the requests to.
+            using var client = _httpClientFactory.CreateClient("Trak");
+            
+            // Serialize the request body to json.
+            var content = new StringContent(JsonConvert.SerializeObject(requestBody, _serializerSettings),
+                Encoding.UTF8, "application/json");
+            
+            // Specify the URI and the content of the post request.
+            var request = new HttpRequestMessage
+            {
+                RequestUri = new Uri(client.BaseAddress, url),
+                Content = content,
+                Method = HttpMethod.Put
+            };
+            
+            // Ensure we send up the JWT auth.
+            request.Headers.Authorization = AuthenticationHeaderValue.Parse(authToken);
+            
+            // Make the request.
+            using var response = await client.SendAsync(request);
+            var json = await response.Content.ReadAsStringAsync();
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException
+                {
+                    StatusCode = response.StatusCode,
+                    Content = json
+                };
+            }
+            
+            // Only de-serialize the response on a successful call. 
+            return JsonConvert.DeserializeObject<T>(json, _deserializerSettings);
+        }
+
         public async Task DeleteAsync(string url, string authToken)
         {
             // Create the client to send the requests to.

@@ -378,4 +378,10 @@
 	<data name="GameRequestErrorMessageNotesMaxLength" xml:space="preserve">
 		<value>The notes cannot exceed 2048 characters.</value>
 	</data>
+	<data name="AddGameErrorMessagePlatformNull" xml:space="preserve">
+		<value>The platform cannot be empty.</value>
+	</data>
+	<data name="AddGameErrorMessageStatusNone" xml:space="preserve">
+		<value>The status cannot be empty.</value>
+	</data>
 </root>

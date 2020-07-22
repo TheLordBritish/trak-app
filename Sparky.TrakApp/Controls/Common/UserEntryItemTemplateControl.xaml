@@ -60,7 +60,7 @@
                 FontSize="Large"
                 LineBreakMode="TailTruncation"
                 MaxLines="2"
-                Style="{StaticResource HeaderLabelStyle}"
+                Style="{StaticResource TitleLabelStyle}"
                 Text="{Binding ItemTitle}" />
 
             <!--  The user entry sub title information.  -->

@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Net;
+using System.Reactive;
+using System.Reactive.Concurrency;
 using Prism.Commands;
 using Prism.Navigation;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FluentValidation;
 using Plugin.FluentValidationRules;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Sparky.TrakApp.Model.Login;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
@@ -22,7 +26,7 @@ namespace Sparky.TrakApp.ViewModel.Login
     /// The <see cref="LoginViewModel"/> also provides methods to validate fields on the login page view. Any
     /// validation errors or generic errors are stored within the view model for use on the view.
     /// </summary>
-    public class LoginViewModel : BaseViewModel, IValidate<UserCredentials>
+    public class LoginViewModel : ReactiveViewModel, IValidate<UserCredentials>
     {
         private readonly IAuthService _authService;
         private readonly IStorageService _storageService;
@@ -30,31 +34,64 @@ namespace Sparky.TrakApp.ViewModel.Login
 
         private IValidator _validator;
         private Validatables _validatables;
+        
+        [Reactive]
+        public Validatable<string> Username { get; set; }
+        
+        [Reactive]
+        public Validatable<string> Password { get; set; }
 
-        private Validatable<string> _username;
-        private Validatable<string> _password;
-
+        public bool IsLoading { [ObservableAsProperty] get; }
+        
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
         /// should be handled by the framework.
         /// </summary>
+        /// <param name="scheduler">The <see cref="IScheduler"/> instance to inject.</param>
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="authService">The <see cref="IAuthService"/> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
-        public LoginViewModel(INavigationService navigationService, IAuthService authService,
+        public LoginViewModel(IScheduler scheduler, INavigationService navigationService, IAuthService authService,
             IStorageService storageService, IRestService restService)
             : base(navigationService)
         {
+            scheduler = scheduler ?? RxApp.MainThreadScheduler;
+            
             _authService = authService;
             _storageService = storageService;
             _restService = restService;
             
-            _username = new Validatable<string>(nameof(UserCredentials.Username));
-            _password = new Validatable<string>(nameof(UserCredentials.Password));
-
             SetupForValidation();
+
+            ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
+            
+            LoginCommand = ReactiveCommand.CreateFromTask(ExecuteLoginAsync, outputScheduler: scheduler);
+            // Report errors if an exception was thrown.
+            LoginCommand.ThrownExceptions.Subscribe(ex =>
+            {
+                IsError = true;
+
+                if (ex is ApiException e)
+                {
+                    ErrorMessage = e.StatusCode == HttpStatusCode.Unauthorized || e.StatusCode == HttpStatusCode.Forbidden
+                        ? Messages.ErrorMessageIncorrectCredentials
+                        : Messages.ErrorMessageApiError;
+                }
+                else
+                {
+                    ErrorMessage = Messages.ErrorMessageGeneric;
+                }
+            });
+            
+            ForgottenPasswordCommand =
+                ReactiveCommand.CreateFromTask(ExecuteForgottenPasswordAsync, outputScheduler: scheduler);
+            
+            RegisterCommand = ReactiveCommand.CreateFromTask(ExecuteRegisterAsync, outputScheduler: scheduler);
+
+            this.WhenAnyObservable(x => x.LoginCommand.IsExecuting)
+                .ToPropertyEx(this, x => x.IsLoading);
         }
 
         /// <summary>
@@ -63,46 +100,26 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// the name is passed through and the request propagated to the <see cref="ClearValidation"/>
         /// methods.
         /// </summary>
-        public ICommand ClearValidationCommand => new DelegateCommand<string>(ClearValidation);
+        public ReactiveCommand<string, Unit> ClearValidationCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the login button is tapped. When called, the command
-        /// will propagate the request and call the <see cref="LoginAsync"/> method.
+        /// will propagate the request and call the <see cref="ExecuteLoginAsync"/> method.
         /// </summary>
-        public ICommand LoginCommand => new DelegateCommand(async () => await LoginAsync());
+        public ReactiveCommand<Unit, Unit> LoginCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the forgotten password label is tapped. When called,
-        /// the command will propagate the request and call the <see cref="ForgottenPasswordAsync"/> method.
+        /// the command will propagate the request and call the <see cref="ExecuteForgottenPasswordAsync"/> method.
         /// </summary>
-        public ICommand ForgottenPasswordCommand => new DelegateCommand(async () => await ForgottenPasswordAsync());
+        public ReactiveCommand<Unit, Unit> ForgottenPasswordCommand { get; }
         
         /// <summary>
         /// Command that is invoked by the view when the register label is tapped. When called, the command
-        /// will propagate the request and call the <see cref="RegisterAsync"/> method.
+        /// will propagate the request and call the <see cref="ExecuteRegisterAsync"/> method.
         /// </summary>
-        public ICommand RegisterCommand => new DelegateCommand(async () => await RegisterAsync());
-
-        /// <summary>
-        /// A <see cref="Validatable{T}"/> that contains the currently populated username with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> Username
-        {
-            get => _username;
-            set => SetProperty(ref _username, value);
-        }
-
-        /// <summary>
-        /// A <see cref="Validatable{T}"/> that contains the currently populated password with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> Password
-        {
-            get => _password;
-            set => SetProperty(ref _password, value);
-        }
-
+        public ReactiveCommand<Unit, Unit> RegisterCommand { get; }
+        
         /// <summary>
         /// Invoked within the constructor of the <see cref="LoginViewModel"/>, its' responsibility is to
         /// instantiate the <see cref="AbstractValidator{T}"/> and the validatable values that will need to
@@ -110,6 +127,9 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// </summary>
         public void SetupForValidation()
         {
+            Username = new Validatable<string>(nameof(UserCredentials.Username));
+            Password = new Validatable<string>(nameof(UserCredentials.Password));
+            
             _validator = new UserCredentialsValidator();
             _validatables = new Validatables(Username, Password);
         }
@@ -148,89 +168,55 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// displayed to the user through the ErrorMessage parameter and setting the IsError boolean to true.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task LoginAsync()
+        private async Task ExecuteLoginAsync()
         {
             IsError = false;
-            IsBusy = true;
-
+            
             var registration = _validatables.Populate<UserCredentials>();
             var validationResult = Validate(registration);
             
-            try
+            if (validationResult.IsValidOverall)
             {
-                if (validationResult.IsValidOverall)
+                var token = await _authService.GetTokenAsync(new UserCredentials
                 {
-                    await AttemptLoginAsync(Username.Value, Password.Value);
+                    Username = Username.Value,
+                    Password = Password.Value
+                });
+
+                var userResponse = await _authService.GetFromUsernameAsync(Username.Value, token);
+
+                // Store the needed credentials in the store.
+                await _storageService.SetAuthTokenAsync(token);
+                await _storageService.SetUserIdAsync(userResponse.Id);
+                await _storageService.SetUsernameAsync(Username.Value);
+                await _storageService.SetPasswordAsync(Password.Value);
+
+                // Need to ensure the correct details are registered for push notifications.
+                await _restService.PostAsync("api/notification-management/v1/notifications/register",
+                    new NotificationRegistrationRequest
+                    {
+                        UserId = await _storageService.GetUserIdAsync(),
+                        DeviceGuid = (await _storageService.GetDeviceIdAsync()).ToString(),
+                        Token = await _storageService.GetNotificationTokenAsync()
+                    }, token);
+            
+                if (!userResponse.Verified)
+                {
+                    await NavigationService.NavigateAsync("VerificationPage");
                 }
-            }
-            catch (ApiException e)
-            {
-                IsError = true;
-                ErrorMessage = e.StatusCode == HttpStatusCode.Unauthorized || e.StatusCode == HttpStatusCode.Forbidden
-                    ? Messages.ErrorMessageIncorrectCredentials
-                    : Messages.ErrorMessageApiError;
-            }
-            catch (Exception)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageGeneric;
-            }
-            finally
-            {
-                IsBusy = false;
+                else
+                {
+                    await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");
+                }
             }
         }
         
-        /// <summary>
-        /// Private method that is invoked within the <see cref="LoginAsync"/> method. Its purpose
-        /// is to call the <see cref="IAuthService"/> to retrieve the token and user information
-        /// before navigating to either the verification page or home page, depending on the verification
-        /// state of the user.
-        /// </summary>
-        /// <param name="username">The username to attempt authentication with.</param>
-        /// <param name="password">The password to attempt authentication with/</param>
-        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task AttemptLoginAsync(string username, string password)
-        {
-            var token = await _authService.GetTokenAsync(new UserCredentials
-            {
-                Username = username,
-                Password = password
-            });
-
-            var userResponse = await _authService.GetFromUsernameAsync(username, token);
-
-            // Store the needed credentials in the store.
-            await _storageService.SetAuthTokenAsync(token);
-            await _storageService.SetUserIdAsync(userResponse.Id);
-            await _storageService.SetUsernameAsync(username);
-            await _storageService.SetPasswordAsync(password);
-
-            // Need to ensure the correct details are registered for push notifications.
-            await _restService.PostAsync("api/notification-management/v1/notifications/register",
-                new NotificationRegistrationRequest
-                {
-                    UserId = await _storageService.GetUserIdAsync(),
-                    DeviceGuid = (await _storageService.GetDeviceIdAsync()).ToString(),
-                    Token = await _storageService.GetNotificationTokenAsync()
-                }, token);
-            
-            if (!userResponse.Verified)
-            {
-                await NavigationService.NavigateAsync("VerificationPage");
-            }
-            else
-            {
-                await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");
-            }
-        }
-
         /// <summary>
         /// Invoked when the <see cref="ForgottenPasswordCommand"/> is invoked by the view. All the method
         /// will do is navigate to the forgotten password page.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ForgottenPasswordAsync()
+        private async Task ExecuteForgottenPasswordAsync()
         {
             await NavigationService.NavigateAsync("ForgottenPasswordPage");
         }
@@ -240,7 +226,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// navigate to the register page.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task RegisterAsync()
+        private async Task ExecuteRegisterAsync()
         {
             await NavigationService.NavigateAsync("RegisterPage");
         }

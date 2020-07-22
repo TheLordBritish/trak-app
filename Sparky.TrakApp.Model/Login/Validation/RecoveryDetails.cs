@@ -1,10 +1,10 @@
-﻿namespace Sparky.TrakApp.Model.Login
+﻿namespace Sparky.TrakApp.Model.Login.Validation
 {
-    public class RegistrationDetails
+    public class RecoveryDetails
     {
         public string Username { get; set; }
         
-        public string EmailAddress { get; set; }
+        public string RecoveryToken { get; set; }
         
         public string Password { get; set; }
         

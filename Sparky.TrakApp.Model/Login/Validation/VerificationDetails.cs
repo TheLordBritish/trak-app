@@ -1,4 +1,4 @@
-﻿namespace Sparky.TrakApp.Model.Login
+﻿namespace Sparky.TrakApp.Model.Login.Validation
 {
     public class VerificationDetails
     {

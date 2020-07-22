@@ -7,6 +7,7 @@ using Plugin.FluentValidationRules;
 using Prism.Commands;
 using Prism.Navigation;
 using Sparky.TrakApp.Model.Login;
+using Sparky.TrakApp.Model.Login.Validation;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
 using Sparky.TrakApp.ViewModel.Resources;

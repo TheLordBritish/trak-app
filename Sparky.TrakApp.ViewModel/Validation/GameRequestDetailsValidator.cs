@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Sparky.TrakApp.Model.Games;
+using Sparky.TrakApp.Model.Games.Validation;
 using Sparky.TrakApp.ViewModel.Resources;
 
 namespace Sparky.TrakApp.ViewModel.Validation

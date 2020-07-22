@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using FluentValidation;
 using Sparky.TrakApp.Model.Login;
+using Sparky.TrakApp.Model.Login.Validation;
 using Sparky.TrakApp.ViewModel.Resources;
 
 namespace Sparky.TrakApp.ViewModel.Validation

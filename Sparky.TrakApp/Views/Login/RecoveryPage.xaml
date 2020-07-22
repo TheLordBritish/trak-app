@@ -54,7 +54,7 @@
                     <!--  Page title  -->
                     <Label
                         Margin="0,20,0,15"
-                        Style="{StaticResource HeaderLabelStyle}"
+                        Style="{StaticResource TitleLabelStyle}"
                         Text="{extensions:Translate RecoveryPageTitle}" />
 
                     <!--  Username label and entry box.  -->

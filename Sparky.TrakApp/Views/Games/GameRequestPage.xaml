@@ -47,7 +47,7 @@
                     <!--  Page title  -->
                     <Label
                         Margin="0,20,0,15"
-                        Style="{StaticResource HeaderLabelStyle}"
+                        Style="{StaticResource TitleLabelStyle}"
                         Text="Request a game" />
 
                     <!--  Title label and entry box.  -->

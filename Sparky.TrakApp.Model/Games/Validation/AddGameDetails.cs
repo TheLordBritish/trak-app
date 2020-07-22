@@ -1,4 +1,4 @@
-﻿namespace Sparky.TrakApp.Model.Games
+﻿namespace Sparky.TrakApp.Model.Games.Validation
 {
     public class AddGameDetails
     {

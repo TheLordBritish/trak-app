@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<ResourceDictionary
+    x:Class="Sparky.TrakApp.Styles.LabelStyles"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:styles="clr-namespace:Sparky.TrakApp.Styles;assembly=Sparky.TrakApp">
+
+    <ResourceDictionary.MergedDictionaries>
+        <styles:Colors />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--  Base style for all buttons.  -->
+    <Style x:Key="BaseLabelStyle" TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+        <Setter Property="FontSize" Value="Medium" />
+    </Style>
+
+    <!--  Apply the base label style to all labels by default.  -->
+    <Style BasedOn="{StaticResource BaseLabelStyle}" TargetType="Label" />
+
+    <!--  Style used to represent the title within a page.  -->
+    <Style
+        x:Key="TitleLabelStyle"
+        BasedOn="{StaticResource BaseLabelStyle}"
+        TargetType="Label">
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="30" />
+    </Style>
+
+    <!--  Style that is used as the subtitle which lists all of the features of Trak.  -->
+    <Style
+        x:Key="SubtitleLabelStyle"
+        BasedOn="{StaticResource BaseLabelStyle}"
+        TargetType="Label">
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="70" />
+        <Setter Property="TextColor" Value="{StaticResource TrakGrey}" />
+    </Style>
+
+    <!--  Style that is used to represent the title above entries and pickers.  -->
+    <Style
+        x:Key="EntryLabelStyle"
+        BasedOn="{StaticResource BaseLabelStyle}"
+        TargetType="Label">
+        <Setter Property="FontAttributes" Value="Bold" />
+    </Style>
+
+    <!--  Style that is used to represent validation errors.  -->
+    <Style
+        x:Key="ValidationLabelStyle"
+        BasedOn="{StaticResource BaseLabelStyle}"
+        TargetType="Label">
+        <Setter Property="FontSize" Value="Small" />
+        <Setter Property="TextColor" Value="{StaticResource TrakRed}" />
+    </Style>
+
+</ResourceDictionary>

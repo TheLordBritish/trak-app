@@ -8,6 +8,7 @@ using Plugin.FluentValidationRules;
 using Prism.Navigation;
 using ReactiveUI;
 using Sparky.TrakApp.Model.Games;
+using Sparky.TrakApp.Model.Games.Validation;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
 using Sparky.TrakApp.ViewModel.Resources;

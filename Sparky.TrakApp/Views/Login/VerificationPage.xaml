@@ -37,7 +37,7 @@
             <!--  Page title  -->
             <Label
                 Margin="0,10,0,0"
-                Style="{StaticResource HeaderLabelStyle}"
+                Style="{StaticResource TitleLabelStyle}"
                 Text="{extensions:Translate VerificationPageTitle}" />
             <!--  Verification code label and entry box.  -->
             <Label Text="{extensions:Translate VerificationPageConfirmation}" TextColor="{StaticResource TrakGrey}" />

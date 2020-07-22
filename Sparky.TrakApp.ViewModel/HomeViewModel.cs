@@ -2,6 +2,7 @@
 using System.Windows.Input;
 using Prism.Commands;
 using Prism.Navigation;
+using Sparky.TrakApp.Common;
 
 namespace Sparky.TrakApp.ViewModel
 {
@@ -16,7 +17,10 @@ namespace Sparky.TrakApp.ViewModel
 
         private async Task LoadGamesAsync()
         {
-            await NavigationService.NavigateAsync("GameUserEntriesTabbedPage");
+            await NavigationService.NavigateAsync("GameUserEntriesTabbedPage", new NavigationParameters
+            {
+                {"transition-type", TransitionType.SlideFromRight}
+            });
         }
     }
 }

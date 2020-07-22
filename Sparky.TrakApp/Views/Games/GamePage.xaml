@@ -125,7 +125,7 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Padding="20,0"
-                        Style="{StaticResource HeaderLabelStyle}"
+                        Style="{StaticResource TitleLabelStyle}"
                         Text="{Binding GameTitle}" />
 
                     <!--  Release date and publishers of the game.  -->
@@ -187,7 +187,7 @@
                             FontSize="Large"
                             IsEnabled="{Binding InLibrary}"
                             IsVisible="{Binding InLibrary}"
-                            Style="{StaticResource HeaderLabelStyle}"
+                            Style="{StaticResource TitleLabelStyle}"
                             Text="{extensions:Translate GamePageCurrentlyIn}" />
                         <Grid
                             HorizontalOptions="FillAndExpand"
@@ -255,7 +255,7 @@
                         <Label
                             Margin="0,15,0,10"
                             FontSize="Large"
-                            Style="{StaticResource HeaderLabelStyle}"
+                            Style="{StaticResource TitleLabelStyle}"
                             Text="{extensions:Translate GamePageSimilarGames}" />
 
                         <!--  List that is displayed if there are any results returned from the initial request.  -->

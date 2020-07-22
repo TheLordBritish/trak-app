@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Sparky.TrakApp.Model.Login;
+using Sparky.TrakApp.Model.Login.Validation;
 using Sparky.TrakApp.ViewModel.Validation;
 
 namespace Sparky.TrakApp.ViewModel.Test.Validation

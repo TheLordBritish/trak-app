@@ -15099,17 +15099,41 @@ namespace Sparky.TrakApp.Droid
 			// aapt resource value: 0x7F01000F
 			public const int design_snackbar_out = 2130771983;
 			
+			// aapt resource value: 0x7F010014
+			public const int EnterFromLeft = 2130771988;
+			
+			// aapt resource value: 0x7F010015
+			public const int EnterFromRight = 2130771989;
+			
 			// aapt resource value: 0x7F010010
-			public const int EnterFromLeft = 2130771984;
+			public const int enter_bottom = 2130771984;
 			
 			// aapt resource value: 0x7F010011
-			public const int EnterFromRight = 2130771985;
+			public const int enter_left = 2130771985;
 			
 			// aapt resource value: 0x7F010012
-			public const int ExitToLeft = 2130771986;
+			public const int enter_right = 2130771986;
 			
 			// aapt resource value: 0x7F010013
-			public const int ExitToRight = 2130771987;
+			public const int enter_top = 2130771987;
+			
+			// aapt resource value: 0x7F01001A
+			public const int ExitToLeft = 2130771994;
+			
+			// aapt resource value: 0x7F01001B
+			public const int ExitToRight = 2130771995;
+			
+			// aapt resource value: 0x7F010016
+			public const int exit_bottom = 2130771990;
+			
+			// aapt resource value: 0x7F010017
+			public const int exit_left = 2130771991;
+			
+			// aapt resource value: 0x7F010018
+			public const int exit_right = 2130771992;
+			
+			// aapt resource value: 0x7F010019
+			public const int exit_top = 2130771993;
 			
 			static Animation()
 			{
@@ -17130,6 +17154,15 @@ namespace Sparky.TrakApp.Droid
 			
 			// aapt resource value: 0x7F050092
 			public const int tooltip_background_light = 2131034258;
+			
+			// aapt resource value: 0x7F050093
+			public const int trakPrimaryBlue = 2131034259;
+			
+			// aapt resource value: 0x7F050094
+			public const int trakPrimaryPurple = 2131034260;
+			
+			// aapt resource value: 0x7F050095
+			public const int trakWhite = 2131034261;
 			
 			static Color()
 			{

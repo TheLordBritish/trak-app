@@ -238,13 +238,13 @@
                         Margin="0,20,0,0"
                         AutomationId="RecoveryPageRecoverButton"
                         Command="{Binding RecoverCommand}"
-                        IsVisible="{Binding IsBusy, Converter={StaticResource NegateBooleanConverter}}"
+                        IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
                         Style="{StaticResource PrimaryButtonStyle}"
                         Text="{extensions:Translate RecoveryPageRecover}" />
                     <ActivityIndicator
                         Margin="0,20,0,0"
-                        IsRunning="{Binding IsBusy}"
-                        IsVisible="{Binding IsBusy}" />
+                        IsRunning="{Binding IsLoading}"
+                        IsVisible="{Binding IsLoading}" />
 
                     <!--  Privacy policy and terms of use label.  -->
                     <Label

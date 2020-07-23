@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FluentValidation;
 using Plugin.FluentValidationRules;
 using Prism.Commands;
 using Prism.Navigation;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Sparky.TrakApp.Model.Login;
 using Sparky.TrakApp.Model.Login.Validation;
 using Sparky.TrakApp.Service;
@@ -21,30 +25,50 @@ namespace Sparky.TrakApp.ViewModel.Login
     /// The <see cref="ForgottenPasswordViewModel"/> also provides methods to validate fields on the forgotten password page view. Any
     /// validation errors or generic errors are stored within the view model for use on the view.
     /// </summary>
-    public class ForgottenPasswordViewModel : BaseViewModel, IValidate<ForgottenPasswordDetails>
+    public class ForgottenPasswordViewModel : ReactiveViewModel, IValidate<ForgottenPasswordDetails>
     {
         private readonly IAuthService _authService;
 
         private IValidator _validator;
         private Validatables _validatables;
 
-        private Validatable<string> _emailAddress;
-        
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
         /// should be handled by the framework.
         /// </summary>
+        /// <param name="scheduler">The <see cref="IScheduler"/> instance to inject.</param>
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="authService"> The <see cref="IAuthService"/> instance to inject.</param>
-        public ForgottenPasswordViewModel(INavigationService navigationService, IAuthService authService) : base(navigationService)
+        public ForgottenPasswordViewModel(IScheduler scheduler, INavigationService navigationService,
+            IAuthService authService) : base(scheduler, navigationService)
         {
             _authService = authService;
 
-            _emailAddress = new Validatable<string>(nameof(ForgottenPasswordDetails.EmailAddress));
-
             SetupForValidation();
+
+            ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
+
+            SendCommand = ReactiveCommand.CreateFromTask(ExecuteSendAsync, outputScheduler: scheduler);
+            // Report errors if an exception was thrown.
+            SendCommand.ThrownExceptions.Subscribe(ex =>
+            {
+                IsError = true;
+                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+            });
+
+            RecoveryCommand = ReactiveCommand.CreateFromTask(ExecuteRecoveryAsync, outputScheduler: scheduler);
+
+            this.WhenAnyObservable(x => x.SendCommand.IsExecuting)
+                .ToPropertyEx(this, x => x.IsLoading);
         }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}"/> that contains the currently populated email address with
+        /// additional validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<string> EmailAddress { get; private set; }
 
         /// <summary>
         /// Command that is invoked each time that the validatable field on the view is changed, which
@@ -52,30 +76,20 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// the name is passed through and the request propagated to the <see cref="ClearValidation"/>
         /// methods.
         /// </summary>
-        public ICommand ClearValidationCommand => new DelegateCommand<string>(ClearValidation);
-        
-        /// <summary>
-        /// Command that is invoked by the view when the send button is tapped. When called, the command
-        /// will propagate the request and call the <see cref="SendAsync"/> method.
-        /// </summary>
-        public ICommand SendCommand => new DelegateCommand(async () => await SendAsync());
-        
-        /// <summary>
-        /// Command that is invoked by the view when the already have recovery token label is tapped. When
-        /// called, the command will propagate the request and call the <see cref="RecoveryAsync"/> method.
-        /// </summary>
-        public ICommand RecoveryCommand => new DelegateCommand(async () => await RecoveryAsync());
+        public ReactiveCommand<string, Unit> ClearValidationCommand { get; }
 
         /// <summary>
-        /// A <see cref="Validatable{T}"/> that contains the currently populated email address with
-        /// additional validation information.
+        /// Command that is invoked by the view when the send button is tapped. When called, the command
+        /// will propagate the request and call the <see cref="ExecuteSendAsync"/> method.
         /// </summary>
-        public Validatable<string> EmailAddress
-        {
-            get => _emailAddress;
-            set => SetProperty(ref _emailAddress, value);
-        }
-        
+        public ReactiveCommand<Unit, Unit> SendCommand { get; }
+
+        /// <summary>
+        /// Command that is invoked by the view when the already have recovery token label is tapped. When
+        /// called, the command will propagate the request and call the <see cref="ExecuteRecoveryAsync"/> method.
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> RecoveryCommand { get; }
+
         /// <summary>
         /// Invoked within the constructor of the <see cref="ForgottenPasswordViewModel"/>, its' responsibility is to
         /// instantiate the <see cref="AbstractValidator{T}"/> and the validatable values that will need to
@@ -83,6 +97,8 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// </summary>
         public void SetupForValidation()
         {
+            EmailAddress = new Validatable<string>(nameof(ForgottenPasswordDetails.EmailAddress));
+
             _validator = new ForgottenPasswordDetailsValidator();
             _validatables = new Validatables(EmailAddress);
         }
@@ -110,63 +126,35 @@ namespace Sparky.TrakApp.ViewModel.Login
         {
             _validatables.Clear(clearOptions);
         }
-        
+
         /// <summary>
         /// Private method that is invoked by the <see cref="SendCommand"/> when activated by the associated
         /// view. This method will validate the email address on the view, and if valid attempt to send a password
         /// reset email to the specified address. If the request is successful, the user is navigated to the recovery
         /// page with further details.
-        ///
-        /// If any errors occur during validation or the email request, the exceptions are caught and the errors are
-        /// displayed to the user through the ErrorMessage parameter and setting the IsError boolean to true.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task SendAsync()
+        private async Task ExecuteSendAsync()
         {
             IsError = false;
-            IsBusy = true;
 
             var registration = _validatables.Populate<ForgottenPasswordDetails>();
             var validationResult = Validate(registration);
-            
-            try
+
+            if (validationResult.IsValidOverall)
             {
-                if (validationResult.IsValidOverall)
-                {
-                    await AttemptSendAsync(EmailAddress.Value);
-                }
+                await _authService.RequestRecoveryAsync(EmailAddress.Value);
+                await NavigationService.NavigateAsync("RecoveryPage");
             }
-            catch (ApiException)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageApiError;
-            }
-            catch (Exception)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageGeneric;
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-        
-        private async Task RecoveryAsync()
-        {
-            await NavigationService.NavigateAsync("RecoveryPage");
         }
 
         /// <summary>
-        /// Private method that is invoked by the <see cref="SendAsync"/> method. All this method
-        /// will do is call off to the recover method on the <see cref="IAuthService"/> and navigate
-        /// the user to the recovery page.
+        /// Private method that is invoked by the <see cref="RecoveryCommand"/> when activated by the associated view.
+        /// This method will merely push the recovery page to the top of the view stack.
         /// </summary>
-        /// <param name="emailAddress">The email address to send the password reset email to.</param>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task AttemptSendAsync(string emailAddress)
+        private async Task ExecuteRecoveryAsync()
         {
-            await _authService.RequestRecoveryAsync(emailAddress);
             await NavigationService.NavigateAsync("RecoveryPage");
         }
     }

@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Reactive;
+using System.Reactive.Linq;
+using Microsoft.Reactive.Testing;
 using Moq;
 using NUnit.Framework;
 using Prism.Navigation;
@@ -15,25 +18,39 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         private Mock<IAuthService> _authService;
 
         private ForgottenPasswordViewModel _forgottenPasswordViewModel;
+        private TestScheduler _scheduler;
 
         [SetUp]
         public void SetUp()
         {
             _navigationService = new Mock<INavigationService>();
             _authService = new Mock<IAuthService>();
+            _scheduler = new TestScheduler();
 
-            _forgottenPasswordViewModel = new ForgottenPasswordViewModel(_navigationService.Object, _authService.Object);
+            _forgottenPasswordViewModel =
+                new ForgottenPasswordViewModel(_scheduler, _navigationService.Object, _authService.Object);
         }
 
+        [Test]
+        public void ClearValidationCommand_WithNoData_DoesntThrowException()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                _forgottenPasswordViewModel.ClearValidationCommand.Execute().Subscribe();
+                _scheduler.Start();
+            });    
+        }
+        
         [Test]
         public void SendCommand_WithInvalidEmailAddress_doesntCallAuthService()
         {
             // Arrange
             _forgottenPasswordViewModel.EmailAddress.Value = "invalid";
-            
+
             // Act
-            _forgottenPasswordViewModel.SendCommand.Execute(null);
-            
+            _forgottenPasswordViewModel.SendCommand.Execute().Subscribe();
+            _scheduler.Start();
+
             // Assert
             _authService.Verify(a => a.RequestRecoveryAsync(It.IsAny<string>()), Times.Never());
         }
@@ -46,10 +63,11 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
 
             _authService.Setup(a => a.RequestRecoveryAsync(It.IsAny<string>()))
                 .Throws(new ApiException());
-            
+
             // Act
-            _forgottenPasswordViewModel.SendCommand.Execute(null);
-            
+            _forgottenPasswordViewModel.SendCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+
             // Assert
             Assert.IsTrue(_forgottenPasswordViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
             Assert.AreEqual(Messages.ErrorMessageApiError, _forgottenPasswordViewModel.ErrorMessage,
@@ -61,13 +79,14 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         {
             // Arrange
             _forgottenPasswordViewModel.EmailAddress.Value = "test.email@test.com";
-            
+
             _authService.Setup(a => a.RequestRecoveryAsync(It.IsAny<string>()))
                 .Throws(new Exception());
-            
+
             // Act
-            _forgottenPasswordViewModel.SendCommand.Execute(null);
-            
+            _forgottenPasswordViewModel.SendCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+
             // Assert
             Assert.IsTrue(_forgottenPasswordViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
             Assert.AreEqual(Messages.ErrorMessageGeneric, _forgottenPasswordViewModel.ErrorMessage,
@@ -79,16 +98,17 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         {
             // Arrange
             _forgottenPasswordViewModel.EmailAddress.Value = "test.email@test.com";
-            
+
             _authService.Setup(a => a.RequestRecoveryAsync(It.IsAny<string>()))
                 .Verifiable();
-            
+
             _navigationService.Setup(mock => mock.NavigateAsync("RecoveryPage"))
                 .Verifiable();
-            
+
             // Act
-            _forgottenPasswordViewModel.SendCommand.Execute(null);
-            
+            _forgottenPasswordViewModel.SendCommand.Execute();
+            _scheduler.Start();
+
             // Assert
             _authService.Verify();
             _navigationService.Verify();
@@ -102,8 +122,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .ReturnsAsync(new Mock<INavigationResult>().Object);
 
             // Act
-            _forgottenPasswordViewModel.RecoveryCommand.Execute(null);
-            
+            _forgottenPasswordViewModel.RecoveryCommand.Execute().Subscribe();
+            _scheduler.Start();
+
             // Assert
             _navigationService.Verify(n => n.NavigateAsync("RecoveryPage"), Times.Once);
         }

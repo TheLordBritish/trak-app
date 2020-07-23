@@ -1,4 +1,5 @@
-﻿using Prism.Navigation;
+﻿using System.Reactive.Concurrency;
+using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
@@ -6,10 +7,13 @@ namespace Sparky.TrakApp.ViewModel
 {
     public abstract class ReactiveViewModel : ReactiveObject, IInitialize, INavigationAware, IDestructible
     {
-        protected ReactiveViewModel(INavigationService navigationService)
+        protected ReactiveViewModel(IScheduler scheduler, INavigationService navigationService)
         {
+            Scheduler = scheduler ?? RxApp.MainThreadScheduler;
             NavigationService = navigationService;
         }
+        
+        protected IScheduler Scheduler { get; }
         
         protected INavigationService NavigationService { get; }
 
@@ -19,6 +23,8 @@ namespace Sparky.TrakApp.ViewModel
         [Reactive]
         public string ErrorMessage { get; protected set; }
 
+        public bool IsLoading { [ObservableAsProperty] get; }
+        
         public virtual void Initialize(INavigationParameters parameters)
         {
             

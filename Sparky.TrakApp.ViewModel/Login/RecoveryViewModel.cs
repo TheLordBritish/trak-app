@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FluentValidation;
 using Plugin.FluentValidationRules;
 using Prism.Commands;
 using Prism.Navigation;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Sparky.TrakApp.Model.Login;
 using Sparky.TrakApp.Model.Login.Validation;
 using Sparky.TrakApp.Service;
@@ -21,16 +25,11 @@ namespace Sparky.TrakApp.ViewModel.Login
     /// The <see cref="RecoveryViewModel"/> also provides methods to validate fields on the recovery page view. Any
     /// validation errors or generic errors are stored within the view model for use on the view.
     /// </summary>
-    public class RecoveryViewModel : BaseViewModel, IValidate<RecoveryDetails>
+    public class RecoveryViewModel : ReactiveViewModel, IValidate<RecoveryDetails>
     {
         private readonly IAuthService _authService;
         private readonly IStorageService _storageService;
         private readonly IRestService _restService;
-
-        private Validatable<string> _username;
-        private Validatable<string> _recoveryToken;
-        private Validatable<string> _password;
-        private Validatable<string> _confirmPassword;
 
         private Validatables _validatables;
         private IValidator _validator;
@@ -40,24 +39,63 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
         /// should be handled by the framework.
         /// </summary>
+        /// <param name="scheduler">The <see cref="IScheduler"/> instance to inject.</param>
         /// <param name="navigationService">The <see cref="INavigationService" /> instance to inject.</param>
         /// <param name="authService">The <see cref="IAuthService" /> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService" /> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
-        public RecoveryViewModel(INavigationService navigationService, IAuthService authService,
-            IStorageService storageService, IRestService restService) : base(navigationService)
+        public RecoveryViewModel(IScheduler scheduler, INavigationService navigationService, IAuthService authService,
+            IStorageService storageService, IRestService restService) : base(scheduler, navigationService)
         {
             _authService = authService;
             _storageService = storageService;
             _restService = restService;
-            
-            Username = new Validatable<string>(nameof(RecoveryDetails.Username));
-            RecoveryToken = new Validatable<string>(nameof(RecoveryDetails.RecoveryToken));
-            Password = new Validatable<string>(nameof(RecoveryDetails.Password));
-            ConfirmPassword = new Validatable<string>(nameof(RecoveryDetails.ConfirmPassword));
 
             SetupForValidation();
+
+            ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
+
+            RecoverCommand = ReactiveCommand.CreateFromTask(ExecuteRecoveryAsync, outputScheduler: scheduler);
+            // Report errors if an exception was thrown.
+            RecoverCommand.ThrownExceptions.Subscribe(ex =>
+            {
+                IsError = true;
+                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+            });
+
+            LoginCommand = ReactiveCommand.CreateFromTask(ExecuteLoginAsync, outputScheduler: scheduler);
+
+            this.WhenAnyObservable(x => x.RecoverCommand.IsExecuting)
+                .ToPropertyEx(this, x => x.IsLoading);
         }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}" /> that contains the currently populated username with
+        /// additional validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<string> Username { get; private set; }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}" /> that contains the currently populated recovery token with
+        /// additional validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<string> RecoveryToken { get; private set; }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}" /> that contains the currently populated password with
+        /// additional validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<string> Password { get; private set; }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}" /> that contains the currently populated password confirmation with
+        /// additional validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<string> ConfirmPassword { get; private set; }
 
         /// <summary>
         /// Command that is invoked each time that a validatable field on the view is changed, which
@@ -65,59 +103,19 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// password. When the view is changed, the name is passed through and the request propagated
         /// to the <see cref="ClearValidation" /> method.
         /// </summary>
-        public ICommand ClearValidationCommand => new DelegateCommand<string>(ClearValidation);
+        public ReactiveCommand<string, Unit> ClearValidationCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the recover button is tapped. When called, the command
-        /// will propagate the request and call the <see cref="RecoverAsync"/> method.
+        /// will propagate the request and call the <see cref="ExecuteRecoveryAsync"/> method.
         /// </summary>
-        public ICommand RecoverCommand => new DelegateCommand(async () => await RecoverAsync());
+        public ReactiveCommand<Unit, Unit> RecoverCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the login label is tapped. When called, the command
-        /// will propagate the request and call the <see cref="LoginAsync"/> method.
+        /// will propagate the request and call the <see cref="ExecuteLoginAsync"/> method.
         /// </summary>
-        public ICommand LoginCommand => new DelegateCommand(async () => await LoginAsync());
-
-        /// <summary>
-        /// A <see cref="Validatable{T}" /> that contains the currently populated username with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> Username
-        {
-            get => _username;
-            set => SetProperty(ref _username, value);
-        }
-
-        /// <summary>
-        /// A <see cref="Validatable{T}" /> that contains the currently populated recovery token with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> RecoveryToken
-        {
-            get => _recoveryToken;
-            set => SetProperty(ref _recoveryToken, value);
-        }
-
-        /// <summary>
-        /// A <see cref="Validatable{T}" /> that contains the currently populated password with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> Password
-        {
-            get => _password;
-            set => SetProperty(ref _password, value);
-        }
-
-        /// <summary>
-        /// A <see cref="Validatable{T}" /> that contains the currently populated password confirmation with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> ConfirmPassword
-        {
-            get => _confirmPassword;
-            set => SetProperty(ref _confirmPassword, value);
-        }
+        public ReactiveCommand<Unit, Unit> LoginCommand { get; }
 
         /// <summary>
         /// Invoked within the constructor of the <see cref="RecoveryViewModel" />, its' responsibility is to
@@ -126,10 +124,14 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// </summary>
         public void SetupForValidation()
         {
+            Username = new Validatable<string>(nameof(RecoveryDetails.Username));
+            RecoveryToken = new Validatable<string>(nameof(RecoveryDetails.RecoveryToken));
+            Password = new Validatable<string>(nameof(RecoveryDetails.Password));
+            ConfirmPassword = new Validatable<string>(nameof(RecoveryDetails.ConfirmPassword));
+
             _validator = new RecoveryDetailsValidator();
             _validatables = new Validatables(Username, RecoveryToken, Password, ConfirmPassword);
         }
-
 
         /// <summary>
         /// Validates the specified <see cref="RecoveryDetails" /> model with the validation rules specified within
@@ -169,34 +171,16 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// incorrect or the account not being in the recovery position.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task RecoverAsync()
+        private async Task ExecuteRecoveryAsync()
         {
             IsError = false;
-            IsBusy = true;
 
             var recovery = _validatables.Populate<RecoveryDetails>();
             var validationResult = Validate(recovery);
 
-            try
+            if (validationResult.IsValidOverall)
             {
-                if (validationResult.IsValidOverall)
-                {
-                    await AttemptRecoveryAsync(Username.Value, RecoveryToken.Value, Password.Value);
-                }
-            }
-            catch (ApiException)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageApiError;
-            }
-            catch (Exception)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageGeneric;
-            }
-            finally
-            {
-                IsBusy = false;
+                await AttemptRecoveryAsync(Username.Value, RecoveryToken.Value, Password.Value);
             }
         }
 
@@ -205,13 +189,13 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// navigate back to the login page.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task LoginAsync()
+        private async Task ExecuteLoginAsync()
         {
             await NavigationService.NavigateAsync("LoginPage");
         }
 
         /// <summary>
-        /// Private method that is invoked within the <see cref="RecoverAsync"/> method. Its purpose
+        /// Private method that is invoked within the <see cref="ExecuteRecoveryAsync"/> method. Its purpose
         /// is to attempt to recover an existing user with the supplied information by calling off to an external
         /// service, before storing some small amount of information for later use. 
         ///
@@ -263,7 +247,7 @@ namespace Sparky.TrakApp.ViewModel.Login
                         DeviceGuid = (await _storageService.GetDeviceIdAsync()).ToString(),
                         Token = await _storageService.GetNotificationTokenAsync()
                     }, token);
-                
+
                 // Navigate to the verification page for the user to verify their account before use.
                 await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");
             }

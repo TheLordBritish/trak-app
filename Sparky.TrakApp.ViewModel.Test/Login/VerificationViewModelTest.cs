@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Net;
+using System.Reactive;
+using System.Reactive.Linq;
 using Acr.UserDialogs;
+using Microsoft.Reactive.Testing;
 using Moq;
 using NUnit.Framework;
 using Prism.Navigation;
@@ -18,6 +21,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         private Mock<IStorageService> _storageService;
         private Mock<INavigationService> _navigationService;
         private Mock<IUserDialogs> _userDialogs;
+        private TestScheduler _scheduler;
 
         private VerificationViewModel _verificationViewModel;
 
@@ -28,16 +32,29 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _storageService = new Mock<IStorageService>();
             _navigationService = new Mock<INavigationService>();
             _userDialogs = new Mock<IUserDialogs>();
+            _scheduler = new TestScheduler();
 
-            _verificationViewModel = new VerificationViewModel(_navigationService.Object, _authService.Object,
+            _verificationViewModel = new VerificationViewModel(_scheduler, _navigationService.Object,
+                _authService.Object,
                 _storageService.Object, _userDialogs.Object);
         }
 
         [Test]
+        public void ClearValidationCommand_WithNoData_DoesntThrowException()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                _verificationViewModel.ClearValidationCommand.Execute().Subscribe();
+                _scheduler.Start();
+            });    
+        }
+        
+        [Test]
         public void VerifyCommand_WithInvalidVerificationCode_doesntCallAnyService()
         {
             // Act
-            _verificationViewModel.VerifyCommand.Execute(null);
+            _verificationViewModel.VerifyCommand.Execute().Subscribe();
+            _scheduler.Start();
 
             // Assert
             _storageService.Verify(s => s.GetUsernameAsync(), Times.Never);
@@ -58,7 +75,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .Throws(new ApiException {StatusCode = HttpStatusCode.Unauthorized});
 
             // Act
-            _verificationViewModel.VerifyCommand.Execute(null);
+            _verificationViewModel.VerifyCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsTrue(_verificationViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
@@ -81,7 +99,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .Throws(new Exception());
 
             // Act
-            _verificationViewModel.VerifyCommand.Execute(null);
+            _verificationViewModel.VerifyCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsTrue(_verificationViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
@@ -104,7 +123,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .ReturnsAsync(new CheckedResponse<bool> {Data = false, Error = true, ErrorMessage = "error message"});
 
             // Act
-            _verificationViewModel.VerifyCommand.Execute(null);
+            _verificationViewModel.VerifyCommand.Execute().Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsTrue(_verificationViewModel.IsError,
@@ -133,7 +153,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .ReturnsAsync(new Mock<INavigationResult>().Object);
 
             // Act
-            _verificationViewModel.VerifyCommand.Execute(null);
+            _verificationViewModel.VerifyCommand.Execute().Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsFalse(_verificationViewModel.IsError,
@@ -155,7 +176,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .Throws(new ApiException {StatusCode = HttpStatusCode.Unauthorized});
 
             // Act
-            _verificationViewModel.ResendVerificationCommand.Execute(null);
+            _verificationViewModel.ResendVerificationCommand.Execute().Catch(Observable.Return(Unit.Default))
+                .Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsTrue(_verificationViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
@@ -176,7 +199,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .Throws(new Exception());
 
             // Act
-            _verificationViewModel.ResendVerificationCommand.Execute(null);
+            _verificationViewModel.ResendVerificationCommand.Execute().Catch(Observable.Return(Unit.Default))
+                .Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsTrue(_verificationViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
@@ -200,7 +225,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .Verifiable();
 
             // Act
-            _verificationViewModel.ResendVerificationCommand.Execute(null);
+            _verificationViewModel.ResendVerificationCommand.Execute().Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsFalse(_verificationViewModel.IsError,

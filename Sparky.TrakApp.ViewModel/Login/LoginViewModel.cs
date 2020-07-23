@@ -45,18 +45,16 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
         public LoginViewModel(IScheduler scheduler, INavigationService navigationService, IAuthService authService,
             IStorageService storageService, IRestService restService)
-            : base(navigationService)
+            : base(scheduler, navigationService)
         {
-            scheduler = scheduler ?? RxApp.MainThreadScheduler;
-            
             _authService = authService;
             _storageService = storageService;
             _restService = restService;
-            
+
             SetupForValidation();
 
             ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
-            
+
             LoginCommand = ReactiveCommand.CreateFromTask(ExecuteLoginAsync, outputScheduler: scheduler);
             // Report errors if an exception was thrown.
             LoginCommand.ThrownExceptions.Subscribe(ex =>
@@ -65,7 +63,8 @@ namespace Sparky.TrakApp.ViewModel.Login
 
                 if (ex is ApiException e)
                 {
-                    ErrorMessage = e.StatusCode == HttpStatusCode.Unauthorized || e.StatusCode == HttpStatusCode.Forbidden
+                    ErrorMessage = e.StatusCode == HttpStatusCode.Unauthorized ||
+                                   e.StatusCode == HttpStatusCode.Forbidden
                         ? Messages.ErrorMessageIncorrectCredentials
                         : Messages.ErrorMessageApiError;
                 }
@@ -74,24 +73,30 @@ namespace Sparky.TrakApp.ViewModel.Login
                     ErrorMessage = Messages.ErrorMessageGeneric;
                 }
             });
-            
+
             ForgottenPasswordCommand =
                 ReactiveCommand.CreateFromTask(ExecuteForgottenPasswordAsync, outputScheduler: scheduler);
-            
+
             RegisterCommand = ReactiveCommand.CreateFromTask(ExecuteRegisterAsync, outputScheduler: scheduler);
 
             this.WhenAnyObservable(x => x.LoginCommand.IsExecuting)
                 .ToPropertyEx(this, x => x.IsLoading);
         }
 
+        /// <summary>
+        /// A <see cref="Validatable{T}"/> that contains the currently populated username with
+        /// additional validation information.
+        /// </summary>
         [Reactive]
         public Validatable<string> Username { get; private set; }
-        
+
+        /// <summary>
+        /// A <see cref="Validatable{T}"/> that contains the currently populated password with
+        /// additional validation information.
+        /// </summary>
         [Reactive]
         public Validatable<string> Password { get; private set; }
 
-        public bool IsLoading { [ObservableAsProperty] get; }
-        
         /// <summary>
         /// Command that is invoked each time that the validatable field on the view is changed, which
         /// for the <see cref="LoginViewModel"/> is the username and password. When the view is changed,
@@ -111,13 +116,13 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// the command will propagate the request and call the <see cref="ExecuteForgottenPasswordAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> ForgottenPasswordCommand { get; }
-        
+
         /// <summary>
         /// Command that is invoked by the view when the register label is tapped. When called, the command
         /// will propagate the request and call the <see cref="ExecuteRegisterAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> RegisterCommand { get; }
-        
+
         /// <summary>
         /// Invoked within the constructor of the <see cref="LoginViewModel"/>, its' responsibility is to
         /// instantiate the <see cref="AbstractValidator{T}"/> and the validatable values that will need to
@@ -127,7 +132,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         {
             Username = new Validatable<string>(nameof(UserCredentials.Username));
             Password = new Validatable<string>(nameof(UserCredentials.Password));
-            
+
             _validator = new UserCredentialsValidator();
             _validatables = new Validatables(Username, Password);
         }
@@ -169,10 +174,10 @@ namespace Sparky.TrakApp.ViewModel.Login
         private async Task ExecuteLoginAsync()
         {
             IsError = false;
-            
+
             var registration = _validatables.Populate<UserCredentials>();
             var validationResult = Validate(registration);
-            
+
             if (validationResult.IsValidOverall)
             {
                 var token = await _authService.GetTokenAsync(new UserCredentials
@@ -197,7 +202,7 @@ namespace Sparky.TrakApp.ViewModel.Login
                         DeviceGuid = (await _storageService.GetDeviceIdAsync()).ToString(),
                         Token = await _storageService.GetNotificationTokenAsync()
                     }, token);
-            
+
                 if (!userResponse.Verified)
                 {
                     await NavigationService.NavigateAsync("VerificationPage");
@@ -208,7 +213,7 @@ namespace Sparky.TrakApp.ViewModel.Login
                 }
             }
         }
-        
+
         /// <summary>
         /// Invoked when the <see cref="ForgottenPasswordCommand"/> is invoked by the view. All the method
         /// will do is navigate to the forgotten password page.
@@ -218,7 +223,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         {
             await NavigationService.NavigateAsync("ForgottenPasswordPage");
         }
-        
+
         /// <summary>
         /// Invoked when the user <see cref="RegisterCommand"/> is invoked by the view. All the method will do is
         /// navigate to the register page.

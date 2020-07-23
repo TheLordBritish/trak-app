@@ -2,10 +2,8 @@
 using System.Net;
 using System.Reactive;
 using System.Reactive.Concurrency;
-using Prism.Commands;
 using Prism.Navigation;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using FluentValidation;
 using Plugin.FluentValidationRules;
 using ReactiveUI;
@@ -34,15 +32,7 @@ namespace Sparky.TrakApp.ViewModel.Login
 
         private IValidator _validator;
         private Validatables _validatables;
-        
-        [Reactive]
-        public Validatable<string> Username { get; set; }
-        
-        [Reactive]
-        public Validatable<string> Password { get; set; }
 
-        public bool IsLoading { [ObservableAsProperty] get; }
-        
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
@@ -94,6 +84,14 @@ namespace Sparky.TrakApp.ViewModel.Login
                 .ToPropertyEx(this, x => x.IsLoading);
         }
 
+        [Reactive]
+        public Validatable<string> Username { get; private set; }
+        
+        [Reactive]
+        public Validatable<string> Password { get; private set; }
+
+        public bool IsLoading { [ObservableAsProperty] get; }
+        
         /// <summary>
         /// Command that is invoked each time that the validatable field on the view is changed, which
         /// for the <see cref="LoginViewModel"/> is the username and password. When the view is changed,

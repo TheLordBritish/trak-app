@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Net;
+using System.Reactive;
+using System.Reactive.Linq;
+using Microsoft.Reactive.Testing;
 using Moq;
 using NUnit.Framework;
 using Prism.Navigation;
@@ -17,7 +20,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         private Mock<IStorageService> _storageService;
         private Mock<INavigationService> _navigationService;
         private Mock<IRestService> _restService;
-
+        private TestScheduler _scheduler;
+        
         private LoginViewModel _loginViewModel;
         
         [SetUp]
@@ -27,8 +31,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _storageService = new Mock<IStorageService>();
             _navigationService = new Mock<INavigationService>();
             _restService = new Mock<IRestService>();
+            _scheduler = new TestScheduler();
             
-            _loginViewModel = new LoginViewModel(_navigationService.Object, _authService.Object, _storageService.Object, _restService.Object);
+            _loginViewModel = new LoginViewModel(_scheduler, _navigationService.Object, _authService.Object, _storageService.Object, _restService.Object);
         }
 
         [Test]
@@ -38,8 +43,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _loginViewModel.Password.Value = "Password";
             
             // Act
-            _loginViewModel.LoginCommand.Execute(null);
-
+            _loginViewModel.LoginCommand.Execute().Subscribe();
+            _scheduler.Start();
+            
             // Assert
             _authService.Verify(a => a.GetTokenAsync(It.IsAny<UserCredentials>()), Times.Never);
         }
@@ -51,7 +57,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _loginViewModel.Username.Value = "Username";
 
             // Act
-            _loginViewModel.LoginCommand.Execute(null);
+            _loginViewModel.LoginCommand.Execute().Subscribe();
+            _scheduler.Start();
 
             // Assert
             _authService.Verify(a => a.GetTokenAsync(It.IsAny<UserCredentials>()), Times.Never);
@@ -68,8 +75,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .Throws(new ApiException {StatusCode = HttpStatusCode.Unauthorized});
             
             // Act
-            _loginViewModel.LoginCommand.Execute(null);
-
+            _loginViewModel.LoginCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+            
             // Assert
             Assert.IsTrue(_loginViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
             Assert.AreEqual(Messages.ErrorMessageIncorrectCredentials, _loginViewModel.ErrorMessage,
@@ -87,7 +95,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .Throws(new ApiException {StatusCode = HttpStatusCode.Conflict});
             
             // Act
-            _loginViewModel.LoginCommand.Execute(null);
+            _loginViewModel.LoginCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsTrue(_loginViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
@@ -106,7 +115,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .Throws(new Exception());
             
             // Act
-            _loginViewModel.LoginCommand.Execute(null);
+            _loginViewModel.LoginCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsTrue(_loginViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
@@ -143,7 +153,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .ReturnsAsync(new Mock<INavigationResult>().Object);
             
             // Act
-            _loginViewModel.LoginCommand.Execute(null);
+            _loginViewModel.LoginCommand.Execute().Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsFalse(_loginViewModel.IsError, "vm.IsError should be false if login was successful.");
@@ -182,7 +193,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .ReturnsAsync(new Mock<INavigationResult>().Object);
 
             // Act
-            _loginViewModel.LoginCommand.Execute(null);
+            _loginViewModel.LoginCommand.Execute().Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsFalse(_loginViewModel.IsError, "vm.IsError should be false if login was successful.");
@@ -201,7 +213,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .ReturnsAsync(new Mock<INavigationResult>().Object);
             
             // Act
-            _loginViewModel.ForgottenPasswordCommand.Execute(null);
+            _loginViewModel.ForgottenPasswordCommand.Execute().Subscribe();
+            _scheduler.Start();
             
             // Assert
             _navigationService.Verify(n => n.NavigateAsync("ForgottenPasswordPage"), Times.Once);
@@ -215,7 +228,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .ReturnsAsync(new Mock<INavigationResult>().Object);
 
             // Act
-            _loginViewModel.RegisterCommand.Execute(null);
+            _loginViewModel.RegisterCommand.Execute().Subscribe();
+            _scheduler.Start();
             
             // Assert
             _navigationService.Verify(n => n.NavigateAsync("RegisterPage"), Times.Once);

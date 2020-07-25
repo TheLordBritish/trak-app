@@ -42,7 +42,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         }
         
         [Test]
-        public void SendCommand_WithInvalidEmailAddress_doesntCallAuthService()
+        public void SendCommand_WithInvalidEmailAddress_DoesntCallAuthService()
         {
             // Arrange
             _forgottenPasswordViewModel.EmailAddress.Value = "invalid";

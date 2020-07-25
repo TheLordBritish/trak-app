@@ -11,6 +11,7 @@ using ReactiveUI.Fody.Helpers;
 using Sparky.TrakApp.Model.Login;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
+using Sparky.TrakApp.ViewModel.Common;
 using Sparky.TrakApp.ViewModel.Resources;
 using Sparky.TrakApp.ViewModel.Validation;
 

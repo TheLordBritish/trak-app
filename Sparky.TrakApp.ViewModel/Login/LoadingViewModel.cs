@@ -3,6 +3,7 @@ using System.Reactive.Concurrency;
 using Prism.Navigation;
 using Sparky.TrakApp.Model.Login;
 using Sparky.TrakApp.Service;
+using Sparky.TrakApp.ViewModel.Common;
 
 namespace Sparky.TrakApp.ViewModel.Login
 {

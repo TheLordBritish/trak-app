@@ -3,7 +3,7 @@ using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 
-namespace Sparky.TrakApp.ViewModel
+namespace Sparky.TrakApp.ViewModel.Common
 {
     public abstract class ReactiveViewModel : ReactiveObject, IInitialize, INavigationAware, IDestructible
     {

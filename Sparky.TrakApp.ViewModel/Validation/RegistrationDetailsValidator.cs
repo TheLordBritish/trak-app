@@ -6,6 +6,11 @@ using Sparky.TrakApp.ViewModel.Resources;
 
 namespace Sparky.TrakApp.ViewModel.Validation
 {
+    /// <summary>
+    /// The <see cref="RegistrationDetailsValidator"/> is a validation class that validates the properties
+    /// within the <see cref="RegistrationDetails"/> class to ensure that they can valid information before
+    /// being passed onto an API call.
+    /// </summary>
     public class RegistrationDetailsValidator : AbstractValidator<RegistrationDetails>
     {
         public RegistrationDetailsValidator()

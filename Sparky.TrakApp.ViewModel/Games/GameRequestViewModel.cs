@@ -7,10 +7,12 @@ using FluentValidation;
 using Plugin.FluentValidationRules;
 using Prism.Navigation;
 using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Sparky.TrakApp.Model.Games;
 using Sparky.TrakApp.Model.Games.Validation;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
+using Sparky.TrakApp.ViewModel.Common;
 using Sparky.TrakApp.ViewModel.Resources;
 using Sparky.TrakApp.ViewModel.Validation;
 
@@ -29,13 +31,8 @@ namespace Sparky.TrakApp.ViewModel.Games
         private readonly IStorageService _storageService;
         private readonly IUserDialogs _userDialogs;
 
-        private Validatable<string> _title;
-        private Validatable<string> _notes;
-
         private IValidator _validator;
         private Validatables _validatables;
-
-        private readonly ObservableAsPropertyHelper<bool> _isLoading;
 
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
@@ -60,7 +57,6 @@ namespace Sparky.TrakApp.ViewModel.Games
             ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
 
             RequestCommand = ReactiveCommand.CreateFromTask(ExecuteRequestAsync, outputScheduler: scheduler);
-
             // Report errors if an exception was thrown.
             RequestCommand.ThrownExceptions.Subscribe(ex =>
             {
@@ -68,9 +64,23 @@ namespace Sparky.TrakApp.ViewModel.Games
                 ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
             });
 
-            _isLoading = this.WhenAnyObservable(x => x.RequestCommand.IsExecuting)
-                .ToProperty(this, x => x.IsLoading, scheduler: scheduler);
+            this.WhenAnyObservable(x => x.RequestCommand.IsExecuting)
+                .ToPropertyEx(this, x => x.IsLoading, scheduler: scheduler);
         }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}"/> that contains the currently populated title with
+        /// additional validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<string> Title { get; private set; }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}"/> that contains the currently populated notes with
+        /// additional validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<string> Notes { get; private set; }
 
         /// <summary>
         /// Command that is invoked each time that the validatable field on the view is changed, which
@@ -87,40 +97,14 @@ namespace Sparky.TrakApp.ViewModel.Games
         public ReactiveCommand<Unit, Unit> RequestCommand { get; }
 
         /// <summary>
-        /// A boolean represents whether the <see cref="RequestCommand"/> is currently executing the behaviour
-        /// within the <see cref="ReactiveCommand{TParam,TResult}"/>.
-        /// </summary>
-        public bool IsLoading => _isLoading.Value;
-
-        /// <summary>
-        /// A <see cref="Validatable{T}"/> that contains the currently populated title with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> Title
-        {
-            get => _title;
-            set => this.RaiseAndSetIfChanged(ref _title, value);
-        }
-
-        /// <summary>
-        /// A <see cref="Validatable{T}"/> that contains the currently populated notes with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> Notes
-        {
-            get => _notes;
-            set => this.RaiseAndSetIfChanged(ref _notes, value);
-        }
-
-        /// <summary>
         /// Invoked within the constructor of the <see cref="GameRequestViewModel"/>, its' responsibility is to
         /// instantiate the <see cref="AbstractValidator{T}"/> and the validatable values that will need to
         /// meet the specified criteria within the <see cref="GameRequestDetailsValidator"/> to pass validation.
         /// </summary>
         public void SetupForValidation()
         {
-            _title = new Validatable<string>(nameof(GameRequestDetails.Title));
-            _notes = new Validatable<string>(nameof(GameRequestDetails.Notes));
+            Title = new Validatable<string>(nameof(GameRequestDetails.Title));
+            Notes = new Validatable<string>(nameof(GameRequestDetails.Notes));
 
             _validator = new GameRequestDetailsValidator();
             _validatables = new Validatables(Title, Notes);

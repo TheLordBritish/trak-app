@@ -2,55 +2,52 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FluentValidation;
 using Plugin.FluentValidationRules;
 using Prism.Commands;
 using Prism.Navigation;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Sparky.TrakApp.Model.Games;
 using Sparky.TrakApp.Model.Games.Validation;
 using Sparky.TrakApp.Model.Response;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
+using Sparky.TrakApp.ViewModel.Common;
 using Sparky.TrakApp.ViewModel.Resources;
 using Sparky.TrakApp.ViewModel.Validation;
 
 namespace Sparky.TrakApp.ViewModel.Games
 {
-    public class AddGameViewModel : BaseViewModel, IValidate<AddGameDetails>
+    public class AddGameViewModel : ReactiveViewModel, IValidate<AddGameDetails>
     {
         private readonly IStorageService _storageService;
         private readonly IRestService _restService;
-
-        private Uri _gameUrl;
-        private long _gameId;
+        
         private bool _inLibrary;
 
         private IValidator _validator;
         private Validatables _validatables;
-
-        private ObservableCollection<Platform> _platforms;
-        private Validatable<Platform> _selectedPlatform;
-
-        private ObservableCollection<GameUserEntryStatus> _statuses;
-        private Validatable<GameUserEntryStatus> _selectedStatus;
-
+        
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
         /// should be handled by the framework.
         /// </summary>
+        /// <param name="scheduler">The <see cref="IScheduler"/> instance to inject.</param>
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
-        public AddGameViewModel(INavigationService navigationService, IStorageService storageService,
-            IRestService restService) : base(navigationService)
+        public AddGameViewModel(IScheduler scheduler, INavigationService navigationService, IStorageService storageService,
+            IRestService restService) : base(scheduler, navigationService)
         {
             _storageService = storageService;
             _restService = restService;
-
-            Platforms = new ObservableCollection<Platform>();
+            
             Statuses = new ObservableCollection<GameUserEntryStatus>
             {
                 GameUserEntryStatus.Backlog,
@@ -58,66 +55,93 @@ namespace Sparky.TrakApp.ViewModel.Games
                 GameUserEntryStatus.Completed,
                 GameUserEntryStatus.Dropped
             };
-
-            SelectedPlatform = new Validatable<Platform>(nameof(AddGameDetails.Platform));
-            SelectedStatus = new Validatable<GameUserEntryStatus>(nameof(AddGameDetails.Status))
-            {
-                Value = GameUserEntryStatus.Backlog
-            };
-
+            
             SetupForValidation();
-        }
+            
+            ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
+            
+            AddGameCommand = ReactiveCommand.CreateFromTask(ExecuteAddGameAsync, outputScheduler: scheduler);
+            // Report errors if an exception was thrown.
+            AddGameCommand.ThrownExceptions.Subscribe(ex =>
+            {
+                IsError = true;
+                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+            });
 
+            this.WhenAnyObservable(x => x.AddGameCommand.IsExecuting)
+                .ToPropertyEx(this, x => x.IsLoading, scheduler: scheduler);
+        }
+        
+        public long GameId { get; private set; }
+        
+        public Uri GameUrl { get; private set; }
+        
+        /// <summary>
+        /// An <see cref="ObservableCollection{T}"/> that contains all of the <see cref="Platform"/>'s
+        /// that the current <see cref="Game"/> is available on.
+        /// </summary>
+        [Reactive]
+        public ObservableCollection<Platform> Platforms { get; private set; }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}"/> that contains the currently selected platform with additional
+        /// validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<Platform> SelectedPlatform { get; private set; }
+
+        /// <summary>
+        /// An <see cref="ObservableCollection{T}"/> that contains a list of all valid and selectable
+        /// <see cref="GameUserEntryStatus"/> enumerations.
+        /// </summary>
+        [Reactive]
+        public ObservableCollection<GameUserEntryStatus> Statuses { get; private set; }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}"/> that contains the currently selected status with additional
+        /// validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<GameUserEntryStatus> SelectedStatus { get; private set; }
+        
         /// <summary>
         /// Command that is invoked each time that the validatable field on the view is changed, which
         /// for the <see cref="AddGameViewModel"/> is the platform and status. When the view is changed,
         /// the name is passed through and the request propagated to the <see cref="ClearValidation"/>
         /// method.
         /// </summary>
-        public ICommand ClearValidationCommand => new DelegateCommand<string>(ClearValidation);
+        public ReactiveCommand<string, Unit> ClearValidationCommand { get; }
 
         /// <summary>
         /// Command that is invoked each the time the Add button is tapped by the user on the view.
-        /// When called, the command will propagate the request and call the <see cref="AddGameAsync"/> method.
+        /// When called, the command will propagate the request and call the <see cref="ExecuteAddGameAsync"/> method.
         /// </summary>
-        public ICommand AddGameCommand => new DelegateCommand(async () => await AddGameAsync());
-        
-        public ObservableCollection<Platform> Platforms
-        {
-            get => _platforms;
-            set => SetProperty(ref _platforms, value);
-        }
+        public ReactiveCommand<Unit, Unit> AddGameCommand { get; }
 
-        public Validatable<Platform> SelectedPlatform
-        {
-            get => _selectedPlatform;
-            set => SetProperty(ref _selectedPlatform, value);
-        }
-
-        public ObservableCollection<GameUserEntryStatus> Statuses
-        {
-            get => _statuses;
-            set => SetProperty(ref _statuses, value);
-        }
-
-        public Validatable<GameUserEntryStatus> SelectedStatus
-        {
-            get => _selectedStatus;
-            set => SetProperty(ref _selectedStatus, value);
-        }
-
+        /// <summary>
+        /// Invoked when the view associated with this view model is being removed from the view. It will add
+        /// a number of parameters to the <see cref="INavigationParameters"/> instance provided referencing the
+        /// game selected, as this information is needed when navigating back to the game view.
+        /// </summary>
+        /// <param name="parameters">The <see cref="INavigationParameters"/> sent when navigating away.</param>
         public override void OnNavigatedFrom(INavigationParameters parameters)
         {
-            parameters.Add("game-url", _gameUrl);
+            parameters.Add("game-url", GameUrl);
             parameters.Add("platform-id", _inLibrary ? SelectedPlatform.Value.Id : 0L);
             parameters.Add("in-library", _inLibrary);
             parameters.Add("status", _inLibrary ? SelectedStatus.Value : GameUserEntryStatus.None);
         }
 
+        /// <summary>
+        /// Invoked when the view first navigates to the view associated with this view model. It will retrieve
+        /// the game information provided by the <see cref="INavigationParameters"/> and the associated platforms
+        /// of the <see cref="Game"/>.
+        /// </summary>
+        /// <param name="parameters">The <see cref="INavigationParameters"/> sent when navigated to.</param>
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
-            _gameUrl = parameters.GetValue<Uri>("game-url");
-            _gameId = parameters.GetValue<long>("game-id");
+            GameUrl = parameters.GetValue<Uri>("game-url");
+            GameId = parameters.GetValue<long>("game-id");
 
             Platforms = new ObservableCollection<Platform>(parameters.GetValue<IEnumerable<Platform>>("platforms"));
         }
@@ -129,6 +153,12 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// </summary>
         public void SetupForValidation()
         {
+            SelectedPlatform = new Validatable<Platform>(nameof(AddGameDetails.Platform));
+            SelectedStatus = new Validatable<GameUserEntryStatus>(nameof(AddGameDetails.Status))
+            {
+                Value = GameUserEntryStatus.Backlog
+            };
+            
             _validator = new AddGameDetailsValidator();
             _validatables = new Validatables(SelectedPlatform, SelectedStatus);
         }
@@ -142,7 +172,8 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// <returns>A <see cref="OverallValidationResult"/> which will contain a list of any errors.</returns>
         public OverallValidationResult Validate(AddGameDetails model)
         {
-            return _validator.Validate(model).ApplyResultsTo(_validatables);
+            return _validator.Validate(model)
+                .ApplyResultsTo(_validatables);
         }
 
         /// <summary>
@@ -156,37 +187,38 @@ namespace Sparky.TrakApp.ViewModel.Games
             _validatables.Clear(clearOptions);
         }
 
-        private async Task AddGameAsync()
+        /// <summary>
+        /// Private method that is invoked by the <see cref="AddGameCommand"/> when activated by the associated
+        /// view. This method will validate the selected platform and status on the view, and if valid attempt to add
+        /// the specified game to the users collection.
+        ///
+        /// If any errors occur during validation or authentication, the exceptions are caught and the errors are
+        /// displayed to the user through the ErrorMessage parameter and setting the IsError boolean to true.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
+        private async Task ExecuteAddGameAsync()
         {
             IsError = false;
-            IsBusy = true;
 
             var details = _validatables.Populate<AddGameDetails>();
             var validationResult = Validate(details);
-
-            try
+            
+            if (validationResult.IsValidOverall)
             {
-                if (validationResult.IsValidOverall)
-                {
-                    await AttemptAddGameAsync();
-                }
-            }
-            catch (ApiException)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageApiError;
-            }
-            catch (Exception)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageGeneric;
-            }
-            finally
-            {
-                IsBusy = false;
+                await AttemptAddGameAsync();
             }
         }
 
+        /// <summary>
+        /// Private method that is invoked by the <see cref="ExecuteAddGameAsync"/> method. Its purpose is to call off to the
+        /// Trak API and either add the game to the users collection, or update it if the information provided already matches
+        /// and existing entry.
+        ///
+        /// Once the game has been added or updated, the user will be navigated back to the previous page, closing the dialog
+        /// and reloading the game view. Once a game has been added, it cannot be added again, instead the user will be presented
+        /// with options to edit the existing entry.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task AttemptAddGameAsync()
         {
             // Get the needed values to make the call from the storage service.
@@ -195,7 +227,7 @@ namespace Sparky.TrakApp.ViewModel.Games
 
             // Make the request to see if the game they're adding is already in their library.
             var existingEntry = await _restService.GetAsync<HateoasPage<GameUserEntry>>(
-                $"api/game-management/v1/game-user-entries?user-id={userId}&platform-id={SelectedPlatform.Value.Id}&game-id={_gameId}",
+                $"api/game-management/v1/game-user-entries?user-id={userId}&platform-id={SelectedPlatform.Value.Id}&game-id={GameId}",
                 token);
 
             if (existingEntry.Embedded != null)
@@ -212,7 +244,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                 var entry = new GameUserEntry
                 {
                     UserId = userId,
-                    GameId = _gameId,
+                    GameId = GameId,
                     PlatformId = SelectedPlatform.Value.Id,
                     Status = SelectedStatus.Value
                 };

@@ -153,7 +153,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
         }
 
         [Test]
-        public void AddGameCommand_ThrowsGenericException_SetsErrorMessageAsApiError()
+        public void AddGameCommand_ThrowsGenericException_SetsErrorMessageAsGenericError()
         {
             // Arrange
             _addGameViewModel.SelectedPlatform.Value = new Platform();

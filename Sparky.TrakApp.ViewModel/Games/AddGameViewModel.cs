@@ -72,8 +72,15 @@ namespace Sparky.TrakApp.ViewModel.Games
                 .ToPropertyEx(this, x => x.IsLoading, scheduler: scheduler);
         }
         
+        /// <summary>
+        /// A <see cref="long"/> that represents the ID of the currently selected <see cref="Game"/> to add.
+        /// </summary>
         public long GameId { get; private set; }
         
+        /// <summary>
+        /// The <see cref="Uri"/> that is used to retrieve additional information about the <see cref="Game"/>
+        /// that is to be added to the users collection.
+        /// </summary>
         public Uri GameUrl { get; private set; }
         
         /// <summary>

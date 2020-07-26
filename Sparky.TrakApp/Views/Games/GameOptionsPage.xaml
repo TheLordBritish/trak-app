@@ -43,20 +43,20 @@
             <Button
                 Margin="0,15,0,0"
                 Command="{Binding UpdateGameCommand}"
-                IsVisible="{Binding IsBusy, Converter={StaticResource NegateBooleanConverter}}"
+                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
                 Style="{StaticResource PrimaryButtonStyle}"
                 Text="Update" />
             <Button
                 Margin="0,15,0,0"
                 Command="{Binding DeleteGameCommand}"
                 FontSize="Medium"
-                IsVisible="{Binding IsBusy, Converter={StaticResource NegateBooleanConverter}}"
+                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
                 Style="{StaticResource SecondaryButtonStyle}"
                 Text="Delete" />
             <ActivityIndicator
                 Margin="0,15,0,0"
-                IsRunning="{Binding IsBusy}"
-                IsVisible="{Binding IsBusy}" />
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}" />
         </StackLayout>
     </pages:PopupPage.Content>
 </pages:PopupPage>

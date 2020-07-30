@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Acr.UserDialogs;
 using Prism.Commands;
 using Prism.Navigation;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Sparky.TrakApp.Common;
 using Sparky.TrakApp.Model.Games;
 using Sparky.TrakApp.Model.Response;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
 using Sparky.TrakApp.ViewModel.Common;
 using Sparky.TrakApp.ViewModel.Resources;
+using Color = System.Drawing.Color;
 
 namespace Sparky.TrakApp.ViewModel.Games
 {
@@ -24,166 +28,167 @@ namespace Sparky.TrakApp.ViewModel.Games
     /// If the user searches for a game that isn't in the library, this view model also allows them to make requests
     /// for the game to be added to the library.
     /// </summary>
-    public class GameLibraryListViewModel : BaseListViewModel<ListItemViewModel>
+    public class GameLibraryListViewModel : ReactiveViewModel
     {
         private readonly IRestService _restService;
         private readonly IStorageService _storageService;
-        private readonly IUserDialogs _userDialogs;
 
         private string _nextUri;
-        private string _search;
 
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
         /// should be handled by the framework.
         /// </summary>
+        /// <param name="scheduler">The <see cref="IScheduler"/> instance to inject.</param>
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
         /// /// <param name="userDialogs">The <see cref="IUserDialogs"/> instance to inject.</param>
-        public GameLibraryListViewModel(INavigationService navigationService, IRestService restService,
-            IStorageService storageService, IUserDialogs userDialogs) : base(navigationService)
+        public GameLibraryListViewModel(IScheduler scheduler, INavigationService navigationService,
+            IRestService restService,
+            IStorageService storageService, IUserDialogs userDialogs) : base(scheduler, navigationService)
         {
             _restService = restService;
             _storageService = storageService;
-            _userDialogs = userDialogs;
+
+            var canSearch = this.WhenAny(x => x.SearchQuery, x => !string.IsNullOrWhiteSpace(x.Value));
+
+            SearchCommand =
+                ReactiveCommand.CreateFromTask<string, IEnumerable<GameInfo>>(ExecuteSearchAsync, canSearch, scheduler);
+            // Register to the result of the search command and convert the result into list item view models.
+            SearchCommand.Subscribe(results =>
+            {
+                Items.Clear();
+                Items.AddRange(results.Select(CreateListItemViewModelFromGameInfo));
+
+                IsEmpty = Items.Count == 0;
+            });
+            // Report errors if an exception was thrown.
+            SearchCommand.ThrownExceptions.Subscribe(ex =>
+            {
+                IsError = true;
+                ErrorMessage = ex is ApiException
+                    ? Messages.GameLibraryListPageEmptyServerError
+                    : Messages.GameLibraryListPageEmptyGenericError;
+            });
+
+            var canLoadMore = this.WhenAnyValue(x => x._nextUri, x => !string.IsNullOrEmpty(x));
+
+            LoadMoreCommand =
+                ReactiveCommand.CreateFromTask<Unit, IEnumerable<GameInfo>>(_ => GetGamesFromUrlAsync(_nextUri),
+                    canLoadMore, scheduler);
+            // Register to the result of the load more command and convert the result into list item view models.
+            LoadMoreCommand.Subscribe(results =>
+            {
+                Items.AddRange(results.Select(CreateListItemViewModelFromGameInfo));
+            });
+            // Report errors if an exception was thrown.
+            LoadMoreCommand.ThrownExceptions.Subscribe(ex =>
+            {
+                IsError = true;
+                if (ex is ApiException)
+                {
+                    userDialogs.Toast(new ToastConfig(Messages.GameLibraryListPageEmptyServerError)
+                        .SetBackgroundColor(Color.Red)
+                        .SetMessageTextColor(Color.White)
+                        .SetDuration(TimeSpan.FromSeconds(5))
+                        .SetPosition(ToastPosition.Bottom));
+                }
+                else
+                {
+                    userDialogs.Toast(new ToastConfig(Messages.GameLibraryListPageEmptyGenericError)
+                        .SetBackgroundColor(Color.Red)
+                        .SetMessageTextColor(Color.White)
+                        .SetDuration(TimeSpan.FromSeconds(5))
+                        .SetPosition(ToastPosition.Bottom));
+                }
+            });
+
+            this.WhenAnyObservable(x => x.SearchCommand.IsExecuting, x => x.LoadMoreCommand.IsExecuting)
+                .ToPropertyEx(this, x => x.IsLoading, scheduler: scheduler);
+
+            this.WhenAnyObservable(x => x.SearchCommand.IsExecuting)
+                .ToPropertyEx(this, x => x.IsSearching, scheduler: scheduler);
             
-            RefreshCommand = new DelegateCommand<object>(async clear => await RefreshAsync(clear), (a) => !IsRefreshing);
-            LoadMoreCommand = new DelegateCommand(async () => await LoadGamesNextPageAsync(),
-                () => !IsBusy && _nextUri != null);
+            RequestCommand = ReactiveCommand.CreateFromTask(ExecuteRequestAsync, outputScheduler: scheduler);
         }
         
-        public ICommand RequestCommand => new DelegateCommand(async () => await RequestAsync());
+        /// <summary>
+        /// An <see cref="ObservableRangeCollection{T}"/> that contains all of the <see cref="ListItemViewModel"/>
+        /// items that each represent a separate <see cref="GameInfo"/>.
+        /// </summary>
+        [Reactive]
+        public ObservableRangeCollection<ListItemViewModel> Items { get; private set; } =
+            new ObservableRangeCollection<ListItemViewModel>();
+
+        /// <summary>
+        /// A <see cref="bool"/> which dictates whether the user entered query has returned any results.
+        /// </summary>
+        [Reactive] public bool IsEmpty { get; set; } = true;
         
         /// <summary>
         /// A <see cref="string"/> that contains the currently populated user defined query to search
         /// the game library with.
         /// </summary>
-        public string Search
-        {
-            get => _search;
-            set => SetProperty(ref _search, value);
-        }
+        [Reactive]
+        public string SearchQuery { get; set; }
 
         /// <summary>
-        /// Private method that is invoked when the <see cref="RefreshCommand"/> is called by the view. It's
-        /// purpose is to load the first page of <see cref="GameInfo"/> objects from the server and convert
-        /// them into <see cref="ListItemViewModel"/> instances for displaying within a collection view. If
-        /// any errors occur during loading, then the <see cref="ErrorMessage"/> variable will be populated
-        /// with additional information.
+        /// A readonly <see cref="bool"/> property that designates whether a query is currently being searched.
         /// </summary>
-        /// <param name="clear">A <see cref="bool"/> that can be used to clear the existing list before loading the first page.</param>
-        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task RefreshAsync(object clear)
+        public bool IsSearching { [ObservableAsProperty] get; }
+
+        /// <summary>
+        /// Command that is invoked each the time the search query is changed by the user on the view.
+        /// When called, the command will propagate the request and call the <see cref="ExecuteSearchAsync"/> method.
+        /// </summary>
+        public ReactiveCommand<string, IEnumerable<GameInfo>> SearchCommand { get; }
+
+        /// <summary>
+        /// Command that is automatically invoked each the time the user scrolls to the bottom of the list and more
+        /// items can be loaded in from the serve. When called, the command will propagate the request and call the
+        /// <see cref="GetGamesFromUrlAsync"/> method.
+        /// </summary>
+        public ReactiveCommand<Unit, IEnumerable<GameInfo>> LoadMoreCommand { get; }
+
+        /// <summary>
+        /// Command that is invoked each the time the make a request button is tapped by the user on the view.
+        /// When called, the command will propagate the request and call the <see cref="ExecuteRequestAsync"/> method.
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> RequestCommand { get; }
+
+        /// <summary>
+        /// Private method that is invoked by the <see cref="SearchCommand"/> when activated by the associated
+        /// view. This method will set the URI to call the <see cref="GameInfo"/> data from and return an
+        /// <see cref="IEnumerable{T}"/> of all games associated with the given query.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> which contains all of the <see cref="GameInfo"/> objects associated with the query.</returns>
+        private async Task<IEnumerable<GameInfo>> ExecuteSearchAsync(string query)
         {
-            if (!string.IsNullOrEmpty(Search))
-            {
-                // Define the first page when searching, it'll be set to null if there are no more pages 
-                // to load.
-                _nextUri = $"api/game-management/v1/games/info?title={Search}&sort=title";
-                
-                // Check whether we want to clear the current results before loading more.
-                if (bool.TryParse(clear.ToString(), out var result) && result)
-                {
-                    Items.Clear();
-                }
-
-                IsError = false;
-                IsBusy = true;
-                IsRefreshing = true;
-
-                try
-                {
-                    // Retrieve all of the games for the current page and turn them into
-                    // list item view models.
-                    Items.AddRange((await GetGamesFromUrlAsync(_nextUri))
-                        .Select(CreateListItemViewModelFromGameInfo));
-                    
-                    // If it's empty, we'll display a message to the user and ask if they want 
-                    // a game added to the library.
-                    IsEmpty = Items.Count == 0;
-                }
-                catch (ApiException)
-                {
-                    IsError = true;
-                    ErrorMessage = Messages.GameLibraryListPageEmptyServerError;
-                }
-                catch (Exception)
-                {
-                    IsError = true;
-                    ErrorMessage = Messages.GameLibraryListPageEmptyGenericError;
-                }
-                finally
-                {
-                    IsBusy = false;
-                    IsRefreshing = false;
-                }
-            }
+            _nextUri = $"api/game-management/v1/games/info?title={query}&sort=title";
+            return await GetGamesFromUrlAsync(_nextUri);
         }
-
-        private async Task RequestAsync()
+        
+        /// <summary>
+        /// Private method that is invoked by the <see cref="RequestCommand"/> when activated by the associated
+        /// view. This method will navigate the user to the game request page.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
+        private async Task ExecuteRequestAsync()
         {
             await NavigationService.NavigateAsync("GameRequestPage");
-        } 
-
-        /// <summary>
-        /// Private method that is invoked when the <see cref="LoadMoreCommand"/> is called by the view. It's
-        /// purpose is to load an additional page of <see cref="GameInfo"/> objects from the server and convert
-        /// them into <see cref="ListItemViewModel"/> instances for displaying within a collection view. If
-        /// any errors occur during loading, then toast message will be pushed to the view.
-        ///
-        /// It should be noted that this command will only be invoked if the view is not currently busy and
-        /// the next Uri is not set to a null value.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task LoadGamesNextPageAsync()
-        {
-            if (!string.IsNullOrEmpty(Search))
-            {
-                IsError = false;
-                IsBusy = true;
-
-                try
-                {
-                    // Load the next page of game user entries with the next page URL.
-                    Items.AddRange((await GetGamesFromUrlAsync(_nextUri))
-                        .Select(CreateListItemViewModelFromGameInfo));
-                }
-                catch (ApiException)
-                {
-                    IsError = true;
-                    _userDialogs.Toast(new ToastConfig(Messages.GameLibraryListPageEmptyServerError)
-                        .SetBackgroundColor(Color.Red)
-                        .SetMessageTextColor(Color.White)
-                        .SetDuration(TimeSpan.FromSeconds(5))
-                        .SetPosition(ToastPosition.Bottom));
-                }
-                catch (Exception)
-                {
-                    IsError = true;
-                    _userDialogs.Toast(new ToastConfig(Messages.GameLibraryListPageEmptyGenericError)
-                        .SetBackgroundColor(Color.Red)
-                        .SetMessageTextColor(Color.White)
-                        .SetDuration(TimeSpan.FromSeconds(5))
-                        .SetPosition(ToastPosition.Bottom));
-                }
-                finally
-                {
-                    IsBusy = false;
-                }
-            }
         }
 
         /// <summary>
         /// Retrieves an <see cref="IEnumerable{T}"/> of <see cref="GameInfo"/> objects from the server by
-        /// invoking the given url. No error checking is done within this method, it is done by the private
-        /// methods that invoke it.
+        /// invoking the given url. No error checking is done within this method, it is done by the commands
+        /// that invoke it.
         ///
         /// If the data loaded has an additional page, the next URI is set and more data can be loaded when
         /// the user reaches the end of the collection.
         /// </summary>
-        /// <param name="url">The url to invoke to retrieve another page of <see cref="GameInfo"/> instances.</param>
+        /// <param name="url">The url to invoke to retrieve another page of <see cref="GameInfo"/> instances from.</param>
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="GameInfo"/> objects from the given page.</returns>
         private async Task<IEnumerable<GameInfo>> GetGamesFromUrlAsync(string url)
         {

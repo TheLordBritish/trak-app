@@ -95,7 +95,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// validation information.
         /// </summary>
         [Reactive]
-        public Validatable<Platform> SelectedPlatform { get; private set; }
+        public Validatable<Platform> SelectedPlatform { get; set; }
 
         /// <summary>
         /// An <see cref="ObservableCollection{T}"/> that contains a list of all valid and selectable
@@ -109,7 +109,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// validation information.
         /// </summary>
         [Reactive]
-        public Validatable<GameUserEntryStatus> SelectedStatus { get; private set; }
+        public Validatable<GameUserEntryStatus> SelectedStatus { get; set; }
         
         /// <summary>
         /// Command that is invoked each time that the validatable field on the view is changed, which

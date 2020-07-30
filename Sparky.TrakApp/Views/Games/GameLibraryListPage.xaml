@@ -5,9 +5,14 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="http://prismlibrary.com"
     xmlns:common="clr-namespace:Sparky.TrakApp.Controls.Common;assembly=Sparky.TrakApp"
-    xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
-    Title="Library">
+    xmlns:games="clr-namespace:Sparky.TrakApp.ViewModel.Games;assembly=Sparky.TrakApp.ViewModel"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Library"
+    d:DataContext="{d:DesignInstance games:GameLibraryListViewModel,
+                                     IsDesignTimeCreatable=True}"
+    mc:Ignorable="d">
     <ContentPage.Content>
         <StackLayout>
             <!--  Search entry field  -->
@@ -23,25 +28,27 @@
                     BackgroundColor="{StaticResource TrakPrimaryBlue}"
                     CornerRadius="0"
                     HasShadow="False">
-                    <controls:CustomEntry
-                        AutomationId="GameLibraryListPageSearchEntry"
-                        Placeholder="Search here..."
-                        Text="{Binding Search}">
-                        <controls:CustomEntry.Behaviors>
+                    <SearchBar
+                        CancelButtonColor="{StaticResource TrakWhite}"
+                        Text="{Binding SearchQuery}"
+                        TextColor="{StaticResource TrakWhite}">
+                        <SearchBar.Behaviors>
                             <behaviors:EventToCommandBehavior
-                                Command="{Binding RefreshCommand}"
-                                CommandParameter="True"
+                                Command="{Binding SearchCommand}"
+                                CommandParameter="{Binding SearchQuery}"
                                 EventName="Unfocused" />
-                        </controls:CustomEntry.Behaviors>
-                    </controls:CustomEntry>
+                        </SearchBar.Behaviors>
+                    </SearchBar>
                 </Frame>
             </Frame>
 
             <!--  A list of all games that match the given query.  -->
             <RefreshView
-                Command="{Binding RefreshCommand}"
-                CommandParameter="True"
-                IsRefreshing="{Binding IsRefreshing}">
+                Command="{Binding SearchCommand}"
+                CommandParameter="{Binding SearchQuery}"
+                IsEnabled="{Binding IsSearching, Converter={StaticResource NegateBooleanConverter}}"
+                IsRefreshing="{Binding IsLoading}"
+                IsVisible="{Binding IsSearching, Converter={StaticResource NegateBooleanConverter}}">
                 <CollectionView
                     ItemsSource="{Binding Items}"
                     RemainingItemsThreshold="0"
@@ -62,7 +69,7 @@
                                     <MultiTrigger TargetType="Label">
                                         <MultiTrigger.Conditions>
                                             <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
-                                            <BindingCondition Binding="{Binding Search, Converter={StaticResource StringEmptyConverter}}" Value="True" />
+                                            <BindingCondition Binding="{Binding SearchQuery, Converter={StaticResource StringEmptyConverter}}" Value="True" />
                                             <BindingCondition Binding="{Binding IsError}" Value="False" />
                                         </MultiTrigger.Conditions>
                                         <Setter Property="Text" Value="{extensions:Translate GameLibraryListPageInstructions}" />
@@ -70,8 +77,8 @@
                                     <!--  Displayed if the search query returned an empty result.  -->
                                     <MultiTrigger TargetType="Label">
                                         <MultiTrigger.Conditions>
-                                            <BindingCondition Binding="{Binding Search, Converter={StaticResource StringEmptyConverter}}" Value="False" />
-                                            <BindingCondition Binding="{Binding IsBusy}" Value="False" />
+                                            <BindingCondition Binding="{Binding SearchQuery, Converter={StaticResource StringEmptyConverter}}" Value="False" />
+                                            <BindingCondition Binding="{Binding IsLoading}" Value="False" />
                                             <BindingCondition Binding="{Binding IsError}" Value="False" />
                                         </MultiTrigger.Conditions>
                                         <Setter Property="Text" Value="{extensions:Translate GameLibraryListPageCantFindGame}" />
@@ -98,8 +105,8 @@
                                 <Button.Triggers>
                                     <MultiTrigger TargetType="Button">
                                         <MultiTrigger.Conditions>
-                                            <BindingCondition Binding="{Binding Search, Converter={StaticResource StringEmptyConverter}}" Value="False" />
-                                            <BindingCondition Binding="{Binding IsBusy}" Value="False" />
+                                            <BindingCondition Binding="{Binding SearchQuery, Converter={StaticResource StringEmptyConverter}}" Value="False" />
+                                            <BindingCondition Binding="{Binding IsLoading}" Value="False" />
                                             <BindingCondition Binding="{Binding IsError}" Value="False" />
                                         </MultiTrigger.Conditions>
                                         <Setter Property="IsVisible" Value="True" />
@@ -117,6 +124,15 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </RefreshView>
+            <ActivityIndicator
+                Margin="0,15,0,0"
+                HorizontalOptions="CenterAndExpand"
+                IsEnabled="{Binding IsSearching}"
+                IsRunning="{Binding IsSearching}"
+                IsVisible="{Binding IsSearching}"
+                MinimumHeightRequest="100"
+                MinimumWidthRequest="100"
+                VerticalOptions="CenterAndExpand" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

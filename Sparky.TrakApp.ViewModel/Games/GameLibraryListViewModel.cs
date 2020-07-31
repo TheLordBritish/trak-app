@@ -44,7 +44,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
-        /// /// <param name="userDialogs">The <see cref="IUserDialogs"/> instance to inject.</param>
+        /// <param name="userDialogs">The <see cref="IUserDialogs"/> instance to inject.</param>
         public GameLibraryListViewModel(IScheduler scheduler, INavigationService navigationService,
             IRestService restService,
             IStorageService storageService, IUserDialogs userDialogs) : base(scheduler, navigationService)

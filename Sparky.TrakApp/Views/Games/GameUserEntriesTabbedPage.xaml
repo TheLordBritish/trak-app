@@ -4,10 +4,16 @@
     x:Class="Sparky.TrakApp.Views.Games.GameUserEntriesTabbedPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:games="clr-namespace:Sparky.TrakApp.Views.Games;assembly=Sparky.TrakApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="clr-namespace:Sparky.TrakApp.ViewModel.Games;assembly=Sparky.TrakApp.ViewModel"
     Title="Games"
-    BarBackgroundColor="{StaticResource TrakPrimaryBlue}">
+    d:DataContext="{d:DesignInstance vms:GameUserEntriesTabbedViewModel,
+                                     IsDesignTimeCreatable=True}"
+    BarBackgroundColor="{StaticResource TrakPrimaryBlue}"
+    mc:Ignorable="d">
     <TabbedPage.Children>
         <games:GameUserEntryListPage Title="{extensions:Translate Backlog}" BindingContext="{Binding BacklogViewModel}" />
         <games:GameUserEntryListPage Title="{extensions:Translate Playing}" BindingContext="{Binding InProgressViewModel}" />

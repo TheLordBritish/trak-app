@@ -55,9 +55,6 @@
     <Compile Update="Controls\Common\RatingUserControl.xaml.cs">
       <DependentUpon>RatingUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Controls\Common\UserEntryInfiniteListViewControl.xaml.cs">
-      <DependentUpon>UserEntryInfiniteListViewControl.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Controls\Common\UserEntryItemTemplateControl.xaml.cs">
       <DependentUpon>UserEntryItemTemplateControl.xaml</DependentUpon>
     </Compile>
@@ -131,9 +128,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\Common\RatingUserControl.xaml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Controls\Common\UserEntryInfiniteListViewControl.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\Common\UserEntryItemTemplateControl.xaml">

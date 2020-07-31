@@ -4,67 +4,96 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:common="clr-namespace:Sparky.TrakApp.Controls.Common;assembly=Sparky.TrakApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
+    xmlns:games="clr-namespace:Sparky.TrakApp.ViewModel.Games;assembly=Sparky.TrakApp.ViewModel"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="GameUserEntryList"
-    BackgroundColor="{StaticResource TrakPrimaryBlue}">
+    d:DataContext="{d:DesignInstance games:GameUserEntryListViewModel,
+                                     IsDesignTimeCreatable=True}"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}"
+    mc:Ignorable="d">
     <ContentPage.Content>
         <StackLayout>
-            <!--  Full-page label telling the user that the request returned no results without error.  -->
-            <Label
-                HorizontalOptions="Center"
-                IsVisible="False"
-                VerticalOptions="CenterAndExpand">
-                <Label.Triggers>
-                    <MultiTrigger TargetType="Label">
-                        <MultiTrigger.Conditions>
-                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
-                            <BindingCondition Binding="{Binding IsError}" Value="False" />
-                        </MultiTrigger.Conditions>
-                        <Setter Property="IsVisible" Value="True" />
-                    </MultiTrigger>
-                </Label.Triggers>
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="{extensions:Translate GameUserEntryListPageEmpty}" />
-                        <Span Text="&quot;" />
-                        <Span
-                            BindingContext="{x:Reference GameUserEntryList}"
-                            FontAttributes="Bold"
-                            FontSize="Medium"
-                            Text="{Binding Title}" />
-                        <Span Text="&quot;" />
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+            <RefreshView
+                Command="{Binding LoadCommand}"
+                IsEnabled="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                IsRefreshing="{Binding IsRefreshing}"
+                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}">
+                <CollectionView
+                    HorizontalOptions="StartAndExpand"
+                    ItemsSource="{Binding Items}"
+                    RemainingItemsThreshold="0"
+                    RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                    VerticalOptions="StartAndExpand">
+                    <CollectionView.EmptyView>
+                        <StackLayout>
+                            <!--  Full-page label telling the user that the request returned no results without error.  -->
+                            <Label
+                                HorizontalOptions="Center"
+                                IsVisible="False"
+                                VerticalOptions="CenterAndExpand">
+                                <Label.Triggers>
+                                    <MultiTrigger TargetType="Label">
+                                        <MultiTrigger.Conditions>
+                                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
+                                            <BindingCondition Binding="{Binding IsError}" Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="IsVisible" Value="True" />
+                                    </MultiTrigger>
+                                </Label.Triggers>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{extensions:Translate GameUserEntryListPageEmpty}" />
+                                        <Span Text="&quot;" />
+                                        <Span
+                                            BindingContext="{x:Reference GameUserEntryList}"
+                                            FontAttributes="Bold"
+                                            FontSize="Medium"
+                                            Text="{Binding Title}" />
+                                        <Span Text="&quot;" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <!--  Full page control that is displayed when the page results are empty and an error was returned.  -->
+                            <common:FullPageErrorControl
+                                ErrorMessage="{extensions:Translate GameUserEntryListPageEmptyServerError}"
+                                HorizontalOptions="Center"
+                                IsRefreshable="True"
+                                IsVisible="False"
+                                RefreshCommand="{Binding LoadCommand}"
+                                VerticalOptions="CenterAndExpand">
+                                <common:FullPageErrorControl.Triggers>
+                                    <MultiTrigger TargetType="common:FullPageErrorControl">
+                                        <MultiTrigger.Conditions>
+                                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
+                                            <BindingCondition Binding="{Binding IsError}" Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="IsVisible" Value="True" />
+                                    </MultiTrigger>
+                                </common:FullPageErrorControl.Triggers>
+                            </common:FullPageErrorControl>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <common:UserEntryItemTemplateControl Margin="20,10" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
 
-            <!--  Full page control that is displayed when the page results are empty and an error was returned.  -->
-            <common:FullPageErrorControl
-                ErrorMessage="{extensions:Translate GameUserEntryListPageEmptyServerError}"
-                HorizontalOptions="Center"
-                IsRefreshable="True"
-                IsVisible="False"
-                RefreshCommand="{Binding RefreshCommand}"
-                VerticalOptions="CenterAndExpand">
-                <common:FullPageErrorControl.Triggers>
-                    <MultiTrigger TargetType="common:FullPageErrorControl">
-                        <MultiTrigger.Conditions>
-                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
-                            <BindingCondition Binding="{Binding IsError}" Value="True" />
-                        </MultiTrigger.Conditions>
-                        <Setter Property="IsVisible" Value="True" />
-                    </MultiTrigger>
-                </common:FullPageErrorControl.Triggers>
-            </common:FullPageErrorControl>
-
-            <!--  List that is displayed if there are any results returned from the initial request.  -->
-            <common:UserEntryInfiniteListViewControl
-                HorizontalOptions="StartAndExpand"
-                IsRefreshing="{Binding IsBusy, Mode=OneWay}"
-                IsVisible="{Binding IsEmpty, Converter={StaticResource NegateBooleanConverter}}"
-                ItemsSource="{Binding Items}"
-                LoadMoreCommand="{Binding LoadMoreCommand}"
-                RefreshCommand="{Binding RefreshCommand}"
-                VerticalOptions="StartAndExpand" />
+            <ActivityIndicator
+                Margin="0,15,0,0"
+                HorizontalOptions="CenterAndExpand"
+                IsEnabled="{Binding IsLoading}"
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}"
+                MinimumHeightRequest="100"
+                MinimumWidthRequest="100"
+                VerticalOptions="CenterAndExpand" />
 
             <Button
                 Margin="20,50"

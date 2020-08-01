@@ -1,4 +1,5 @@
-﻿using System.Reactive.Concurrency;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reactive.Concurrency;
 using Prism.Navigation;
 using ReactiveUI.Fody.Helpers;
 using Sparky.TrakApp.ViewModel.Common;
@@ -10,6 +11,7 @@ namespace Sparky.TrakApp.ViewModel.Games
     /// page view. Its responsibility is to define different view models that are used by each individual tab within the page,
     /// which are backlog, playing, done and dropped.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class GameUserEntriesTabbedViewModel : ReactiveViewModel
     {
         /// <summary>

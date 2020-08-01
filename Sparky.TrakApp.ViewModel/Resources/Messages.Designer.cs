@@ -367,7 +367,7 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Similar Games:.
+        ///   Looks up a localized string similar to Similar Games.
         /// </summary>
         public static string GamePageSimilarGames {
             get {

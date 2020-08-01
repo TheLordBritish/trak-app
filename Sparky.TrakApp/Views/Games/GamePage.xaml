@@ -6,10 +6,10 @@
     xmlns:common="clr-namespace:Sparky.TrakApp.Controls.Common;assembly=Sparky.TrakApp"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:games="clr-namespace:Sparky.TrakApp.Model.Games;assembly=Sparky.TrakApp.Model"
-    xmlns:games1="clr-namespace:Sparky.TrakApp.Views.Games;assembly=Sparky.TrakApp"
-    xmlns:magicGradients="clr-namespace:MagicGradients;assembly=MagicGradients">
+    xmlns:magicGradients="clr-namespace:MagicGradients;assembly=MagicGradients"
+    xmlns:vm="clr-namespace:Sparky.TrakApp.ViewModel.Games;assembly=Sparky.TrakApp.ViewModel">
     <ContentPage.Content>
-        <Grid>
+        <Grid x:DataType="vm:GameViewModel">
             <!--  Full page control that is displayed when there's an error reported by the view model.  -->
             <common:FullPageErrorControl
                 ErrorMessage="{extensions:Translate GamePageErrorMessage}"
@@ -32,25 +32,16 @@
             <ActivityIndicator
                 HeightRequest="100"
                 HorizontalOptions="CenterAndExpand"
-                IsRunning="{Binding IsBusy}"
-                IsVisible="{Binding IsBusy}"
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}"
                 VerticalOptions="CenterAndExpand"
                 WidthRequest="100" />
 
             <ScrollView
                 HorizontalOptions="FillAndExpand"
                 IsClippedToBounds="True"
-                IsVisible="False"
+                IsVisible="{Binding HasLoaded}"
                 VerticalOptions="FillAndExpand">
-                <ScrollView.Triggers>
-                    <MultiTrigger TargetType="ScrollView">
-                        <MultiTrigger.Conditions>
-                            <BindingCondition Binding="{Binding IsBusy}" Value="False" />
-                            <BindingCondition Binding="{Binding IsError}" Value="False" />
-                        </MultiTrigger.Conditions>
-                        <Setter Property="IsVisible" Value="True" />
-                    </MultiTrigger>
-                </ScrollView.Triggers>
                 <Grid RowSpacing="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -106,7 +97,7 @@
                         Grid.Row="1"
                         Grid.Column="1"
                         Margin="20,0"
-                        Command="{Binding ShowGameOptionsCommand}"
+                        Command="{Binding OptionsCommand}"
                         Style="{StaticResource SecondaryButtonStyle}"
                         Text="{extensions:Translate GamePageAddToLibrary}">
                         <Button.Triggers>

@@ -6,4 +6,10 @@
             android:tileMode="disabled" 
             android:gravity="center|fill_horizontal|fill_vertical"/>
     </item>
+    <item android:left="16dp" android:right="16dp">
+        <bitmap
+            android:src="@drawable/logo"
+            android:tileMode="disabled"
+            android:gravity="center|clip_vertical|clip_horizontal"/>
+    </item>
 </layer-list>

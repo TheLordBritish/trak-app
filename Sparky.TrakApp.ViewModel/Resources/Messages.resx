@@ -199,7 +199,7 @@
 		<value>Currently in:</value>
 	</data>
 	<data name="GamePageSimilarGames" xml:space="preserve">
-		<value>Similar Games:</value>
+		<value>Similar Games</value>
 	</data>
 	<data name="GamePageAddToLibrary" xml:space="preserve">
 		<value>Add to library</value>

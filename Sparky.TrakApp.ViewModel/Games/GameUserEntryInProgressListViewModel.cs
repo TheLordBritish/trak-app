@@ -1,4 +1,5 @@
-﻿using System.Reactive.Concurrency;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reactive.Concurrency;
 using Acr.UserDialogs;
 using Prism.Navigation;
 using Sparky.TrakApp.Model.Games;
@@ -10,6 +11,7 @@ namespace Sparky.TrakApp.ViewModel.Games
     /// The <see cref="GameUserEntryInProgressListViewModel"/> is the view model that is associated with a in progress game user entry
     /// list page view. Its responsibility is to display the users personal collection of games within the in progress status.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public class GameUserEntryInProgressListViewModel : GameUserEntryListViewModel
     {
         /// <summary>

@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
-using Sparky.TrakApp.ViewModel;
+using Sparky.TrakApp.ViewModel.Common;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -22,7 +22,7 @@ namespace Sparky.TrakApp.Extensions
                 return string.Empty;
             }
             
-            var resourceManager = new ResourceManager(_resourceId, typeof(BaseViewModel).GetTypeInfo().Assembly);
+            var resourceManager = new ResourceManager(_resourceId, typeof(ReactiveViewModel).GetTypeInfo().Assembly);
             var message = resourceManager.GetString(Text, CultureInfo.CurrentCulture);
 
             if (string.IsNullOrEmpty(message))

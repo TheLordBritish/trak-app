@@ -21,14 +21,16 @@
          colorControlHighlight and colorSwitchThumbNormal. -->
     <item name="windowActionModeOverlay">true</item>
 
-    <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
-    <item name="android:alertDialogTheme">@style/AppCompatDialogStyle</item>
+<!--    <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>-->
+<!--    <item name="android:alertDialogTheme">@style/AppCompatDialogStyle</item>-->
+<!--    <item name="android:dialogTheme">@style/AppCompatDialogStyle</item>-->
     <item name="android:textAllCaps">false</item>
   </style>
 
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
     <item name="colorAccent">@color/trakPrimaryPurple</item>
     <item name="android:textColorPrimary">@color/trakWhite</item>
+    <item name="android:textColor">@color/trakWhite</item>
     <item name="android:background">@color/trakPrimaryBlue</item>
   </style>
 

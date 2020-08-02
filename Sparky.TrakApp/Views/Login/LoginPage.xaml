@@ -8,170 +8,152 @@
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:login="clr-namespace:Sparky.TrakApp.ViewModel.Login;assembly=Sparky.TrakApp.ViewModel"
     AutomationId="LoginPage">
-    <Grid Padding="35" x:DataType="login:LoginViewModel">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="1*" />
-        </Grid.ColumnDefinitions>
-        <!--  App logo  -->
-        <Image
-            Grid.Row="0"
-            Grid.Column="0"
-            Margin="0,75,0,10"
-            Source="logo.png" />
-        <!--  Subtitle  -->
-        <ScrollView
-            Grid.Row="1"
-            Grid.Column="0"
-            Grid.ColumnSpan="2"
-            Margin="0,-20,0,0"
-            HorizontalOptions="Fill"
-            HorizontalScrollBarVisibility="Never"
-            Orientation="Horizontal"
-            VerticalOptions="Start"
-            VerticalScrollBarVisibility="Never">
-            <Label Style="{StaticResource SubtitleLabelStyle}" Text="{extensions:Translate Subtitle}" />
-        </ScrollView>
-        <StackLayout
-            Grid.Row="2"
-            Grid.Column="0"
-            Grid.ColumnSpan="2">
-            <!--  Page title  -->
-            <Label
-                Margin="0,20,0,15"
-                Style="{StaticResource TitleLabelStyle}"
-                Text="{extensions:Translate LoginPageTitle}" />
-            <!--  Username label and entry box.  -->
-            <Label FontAttributes="Bold" Text="{extensions:Translate LoginPageUsername}" />
-            <Frame
-                Padding="0"
-                BackgroundColor="{StaticResource TrakWhite}"
-                CornerRadius="0"
-                HasShadow="False">
-                <Frame.Triggers>
-                    <DataTrigger
-                        Binding="{Binding Username.IsValid}"
-                        TargetType="Frame"
-                        Value="False">
-                        <Setter Property="BackgroundColor" Value="Red" />
-                    </DataTrigger>
-                </Frame.Triggers>
-                <Frame
-                    Margin="1"
-                    Padding="0"
-                    BackgroundColor="{StaticResource TrakPrimaryBlue}"
-                    CornerRadius="0"
-                    HasShadow="False">
-                    <controls:CustomEntry AutomationId="LoginPageUsernameEntry" Text="{Binding Username.Value}">
-                        <controls:CustomEntry.Behaviors>
-                            <behaviors:EventToCommandBehavior
-                                Command="{Binding ClearValidationCommand}"
-                                CommandParameter="Username"
-                                EventName="Focused" />
-                        </controls:CustomEntry.Behaviors>
-                    </controls:CustomEntry>
-                </Frame>
-            </Frame>
-            <Label
-                AutomationId="LoginPageUsernameErrorLabel"
-                IsEnabled="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                IsVisible="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                Style="{StaticResource ValidationLabelStyle}"
-                Text="{Binding Username.FirstError}" />
-            <!--  Password label and entry box.  -->
-            <Label
-                Margin="0,15,0,0"
-                FontAttributes="Bold"
-                Text="{extensions:Translate LoginPagePassword}" />
-            <Frame
-                Padding="0"
-                BackgroundColor="{StaticResource TrakWhite}"
-                CornerRadius="0"
-                HasShadow="False">
-                <Frame.Triggers>
-                    <DataTrigger
-                        Binding="{Binding Password.IsValid}"
-                        TargetType="Frame"
-                        Value="False">
-                        <Setter Property="BackgroundColor" Value="Red" />
-                    </DataTrigger>
-                </Frame.Triggers>
-                <Frame
-                    Margin="1"
-                    Padding="0"
-                    BackgroundColor="{StaticResource TrakPrimaryBlue}"
-                    CornerRadius="0"
-                    HasShadow="False">
-                    <controls:CustomEntry
-                        AutomationId="LoginPagePasswordEntry"
-                        IsPassword="True"
-                        Text="{Binding Password.Value}">
-                        <controls:CustomEntry.Behaviors>
-                            <behaviors:EventToCommandBehavior
-                                Command="{Binding ClearValidationCommand}"
-                                CommandParameter="Password"
-                                EventName="Focused" />
-                        </controls:CustomEntry.Behaviors>
-                    </controls:CustomEntry>
-                </Frame>
-            </Frame>
-            <Label
-                AutomationId="LoginPagePasswordErrorLabel "
-                IsEnabled="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                IsVisible="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                Style="{StaticResource ValidationLabelStyle}"
-                Text="{Binding Password.FirstError}" />
-            <!--  Display error messages if anything went wrong.  -->
-            <Label
-                Margin="0,5"
-                AutomationId="LoginPageErrorMessage"
-                IsEnabled="{Binding IsError}"
-                IsVisible="{Binding IsError}"
-                Style="{StaticResource ValidationLabelStyle}"
-                Text="{Binding ErrorMessage}" />
-            <!--  Forgotten password  -->
-            <Label
-                Margin="0,5"
-                AutomationId="LoginPageForgottenPasswordLabel"
-                FontSize="Small"
-                Text="{extensions:Translate LoginPageForgottenPassword}">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding ForgottenPasswordCommand}" NumberOfTapsRequired="1" />
-                </Label.GestureRecognizers>
-            </Label>
-            <!--  Login button and the activity indicator  -->
-            <Button
-                Margin="0,20"
-                AutomationId="LoginPageLoginButton"
-                Command="{Binding LoginCommand}"
-                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
-                Style="{StaticResource PrimaryButtonStyle}"
-                Text="{extensions:Translate LoginPageLogIn}" />
-            <ActivityIndicator
-                Margin="0,20"
-                IsRunning="{Binding IsLoading}"
-                IsVisible="{Binding IsLoading}" />
-            <!--  Sign up label  -->
-            <Label FontSize="Small" HorizontalOptions="Center">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="{extensions:Translate LoginPageDontHaveAnAccount}" />
-                        <Span
-                            AutomationId="LoginPageSignUpLabel"
-                            FontAttributes="Bold"
-                            Text="{extensions:Translate LoginPageSignUp}">
-                            <Span.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding RegisterCommand}" NumberOfTapsRequired="1" />
-                            </Span.GestureRecognizers>
-                        </Span>
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
-        </StackLayout>
-    </Grid>
+    <ScrollView Padding="35" x:DataType="login:LoginViewModel">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <!--  App logo  -->
+            <Image
+                Grid.Row="0"
+                Grid.Column="0"
+                Margin="0,75,0,10"
+                Source="logo.png" />
+            <!--  Subtitle  -->
+            <ScrollView
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0,-20,0,0"
+                HorizontalOptions="Fill"
+                HorizontalScrollBarVisibility="Never"
+                Orientation="Horizontal"
+                VerticalOptions="Start"
+                VerticalScrollBarVisibility="Never">
+                <Label Style="{StaticResource SubtitleLabelStyle}" Text="{extensions:Translate Subtitle}" />
+            </ScrollView>
+            <StackLayout
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="2">
+                <!--  Page title  -->
+                <Label
+                    Margin="0,20,0,15"
+                    Style="{StaticResource TitleLabelStyle}"
+                    Text="{extensions:Translate LoginPageTitle}" />
+                <!--  Username label and entry box.  -->
+                <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate LoginPageUsername}" />
+                <controls:BorderedEntry
+                    AutomationId="LoginPageUsernameEntry"
+                    BorderColor="{StaticResource TrakWhite}"
+                    BorderThickness="1"
+                    Text="{Binding Username.Value}">
+                    <controls:BorderedEntry.Behaviors>
+                        <behaviors:EventToCommandBehavior
+                            Command="{Binding ClearValidationCommand}"
+                            CommandParameter="Username"
+                            EventName="Focused" />
+                    </controls:BorderedEntry.Behaviors>
+                    <controls:BorderedEntry.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Username.IsValid}"
+                            TargetType="controls:BorderedEntry"
+                            Value="False">
+                            <Setter Property="BorderColor" Value="{StaticResource TrakRed}" />
+                        </DataTrigger>
+                    </controls:BorderedEntry.Triggers>
+                </controls:BorderedEntry>
+                <Label
+                    AutomationId="LoginPageUsernameErrorLabel"
+                    IsEnabled="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                    IsVisible="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                    Style="{StaticResource ValidationLabelStyle}"
+                    Text="{Binding Username.FirstError}" />
+                <!--  Password label and entry box.  -->
+                <Label
+                    Margin="0,15,0,0"
+                    Style="{StaticResource EntryLabelStyle}"
+                    Text="{extensions:Translate LoginPagePassword}" />
+                <controls:BorderedEntry
+                    AutomationId="LoginPagePasswordEntry"
+                    BorderColor="{StaticResource TrakWhite}"
+                    BorderThickness="1"
+                    IsPassword="True"
+                    Text="{Binding Password.Value}">
+                    <controls:BorderedEntry.Behaviors>
+                        <behaviors:EventToCommandBehavior
+                            Command="{Binding ClearValidationCommand}"
+                            CommandParameter="Password"
+                            EventName="Focused" />
+                    </controls:BorderedEntry.Behaviors>
+                    <controls:BorderedEntry.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Password.IsValid}"
+                            TargetType="controls:BorderedEntry"
+                            Value="False">
+                            <Setter Property="BorderColor" Value="{StaticResource TrakRed}" />
+                        </DataTrigger>
+                    </controls:BorderedEntry.Triggers>
+                </controls:BorderedEntry>
+                <Label
+                    AutomationId="LoginPagePasswordErrorLabel"
+                    IsEnabled="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                    IsVisible="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                    Style="{StaticResource ValidationLabelStyle}"
+                    Text="{Binding Password.FirstError}" />
+                <!--  Display error messages if anything went wrong.  -->
+                <Label
+                    Margin="0,5"
+                    AutomationId="LoginPageErrorMessage"
+                    IsEnabled="{Binding IsError}"
+                    IsVisible="{Binding IsError}"
+                    Style="{StaticResource ValidationLabelStyle}"
+                    Text="{Binding ErrorMessage}" />
+                <!--  Forgotten password  -->
+                <Label
+                    Margin="0,5"
+                    AutomationId="LoginPageForgottenPasswordLabel"
+                    FontSize="Small"
+                    Text="{extensions:Translate LoginPageForgottenPassword}">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ForgottenPasswordCommand}" NumberOfTapsRequired="1" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <!--  Login button and the activity indicator  -->
+                <Button
+                    Margin="0,20"
+                    AutomationId="LoginPageLoginButton"
+                    Command="{Binding LoginCommand}"
+                    IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Text="{extensions:Translate LoginPageLogIn}" />
+                <ActivityIndicator
+                    Margin="0,20"
+                    IsRunning="{Binding IsLoading}"
+                    IsVisible="{Binding IsLoading}" />
+                <!--  Sign up label  -->
+                <Label FontSize="Small" HorizontalOptions="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{extensions:Translate LoginPageDontHaveAnAccount}" />
+                            <Span
+                                AutomationId="LoginPageSignUpLabel"
+                                FontAttributes="Bold"
+                                Text="{extensions:Translate LoginPageSignUp}">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding RegisterCommand}" NumberOfTapsRequired="1" />
+                                </Span.GestureRecognizers>
+                            </Span>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+        </Grid>
+    </ScrollView>
 </ContentPage>

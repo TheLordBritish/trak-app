@@ -7,7 +7,7 @@
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:games="clr-namespace:Sparky.TrakApp.Views.Games;assembly=Sparky.TrakApp"
     xmlns:vms="clr-namespace:Sparky.TrakApp.ViewModel.Games;assembly=Sparky.TrakApp.ViewModel"
-    Title="Games"
+    Title="{extensions:Translate GameUserEntriesTabbedPageTitle}"
     x:DataType="vms:GameUserEntriesTabbedViewModel"
     BarBackgroundColor="{StaticResource TrakPrimaryBlue}">
     <TabbedPage.Children>

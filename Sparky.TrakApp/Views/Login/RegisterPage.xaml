@@ -50,35 +50,26 @@
                         Text="{extensions:Translate RegisterPageTitle}" />
                     <!--  Username label and entry box.  -->
                     <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPageUsername}" />
-                    <Frame
-                        Padding="0"
-                        BackgroundColor="{StaticResource TrakWhite}"
-                        CornerRadius="0"
-                        HasShadow="False">
-                        <Frame.Triggers>
+                    <controls:BorderedEntry
+                        AutomationId="RegisterPageUsernameEntry"
+                        BorderColor="{StaticResource TrakWhite}"
+                        BorderThickness="1"
+                        Text="{Binding Username.Value}">
+                        <controls:BorderedEntry.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding ClearValidationCommand}"
+                                CommandParameter="Username"
+                                EventName="Focused" />
+                        </controls:BorderedEntry.Behaviors>
+                        <controls:BorderedEntry.Triggers>
                             <DataTrigger
                                 Binding="{Binding Username.IsValid}"
-                                TargetType="Frame"
+                                TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="Red" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
                             </DataTrigger>
-                        </Frame.Triggers>
-                        <Frame
-                            Margin="1"
-                            Padding="0"
-                            BackgroundColor="{StaticResource TrakPrimaryBlue}"
-                            CornerRadius="0"
-                            HasShadow="False">
-                            <controls:CustomEntry AutomationId="RegisterPageUsernameEntry" Text="{Binding Username.Value}">
-                                <controls:CustomEntry.Behaviors>
-                                    <behaviors:EventToCommandBehavior
-                                        Command="{Binding ClearValidationCommand}"
-                                        CommandParameter="Username"
-                                        EventName="Focused" />
-                                </controls:CustomEntry.Behaviors>
-                            </controls:CustomEntry>
-                        </Frame>
-                    </Frame>
+                        </controls:BorderedEntry.Triggers>
+                    </controls:BorderedEntry>
                     <Label
                         IsEnabled="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         IsVisible="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
@@ -86,35 +77,26 @@
                         Text="{Binding Username.FirstError}" />
                     <!--  Email address label and entry box.  -->
                     <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPageEmailAddress}" />
-                    <Frame
-                        Padding="0"
-                        BackgroundColor="{StaticResource TrakWhite}"
-                        CornerRadius="0"
-                        HasShadow="False">
-                        <Frame.Triggers>
+                    <controls:BorderedEntry
+                        AutomationId="RegisterPageEmailAddressEntry"
+                        BorderColor="{StaticResource TrakWhite}"
+                        BorderThickness="1"
+                        Text="{Binding EmailAddress.Value}">
+                        <controls:BorderedEntry.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding ClearValidationCommand}"
+                                CommandParameter="EmailAddress"
+                                EventName="Focused" />
+                        </controls:BorderedEntry.Behaviors>
+                        <controls:BorderedEntry.Triggers>
                             <DataTrigger
                                 Binding="{Binding EmailAddress.IsValid}"
-                                TargetType="Frame"
+                                TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="Red" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
                             </DataTrigger>
-                        </Frame.Triggers>
-                        <Frame
-                            Margin="1"
-                            Padding="0"
-                            BackgroundColor="{StaticResource TrakPrimaryBlue}"
-                            CornerRadius="0"
-                            HasShadow="False">
-                            <controls:CustomEntry AutomationId="RegisterPageEmailAddressEntry" Text="{Binding EmailAddress.Value}">
-                                <controls:CustomEntry.Behaviors>
-                                    <behaviors:EventToCommandBehavior
-                                        Command="{Binding ClearValidationCommand}"
-                                        CommandParameter="EmailAddress"
-                                        EventName="Focused" />
-                                </controls:CustomEntry.Behaviors>
-                            </controls:CustomEntry>
-                        </Frame>
-                    </Frame>
+                        </controls:BorderedEntry.Triggers>
+                    </controls:BorderedEntry>
                     <Label
                         IsEnabled="{Binding EmailAddress.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         IsVisible="{Binding EmailAddress.IsValid, Converter={StaticResource NegateBooleanConverter}}"
@@ -122,38 +104,27 @@
                         Text="{Binding EmailAddress.FirstError}" />
                     <!--  Password label and entry box.  -->
                     <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPagePassword}" />
-                    <Frame
-                        Padding="0"
-                        BackgroundColor="{StaticResource TrakWhite}"
-                        CornerRadius="0"
-                        HasShadow="False">
-                        <Frame.Triggers>
+                    <controls:BorderedEntry
+                        AutomationId="RegisterPagePasswordEntry"
+                        BorderColor="{StaticResource TrakWhite}"
+                        BorderThickness="1"
+                        IsPassword="True"
+                        Text="{Binding Password.Value}">
+                        <controls:BorderedEntry.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding ClearValidationCommand}"
+                                CommandParameter="Password"
+                                EventName="Focused" />
+                        </controls:BorderedEntry.Behaviors>
+                        <controls:BorderedEntry.Triggers>
                             <DataTrigger
                                 Binding="{Binding Password.IsValid}"
-                                TargetType="Frame"
+                                TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="Red" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
                             </DataTrigger>
-                        </Frame.Triggers>
-                        <Frame
-                            Margin="1"
-                            Padding="0"
-                            BackgroundColor="{StaticResource TrakPrimaryBlue}"
-                            CornerRadius="0"
-                            HasShadow="False">
-                            <controls:CustomEntry
-                                AutomationId="RegisterPagePasswordEntry"
-                                IsPassword="True"
-                                Text="{Binding Password.Value}">
-                                <controls:CustomEntry.Behaviors>
-                                    <behaviors:EventToCommandBehavior
-                                        Command="{Binding ClearValidationCommand}"
-                                        CommandParameter="Password"
-                                        EventName="Focused" />
-                                </controls:CustomEntry.Behaviors>
-                            </controls:CustomEntry>
-                        </Frame>
-                    </Frame>
+                        </controls:BorderedEntry.Triggers>
+                    </controls:BorderedEntry>
                     <Label
                         IsEnabled="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         IsVisible="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
@@ -171,38 +142,27 @@
 
                     <!--  Confirm password label and entry box.  -->
                     <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPageConfirmPassword}" />
-                    <Frame
-                        Padding="0"
-                        BackgroundColor="{StaticResource TrakWhite}"
-                        CornerRadius="0"
-                        HasShadow="False">
-                        <Frame.Triggers>
+                    <controls:BorderedEntry
+                        AutomationId="RegisterPageConfirmPasswordEntry"
+                        BorderColor="{StaticResource TrakWhite}"
+                        BorderThickness="1"
+                        IsPassword="True"
+                        Text="{Binding ConfirmPassword.Value}">
+                        <controls:BorderedEntry.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding ClearValidationCommand}"
+                                CommandParameter="ConfirmPassword"
+                                EventName="Focused" />
+                        </controls:BorderedEntry.Behaviors>
+                        <controls:BorderedEntry.Triggers>
                             <DataTrigger
                                 Binding="{Binding ConfirmPassword.IsValid}"
-                                TargetType="Frame"
+                                TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="Red" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
                             </DataTrigger>
-                        </Frame.Triggers>
-                        <Frame
-                            Margin="1"
-                            Padding="0"
-                            BackgroundColor="{StaticResource TrakPrimaryBlue}"
-                            CornerRadius="0"
-                            HasShadow="False">
-                            <controls:CustomEntry
-                                AutomationId="RegisterPageConfirmPasswordEntry"
-                                IsPassword="True"
-                                Text="{Binding ConfirmPassword.Value}">
-                                <controls:CustomEntry.Behaviors>
-                                    <behaviors:EventToCommandBehavior
-                                        Command="{Binding ClearValidationCommand}"
-                                        CommandParameter="ConfirmPassword"
-                                        EventName="Focused" />
-                                </controls:CustomEntry.Behaviors>
-                            </controls:CustomEntry>
-                        </Frame>
-                    </Frame>
+                        </controls:BorderedEntry.Triggers>
+                    </controls:BorderedEntry>
                     <Label
                         IsEnabled="{Binding ConfirmPassword.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         IsVisible="{Binding ConfirmPassword.IsValid, Converter={StaticResource NegateBooleanConverter}}"

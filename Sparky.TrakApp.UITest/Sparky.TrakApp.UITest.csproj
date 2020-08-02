@@ -36,10 +36,10 @@
         <Compile Include="AppManager.cs" />
         <Compile Include="Pages\BasePage.cs" />
         <Compile Include="Pages\Login\LoginPage.cs" />
-        <Compile Include="Pages\Login\RegisterPage.cs" />
         <Compile Include="PlatformQuery.cs" />
-        <Compile Include="Tests\Login\LoginPageTests.cs" />
-        <Compile Include="Tests\Login\RegisterPageTests.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Tests" />
     </ItemGroup>
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

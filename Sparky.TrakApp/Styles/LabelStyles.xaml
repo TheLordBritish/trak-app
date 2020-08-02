@@ -24,6 +24,7 @@
         x:Key="TitleLabelStyle"
         BasedOn="{StaticResource BaseLabelStyle}"
         TargetType="Label">
+        <Setter Property="LineBreakMode" Value="NoWrap" />
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="FontSize" Value="30" />
     </Style>
@@ -33,6 +34,7 @@
         x:Key="SubtitleLabelStyle"
         BasedOn="{StaticResource BaseLabelStyle}"
         TargetType="Label">
+        <Setter Property="LineBreakMode" Value="NoWrap" />
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="FontSize" Value="70" />
         <Setter Property="TextColor" Value="{StaticResource TrakGrey}" />
@@ -43,6 +45,7 @@
         x:Key="EntryLabelStyle"
         BasedOn="{StaticResource BaseLabelStyle}"
         TargetType="Label">
+        <Setter Property="LineBreakMode" Value="NoWrap" />
         <Setter Property="FontAttributes" Value="Bold" />
     </Style>
 

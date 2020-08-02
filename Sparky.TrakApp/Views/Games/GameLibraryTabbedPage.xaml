@@ -4,5 +4,6 @@
     x:Class="Sparky.TrakApp.Views.Games.GameLibraryTabbedPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    Title="Game Library"
+    xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
+    Title="{extensions:Translate GameLibraryTabbedPage}"
     BarBackgroundColor="{StaticResource TrakPrimaryBlue}" />

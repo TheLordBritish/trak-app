@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-
 <pages:PopupPage
     x:Class="Sparky.TrakApp.Views.Games.GameOptionsPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
+    xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:games="clr-namespace:Sparky.TrakApp.ViewModel.Games;assembly=Sparky.TrakApp.ViewModel"
     xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
     <pages:PopupPage.Content>
@@ -16,24 +17,13 @@
             <Label
                 Margin="0,15,0,0"
                 FontAttributes="Bold"
-                Text="Status" />
-            <Frame
-                Padding="0"
-                BackgroundColor="{StaticResource TrakWhite}"
-                CornerRadius="0"
-                HasShadow="False">
-                <Frame
-                    Margin="1"
-                    Padding="0"
-                    BackgroundColor="{StaticResource TrakPrimaryBlue}"
-                    CornerRadius="0"
-                    HasShadow="False">
-                    <Picker
-                        ItemDisplayBinding="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"
-                        ItemsSource="{Binding Statuses}"
-                        SelectedItem="{Binding SelectedStatus}" />
-                </Frame>
-            </Frame>
+                Text="{extensions:Translate GameOptionsPageStatus}" />
+            <controls:BorderedPicker
+                BorderColor="{StaticResource TrakWhite}"
+                BorderThickness="1"
+                ItemDisplayBinding="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"
+                ItemsSource="{Binding Statuses}"
+                SelectedItem="{Binding SelectedStatus}" />
             <!--  Display error messages if anything went wrong.  -->
             <Label
                 Margin="0,5"
@@ -47,14 +37,14 @@
                 Command="{Binding UpdateGameCommand}"
                 IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
                 Style="{StaticResource PrimaryButtonStyle}"
-                Text="Update" />
+                Text="{extensions:Translate GameOptionsPageUpdate}" />
             <Button
                 Margin="0,15,0,0"
                 Command="{Binding DeleteGameCommand}"
                 FontSize="Medium"
                 IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
                 Style="{StaticResource SecondaryButtonStyle}"
-                Text="Delete" />
+                Text="{extensions:Translate GameOptionsPageDelete}" />
             <ActivityIndicator
                 Margin="0,15,0,0"
                 IsRunning="{Binding IsLoading}"

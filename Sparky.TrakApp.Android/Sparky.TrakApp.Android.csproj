@@ -83,9 +83,9 @@
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
     <Compile Include="MyFirebaseMessagingService.cs" />
-    <Compile Include="Renderers\CustomEditorRenderer.cs" />
-    <Compile Include="Renderers\CustomEntryRenderer.cs" />
-    <Compile Include="Renderers\CustomPickerRenderer.cs" />
+    <Compile Include="Renderers\BorderedEditorRenderer.cs" />
+    <Compile Include="Renderers\BorderedEntryRenderer.cs" />
+    <Compile Include="Renderers\BorderedPickerRenderer.cs" />
     <Compile Include="Renderers\BaseNavigationPageRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

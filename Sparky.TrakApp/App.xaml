@@ -23,16 +23,6 @@
                 <styles:LabelStyles />
             </ResourceDictionary.MergedDictionaries>
 
-            <!--  Content page styling  -->
-            <Style TargetType="ContentPage">
-                <Setter Property="BackgroundColor" Value="Transparent" />
-            </Style>
-
-            <!--  Grid styling  -->
-            <Style TargetType="Grid">
-                <Setter Property="BackgroundColor" Value="Transparent" />
-            </Style>
-
             <!--  Activity Indicator styling  -->
             <Style TargetType="ActivityIndicator">
                 <Setter Property="Color" Value="{StaticResource TrakPrimaryPurple}" />
@@ -40,8 +30,7 @@
 
             <!--  Entry styling  -->
             <Style ApplyToDerivedTypes="True" TargetType="Entry">
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="BackgroundColor" Value="{StaticResource TrakPrimaryBlue}" />
                 <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
                 <Setter Property="PlaceholderColor" Value="{StaticResource TrakGrey}" />
                 <Setter Property="IsSpellCheckEnabled" Value="False" />
@@ -49,16 +38,14 @@
 
             <!--  Editor styling  -->
             <Style ApplyToDerivedTypes="True" TargetType="Editor">
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="BackgroundColor" Value="{StaticResource TrakPrimaryBlue}" />
                 <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
                 <Setter Property="PlaceholderColor" Value="{StaticResource TrakGrey}" />
             </Style>
 
             <!--  Picker styling  -->
             <Style ApplyToDerivedTypes="True" TargetType="Picker">
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="HorizontalOptions" Value="FillAndExpand" />
+                <Setter Property="BackgroundColor" Value="{StaticResource TrakPrimaryBlue}" />
                 <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
             </Style>
 

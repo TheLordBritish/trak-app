@@ -6,7 +6,7 @@
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:forms="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
     xmlns:games="clr-namespace:Sparky.TrakApp.ViewModel.Games;assembly=Sparky.TrakApp.ViewModel"
-    Title="Barcode">
+    Title="{extensions:Translate GameBarcodeScannerPageTitle}">
     <ContentPage.Content>
         <Grid
             x:DataType="games:GameBarcodeScannerViewModel"

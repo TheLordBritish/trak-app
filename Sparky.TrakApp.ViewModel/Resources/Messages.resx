@@ -324,6 +324,9 @@
 	<data name="RecoveryErrorMessageConfirmPasswordMismatch" xml:space="preserve">
 		<value>The passwords must match.</value>
 	</data>
+	<data name="GameLibraryListPageTitle" xml:space="preserve">
+		<value>Library</value>
+	</data>
 	<data name="GameLibraryListPageInstructions" xml:space="preserve">
 		<value>Use the entry above to search for games.</value>
 	</data>
@@ -386,5 +389,29 @@
 	</data>
 	<data name="AddGameErrorMessageStatusNone" xml:space="preserve">
 		<value>The status cannot be empty.</value>
+	</data>
+	<data name="AddGamePagePlatform" xml:space="preserve">
+		<value>Platform</value>
+	</data>
+	<data name="AddGamePageStatus" xml:space="preserve">
+		<value>Status</value>
+	</data>
+	<data name="AddGamePageAdd" xml:space="preserve">
+		<value>Add</value>
+	</data>
+	<data name="GameOptionsPageStatus" xml:space="preserve">
+		<value>Status</value>
+	</data>
+	<data name="GameOptionsPageUpdate" xml:space="preserve">
+		<value>Update</value>
+	</data>
+	<data name="GameOptionsPageDelete" xml:space="preserve">
+		<value>Delete</value>
+	</data>
+	<data name="GameLibraryTabbedPage" xml:space="preserve">
+		<value>Game Library</value>
+	</data>
+	<data name="GameUserEntriesTabbedPageTitle" xml:space="preserve">
+		<value>Games</value>
 	</data>
 </root>

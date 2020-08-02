@@ -13,6 +13,10 @@
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.1.0.442" />
     <PackageReference Include="MagicGradients" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AppCenter" Version="3.4.0" />
+    <PackageReference Include="Microsoft.AppCenter.Analytics" Version="3.4.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.4.0" />
+    <PackageReference Include="Mobile.BuildTools" Version="1.4.0.638" />
     <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1422" />
     <PackageReference Include="Prism.Plugin.Popups" Version="7.2.0.1046" />
     <PackageReference Include="ReactiveUI.Fody" Version="11.4.17" />

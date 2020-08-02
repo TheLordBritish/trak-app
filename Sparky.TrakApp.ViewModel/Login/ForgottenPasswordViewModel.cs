@@ -4,6 +4,7 @@ using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FluentValidation;
+using Microsoft.AppCenter.Crashes;
 using Plugin.FluentValidationRules;
 using Prism.Commands;
 using Prism.Navigation;
@@ -50,15 +51,23 @@ namespace Sparky.TrakApp.ViewModel.Login
 
             ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
 
-            SendCommand = ReactiveCommand.CreateFromTask(ExecuteSendAsync, outputScheduler: scheduler);
+            SendCommand = ReactiveCommand.CreateFromTask(SendAsync, outputScheduler: scheduler);
             // Report errors if an exception was thrown.
             SendCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+                if (ex is ApiException)
+                {
+                    ErrorMessage = Messages.ErrorMessageApiError;
+                }
+                else
+                {
+                    ErrorMessage = Messages.ErrorMessageGeneric;
+                    Crashes.TrackError(ex);
+                }
             });
 
-            RecoveryCommand = ReactiveCommand.CreateFromTask(ExecuteRecoveryAsync, outputScheduler: scheduler);
+            RecoveryCommand = ReactiveCommand.CreateFromTask(RecoveryAsync, outputScheduler: scheduler);
 
             this.WhenAnyObservable(x => x.SendCommand.IsExecuting)
                 .ToPropertyEx(this, x => x.IsLoading);
@@ -81,13 +90,13 @@ namespace Sparky.TrakApp.ViewModel.Login
 
         /// <summary>
         /// Command that is invoked by the view when the send button is tapped. When called, the command
-        /// will propagate the request and call the <see cref="ExecuteSendAsync"/> method.
+        /// will propagate the request and call the <see cref="SendAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> SendCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the already have recovery token label is tapped. When
-        /// called, the command will propagate the request and call the <see cref="ExecuteRecoveryAsync"/> method.
+        /// called, the command will propagate the request and call the <see cref="RecoveryAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> RecoveryCommand { get; }
 
@@ -135,7 +144,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// page with further details.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteSendAsync()
+        private async Task SendAsync()
         {
             IsError = false;
 
@@ -154,7 +163,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// This method will merely push the recovery page to the top of the view stack.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteRecoveryAsync()
+        private async Task RecoveryAsync()
         {
             await NavigationService.NavigateAsync("RecoveryPage");
         }

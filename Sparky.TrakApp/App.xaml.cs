@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Reactive.Concurrency;
 using Acr.UserDialogs;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using Prism;
 using Prism.Ioc;
 using Prism.Plugin.Popups;
 using ReactiveUI;
+using Sparky.TrakApp.Helpers;
 using Sparky.TrakApp.Impl;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.ViewModel;
@@ -18,13 +22,20 @@ namespace Sparky.TrakApp
 {
     public partial class App
     {
-        public App() : this(null) { }
+        public App() : this(null)
+        {
+        }
 
-        public App(IPlatformInitializer initializer) : base(initializer) { }
+        public App(IPlatformInitializer initializer) : base(initializer)
+        {
+        }
 
         protected override async void OnInitialized()
         {
             InitializeComponent();
+
+            AppCenter.Start($"android={Secrets.AppCenterAndroidSecret};ios={Secrets.AppCenterIOSSecret};",
+                typeof(Analytics), typeof(Crashes));
 
             // Get the storage service.
             var storageService = Container.Resolve<IStorageService>();
@@ -45,16 +56,16 @@ namespace Sparky.TrakApp
             containerRegistry.RegisterPopupNavigationService<TransitionPopupPageNavigationService>();
 
             // Services
-            ServiceRegistry.RegisterTypes(containerRegistry);
+            ServiceRegistry.RegisterTypes(containerRegistry, Secrets.EnvironmentUrl);
             containerRegistry.Register<IFormsDevice, XamarinFormsDevice>();
             containerRegistry.Register<IStorageService, SecureStorageService>();
             containerRegistry.RegisterInstance(UserDialogs.Instance);
             containerRegistry.RegisterInstance(typeof(IScheduler), RxApp.MainThreadScheduler);
-            
+
             // Xamarin pages.
             containerRegistry.RegisterForNavigation<BaseMasterDetailPage, BaseMasterDetailViewModel>();
             containerRegistry.RegisterForNavigation<BaseNavigationPage>();
-            
+
             // Login pages.
             containerRegistry.RegisterForNavigation<LoadingPage, LoadingViewModel>();
             containerRegistry.RegisterForNavigation<LoginPage, LoginViewModel>();
@@ -62,10 +73,10 @@ namespace Sparky.TrakApp
             containerRegistry.RegisterForNavigation<ForgottenPasswordPage, ForgottenPasswordViewModel>();
             containerRegistry.RegisterForNavigation<RecoveryPage, RecoveryViewModel>();
             containerRegistry.RegisterForNavigation<VerificationPage, VerificationViewModel>();
-            
+
             // Home pages
             containerRegistry.RegisterForNavigation<HomePage, HomeViewModel>();
-            
+
             // Game pages
             containerRegistry.Register<GameUserEntryBacklogListViewModel>();
             containerRegistry.Register<GameUserEntryInProgressListViewModel>();

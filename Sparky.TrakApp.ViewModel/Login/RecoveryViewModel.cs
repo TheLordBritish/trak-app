@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using FluentValidation;
+using Microsoft.AppCenter.Crashes;
 using Plugin.FluentValidationRules;
-using Prism.Commands;
 using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -56,15 +56,26 @@ namespace Sparky.TrakApp.ViewModel.Login
 
             ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
 
-            RecoverCommand = ReactiveCommand.CreateFromTask(ExecuteRecoveryAsync, outputScheduler: scheduler);
+            RecoverCommand = ReactiveCommand.CreateFromTask(RecoverAsync, outputScheduler: scheduler);
             // Report errors if an exception was thrown.
             RecoverCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+                if (ex is ApiException)
+                {
+                    ErrorMessage = Messages.ErrorMessageApiError;
+                }
+                else
+                {
+                    ErrorMessage = Messages.ErrorMessageGeneric;
+                    Crashes.TrackError(ex, new Dictionary<string, string>
+                    {
+                        {"Username", Username.Value}
+                    });
+                }
             });
 
-            LoginCommand = ReactiveCommand.CreateFromTask(ExecuteLoginAsync, outputScheduler: scheduler);
+            LoginCommand = ReactiveCommand.CreateFromTask(LoginAsync, outputScheduler: scheduler);
 
             this.WhenAnyObservable(x => x.RecoverCommand.IsExecuting)
                 .ToPropertyEx(this, x => x.IsLoading);
@@ -108,13 +119,13 @@ namespace Sparky.TrakApp.ViewModel.Login
 
         /// <summary>
         /// Command that is invoked by the view when the recover button is tapped. When called, the command
-        /// will propagate the request and call the <see cref="ExecuteRecoveryAsync"/> method.
+        /// will propagate the request and call the <see cref="RecoverAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> RecoverCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the login label is tapped. When called, the command
-        /// will propagate the request and call the <see cref="ExecuteLoginAsync"/> method.
+        /// will propagate the request and call the <see cref="LoginAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> LoginCommand { get; }
 
@@ -172,7 +183,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// incorrect or the account not being in the recovery position.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteRecoveryAsync()
+        private async Task RecoverAsync()
         {
             IsError = false;
 
@@ -181,7 +192,7 @@ namespace Sparky.TrakApp.ViewModel.Login
 
             if (validationResult.IsValidOverall)
             {
-                await AttemptRecoveryAsync(Username.Value, RecoveryToken.Value, Password.Value);
+                await AttemptRecoverAsync(Username.Value, RecoveryToken.Value, Password.Value);
             }
         }
 
@@ -190,13 +201,13 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// navigate back to the login page.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteLoginAsync()
+        private async Task LoginAsync()
         {
             await NavigationService.NavigateAsync("LoginPage");
         }
 
         /// <summary>
-        /// Private method that is invoked within the <see cref="ExecuteRecoveryAsync"/> method. Its purpose
+        /// Private method that is invoked within the <see cref="RecoverAsync"/> method. Its purpose
         /// is to attempt to recover an existing user with the supplied information by calling off to an external
         /// service, before storing some small amount of information for later use. 
         ///
@@ -208,7 +219,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// <param name="recoveryToken">The recovery token to attempt recovery with.</param>
         /// <param name="password">The password to attempt recovery with.</param>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task AttemptRecoveryAsync(string username, string recoveryToken, string password)
+        private async Task AttemptRecoverAsync(string username, string recoveryToken, string password)
         {
             // Attempt to recover an existing account.
             var userRecoveryResponse = await _authService.RecoverAsync(new RecoveryRequest

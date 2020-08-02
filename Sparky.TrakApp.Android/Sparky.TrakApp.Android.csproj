@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.1.0.442" />
+    <PackageReference Include="Mobile.BuildTools" Version="1.4.0.638" />
     <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1422" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.3" />
     <PackageReference Include="Xamarin.Firebase.Messaging" Version="71.1740.1" />

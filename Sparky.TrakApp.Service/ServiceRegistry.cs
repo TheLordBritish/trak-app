@@ -12,7 +12,7 @@ namespace Sparky.TrakApp.Service
 {
     public static class ServiceRegistry
     {
-        public static void RegisterTypes(IContainerRegistry containerRegistry)
+        public static void RegisterTypes(IContainerRegistry containerRegistry, string environmentUrl)
         {
             var retryPolicy = HttpPolicyExtensions
                 .HandleTransientHttpError()
@@ -31,7 +31,7 @@ namespace Sparky.TrakApp.Service
             serviceCollection
                 .AddHttpClient("Trak", client =>
                 {
-                    client.BaseAddress = new Uri("http://192.168.1.191:8080/");
+                    client.BaseAddress = new Uri(environmentUrl);
                 })
                 .AddPolicyHandler(retryPolicy)
                 .AddPolicyHandler(timeoutPolicy);
@@ -39,7 +39,7 @@ namespace Sparky.TrakApp.Service
             serviceCollection
                 .AddHttpClient("TrakAuth", client =>
                 {
-                    client.BaseAddress = new Uri("http://192.168.1.191:8080/");
+                    client.BaseAddress = new Uri(environmentUrl);
                 })
                 .AddPolicyHandler(timeoutPolicy);
             

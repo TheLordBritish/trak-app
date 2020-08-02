@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using Microsoft.AppCenter.Crashes;
 using Prism.Commands;
 using Prism.Navigation;
 using ReactiveUI;
@@ -55,7 +56,7 @@ namespace Sparky.TrakApp.ViewModel.Games
             var canSearch = this.WhenAny(x => x.SearchQuery, x => !string.IsNullOrWhiteSpace(x.Value));
 
             SearchCommand =
-                ReactiveCommand.CreateFromTask<string, IEnumerable<GameInfo>>(ExecuteSearchAsync, canSearch, scheduler);
+                ReactiveCommand.CreateFromTask<string, IEnumerable<GameInfo>>(SearchAsync, canSearch, scheduler);
             // Register to the result of the search command and convert the result into list item view models.
             SearchCommand.Subscribe(results =>
             {
@@ -68,9 +69,18 @@ namespace Sparky.TrakApp.ViewModel.Games
             SearchCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                ErrorMessage = ex is ApiException
-                    ? Messages.GameLibraryListPageEmptyServerError
-                    : Messages.GameLibraryListPageEmptyGenericError;
+                if (ex is ApiException)
+                {
+                    ErrorMessage = Messages.GameLibraryListPageEmptyServerError;
+                }
+                else
+                {
+                    ErrorMessage = Messages.GameLibraryListPageEmptyGenericError;
+                    Crashes.TrackError(ex, new Dictionary<string, string>
+                    {
+                        {"Search query", SearchQuery}
+                    });
+                }
             });
 
             var canLoadMore = this.WhenAnyValue(x => x._nextUri, x => !string.IsNullOrEmpty(x));
@@ -102,6 +112,11 @@ namespace Sparky.TrakApp.ViewModel.Games
                         .SetMessageTextColor(Color.White)
                         .SetDuration(TimeSpan.FromSeconds(5))
                         .SetPosition(ToastPosition.Bottom));
+                    
+                    Crashes.TrackError(ex, new Dictionary<string, string>
+                    {
+                        {"Search query", SearchQuery}
+                    });
                 }
             });
 
@@ -111,7 +126,7 @@ namespace Sparky.TrakApp.ViewModel.Games
             this.WhenAnyObservable(x => x.SearchCommand.IsExecuting)
                 .ToPropertyEx(this, x => x.IsSearching, scheduler: scheduler);
             
-            RequestCommand = ReactiveCommand.CreateFromTask(ExecuteRequestAsync, outputScheduler: scheduler);
+            RequestCommand = ReactiveCommand.CreateFromTask(RequestAsync, outputScheduler: scheduler);
         }
         
         /// <summary>
@@ -141,7 +156,7 @@ namespace Sparky.TrakApp.ViewModel.Games
 
         /// <summary>
         /// Command that is invoked each the time the search query is changed by the user on the view.
-        /// When called, the command will propagate the request and call the <see cref="ExecuteSearchAsync"/> method.
+        /// When called, the command will propagate the request and call the <see cref="SearchAsync"/> method.
         /// </summary>
         public ReactiveCommand<string, IEnumerable<GameInfo>> SearchCommand { get; }
 
@@ -154,7 +169,7 @@ namespace Sparky.TrakApp.ViewModel.Games
 
         /// <summary>
         /// Command that is invoked each the time the make a request button is tapped by the user on the view.
-        /// When called, the command will propagate the request and call the <see cref="ExecuteRequestAsync"/> method.
+        /// When called, the command will propagate the request and call the <see cref="RequestAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> RequestCommand { get; }
 
@@ -164,7 +179,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// <see cref="IEnumerable{T}"/> of all games associated with the given query.
         /// </summary>
         /// <returns>A <see cref="Task"/> which contains all of the <see cref="GameInfo"/> objects associated with the query.</returns>
-        private async Task<IEnumerable<GameInfo>> ExecuteSearchAsync(string query)
+        private async Task<IEnumerable<GameInfo>> SearchAsync(string query)
         {
             _nextUri = $"api/game-management/v1/games/info?title={query}&sort=title";
             return await GetGamesFromUrlAsync(_nextUri);
@@ -175,7 +190,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// view. This method will navigate the user to the game request page.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteRequestAsync()
+        private async Task RequestAsync()
         {
             await NavigationService.NavigateAsync("GameRequestPage");
         }

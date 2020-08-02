@@ -4,17 +4,13 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="http://prismlibrary.com"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:games="clr-namespace:Sparky.TrakApp.ViewModel.Games;assembly=Sparky.TrakApp.ViewModel"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
-    d:DataContext="{d:DesignInstance games:AddGameViewModel,
-                                     IsDesignTimeCreatable=True}"
-    mc:Ignorable="d">
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
     <pages:PopupPage.Content>
         <StackLayout
             Margin="20,0"
             Padding="15"
+            x:DataType="games:AddGameViewModel"
             BackgroundColor="{StaticResource TrakPrimaryBlue}"
             VerticalOptions="Center">
             <Label

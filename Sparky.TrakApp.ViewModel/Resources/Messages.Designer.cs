@@ -286,6 +286,15 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Barcode.
+        /// </summary>
+        public static string GameBarcodeScannerPageTitle {
+            get {
+                return ResourceManager.GetString("GameBarcodeScannerPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t find what you&apos;re looking for?.
         /// </summary>
         public static string GameLibraryListPageCantFindGame {

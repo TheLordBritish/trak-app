@@ -6,10 +6,12 @@
     xmlns:behaviors="http://prismlibrary.com"
     xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
+    xmlns:login="clr-namespace:Sparky.TrakApp.ViewModel.Login;assembly=Sparky.TrakApp.ViewModel"
     AutomationId="VerificationPage">
     <ContentPage.Content>
         <StackLayout
             Padding="35"
+            x:DataType="login:VerificationViewModel"
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand">
             <Grid>
@@ -76,8 +78,8 @@
             </Frame>
             <Label
                 AutomationId="VerificationPageVerificationCodeErrorLabel"
-                IsEnabled="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                IsVisible="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                IsEnabled="{Binding VerificationCode.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                IsVisible="{Binding VerificationCode.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                 Style="{StaticResource ValidationLabelStyle}"
                 Text="{Binding VerificationCode.FirstError}" />
             <!--  Display error messages if anything went wrong.  -->

@@ -4,10 +4,11 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
+    xmlns:viewModel="clr-namespace:Sparky.TrakApp.ViewModel;assembly=Sparky.TrakApp.ViewModel"
     Title="Menu"
     BackgroundColor="Transparent">
     <ContentPage.Content>
-        <ScrollView Padding="35">
+        <ScrollView Padding="35" x:DataType="viewModel:BaseMasterDetailViewModel">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -59,11 +60,7 @@
                     Grid.ColumnSpan="2"
                     FontSize="48"
                     Style="{StaticResource TitleLabelStyle}"
-                    Text="{extensions:Translate BaseMasterDetailContentPageBooks}">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding LoadBooksCommand}" NumberOfTapsRequired="1" />
-                    </Label.GestureRecognizers>
-                </Label>
+                    Text="{extensions:Translate BaseMasterDetailContentPageBooks}" />
                 <!--  Anime label  -->
                 <Label
                     Grid.Row="4"
@@ -71,11 +68,7 @@
                     Grid.ColumnSpan="2"
                     FontSize="48"
                     Style="{StaticResource TitleLabelStyle}"
-                    Text="{extensions:Translate BaseMasterDetailContentPageAnime}">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding LoadAnimeCommand}" NumberOfTapsRequired="1" />
-                    </Label.GestureRecognizers>
-                </Label>
+                    Text="{extensions:Translate BaseMasterDetailContentPageAnime}" />
                 <!--  Manga label  -->
                 <Label
                     Grid.Row="5"
@@ -83,11 +76,7 @@
                     Grid.ColumnSpan="2"
                     FontSize="48"
                     Style="{StaticResource TitleLabelStyle}"
-                    Text="{extensions:Translate BaseMasterDetailContentPageManga}">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding LoadMangaCommand}" NumberOfTapsRequired="1" />
-                    </Label.GestureRecognizers>
-                </Label>
+                    Text="{extensions:Translate BaseMasterDetailContentPageManga}" />
                 <StackLayout
                     Grid.Row="6"
                     Grid.Column="0"
@@ -97,11 +86,7 @@
                     <Label
                         FontSize="48"
                         Style="{StaticResource TitleLabelStyle}"
-                        Text="{extensions:Translate BaseMasterDetailContentPageSettings}">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding LoadSettingsCommand}" NumberOfTapsRequired="1" />
-                        </Label.GestureRecognizers>
-                    </Label>
+                        Text="{extensions:Translate BaseMasterDetailContentPageSettings}" />
                     <!--  Logout label  -->
                     <Label
                         FontSize="48"

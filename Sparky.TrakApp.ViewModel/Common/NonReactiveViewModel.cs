@@ -1,15 +1,15 @@
 ﻿using Prism.Mvvm;
 using Prism.Navigation;
 
-namespace Sparky.TrakApp.ViewModel
+namespace Sparky.TrakApp.ViewModel.Common
 {
-    public abstract class BaseViewModel : BindableBase, IInitialize, INavigationAware, IDestructible
+    public abstract class NonReactiveViewModel : BindableBase, IInitialize, INavigationAware, IDestructible
     {
         private bool _isBusy;
         private bool _isError;
         private string _errorMessage;
 
-        protected BaseViewModel(INavigationService navigationService)
+        protected NonReactiveViewModel(INavigationService navigationService)
         {
             NavigationService = navigationService;
         }

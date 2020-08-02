@@ -5,13 +5,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="http://prismlibrary.com"
     xmlns:controls="clr-namespace:Sparky.TrakApp.Controls"
-    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    AutomationId="RegisterPage"
-    mc:Ignorable="d">
+    xmlns:login="clr-namespace:Sparky.TrakApp.ViewModel.Login;assembly=Sparky.TrakApp.ViewModel"
+    AutomationId="RegisterPage">
     <ContentPage.Content>
-        <ScrollView Padding="35">
+        <ScrollView Padding="35" x:DataType="login:RegisterViewModel">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

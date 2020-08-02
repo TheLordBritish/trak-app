@@ -207,6 +207,9 @@
 	<data name="GamePageOptions" xml:space="preserve">
 		<value>Options</value>
 	</data>
+	<data name="GameBarcodeScannerPageTitle" xml:space="preserve">
+		<value>Barcode</value>
+	</data>
 	<data name="GameBarcodeScannerPageInstructions" xml:space="preserve">
 		<value>Place the red line over the barcode you'd like to scan.</value>
 	</data>

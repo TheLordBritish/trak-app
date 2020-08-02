@@ -8,6 +8,7 @@ using System.Reactive.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using Microsoft.AppCenter.Crashes;
 using Prism;
 using Prism.Commands;
 using Prism.Navigation;
@@ -73,9 +74,15 @@ namespace Sparky.TrakApp.ViewModel.Games
             LoadCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                ErrorMessage = ex is ApiException
-                    ? Messages.GameLibraryListPageEmptyServerError
-                    : Messages.GameLibraryListPageEmptyGenericError;
+                if (ex is ApiException)
+                {
+                    ErrorMessage = Messages.GameLibraryListPageEmptyServerError;
+                }
+                else
+                {
+                    ErrorMessage = Messages.GameLibraryListPageEmptyGenericError;
+                    Crashes.TrackError(ex);
+                }
             });
 
             var canLoadMore = this.WhenAnyValue(x => x._nextUri, x => !string.IsNullOrEmpty(x));
@@ -109,6 +116,8 @@ namespace Sparky.TrakApp.ViewModel.Games
                         .SetMessageTextColor(Color.White)
                         .SetDuration(TimeSpan.FromSeconds(5))
                         .SetPosition(ToastPosition.Bottom));
+                    
+                    Crashes.TrackError(ex);
                 }
             });
 

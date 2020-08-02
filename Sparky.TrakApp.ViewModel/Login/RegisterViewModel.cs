@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using FluentValidation;
+using Microsoft.AppCenter.Crashes;
 using Plugin.FluentValidationRules;
 using Prism.Navigation;
 using ReactiveUI;
@@ -54,15 +56,26 @@ namespace Sparky.TrakApp.ViewModel.Login
 
             ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
 
-            RegisterCommand = ReactiveCommand.CreateFromTask(ExecuteRegisterAsync, outputScheduler: scheduler);
+            RegisterCommand = ReactiveCommand.CreateFromTask(RegisterAsync, outputScheduler: scheduler);
             // Report errors if an exception was thrown.
             RegisterCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+                if (ex is ApiException)
+                {
+                    ErrorMessage = Messages.ErrorMessageApiError;
+                }
+                else
+                {
+                    ErrorMessage = Messages.ErrorMessageGeneric;
+                    Crashes.TrackError(ex, new Dictionary<string, string>
+                    {
+                        {"Username", Username.Value}
+                    });
+                }
             });
 
-            LoginCommand = ReactiveCommand.CreateFromTask(ExecuteLoginAsync, outputScheduler: scheduler);
+            LoginCommand = ReactiveCommand.CreateFromTask(LoginAsync, outputScheduler: scheduler);
 
             this.WhenAnyObservable(x => x.RegisterCommand.IsExecuting)
                 .ToPropertyEx(this, x => x.IsLoading);
@@ -106,13 +119,13 @@ namespace Sparky.TrakApp.ViewModel.Login
 
         /// <summary>
         /// Command that is invoked by the view when the register button is tapped. When called, the command
-        /// will propagate the request and call the <see cref="ExecuteRegisterAsync"/> method.
+        /// will propagate the request and call the <see cref="RegisterAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> RegisterCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the log in label is tapped. When called, the command
-        /// will propagate the request and call the <see cref="ExecuteLoginAsync"/> method.
+        /// will propagate the request and call the <see cref="LoginAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> LoginCommand { get; }
 
@@ -168,7 +181,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// being registered with the supplied details.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteRegisterAsync()
+        private async Task RegisterAsync()
         {
             IsError = false;
 
@@ -182,7 +195,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         }
 
         /// <summary>
-        /// Private method that is invoked within the <see cref="ExecuteRegisterAsync"/> method. Its purpose
+        /// Private method that is invoked within the <see cref="RegisterAsync"/> method. Its purpose
         /// is to attempt to register a new user with the supplied information by calling off to an external
         /// service, before storing some small amount of information for later use. 
         ///
@@ -245,7 +258,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// navigate back to the login page.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteLoginAsync()
+        private async Task LoginAsync()
         {
             await NavigationService.GoBackAsync();
         }

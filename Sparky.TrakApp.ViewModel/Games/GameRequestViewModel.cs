@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using FluentValidation;
+using Microsoft.AppCenter.Crashes;
 using Plugin.FluentValidationRules;
 using Prism.Navigation;
 using ReactiveUI;
@@ -56,12 +58,24 @@ namespace Sparky.TrakApp.ViewModel.Games
 
             ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
 
-            RequestCommand = ReactiveCommand.CreateFromTask(ExecuteRequestAsync, outputScheduler: scheduler);
+            RequestCommand = ReactiveCommand.CreateFromTask(RequestAsync, outputScheduler: scheduler);
             // Report errors if an exception was thrown.
             RequestCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+                if (ex is ApiException)
+                {
+                    ErrorMessage = Messages.ErrorMessageApiError;
+                }
+                else
+                {
+                    ErrorMessage = Messages.ErrorMessageGeneric;
+                    Crashes.TrackError(ex, new Dictionary<string, string>
+                    {
+                        {"Title", Title.Value},
+                        {"Notes", Notes.Value}
+                    });
+                }
             });
 
             this.WhenAnyObservable(x => x.RequestCommand.IsExecuting)
@@ -92,7 +106,7 @@ namespace Sparky.TrakApp.ViewModel.Games
 
         /// <summary>
         /// Command that is invoked by the view when the submit button is tapped. When called, the command
-        /// will propagate the request and call the <see cref="ExecuteRequestAsync"/> method.
+        /// will propagate the request and call the <see cref="RequestAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> RequestCommand { get; }
 
@@ -144,7 +158,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// displayed to the user through the ErrorMessage parameter and setting the IsError boolean to true.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteRequestAsync()
+        private async Task RequestAsync()
         {
             IsError = false;
 

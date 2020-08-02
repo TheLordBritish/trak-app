@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using Prism.Navigation;
 using System.Threading.Tasks;
 using FluentValidation;
+using Microsoft.AppCenter.Crashes;
 using Plugin.FluentValidationRules;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -56,7 +58,7 @@ namespace Sparky.TrakApp.ViewModel.Login
 
             ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
 
-            LoginCommand = ReactiveCommand.CreateFromTask(ExecuteLoginAsync, outputScheduler: scheduler);
+            LoginCommand = ReactiveCommand.CreateFromTask(LoginAsync, outputScheduler: scheduler);
             // Report errors if an exception was thrown.
             LoginCommand.ThrownExceptions.Subscribe(ex =>
             {
@@ -72,13 +74,17 @@ namespace Sparky.TrakApp.ViewModel.Login
                 else
                 {
                     ErrorMessage = Messages.ErrorMessageGeneric;
+                    Crashes.TrackError(ex, new Dictionary<string, string>
+                    {
+                        {"Username", Username.Value}
+                    });
                 }
             });
 
             ForgottenPasswordCommand =
-                ReactiveCommand.CreateFromTask(ExecuteForgottenPasswordAsync, outputScheduler: scheduler);
+                ReactiveCommand.CreateFromTask(ForgottenPasswordAsync, outputScheduler: scheduler);
 
-            RegisterCommand = ReactiveCommand.CreateFromTask(ExecuteRegisterAsync, outputScheduler: scheduler);
+            RegisterCommand = ReactiveCommand.CreateFromTask(RegisterAsync, outputScheduler: scheduler);
 
             this.WhenAnyObservable(x => x.LoginCommand.IsExecuting)
                 .ToPropertyEx(this, x => x.IsLoading);
@@ -108,19 +114,19 @@ namespace Sparky.TrakApp.ViewModel.Login
 
         /// <summary>
         /// Command that is invoked by the view when the login button is tapped. When called, the command
-        /// will propagate the request and call the <see cref="ExecuteLoginAsync"/> method.
+        /// will propagate the request and call the <see cref="LoginAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> LoginCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the forgotten password label is tapped. When called,
-        /// the command will propagate the request and call the <see cref="ExecuteForgottenPasswordAsync"/> method.
+        /// the command will propagate the request and call the <see cref="ForgottenPasswordAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> ForgottenPasswordCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the register label is tapped. When called, the command
-        /// will propagate the request and call the <see cref="ExecuteRegisterAsync"/> method.
+        /// will propagate the request and call the <see cref="RegisterAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> RegisterCommand { get; }
 
@@ -172,7 +178,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// displayed to the user through the ErrorMessage parameter and setting the IsError boolean to true.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteLoginAsync()
+        private async Task LoginAsync()
         {
             IsError = false;
 
@@ -220,7 +226,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// will do is navigate to the forgotten password page.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteForgottenPasswordAsync()
+        private async Task ForgottenPasswordAsync()
         {
             await NavigationService.NavigateAsync("ForgottenPasswordPage");
         }
@@ -230,7 +236,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// navigate to the register page.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteRegisterAsync()
+        private async Task RegisterAsync()
         {
             await NavigationService.NavigateAsync("RegisterPage");
         }

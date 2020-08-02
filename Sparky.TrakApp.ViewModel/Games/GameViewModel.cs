@@ -5,12 +5,14 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading.Tasks;
+using Microsoft.AppCenter.Crashes;
 using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
 using Sparky.TrakApp.Model.Games;
 using Sparky.TrakApp.Model.Response;
 using Sparky.TrakApp.Service;
+using Sparky.TrakApp.Service.Exception;
 using Sparky.TrakApp.ViewModel.Common;
 
 namespace Sparky.TrakApp.ViewModel.Games
@@ -27,7 +29,7 @@ namespace Sparky.TrakApp.ViewModel.Games
 
         private long _gameId;
         private IEnumerable<Platform> _allPlatforms;
-        
+
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
@@ -37,39 +39,53 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// <param name="navigationService">The <see cref="INavigationService" /> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService" /> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService" /> instance to inject.</param>
-        public GameViewModel(IScheduler scheduler, INavigationService navigationService, IStorageService storageService, IRestService restService) : base(scheduler, navigationService)
+        public GameViewModel(IScheduler scheduler, INavigationService navigationService, IStorageService storageService,
+            IRestService restService) : base(scheduler, navigationService)
         {
             _storageService = storageService;
             _restService = restService;
-            
+
             // Default values
             Status = GameUserEntryStatus.None;
 
             // The page will be busy by default, as as soon as it's navigated to, API requests are made.
             SimilarGames = new ObservableCollection<ListItemViewModel>();
-            
+
             OptionsCommand = ReactiveCommand.CreateFromTask(OptionsAsync, outputScheduler: scheduler);
-            
+
             LoadGameInfoCommand = ReactiveCommand.CreateFromTask(LoadGameInfoAsync, outputScheduler: scheduler);
             // Report errors if an exception was thrown.
             LoadGameInfoCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
+                if (!(ex is ApiException))
+                {
+                    Crashes.TrackError(ex);
+                }
             });
-            
+
             this.WhenAnyObservable(x => x.LoadGameInfoCommand.IsExecuting)
                 .ToPropertyEx(this, x => x.IsLoading, scheduler: scheduler);
         }
 
-        [Reactive]
+        /// <summary>
+        /// A <see cref="bool"/> that specifies whether the page has been fully loaded.
+        /// </summary>
+        [Reactive] 
         public bool HasLoaded { get; set; }
 
+        /// <summary>
+        /// A <see cref="Uri"/> which specifies the URI from which the <see cref="GameInfo"/> was loaded from.
+        /// </summary>
         [Reactive] 
         public Uri GameUrl { get; set; }
 
-        [Reactive]
+        /// <summary>
+        /// A ID of the current <see cref="Platform"/> the <see cref="Game"/> has been added for.
+        /// </summary>
+        [Reactive] 
         public long PlatformId { get; set; }
-        
+
         /// <summary>
         /// A <see cref="Uri" /> that contains the URL of the image that is associated with the game within this view model.
         /// </summary>
@@ -129,7 +145,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// </summary>
         [Reactive]
         public string Description { get; set; }
-        
+
         /// <summary>
         /// A <see cref="GameUserEntryStatus" /> that represents the current status of the game. If the game being
         /// displayed isn't within the users collection, the status will be set to <see cref="GameUserEntryStatus.None" />.
@@ -149,13 +165,13 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// When called, the command will propagate the request and call the <see cref="OptionsAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> OptionsCommand { get; }
-        
+
         /// <summary>
         /// Command that is invoked each time the page is first navigated to. When called, the command will
         /// propagate the request and call the <see cref="LoadGameInfoAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> LoadGameInfoCommand { get; }
-        
+
         /// <summary>
         /// Overriden method that is automatically invoked when the page is navigated to. Its purpose is to retrieve
         /// values from the <see cref="NavigationParameters" /> before invoking <see cref="LoadGameInfoAsync" /> to
@@ -175,7 +191,7 @@ namespace Sparky.TrakApp.ViewModel.Games
 
             LoadGameInfoCommand.Execute().Subscribe();
         }
-        
+
         /// <summary>
         /// Private method that is invoked by the <see cref="OptionsCommand"/>. When invoked, it will either navigate the user to the
         /// game options page or the add game page, depending on whether the currently selected game is already within the user collection
@@ -193,7 +209,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                     {"platform-id", PlatformId},
                     {"status", Status}
                 };
-                
+
                 await NavigationService.NavigateAsync("GameOptionsPage", parameters);
             }
             else
@@ -204,11 +220,11 @@ namespace Sparky.TrakApp.ViewModel.Games
                     {"platforms", _allPlatforms},
                     {"game-id", _gameId}
                 };
-                
+
                 await NavigationService.NavigateAsync("AddGamePage", parameters);
             }
         }
-        
+
         /// <summary>
         /// Private method that is invoked by the <see cref="LoadGameInfoCommand" /> when activated by the associated
         /// view. This method will attempt to retrieve the game information from the url provided by the
@@ -222,7 +238,7 @@ namespace Sparky.TrakApp.ViewModel.Games
             // We're going to make some requests, so we're busy and remove any current errors.
             IsError = false;
             HasLoaded = false;
-            
+
             // Get the auth token from the store.
             var token = await _storageService.GetAuthTokenAsync();
 
@@ -240,7 +256,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                     gameInfo.GetLink("publishers").OriginalString, token);
 
             Publishers = publishers.Embedded?.Data;
-            
+
             // Load the platform data from either the supplied platform uri or the platform data with the game info.
             await GetPlatformsAsync(gameInfo.GetLink("platforms"), token);
 
@@ -250,7 +266,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                     token);
 
             Genres = genres.Embedded?.Data;
-            
+
             // Grab the first genre and load some game information from it.
             var games = await _restService.GetAsync<HateoasPage<GameInfo>>(
                 genres.Embedded?.Data.First().GetLink("gameInfos").OriginalString, token);
@@ -259,7 +275,7 @@ namespace Sparky.TrakApp.ViewModel.Games
 
             HasLoaded = true;
         }
-        
+
         /// <summary>
         /// Private method that is invoked within the <see cref="LoadGameInfoAsync" /> method. Its purpose
         /// is to convert the provided <see cref="IEnumerable{T}" /> of <see cref="GameInfo" /> instances into

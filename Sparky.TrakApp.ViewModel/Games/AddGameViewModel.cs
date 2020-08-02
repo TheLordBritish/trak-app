@@ -7,6 +7,7 @@ using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using FluentValidation;
+using Microsoft.AppCenter.Crashes;
 using Plugin.FluentValidationRules;
 using Prism.Commands;
 using Prism.Navigation;
@@ -60,12 +61,24 @@ namespace Sparky.TrakApp.ViewModel.Games
             
             ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
             
-            AddGameCommand = ReactiveCommand.CreateFromTask(ExecuteAddGameAsync, outputScheduler: scheduler);
+            AddGameCommand = ReactiveCommand.CreateFromTask(AddGameAsync, outputScheduler: scheduler);
             // Report errors if an exception was thrown.
             AddGameCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+                if (ex is ApiException)
+                {
+                    ErrorMessage = Messages.ErrorMessageApiError;
+                }
+                else
+                {
+                    ErrorMessage = Messages.ErrorMessageGeneric;
+                    Crashes.TrackError(ex, new Dictionary<string, string>
+                    {
+                        {"Game ID", GameId.ToString()},
+                        {"Platform ID", SelectedPlatform.Value.Id.ToString()}
+                    });
+                }
             });
 
             this.WhenAnyObservable(x => x.AddGameCommand.IsExecuting)
@@ -121,7 +134,7 @@ namespace Sparky.TrakApp.ViewModel.Games
 
         /// <summary>
         /// Command that is invoked each the time the Add button is tapped by the user on the view.
-        /// When called, the command will propagate the request and call the <see cref="ExecuteAddGameAsync"/> method.
+        /// When called, the command will propagate the request and call the <see cref="AddGameAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> AddGameCommand { get; }
 
@@ -203,7 +216,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// displayed to the user through the ErrorMessage parameter and setting the IsError boolean to true.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteAddGameAsync()
+        private async Task AddGameAsync()
         {
             IsError = false;
 
@@ -217,7 +230,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         }
 
         /// <summary>
-        /// Private method that is invoked by the <see cref="ExecuteAddGameAsync"/> method. Its purpose is to call off to the
+        /// Private method that is invoked by the <see cref="AddGameAsync"/> method. Its purpose is to call off to the
         /// Trak API and either add the game to the users collection, or update it if the information provided already matches
         /// and existing entry.
         ///

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Acr.UserDialogs;
+using Microsoft.AppCenter.Crashes;
 using Prism.Commands;
 using Prism.Navigation;
 using Sparky.TrakApp.Common;
@@ -108,9 +110,9 @@ namespace Sparky.TrakApp.ViewModel.Games
                 HandleApiException(e);
                 IsBusy = false;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                HandleException();
+                HandleException(e);
                 IsBusy = false;
             }
         }
@@ -211,7 +213,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// The user will be presented with an error message telling them that an error has occurred, although there is no
         /// recommendation to retry.
         /// </summary>
-        private void HandleException()
+        private void HandleException(Exception e)
         {
             var alertConfig = new AlertConfig()
                 .SetTitle(Messages.TrakTitle)
@@ -221,6 +223,11 @@ namespace Sparky.TrakApp.ViewModel.Games
             {
                 await _userDialogs.AlertAsync(alertConfig);
                 IsAnalyzing = true;
+            });
+            
+            Crashes.TrackError(e, new Dictionary<string, string>
+            {
+                {"Barcode", Result.Text}
             });
         }
     }

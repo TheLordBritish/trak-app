@@ -4,6 +4,7 @@ using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using FluentValidation;
+using Microsoft.AppCenter.Crashes;
 using Plugin.FluentValidationRules;
 using Prism.Navigation;
 using ReactiveUI;
@@ -55,21 +56,37 @@ namespace Sparky.TrakApp.ViewModel.Login
 
             ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
 
-            VerifyCommand = ReactiveCommand.CreateFromTask(ExecuteVerifyAsync, outputScheduler: scheduler);
+            VerifyCommand = ReactiveCommand.CreateFromTask(VerifyAsync, outputScheduler: scheduler);
             // Report errors if an exception was thrown.
             VerifyCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+                if (ex is ApiException)
+                {
+                    ErrorMessage = Messages.ErrorMessageApiError;
+                }
+                else
+                {
+                    ErrorMessage = Messages.ErrorMessageGeneric;
+                    Crashes.TrackError(ex);
+                }
             });
 
             ResendVerificationCommand =
-                ReactiveCommand.CreateFromTask(ExecuteResendVerificationAsync, outputScheduler: scheduler);
+                ReactiveCommand.CreateFromTask(ResendVerificationAsync, outputScheduler: scheduler);
             // Report errors if an exception was thrown.
             ResendVerificationCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+                if (ex is ApiException)
+                {
+                    ErrorMessage = Messages.ErrorMessageApiError;
+                }
+                else
+                {
+                    ErrorMessage = Messages.ErrorMessageGeneric;
+                    Crashes.TrackError(ex);
+                }
             });
 
             this.WhenAnyObservable(x => x.VerifyCommand.IsExecuting)
@@ -96,13 +113,13 @@ namespace Sparky.TrakApp.ViewModel.Login
 
         /// <summary>
         /// Command that is invoked by the view when the verify button is tapped. When called, the command
-        /// will propagate the request and call the <see cref="ExecuteVerifyAsync"/> method.
+        /// will propagate the request and call the <see cref="VerifyAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> VerifyCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the resend verification email label is tapped. When called,
-        /// the command will propagate the request and calls the <see cref="ExecuteResendVerificationAsync"/> method.
+        /// the command will propagate the request and calls the <see cref="ResendVerificationAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> ResendVerificationCommand { get; }
 
@@ -153,7 +170,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// is done if the calls were successful but the verification code was incorrect.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteVerifyAsync()
+        private async Task VerifyAsync()
         {
             IsError = false;
 
@@ -167,7 +184,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         }
 
         /// <summary>
-        /// Private method that is invoked within the <see cref="ExecuteVerifyAsync"/> method. Its purpose
+        /// Private method that is invoked within the <see cref="VerifyAsync"/> method. Its purpose
         /// is to retrieve the needed credential data from the <see cref="IStorageService"/> and attempt
         /// to verify the user with the verification code supplied by the user via the view.
         ///
@@ -204,7 +221,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// ErrorMessage parameter and setting the IsError boolean to true.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ExecuteResendVerificationAsync()
+        private async Task ResendVerificationAsync()
         {
             IsError = false;
 

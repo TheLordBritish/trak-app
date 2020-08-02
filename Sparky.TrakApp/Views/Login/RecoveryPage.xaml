@@ -5,9 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:behaviors="http://prismlibrary.com"
     xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
-    xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp">
+    xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
+    xmlns:login="clr-namespace:Sparky.TrakApp.ViewModel.Login;assembly=Sparky.TrakApp.ViewModel">
     <ContentPage.Content>
-        <ScrollView Padding="35">
+        <ScrollView Padding="35" x:DataType="login:RecoveryViewModel">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
@@ -54,40 +55,31 @@
                     <!--  Page title  -->
                     <Label
                         Margin="0,20,0,15"
-                        Style="{StaticResource HeaderLabelStyle}"
+                        Style="{StaticResource TitleLabelStyle}"
                         Text="{extensions:Translate RecoveryPageTitle}" />
 
                     <!--  Username label and entry box.  -->
                     <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RecoveryPageUsername}" />
-                    <Frame
-                        Padding="0"
-                        BackgroundColor="{StaticResource TrakWhite}"
-                        CornerRadius="0"
-                        HasShadow="False">
-                        <Frame.Triggers>
+                    <controls:BorderedEntry
+                        AutomationId="RecoveryPageUsernameEntry"
+                        BorderColor="{StaticResource TrakWhite}"
+                        BorderThickness="1"
+                        Text="{Binding Username.Value}">
+                        <controls:BorderedEntry.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding ClearValidationCommand}"
+                                CommandParameter="Username"
+                                EventName="Focused" />
+                        </controls:BorderedEntry.Behaviors>
+                        <controls:BorderedEntry.Triggers>
                             <DataTrigger
                                 Binding="{Binding Username.IsValid}"
-                                TargetType="Frame"
+                                TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="Red" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
                             </DataTrigger>
-                        </Frame.Triggers>
-                        <Frame
-                            Margin="1"
-                            Padding="0"
-                            BackgroundColor="{StaticResource TrakPrimaryBlue}"
-                            CornerRadius="0"
-                            HasShadow="False">
-                            <controls:CustomEntry AutomationId="RecoveryPageUsernameEntry" Text="{Binding Username.Value}">
-                                <controls:CustomEntry.Behaviors>
-                                    <behaviors:EventToCommandBehavior
-                                        Command="{Binding ClearValidationCommand}"
-                                        CommandParameter="Username"
-                                        EventName="Focused" />
-                                </controls:CustomEntry.Behaviors>
-                            </controls:CustomEntry>
-                        </Frame>
-                    </Frame>
+                        </controls:BorderedEntry.Triggers>
+                    </controls:BorderedEntry>
                     <!--  Username validation errors  -->
                     <Label
                         IsEnabled="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
@@ -97,35 +89,26 @@
 
                     <!--  Recovery token label and entry box.  -->
                     <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RecoveryPageRecoveryToken}" />
-                    <Frame
-                        Padding="0"
-                        BackgroundColor="{StaticResource TrakWhite}"
-                        CornerRadius="0"
-                        HasShadow="False">
-                        <Frame.Triggers>
+                    <controls:BorderedEntry
+                        AutomationId="RecoveryPageRecoveryTokenEntry"
+                        BorderColor="{StaticResource TrakWhite}"
+                        BorderThickness="1"
+                        Text="{Binding RecoveryToken.Value}">
+                        <controls:BorderedEntry.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding ClearValidationCommand}"
+                                CommandParameter="RecoveryToken"
+                                EventName="Focused" />
+                        </controls:BorderedEntry.Behaviors>
+                        <controls:BorderedEntry.Triggers>
                             <DataTrigger
                                 Binding="{Binding RecoveryToken.IsValid}"
-                                TargetType="Frame"
+                                TargetType="controls:BorderedEntry"
                                 Value="False">
                                 <Setter Property="BackgroundColor" Value="Red" />
                             </DataTrigger>
-                        </Frame.Triggers>
-                        <Frame
-                            Margin="1"
-                            Padding="0"
-                            BackgroundColor="{StaticResource TrakPrimaryBlue}"
-                            CornerRadius="0"
-                            HasShadow="False">
-                            <controls:CustomEntry AutomationId="RecoveryPageRecoveryTokenEntry" Text="{Binding RecoveryToken.Value}">
-                                <controls:CustomEntry.Behaviors>
-                                    <behaviors:EventToCommandBehavior
-                                        Command="{Binding ClearValidationCommand}"
-                                        CommandParameter="RecoveryToken"
-                                        EventName="Focused" />
-                                </controls:CustomEntry.Behaviors>
-                            </controls:CustomEntry>
-                        </Frame>
-                    </Frame>
+                        </controls:BorderedEntry.Triggers>
+                    </controls:BorderedEntry>
                     <!--  Recovery token validation errors  -->
                     <Label
                         IsEnabled="{Binding RecoveryToken.IsValid, Converter={StaticResource NegateBooleanConverter}}"
@@ -135,38 +118,27 @@
 
                     <!--  Password label and entry box.  -->
                     <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RecoveryPagePassword}" />
-                    <Frame
-                        Padding="0"
-                        BackgroundColor="{StaticResource TrakWhite}"
-                        CornerRadius="0"
-                        HasShadow="False">
-                        <Frame.Triggers>
+                    <controls:BorderedEntry
+                        AutomationId="RecoveryPagePasswordEntry"
+                        BorderColor="{StaticResource TrakWhite}"
+                        BorderThickness="1"
+                        IsPassword="True"
+                        Text="{Binding Password.Value}">
+                        <controls:BorderedEntry.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding ClearValidationCommand}"
+                                CommandParameter="Password"
+                                EventName="Focused" />
+                        </controls:BorderedEntry.Behaviors>
+                        <controls:BorderedEntry.Triggers>
                             <DataTrigger
                                 Binding="{Binding Password.IsValid}"
-                                TargetType="Frame"
+                                TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="Red" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
                             </DataTrigger>
-                        </Frame.Triggers>
-                        <Frame
-                            Margin="1"
-                            Padding="0"
-                            BackgroundColor="{StaticResource TrakPrimaryBlue}"
-                            CornerRadius="0"
-                            HasShadow="False">
-                            <controls:CustomEntry
-                                AutomationId="RecoveryPagePasswordEntry"
-                                IsPassword="True"
-                                Text="{Binding Password.Value}">
-                                <controls:CustomEntry.Behaviors>
-                                    <behaviors:EventToCommandBehavior
-                                        Command="{Binding ClearValidationCommand}"
-                                        CommandParameter="Password"
-                                        EventName="Focused" />
-                                </controls:CustomEntry.Behaviors>
-                            </controls:CustomEntry>
-                        </Frame>
-                    </Frame>
+                        </controls:BorderedEntry.Triggers>
+                    </controls:BorderedEntry>
                     <!--  Password validation errors  -->
                     <Label
                         IsEnabled="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
@@ -185,38 +157,27 @@
 
                     <!--  Confirm password label and entry box.  -->
                     <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RecoveryPageConfirmPassword}" />
-                    <Frame
-                        Padding="0"
-                        BackgroundColor="{StaticResource TrakWhite}"
-                        CornerRadius="0"
-                        HasShadow="False">
-                        <Frame.Triggers>
+                    <controls:BorderedEntry
+                        AutomationId="RecoveryPageConfirmPasswordEntry"
+                        BorderColor="{StaticResource TrakWhite}"
+                        BorderThickness="1"
+                        IsPassword="True"
+                        Text="{Binding ConfirmPassword.Value}">
+                        <controls:BorderedEntry.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding ClearValidationCommand}"
+                                CommandParameter="ConfirmPassword"
+                                EventName="Focused" />
+                        </controls:BorderedEntry.Behaviors>
+                        <controls:BorderedEntry.Triggers>
                             <DataTrigger
                                 Binding="{Binding ConfirmPassword.IsValid}"
-                                TargetType="Frame"
+                                TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="Red" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
                             </DataTrigger>
-                        </Frame.Triggers>
-                        <Frame
-                            Margin="1"
-                            Padding="0"
-                            BackgroundColor="{StaticResource TrakPrimaryBlue}"
-                            CornerRadius="0"
-                            HasShadow="False">
-                            <controls:CustomEntry
-                                AutomationId="RecoveryPageConfirmPasswordEntry"
-                                IsPassword="True"
-                                Text="{Binding ConfirmPassword.Value}">
-                                <controls:CustomEntry.Behaviors>
-                                    <behaviors:EventToCommandBehavior
-                                        Command="{Binding ClearValidationCommand}"
-                                        CommandParameter="ConfirmPassword"
-                                        EventName="Focused" />
-                                </controls:CustomEntry.Behaviors>
-                            </controls:CustomEntry>
-                        </Frame>
-                    </Frame>
+                        </controls:BorderedEntry.Triggers>
+                    </controls:BorderedEntry>
                     <!--  Confirm password validation errors  -->
                     <Label
                         IsEnabled="{Binding ConfirmPassword.IsValid, Converter={StaticResource NegateBooleanConverter}}"
@@ -238,13 +199,13 @@
                         Margin="0,20,0,0"
                         AutomationId="RecoveryPageRecoverButton"
                         Command="{Binding RecoverCommand}"
-                        IsVisible="{Binding IsBusy, Converter={StaticResource NegateBooleanConverter}}"
+                        IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
                         Style="{StaticResource PrimaryButtonStyle}"
                         Text="{extensions:Translate RecoveryPageRecover}" />
                     <ActivityIndicator
                         Margin="0,20,0,0"
-                        IsRunning="{Binding IsBusy}"
-                        IsVisible="{Binding IsBusy}" />
+                        IsRunning="{Binding IsLoading}"
+                        IsVisible="{Binding IsLoading}" />
 
                     <!--  Privacy policy and terms of use label.  -->
                     <Label

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Sparky.TrakApp.Model.Games
 {
+    [ExcludeFromCodeCoverage]
     public class GameRequest
     {
         public long Id { get; set; }

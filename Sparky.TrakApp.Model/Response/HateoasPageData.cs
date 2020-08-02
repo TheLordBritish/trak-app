@@ -1,5 +1,8 @@
-﻿namespace Sparky.TrakApp.Model.Response
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Sparky.TrakApp.Model.Response
 {
+    [ExcludeFromCodeCoverage]
     public class HateoasPageData
     {
         public int Size { get; set; }

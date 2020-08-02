@@ -4,4 +4,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    
+    <color name="trakWhite">#FFFFFF</color>
+    <color name="trakPrimaryPurple">#CC00F7</color>
+    <color name="trakPrimaryBlue">#020E2F</color>
 </resources>

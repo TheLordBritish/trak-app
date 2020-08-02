@@ -37,6 +37,16 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
         }
 
         [Test]
+        public void ClearValidationCommand_WithNoData_DoesntThrowException()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                _gameRequestViewModel.ClearValidationCommand.Execute().Subscribe();
+                _scheduler.Start();
+            });    
+        }
+        
+        [Test]
         public void RequestCommand_WithInvalidTitle_doesntCallRestService()
         {
             // Arrange

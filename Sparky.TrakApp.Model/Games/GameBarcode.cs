@@ -1,9 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Sparky.TrakApp.Model.Response;
 
 namespace Sparky.TrakApp.Model.Games
 {
+    [ExcludeFromCodeCoverage]
     public class GameBarcode : HateoasResource
     {
         public long Id { get; set; }

@@ -1,14 +1,17 @@
 ﻿using System;
+using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Acr.UserDialogs;
 using FluentValidation;
 using Plugin.FluentValidationRules;
-using Prism.Commands;
 using Prism.Navigation;
-using Sparky.TrakApp.Model.Login;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
+using Sparky.TrakApp.Model.Login.Validation;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
+using Sparky.TrakApp.ViewModel.Common;
 using Sparky.TrakApp.ViewModel.Resources;
 using Sparky.TrakApp.ViewModel.Validation;
 
@@ -21,7 +24,7 @@ namespace Sparky.TrakApp.ViewModel.Login
     /// The <see cref="VerificationViewModel"/> also provides methods to validate fields on the verification page view. Any
     /// validation errors or generic errors are stored within the view model for use on the view.
     /// </summary>
-    public class VerificationViewModel : BaseViewModel, IValidate<VerificationDetails>
+    public class VerificationViewModel : ReactiveViewModel, IValidate<VerificationDetails>
     {
         private readonly IAuthService _authService;
         private readonly IStorageService _storageService;
@@ -30,28 +33,58 @@ namespace Sparky.TrakApp.ViewModel.Login
         private IValidator _validator;
         private Validatables _validatables;
 
-        private Validatable<string> _verificationCode;
-
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
         /// should be handled by the framework.
         /// </summary>
+        /// <param name="scheduler">The <see cref="IScheduler"/> instance to inject.</param>
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="authService">The <see cref="IAuthService"/> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
         /// <param name="userDialogs">The <see cref="IUserDialogs"/> instance to inject.</param>
-        public VerificationViewModel(INavigationService navigationService, IAuthService authService,
-            IStorageService storageService, IUserDialogs userDialogs) : base(navigationService)
+        public VerificationViewModel(IScheduler scheduler, INavigationService navigationService,
+            IAuthService authService,
+            IStorageService storageService, IUserDialogs userDialogs) : base(scheduler, navigationService)
         {
             _authService = authService;
             _storageService = storageService;
             _userDialogs = userDialogs;
 
-            _verificationCode = new Validatable<string>(nameof(VerificationDetails.VerificationCode));
-
             SetupForValidation();
+
+            ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
+
+            VerifyCommand = ReactiveCommand.CreateFromTask(ExecuteVerifyAsync, outputScheduler: scheduler);
+            // Report errors if an exception was thrown.
+            VerifyCommand.ThrownExceptions.Subscribe(ex =>
+            {
+                IsError = true;
+                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+            });
+
+            ResendVerificationCommand =
+                ReactiveCommand.CreateFromTask(ExecuteResendVerificationAsync, outputScheduler: scheduler);
+            // Report errors if an exception was thrown.
+            ResendVerificationCommand.ThrownExceptions.Subscribe(ex =>
+            {
+                IsError = true;
+                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+            });
+
+            this.WhenAnyObservable(x => x.VerifyCommand.IsExecuting)
+                .ToPropertyEx(this, x => x.IsLoading);
+
+            this.WhenAnyObservable(x => x.ResendVerificationCommand.IsExecuting)
+                .ToPropertyEx(this, x => x.IsLoading);
         }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}"/> that contains the currently populated verification code with
+        /// additional validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<string> VerificationCode { get; private set; }
 
         /// <summary>
         /// Command that is invoked each time that the validatable field on the view is changed, which
@@ -59,29 +92,19 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// the name is passed through and the request propagated to the <see cref="ClearValidation"/>
         /// methods.
         /// </summary>
-        public ICommand ClearValidationCommand => new DelegateCommand<string>(ClearValidation);
+        public ReactiveCommand<string, Unit> ClearValidationCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the verify button is tapped. When called, the command
-        /// will propagate the request and call the <see cref="VerifyAsync"/> method.
+        /// will propagate the request and call the <see cref="ExecuteVerifyAsync"/> method.
         /// </summary>
-        public ICommand VerifyCommand => new DelegateCommand(async () => await VerifyAsync());
+        public ReactiveCommand<Unit, Unit> VerifyCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the resend verification email label is tapped. When called,
-        /// the command will propagate the request and calle the <see cref="ResendVerificationAsync"/> method.
+        /// the command will propagate the request and calls the <see cref="ExecuteResendVerificationAsync"/> method.
         /// </summary>
-        public ICommand ResendVerificationCommand => new DelegateCommand(async () => await ResendVerificationAsync());
-
-        /// <summary>
-        /// A <see cref="Validatable{T}"/> that contains the currently populated verification code with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> VerificationCode
-        {
-            get => _verificationCode;
-            set => SetProperty(ref _verificationCode, value);
-        }
+        public ReactiveCommand<Unit, Unit> ResendVerificationCommand { get; }
 
         /// <summary>
         /// Invoked within the constructor of the <see cref="VerificationViewModel"/>, its' responsibility is to
@@ -90,6 +113,8 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// </summary>
         public void SetupForValidation()
         {
+            VerificationCode = new Validatable<string>(nameof(VerificationDetails.VerificationCode));
+
             _validator = new VerificationDetailsValidator();
             _validatables = new Validatables(VerificationCode);
         }
@@ -128,82 +153,21 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// is done if the calls were successful but the verification code was incorrect.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task VerifyAsync()
+        private async Task ExecuteVerifyAsync()
         {
             IsError = false;
-            IsBusy = true;
 
             var registration = _validatables.Populate<VerificationDetails>();
             var validationResult = Validate(registration);
 
-            try
+            if (validationResult.IsValidOverall)
             {
-                if (validationResult.IsValidOverall)
-                {
-                    await AttemptVerificationAsync(VerificationCode.Value);
-                }
-            }
-            catch (ApiException)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageApiError;
-            }
-            catch (Exception)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageGeneric;
-            }
-            finally
-            {
-                IsBusy = false;
+                await AttemptVerificationAsync(VerificationCode.Value);
             }
         }
 
         /// <summary>
-        /// Private method that is invoked by the <see cref="ResendVerificationCommand"/> when activated by the associated
-        /// view. This method will call off to the server to resend an additional verification email to the logged in
-        /// user, clearing all previous verification data. Once the email has been sent, the user is presented with a
-        /// dialog box prompting them to check their emails.
-        ///
-        /// If any errors occur during resending, the exceptions are caught and the errors are displayed to the user through the
-        /// ErrorMessage parameter and setting the IsError boolean to true.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task ResendVerificationAsync()
-        {
-            IsError = false;
-            IsBusy = true;
-
-            try
-            {
-                // Retrieve the needed credentials from the store.
-                var username = await _storageService.GetUsernameAsync();
-                var authToken = await _storageService.GetAuthTokenAsync();
-
-                // Send the re-verification request.
-                await _authService.ReVerifyAsync(username, authToken);
-
-                // On successful request, display a popup to the user stating that the email has been sent.
-                await _userDialogs.AlertAsync(Messages.VerificationPageConfirmation, Messages.TrakTitle);
-            }
-            catch (ApiException)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageApiError;
-            }
-            catch (Exception)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageGeneric;
-            }
-            finally
-            {
-                IsBusy = false;
-            }
-        }
-
-        /// <summary>
-        /// Private method that is invoked within the <see cref="VerifyAsync"/> method. Its purpose
+        /// Private method that is invoked within the <see cref="ExecuteVerifyAsync"/> method. Its purpose
         /// is to retrieve the needed credential data from the <see cref="IStorageService"/> and attempt
         /// to verify the user with the verification code supplied by the user via the view.
         ///
@@ -228,6 +192,31 @@ namespace Sparky.TrakApp.ViewModel.Login
             {
                 await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");
             }
+        }
+
+        /// <summary>
+        /// Private method that is invoked by the <see cref="ResendVerificationCommand"/> when activated by the associated
+        /// view. This method will call off to the server to resend an additional verification email to the logged in
+        /// user, clearing all previous verification data. Once the email has been sent, the user is presented with a
+        /// dialog box prompting them to check their emails.
+        ///
+        /// If any errors occur during resending, the exceptions are caught and the errors are displayed to the user through the
+        /// ErrorMessage parameter and setting the IsError boolean to true.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
+        private async Task ExecuteResendVerificationAsync()
+        {
+            IsError = false;
+
+            // Retrieve the needed credentials from the store.
+            var username = await _storageService.GetUsernameAsync();
+            var authToken = await _storageService.GetAuthTokenAsync();
+
+            // Send the re-verification request.
+            await _authService.ReVerifyAsync(username, authToken);
+
+            // On successful request, display a popup to the user stating that the email has been sent.
+            await _userDialogs.AlertAsync(Messages.VerificationPageConfirmation, Messages.TrakTitle);
         }
     }
 }

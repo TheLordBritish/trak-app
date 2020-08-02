@@ -1,5 +1,7 @@
-﻿using NUnit.Framework;
-using Sparky.TrakApp.Model.Login;
+﻿using System.Linq;
+using NUnit.Framework;
+using Sparky.TrakApp.Model.Login.Validation;
+using Sparky.TrakApp.ViewModel.Resources;
 using Sparky.TrakApp.ViewModel.Validation;
 
 namespace Sparky.TrakApp.ViewModel.Test.Validation
@@ -16,6 +18,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Validation
             var result = validator.Validate(new VerificationDetails());
 
             // Assert
+            Assert.AreEqual(Messages.VerificationErrorMessageVerificationCodeEmpty,
+                result.Errors.First().ErrorMessage);
             Assert.IsFalse(result.IsValid, "result.IsValid should be false for a null verification code.");
         }
 
@@ -29,6 +33,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Validation
             var result = validator.Validate(new VerificationDetails {VerificationCode = string.Empty});
 
             // Assert
+            Assert.AreEqual(Messages.VerificationErrorMessageVerificationCodeEmpty,
+                result.Errors.First().ErrorMessage);
             Assert.IsFalse(result.IsValid, "result.IsValid should be false for an empty verification code.");
         }
 
@@ -42,6 +48,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Validation
             var result = validator.Validate(new VerificationDetails {VerificationCode = "11111 "});
 
             // Assert
+            Assert.AreEqual(Messages.VerificationErrorMessageVerificationCodeWhitespace,
+                result.Errors.First().ErrorMessage);
             Assert.IsFalse(result.IsValid,
                 "result.IsValid should be false for an verification code containing white space.");
         }
@@ -56,6 +64,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Validation
             var result = validator.Validate(new VerificationDetails {VerificationCode = "111111"});
 
             // Assert
+            Assert.AreEqual(Messages.VerificationErrorMessageVerificationCodeLength,
+                result.Errors.First().ErrorMessage);
             Assert.IsFalse(result.IsValid,
                 "result.IsValid should be false for an verification code containing more than five characters.");
         }
@@ -70,6 +80,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Validation
             var result = validator.Validate(new VerificationDetails {VerificationCode = "11_$%"});
 
             // Assert
+            Assert.AreEqual(Messages.VerificationErrorMessageVerificationCodeInvalidCharacters,
+                result.Errors.First().ErrorMessage);
             Assert.IsFalse(result.IsValid,
                 "result.IsValid should be false for an verification code containing non alphanumeric characters.");
         }

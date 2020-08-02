@@ -42,7 +42,7 @@ namespace Sparky.TrakApp
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterPopupNavigationService();
+            containerRegistry.RegisterPopupNavigationService<TransitionPopupPageNavigationService>();
 
             // Services
             ServiceRegistry.RegisterTypes(containerRegistry);

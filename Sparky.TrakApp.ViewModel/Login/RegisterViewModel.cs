@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Reactive;
+using System.Reactive.Concurrency;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using FluentValidation;
 using Plugin.FluentValidationRules;
-using Prism.Commands;
 using Prism.Navigation;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 using Sparky.TrakApp.Model.Login;
+using Sparky.TrakApp.Model.Login.Validation;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;
+using Sparky.TrakApp.ViewModel.Common;
 using Sparky.TrakApp.ViewModel.Resources;
 using Sparky.TrakApp.ViewModel.Validation;
 
@@ -20,7 +24,7 @@ namespace Sparky.TrakApp.ViewModel.Login
     /// The <see cref="RegisterViewModel"/> also provides methods to validate fields on the register page view. Any
     /// validation errors or generic errors are stored within the view model for use on the view.
     /// </summary>
-    public class RegisterViewModel : BaseViewModel, IValidate<RegistrationDetails>
+    public class RegisterViewModel : ReactiveViewModel, IValidate<RegistrationDetails>
     {
         private readonly IAuthService _authService;
         private readonly IStorageService _storageService;
@@ -29,34 +33,68 @@ namespace Sparky.TrakApp.ViewModel.Login
         private IValidator _validator;
         private Validatables _validatables;
 
-        private Validatable<string> _username;
-        private Validatable<string> _emailAddress;
-        private Validatable<string> _password;
-        private Validatable<string> _confirmPassword;
-
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
         /// should be handled by the framework.
         /// </summary>
+        /// <param name="scheduler">The <see cref="IScheduler"/> instance to inject.</param>
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="authService">The <see cref="IAuthService"/> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
-        public RegisterViewModel(INavigationService navigationService, IAuthService authService,
-            IStorageService storageService, IRestService restService) : base(navigationService)
+        public RegisterViewModel(IScheduler scheduler, INavigationService navigationService, IAuthService authService,
+            IStorageService storageService, IRestService restService) : base(scheduler, navigationService)
         {
             _authService = authService;
             _storageService = storageService;
             _restService = restService;
-            
-            Username = new Validatable<string>(nameof(RegistrationDetails.Username));
-            EmailAddress = new Validatable<string>(nameof(RegistrationDetails.EmailAddress));
-            Password = new Validatable<string>(nameof(RegistrationDetails.Password));
-            ConfirmPassword = new Validatable<string>(nameof(RegistrationDetails.ConfirmPassword));
 
             SetupForValidation();
+
+            ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
+
+            RegisterCommand = ReactiveCommand.CreateFromTask(ExecuteRegisterAsync, outputScheduler: scheduler);
+            // Report errors if an exception was thrown.
+            RegisterCommand.ThrownExceptions.Subscribe(ex =>
+            {
+                IsError = true;
+                ErrorMessage = ex is ApiException ? Messages.ErrorMessageApiError : Messages.ErrorMessageGeneric;
+            });
+
+            LoginCommand = ReactiveCommand.CreateFromTask(ExecuteLoginAsync, outputScheduler: scheduler);
+
+            this.WhenAnyObservable(x => x.RegisterCommand.IsExecuting)
+                .ToPropertyEx(this, x => x.IsLoading);
         }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}"/> that contains the currently populated username with
+        /// additional validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<string> Username { get; private set; }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}"/> that contains the currently populated email address with
+        /// additional validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<string> EmailAddress { get; private set; }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}"/> that contains the currently populated password with
+        /// additional validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<string> Password { get; private set; }
+
+        /// <summary>
+        /// A <see cref="Validatable{T}"/> that contains the currently populated password confirmation with
+        /// additional validation information.
+        /// </summary>
+        [Reactive]
+        public Validatable<string> ConfirmPassword { get; private set; }
 
         /// <summary>
         /// Command that is invoked each time that a validatable field on the view is changed, which
@@ -64,59 +102,19 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// password code. When the view is changed, the name is passed through and the request propagated
         /// to the <see cref="ClearValidation"/> method.
         /// </summary>
-        public ICommand ClearValidationCommand => new DelegateCommand<string>(ClearValidation);
+        public ReactiveCommand<string, Unit> ClearValidationCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the register button is tapped. When called, the command
-        /// will propagate the request and call the <see cref="RegisterAsync"/> method.
+        /// will propagate the request and call the <see cref="ExecuteRegisterAsync"/> method.
         /// </summary>
-        public ICommand RegisterCommand => new DelegateCommand(async () => await RegisterAsync());
+        public ReactiveCommand<Unit, Unit> RegisterCommand { get; }
 
         /// <summary>
         /// Command that is invoked by the view when the log in label is tapped. When called, the command
-        /// will propagate the request and call the <see cref="LoginAsync"/> method.
+        /// will propagate the request and call the <see cref="ExecuteLoginAsync"/> method.
         /// </summary>
-        public ICommand LoginCommand => new DelegateCommand(async () => await LoginAsync());
-
-        /// <summary>
-        /// A <see cref="Validatable{T}"/> that contains the currently populated username with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> Username
-        {
-            get => _username;
-            set => SetProperty(ref _username, value);
-        }
-
-        /// <summary>
-        /// A <see cref="Validatable{T}"/> that contains the currently populated email address with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> EmailAddress
-        {
-            get => _emailAddress;
-            set => SetProperty(ref _emailAddress, value);
-        }
-
-        /// <summary>
-        /// A <see cref="Validatable{T}"/> that contains the currently populated password with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> Password
-        {
-            get => _password;
-            set => SetProperty(ref _password, value);
-        }
-
-        /// <summary>
-        /// A <see cref="Validatable{T}"/> that contains the currently populated password confirmation with
-        /// additional validation information.
-        /// </summary>
-        public Validatable<string> ConfirmPassword
-        {
-            get => _confirmPassword;
-            set => SetProperty(ref _confirmPassword, value);
-        }
+        public ReactiveCommand<Unit, Unit> LoginCommand { get; }
 
         /// <summary>
         /// Invoked within the constructor of the <see cref="RegisterViewModel"/>, its' responsibility is to
@@ -125,6 +123,11 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// </summary>
         public void SetupForValidation()
         {
+            Username = new Validatable<string>(nameof(RegistrationDetails.Username));
+            EmailAddress = new Validatable<string>(nameof(RegistrationDetails.EmailAddress));
+            Password = new Validatable<string>(nameof(RegistrationDetails.Password));
+            ConfirmPassword = new Validatable<string>(nameof(RegistrationDetails.ConfirmPassword));
+
             _validator = new RegistrationDetailsValidator();
             _validatables = new Validatables(Username, EmailAddress, Password, ConfirmPassword);
         }
@@ -165,39 +168,21 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// being registered with the supplied details.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task RegisterAsync()
+        private async Task ExecuteRegisterAsync()
         {
             IsError = false;
-            IsBusy = true;
 
             var registration = _validatables.Populate<RegistrationDetails>();
             var validationResult = Validate(registration);
 
-            try
+            if (validationResult.IsValidOverall)
             {
-                if (validationResult.IsValidOverall)
-                {
-                    await AttemptRegistrationAsync(Username.Value, EmailAddress.Value, Password.Value);
-                }
-            }
-            catch (ApiException)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageApiError;
-            }
-            catch (Exception)
-            {
-                IsError = true;
-                ErrorMessage = Messages.ErrorMessageGeneric;
-            }
-            finally
-            {
-                IsBusy = false;
+                await AttemptRegistrationAsync(Username.Value, EmailAddress.Value, Password.Value);
             }
         }
 
         /// <summary>
-        /// Private method that is invoked within the <see cref="RegisterAsync"/> method. Its purpose
+        /// Private method that is invoked within the <see cref="ExecuteRegisterAsync"/> method. Its purpose
         /// is to attempt to register a new user with the supplied information by calling off to an external
         /// service, before storing some small amount of information for later use. 
         ///
@@ -249,7 +234,7 @@ namespace Sparky.TrakApp.ViewModel.Login
                         DeviceGuid = (await _storageService.GetDeviceIdAsync()).ToString(),
                         Token = await _storageService.GetNotificationTokenAsync()
                     }, token);
-                
+
                 // Navigate to the verification page for the user to verify their account before use.
                 await NavigationService.NavigateAsync("VerificationPage");
             }
@@ -260,7 +245,7 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// navigate back to the login page.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task LoginAsync()
+        private async Task ExecuteLoginAsync()
         {
             await NavigationService.GoBackAsync();
         }

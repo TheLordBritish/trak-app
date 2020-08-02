@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Net;
+using System.Reactive;
+using System.Reactive.Linq;
+using Microsoft.Reactive.Testing;
 using Moq;
 using NUnit.Framework;
 using Prism.Navigation;
@@ -18,9 +21,10 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         private Mock<IStorageService> _storageService;
         private Mock<INavigationService> _navigationService;
         private Mock<IRestService> _restService;
+        private TestScheduler _scheduler;
 
         private RecoveryViewModel _recoveryViewModel;
-        
+
         [SetUp]
         public void SetUp()
         {
@@ -28,8 +32,20 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _storageService = new Mock<IStorageService>();
             _navigationService = new Mock<INavigationService>();
             _restService = new Mock<IRestService>();
-            
-            _recoveryViewModel = new RecoveryViewModel(_navigationService.Object, _authService.Object, _storageService.Object, _restService.Object);
+            _scheduler = new TestScheduler();
+
+            _recoveryViewModel = new RecoveryViewModel(_scheduler, _navigationService.Object, _authService.Object,
+                _storageService.Object, _restService.Object);
+        }
+
+        [Test]
+        public void ClearValidationCommand_WithNoData_DoesntThrowException()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                _recoveryViewModel.ClearValidationCommand.Execute().Subscribe();
+                _scheduler.Start();
+            });    
         }
         
         [Test]
@@ -39,14 +55,15 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _recoveryViewModel.RecoveryToken.Value = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             _recoveryViewModel.Password.Value = "Password123";
             _recoveryViewModel.ConfirmPassword.Value = "Password123";
-            
+
             // Act
-            _recoveryViewModel.RecoverCommand.Execute(null);
-            
+            _recoveryViewModel.RecoverCommand.Execute().Subscribe();
+            _scheduler.Start();
+
             // Assert
             _authService.Verify(a => a.RecoverAsync(It.IsAny<RecoveryRequest>()), Times.Never);
         }
-        
+
         [Test]
         public void RecoverCommand_WithInvalidRecoveryToken_doesntCallRecoverAsync()
         {
@@ -54,14 +71,15 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _recoveryViewModel.Username.Value = "TestUsername";
             _recoveryViewModel.Password.Value = "Password123";
             _recoveryViewModel.ConfirmPassword.Value = "Password123";
-            
+
             // Act
-            _recoveryViewModel.RecoverCommand.Execute(null);
-            
+            _recoveryViewModel.RecoverCommand.Execute().Subscribe();
+            _scheduler.Start();
+
             // Assert
             _authService.Verify(a => a.RecoverAsync(It.IsAny<RecoveryRequest>()), Times.Never);
         }
-        
+
         [Test]
         public void RecoverCommand_WithInvalidPassword_doesntCallRecoverAsync()
         {
@@ -69,30 +87,32 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _recoveryViewModel.Username.Value = "TestUsername";
             _recoveryViewModel.RecoveryToken.Value = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             _recoveryViewModel.ConfirmPassword.Value = "Password123";
-            
+
             // Act
-            _recoveryViewModel.RecoverCommand.Execute(null);
-            
+            _recoveryViewModel.RecoverCommand.Execute().Subscribe();
+            _scheduler.Start();
+
             // Assert
             _authService.Verify(a => a.RecoverAsync(It.IsAny<RecoveryRequest>()), Times.Never);
         }
-        
+
         [Test]
-        public void RecoverCommand_WithInvaliConfirmPassword_doesntCallRecoverAsync()
+        public void RecoverCommand_WithInvalidConfirmPassword_doesntCallRecoverAsync()
         {
             // Arrange
             _recoveryViewModel.Username.Value = "TestUsername";
             _recoveryViewModel.RecoveryToken.Value = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             _recoveryViewModel.Password.Value = "Password123";
             _recoveryViewModel.ConfirmPassword.Value = "Password1234";
-            
+
             // Act
-            _recoveryViewModel.RecoverCommand.Execute(null);
-            
+            _recoveryViewModel.RecoverCommand.Execute().Subscribe();
+            _scheduler.Start();
+
             // Assert
             _authService.Verify(a => a.RecoverAsync(It.IsAny<RecoveryRequest>()), Times.Never);
         }
-        
+
         [Test]
         public void RecoverCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {
@@ -101,19 +121,20 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _recoveryViewModel.RecoveryToken.Value = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             _recoveryViewModel.Password.Value = "Password123";
             _recoveryViewModel.ConfirmPassword.Value = "Password123";
-            
+
             _authService.Setup(mock => mock.RecoverAsync(It.IsAny<RecoveryRequest>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.Unauthorized});
 
             // Act
-            _recoveryViewModel.RecoverCommand.Execute(null);
+            _recoveryViewModel.RecoverCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsTrue(_recoveryViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
             Assert.AreEqual(Messages.ErrorMessageApiError, _recoveryViewModel.ErrorMessage,
                 "The error message is incorrect.");
         }
-        
+
         [Test]
         public void RecoverCommand_ThrowsNonApiException_SetsErrorMessageAsGeneric()
         {
@@ -122,19 +143,20 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _recoveryViewModel.RecoveryToken.Value = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             _recoveryViewModel.Password.Value = "Password123";
             _recoveryViewModel.ConfirmPassword.Value = "Password123";
-            
+
             _authService.Setup(mock => mock.RecoverAsync(It.IsAny<RecoveryRequest>()))
                 .Throws(new Exception());
 
             // Act
-            _recoveryViewModel.RecoverCommand.Execute(null);
+            _recoveryViewModel.RecoverCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsTrue(_recoveryViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
             Assert.AreEqual(Messages.ErrorMessageGeneric, _recoveryViewModel.ErrorMessage,
                 "The error message is incorrect.");
         }
-        
+
         [Test]
         public void RecoverCommand_WithErroneousUserResponse_SetsErrorMessage()
         {
@@ -146,17 +168,18 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
 
             _authService.Setup(mock => mock.RecoverAsync(It.IsAny<RecoveryRequest>()))
                 .ReturnsAsync(new CheckedResponse<UserResponse> {Error = true, ErrorMessage = "error"});
-            
+
             // Act
-            _recoveryViewModel.RecoverCommand.Execute(null);
+            _recoveryViewModel.RecoverCommand.Execute().Subscribe();
+            _scheduler.Start();
 
             // Assert
             Assert.IsTrue(_recoveryViewModel.IsError, "vm.IsError should be true if the user response has an error.");
             Assert.AreEqual("error", _recoveryViewModel.ErrorMessage, "The error message is incorrect.");
-            
+
             _authService.Verify(s => s.GetTokenAsync(It.IsAny<UserCredentials>()), Times.Never);
         }
-        
+
         [Test]
         public void RecoverCommand_WithValidUserResponse_SavesCredentialsAndNavigatesToHomePage()
         {
@@ -165,17 +188,20 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _recoveryViewModel.RecoveryToken.Value = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
             _recoveryViewModel.Password.Value = "Password123";
             _recoveryViewModel.ConfirmPassword.Value = "Password123";
-            
+
             _authService.Setup(mock => mock.RecoverAsync(It.IsAny<RecoveryRequest>()))
-                .ReturnsAsync(new CheckedResponse<UserResponse> {Data = new UserResponse
+                .ReturnsAsync(new CheckedResponse<UserResponse>
                 {
-                    Id = 5L,
-                    Username = "Username"
-                }});
+                    Data = new UserResponse
+                    {
+                        Id = 5L,
+                        Username = "Username"
+                    }
+                });
 
             _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<UserCredentials>()))
                 .ReturnsAsync("token");
-            
+
             _storageService.Setup(mock => mock.SetAuthTokenAsync(It.IsAny<string>()))
                 .Verifiable();
             _storageService.Setup(mock => mock.SetUserIdAsync(It.IsAny<long>()))
@@ -184,25 +210,28 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .Verifiable();
             _storageService.Setup(mock => mock.SetPasswordAsync(It.IsAny<string>()))
                 .Verifiable();
-            
-            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<NotificationRegistrationRequest>(), It.IsAny<string>()))
+
+            _restService.Setup(mock =>
+                    mock.PostAsync(It.IsAny<string>(), It.IsAny<NotificationRegistrationRequest>(), It.IsAny<string>()))
                 .Verifiable();
-            
+
             _navigationService.Setup(mock => mock.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage"))
                 .ReturnsAsync(new Mock<INavigationResult>().Object);
-            
+
             // Act
-            _recoveryViewModel.RecoverCommand.Execute(null);
-            
+            _recoveryViewModel.RecoverCommand.Execute().Subscribe();
+            _scheduler.Start();
+
             // Assert
             Assert.IsFalse(_recoveryViewModel.IsError,
                 "vm.IsError should be false if recovery was successful.");
 
             _storageService.Verify();
             _restService.Verify();
-            _navigationService.Verify(s => s.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage"), Times.Once);
+            _navigationService.Verify(s => s.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage"),
+                Times.Once);
         }
-        
+
         [Test]
         public void LoginCommand_WithNoData_NavigatesToLoginPage()
         {
@@ -211,8 +240,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .ReturnsAsync(new Mock<INavigationResult>().Object);
 
             // Act
-            _recoveryViewModel.LoginCommand.Execute(null);
-            
+            _recoveryViewModel.LoginCommand.Execute().Subscribe();
+            _scheduler.Start();
+
             // Assert
             _navigationService.Verify(n => n.NavigateAsync("LoginPage"), Times.Once);
         }

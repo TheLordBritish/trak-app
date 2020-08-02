@@ -79,6 +79,33 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string AddGamePageAdd {
+            get {
+                return ResourceManager.GetString("AddGamePageAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Platform.
+        /// </summary>
+        public static string AddGamePagePlatform {
+            get {
+                return ResourceManager.GetString("AddGamePagePlatform", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string AddGamePageStatus {
+            get {
+                return ResourceManager.GetString("AddGamePageStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Backlog.
         /// </summary>
         public static string Backlog {
@@ -286,6 +313,15 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Barcode.
+        /// </summary>
+        public static string GameBarcodeScannerPageTitle {
+            get {
+                return ResourceManager.GetString("GameBarcodeScannerPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t find what you&apos;re looking for?.
         /// </summary>
         public static string GameLibraryListPageCantFindGame {
@@ -331,6 +367,51 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Library.
+        /// </summary>
+        public static string GameLibraryListPageTitle {
+            get {
+                return ResourceManager.GetString("GameLibraryListPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Library.
+        /// </summary>
+        public static string GameLibraryTabbedPage {
+            get {
+                return ResourceManager.GetString("GameLibraryTabbedPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string GameOptionsPageDelete {
+            get {
+                return ResourceManager.GetString("GameOptionsPageDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string GameOptionsPageStatus {
+            get {
+                return ResourceManager.GetString("GameOptionsPageStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string GameOptionsPageUpdate {
+            get {
+                return ResourceManager.GetString("GameOptionsPageUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add to library.
         /// </summary>
         public static string GamePageAddToLibrary {
@@ -367,7 +448,7 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Similar Games:.
+        ///   Looks up a localized string similar to Similar Games.
         /// </summary>
         public static string GamePageSimilarGames {
             get {
@@ -435,6 +516,15 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         public static string GameRequestPageTitle {
             get {
                 return ResourceManager.GetString("GameRequestPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Games.
+        /// </summary>
+        public static string GameUserEntriesTabbedPageTitle {
+            get {
+                return ResourceManager.GetString("GameUserEntriesTabbedPageTitle", resourceCulture);
             }
         }
         

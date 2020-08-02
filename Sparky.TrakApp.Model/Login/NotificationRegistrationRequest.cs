@@ -1,5 +1,8 @@
-﻿namespace Sparky.TrakApp.Model.Login
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Sparky.TrakApp.Model.Login
 {
+    [ExcludeFromCodeCoverage]
     public class NotificationRegistrationRequest
     {
         public long UserId { get; set; }

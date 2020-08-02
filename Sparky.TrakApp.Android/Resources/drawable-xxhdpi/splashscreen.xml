@@ -1,9 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <bitmap 
-            android:src="@drawable/background" 
-            android:tileMode="disabled" 
-            android:gravity="center|fill_horizontal|fill_vertical"/>
+        <bitmap
+                android:src="@drawable/background"
+                android:tileMode="disabled"
+                android:gravity="center|fill_horizontal|fill_vertical"/>
+    </item>
+    <item android:left="16dp" android:right="16dp">
+        <bitmap
+                android:src="@drawable/logo"
+                android:tileMode="disabled"
+                android:gravity="center|clip_vertical|clip_horizontal"/>
     </item>
 </layer-list>

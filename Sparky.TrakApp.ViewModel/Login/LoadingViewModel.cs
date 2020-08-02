@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Reactive.Concurrency;
 using Prism.Navigation;
 using Sparky.TrakApp.Model.Login;
 using Sparky.TrakApp.Service;
+using Sparky.TrakApp.ViewModel.Common;
 
 namespace Sparky.TrakApp.ViewModel.Login
 {
@@ -10,22 +12,25 @@ namespace Sparky.TrakApp.ViewModel.Login
     /// Its responsibility is to load any existing credentials when the app first loads and either direct the user
     /// to the home page when the app contains valid credentials, or go to the login page if any problems occured.
     /// </summary>
-    public class LoadingViewModel : BaseViewModel
+    public class LoadingViewModel : ReactiveViewModel
     {
         private readonly IStorageService _storageService;
         private readonly IAuthService _authService;
         private readonly IRestService _restService;
-        
+
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
         /// should be handled by the framework.
         /// </summary>
+        /// <param name="scheduler">The <see cref="IScheduler"/> instance to inject.</param>
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
         /// <param name="authService">The <see cref="IAuthService"/> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
-        public LoadingViewModel(INavigationService navigationService, IStorageService storageService, IAuthService authService, IRestService restService) : base(navigationService)
+        public LoadingViewModel(IScheduler scheduler, INavigationService navigationService,
+            IStorageService storageService,
+            IAuthService authService, IRestService restService) : base(scheduler, navigationService)
         {
             _storageService = storageService;
             _authService = authService;
@@ -47,17 +52,17 @@ namespace Sparky.TrakApp.ViewModel.Login
                 // Retrieve any existing credentials.
                 var username = await _storageService.GetUsernameAsync();
                 var password = await _storageService.GetPasswordAsync();
-                
+
                 // Try to retrieve a token from the credentials in the store.
                 var token = await _authService.GetTokenAsync(new UserCredentials
                 {
                     Username = username,
                     Password = password
                 });
-                
+
                 // We got a valid token, so store it.
                 await _storageService.SetAuthTokenAsync(token);
-                
+
                 // Need to ensure the correct details are registered for push notifications.
                 await _restService.PostAsync("api/notification-management/v1/notifications/register",
                     new NotificationRegistrationRequest
@@ -66,11 +71,11 @@ namespace Sparky.TrakApp.ViewModel.Login
                         DeviceGuid = (await _storageService.GetDeviceIdAsync()).ToString(),
                         Token = await _storageService.GetNotificationTokenAsync()
                     }, token);
-                
+
                 // Need to get details to check if they're verified, if they're not they can go back
                 // to the login page.
                 var userResponse = await _authService.GetFromUsernameAsync(username, token);
-                
+
                 if (!userResponse.Verified)
                 {
                     await NavigationService.NavigateAsync("/LoginPage");

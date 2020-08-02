@@ -15,10 +15,12 @@
     <PackageReference Include="MagicGradients" Version="1.1.0" />
     <PackageReference Include="Prism.DryIoc.Forms" Version="7.2.0.1422" />
     <PackageReference Include="Prism.Plugin.Popups" Version="7.2.0.1046" />
+    <PackageReference Include="ReactiveUI.Fody" Version="11.4.17" />
     <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.3" />
     <PackageReference Include="Xamarin.Forms" Version="4.6.0.847" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
-    <PackageReference Include="ZXing.Net.Mobile.Forms" Version="3.0.0-beta5" />
+    <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
+    <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,9 +56,6 @@
     <Compile Update="Controls\Common\RatingUserControl.xaml.cs">
       <DependentUpon>RatingUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Controls\Common\UserEntryInfiniteListViewControl.xaml.cs">
-      <DependentUpon>UserEntryInfiniteListViewControl.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Controls\Common\UserEntryItemTemplateControl.xaml.cs">
       <DependentUpon>UserEntryItemTemplateControl.xaml</DependentUpon>
     </Compile>
@@ -86,6 +85,15 @@
     </Compile>
     <Compile Update="Views\Games\GameOptionsPage.xaml.cs">
       <DependentUpon>GameOptionsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Styles\ButtonStyles.xaml.cs">
+      <DependentUpon>ButtonStyles.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Styles\Colors.xaml.cs">
+      <DependentUpon>Colors.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Styles\LabelStyles.xaml.cs">
+      <DependentUpon>LabelStyles.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -123,9 +131,6 @@
     <EmbeddedResource Update="Controls\Common\RatingUserControl.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Update="Controls\Common\UserEntryInfiniteListViewControl.xaml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Update="Controls\Common\UserEntryItemTemplateControl.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -156,6 +161,18 @@
       <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Games\GameOptionsPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Styles\ButtonStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Styles\Colors.xaml">
+      <SubType>Designer</SubType>
+      <Generator></Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Styles\LabelStyles.xaml">
       <SubType>Designer</SubType>
       <Generator></Generator>
     </EmbeddedResource>

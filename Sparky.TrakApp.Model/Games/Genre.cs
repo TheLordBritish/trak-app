@@ -1,7 +1,9 @@
-﻿using Sparky.TrakApp.Model.Response;
+﻿using System.Diagnostics.CodeAnalysis;
+using Sparky.TrakApp.Model.Response;
 
 namespace Sparky.TrakApp.Model.Games
 {
+    [ExcludeFromCodeCoverage]
     public class Genre : HateoasResource
     {
         public long Id { get; set; }

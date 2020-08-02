@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Sparky.TrakApp.Model.Response;
 
 namespace Sparky.TrakApp.Model.Games
 {
+    [ExcludeFromCodeCoverage]
     public class GameInfo : HateoasResource
     {
         public long Id { get; set; }

@@ -419,5 +419,88 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             Assert.AreEqual(platforms[1].Id, _gameViewModel.Platforms.First().Id, "The platform Id should match.");
             Assert.AreEqual(genres, _gameViewModel.Genres, "The genres should match.");
         }
+
+        [Test]
+        public void OnRatingTappedCommand_ThrowsException_SetIsErrorToTrue()
+        {
+            // Arrange
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(5L);
+
+            _storageService.Setup(mock => mock.GetAuthTokenAsync())
+                .ReturnsAsync("token");
+
+            _restService
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new ApiException());
+
+            // Act
+            _gameViewModel.OnRatingTappedCommand.Execute("5").Catch(Observable.Return(true)).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.IsTrue(_gameViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
+        }
+
+        [Test]
+        public void OnRatingTappedCommand_WithNoMatchingEntryToUpdate_DoesntPatchGameUserEntry()
+        {
+            // Arrange
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(5L);
+
+            _storageService.Setup(mock => mock.GetAuthTokenAsync())
+                .ReturnsAsync("token");
+
+            _restService
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new HateoasPage<GameUserEntry>());
+
+            // Act
+            _gameViewModel.OnRatingTappedCommand.Execute("5").Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            _restService.Verify(
+                mock => mock.PatchAsync<GameUserEntry>(It.IsAny<string>(), It.IsAny<IDictionary<string, object>>(),
+                    It.IsAny<string>()), Times.Never);
+        }
+
+        [Test]
+        public void OnRatingTappedCommand_WithMatchingEntryToUpdate_PatchesGameUserEntry()
+        {
+            // Arrange
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(5L);
+
+            _storageService.Setup(mock => mock.GetAuthTokenAsync())
+                .ReturnsAsync("token");
+
+            _restService
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new HateoasPage<GameUserEntry>
+                {
+                    Embedded = new HateoasResources<GameUserEntry>
+                    {
+                        Data = new[]
+                        {
+                            new GameUserEntry()
+                        }
+                    }
+                });
+
+            _restService.Setup(mock => mock.PatchAsync<GameUserEntry>(It.IsAny<string>(),
+                    It.IsAny<IDictionary<string, object>>(), It.IsAny<string>()))
+                .ReturnsAsync(new GameUserEntry());
+
+            // Act
+            _gameViewModel.OnRatingTappedCommand.Execute("5").Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            _restService.Verify(
+                mock => mock.PatchAsync<GameUserEntry>(It.IsAny<string>(), It.IsAny<IDictionary<string, object>>(),
+                    It.IsAny<string>()), Times.Once);
+        }
     }
 }

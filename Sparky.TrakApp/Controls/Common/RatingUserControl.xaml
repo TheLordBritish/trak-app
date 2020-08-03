@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-
 <ContentView
     x:Class="Sparky.TrakApp.Controls.Common.RatingUserControl"
     xmlns="http://xamarin.com/schemas/2014/forms"
@@ -20,6 +19,12 @@
                         <Setter Property="Source" Value="star_white.png" />
                     </DataTrigger>
                 </Image.Triggers>
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding OnTappedCommand, Source={x:Reference RatingUserControlView}}"
+                        CommandParameter="1"
+                        NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
             </Image>
             <Image Source="star_grey.png">
                 <Image.Triggers>
@@ -30,6 +35,12 @@
                         <Setter Property="Source" Value="star_white.png" />
                     </DataTrigger>
                 </Image.Triggers>
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding OnTappedCommand, Source={x:Reference RatingUserControlView}}"
+                        CommandParameter="2"
+                        NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
             </Image>
             <Image Source="star_grey.png">
                 <Image.Triggers>
@@ -40,6 +51,12 @@
                         <Setter Property="Source" Value="star_white.png" />
                     </DataTrigger>
                 </Image.Triggers>
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding OnTappedCommand, Source={x:Reference RatingUserControlView}}"
+                        CommandParameter="3"
+                        NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
             </Image>
             <Image Source="star_grey.png">
                 <Image.Triggers>
@@ -50,6 +67,12 @@
                         <Setter Property="Source" Value="star_white.png" />
                     </DataTrigger>
                 </Image.Triggers>
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding OnTappedCommand, Source={x:Reference RatingUserControlView}}"
+                        CommandParameter="4"
+                        NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
             </Image>
             <Image Source="star_grey.png">
                 <Image.Triggers>
@@ -60,6 +83,12 @@
                         <Setter Property="Source" Value="star_white.png" />
                     </DataTrigger>
                 </Image.Triggers>
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding OnTappedCommand, Source={x:Reference RatingUserControlView}}"
+                        CommandParameter="5"
+                        NumberOfTapsRequired="1" />
+                </Image.GestureRecognizers>
             </Image>
         </StackLayout>
     </ContentView.Content>

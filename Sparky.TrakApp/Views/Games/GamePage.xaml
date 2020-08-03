@@ -40,8 +40,17 @@
             <ScrollView
                 HorizontalOptions="FillAndExpand"
                 IsClippedToBounds="True"
-                IsVisible="{Binding HasLoaded}"
+                IsVisible="False"
                 VerticalOptions="FillAndExpand">
+                <ScrollView.Triggers>
+                    <MultiTrigger TargetType="ScrollView">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding HasLoaded}" Value="True" />
+                            <BindingCondition Binding="{Binding IsError}" Value="False" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="IsVisible" Value="True" />
+                    </MultiTrigger>
+                </ScrollView.Triggers>
                 <Grid RowSpacing="0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
@@ -155,7 +164,7 @@
                                     </DataTrigger>
                                 </Label.Triggers>
                             </Label>
-                            <common:RatingUserControl Rating="{Binding Rating}" />
+                            <common:RatingUserControl OnTappedCommand="{Binding OnRatingTappedCommand}" Rating="{Binding Rating}" />
                         </StackLayout>
 
                         <!--  A comma separated list of genres.  -->

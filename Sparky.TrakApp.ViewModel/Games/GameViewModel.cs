@@ -64,6 +64,19 @@ namespace Sparky.TrakApp.ViewModel.Games
                 }
             });
 
+            OnRatingTappedCommand =
+                ReactiveCommand.CreateFromTask<string, bool>(async rating => await OnRatingTappedAsync(rating),
+                    outputScheduler: scheduler);
+            // Report errors if an exception was thrown.
+            OnRatingTappedCommand.ThrownExceptions.Subscribe(ex =>
+            {
+                IsError = true;
+                if (!(ex is ApiException))
+                {
+                    Crashes.TrackError(ex);
+                }
+            });
+
             this.WhenAnyObservable(x => x.LoadGameInfoCommand.IsExecuting)
                 .ToPropertyEx(this, x => x.IsLoading, scheduler: scheduler);
         }
@@ -71,19 +84,19 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// <summary>
         /// A <see cref="bool"/> that specifies whether the page has been fully loaded.
         /// </summary>
-        [Reactive] 
+        [Reactive]
         public bool HasLoaded { get; set; }
 
         /// <summary>
         /// A <see cref="Uri"/> which specifies the URI from which the <see cref="GameInfo"/> was loaded from.
         /// </summary>
-        [Reactive] 
+        [Reactive]
         public Uri GameUrl { get; set; }
 
         /// <summary>
         /// A ID of the current <see cref="Platform"/> the <see cref="Game"/> has been added for.
         /// </summary>
-        [Reactive] 
+        [Reactive]
         public long PlatformId { get; set; }
 
         /// <summary>
@@ -171,6 +184,12 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// propagate the request and call the <see cref="LoadGameInfoAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> LoadGameInfoCommand { get; }
+
+        /// <summary>
+        /// Command that is invoked each time any of the rating stars are tapped by the user. When called,
+        /// the command will propagate the request and call the <see cref="OnRatingTappedAsync"/> method.
+        /// </summary>
+        public ReactiveCommand<string, bool> OnRatingTappedCommand { get; }
 
         /// <summary>
         /// Overriden method that is automatically invoked when the page is navigated to. Its purpose is to retrieve
@@ -274,6 +293,33 @@ namespace Sparky.TrakApp.ViewModel.Games
             CreateSimilarGamesList(games.Embedded.Data.Where(x => x.Id != gameInfo.Id));
 
             HasLoaded = true;
+        }
+
+        private async Task<bool> OnRatingTappedAsync(string rating)
+        {
+            // Update the rating to reflect on the view.
+            Rating = short.Parse(rating);
+            
+            // Get the user ID, needed to update the correct game user entry.
+            var userId = await _storageService.GetUserIdAsync();
+            // Get the auth token from the store.
+            var token = await _storageService.GetAuthTokenAsync();
+
+            // Get the details of the user entry that the rating is going to be updated for.
+            var entry = await _restService.GetAsync<HateoasPage<GameUserEntry>>(
+                $"api/game-management/v1/game-user-entries?user-id={userId}&platform-id={PlatformId}&game-id={_gameId}", token);
+
+            if (entry.Embedded != null)
+            {
+                // Update the entry via patch with only the rating changed.
+                await _restService.PatchAsync<GameUserEntry>($"api/game-management/v1/game-user-entries/{entry.Embedded.Data.First().Id}",
+                    new Dictionary<string, object>
+                    {
+                        {nameof(GameUserEntry.Rating), Rating}
+                    }, token);
+            }
+            
+            return true;
         }
 
         /// <summary>

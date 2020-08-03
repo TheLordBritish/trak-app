@@ -5,7 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:viewModel="clr-namespace:Sparky.TrakApp.ViewModel;assembly=Sparky.TrakApp.ViewModel"
-    Title="Title">
+    Title="Title"
+    BackgroundColor="Transparent">
     <ContentPage.Content>
         <ScrollView Padding="35" x:DataType="viewModel:BaseMasterDetailViewModel">
             <Grid>

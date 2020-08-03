@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 GOOGLE_JSON_FILE=$APPCENTER_SOURCE_DIRECTORY/Sparky.TrakApp.Android/google-services.json
 
 # Update the google json file with the value provided by the environment variable.

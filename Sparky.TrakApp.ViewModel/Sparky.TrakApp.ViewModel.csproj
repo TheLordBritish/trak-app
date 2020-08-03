@@ -16,7 +16,9 @@
     <PackageReference Include="Prism.Plugin.Popups" Version="7.2.0.1046" />
     <PackageReference Include="ReactiveUI.Fody" Version="11.4.17" />
     <PackageReference Include="ReactiveUI.XamForms" Version="11.4.17" />
-    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.3" />
+    <PackageReference Include="Rg.Plugins.Popup" Version="2.0.0.3">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.6.0.847" />
     <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
   </ItemGroup>

@@ -128,14 +128,11 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// <returns>A <see cref="Task" /> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task AttemptBarcodeScanAsync()
         {
-            // Get the auth token from the store.
-            var token = await _storageService.GetAuthTokenAsync();
-
             // Check to see if the barcode scanned matches any stored in the server.
             // If it doesn't, it'll throw an exception.
             var gameBarcode =
                 await _restService.GetAsync<GameBarcode>(
-                    "api/game-management/v1/game-barcodes/barcode/" + Result.Text, token);
+                    $"games/barcodes/{Result.Text}");
 
             // Set the needed parameters to correctly load the game page for the 
             // given barcode.

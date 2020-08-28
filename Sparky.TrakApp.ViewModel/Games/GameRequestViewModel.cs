@@ -170,7 +170,6 @@ namespace Sparky.TrakApp.ViewModel.Games
             {
                 // Get the current ID of the user, needed to register a request against their account.
                 var userId = await _storageService.GetUserIdAsync();
-                var authToken = await _storageService.GetAuthTokenAsync();
 
                 // Make the request object to send.
                 var gameRequest = new GameRequest
@@ -181,7 +180,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                 };
 
                 // Make the request to the server to create the new game request.
-                await _restService.PostAsync("api/game-management/v1/game-requests", gameRequest, authToken);
+                await _restService.PostAsync("games/requests", gameRequest);
 
                 // On a successful request, show the user a confirmation dialog and navigate back to the previous page.
                 var alertConfig = new AlertConfig()

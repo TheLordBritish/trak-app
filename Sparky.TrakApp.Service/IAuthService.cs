@@ -7,12 +7,10 @@ namespace Sparky.TrakApp.Service
     public interface IAuthService
     {
         Task<string> GetTokenAsync(UserCredentials userCredentials);
+        
+        Task<CheckedResponse<bool>> VerifyAsync(string username, string verificationCode);
 
-        Task<UserResponse> GetFromUsernameAsync(string username, string authToken);
-
-        Task<CheckedResponse<bool>> VerifyAsync(string username, string verificationCode, string authToken);
-
-        Task ReVerifyAsync(string username, string authToken);
+        Task ReVerifyAsync(string username);
 
         Task RequestRecoveryAsync(string emailAddress);
         

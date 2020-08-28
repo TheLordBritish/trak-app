@@ -92,12 +92,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(0L);
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
+            
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.InternalServerError});
 
             // Act
@@ -118,12 +115,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(0L);
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
+            
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .Throws(new Exception());
 
             // Act
@@ -144,12 +138,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(0L);
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
+            
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .ReturnsAsync(new HateoasPage<GameUserEntry>());
 
             _navigationService.Setup(mock => mock.GoBackAsync())
@@ -161,7 +152,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
 
             // Assert
             _restService.Verify(
-                mock => mock.PutAsync(It.IsAny<string>(), It.IsAny<GameUserEntry>(), It.IsAny<string>()), Times.Never);
+                mock => mock.PutAsync(It.IsAny<string>(), It.IsAny<GameUserEntry>()), Times.Never);
             _navigationService.Verify(mock => mock.GoBackAsync(), Times.Once);
 
             Assert.IsTrue(_gameOptionsViewModel.IsUpdated, "IsUpdated should be true if no exception was thrown.");
@@ -173,12 +164,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(0L);
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
+            
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .ReturnsAsync(new HateoasPage<GameUserEntry>
                 {
                     Embedded = new HateoasResources<GameUserEntry>
@@ -190,7 +178,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
                     }
                 });
 
-            _restService.Setup(mock => mock.PutAsync(It.IsAny<string>(), It.IsAny<GameUserEntry>(), It.IsAny<string>()))
+            _restService.Setup(mock => mock.PutAsync(It.IsAny<string>(), It.IsAny<GameUserEntry>()))
                 .ReturnsAsync(new GameUserEntry());
 
             _navigationService.Setup(mock => mock.GoBackAsync())
@@ -202,7 +190,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
 
             // Assert
             _restService.Verify(
-                mock => mock.PutAsync(It.IsAny<string>(), It.IsAny<GameUserEntry>(), It.IsAny<string>()), Times.Once);
+                mock => mock.PutAsync(It.IsAny<string>(), It.IsAny<GameUserEntry>()), Times.Once);
             _navigationService.Verify(mock => mock.GoBackAsync(), Times.Once);
 
             Assert.IsTrue(_gameOptionsViewModel.IsUpdated, "IsUpdated should be true if no exception was thrown.");
@@ -214,12 +202,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(0L);
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
+            
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.InternalServerError});
 
             // Act
@@ -238,12 +223,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(0L);
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
+            
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .Throws(new Exception());
 
             // Act
@@ -262,12 +244,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(0L);
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
+            
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .ReturnsAsync(new HateoasPage<GameUserEntry>());
 
             _navigationService.Setup(mock => mock.GoBackAsync())
@@ -278,7 +257,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             _scheduler.Start();
 
             // Assert
-            _restService.Verify(mock => mock.DeleteAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            _restService.Verify(mock => mock.DeleteAsync(It.IsAny<string>()), Times.Never);
             _navigationService.Verify(mock => mock.GoBackAsync(), Times.Once);
         }
 
@@ -289,11 +268,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(0L);
 
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .ReturnsAsync(new HateoasPage<GameUserEntry>
                 {
                     Embedded = new HateoasResources<GameUserEntry>
@@ -305,7 +281,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
                     }
                 });
 
-            _restService.Setup(mock => mock.DeleteAsync(It.IsAny<string>(), It.IsAny<string>()))
+            _restService.Setup(mock => mock.DeleteAsync(It.IsAny<string>()))
                 .Verifiable();
 
             _navigationService.Setup(mock => mock.GoBackAsync())

@@ -65,17 +65,22 @@ namespace Sparky.TrakApp.ViewModel.Test
         {
             // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
-                .ThrowsAsync(new Exception());
-
-            _navigationService.Setup(mock => mock.NavigateAsync("/LoginPage"))
+                .ReturnsAsync(0L)
                 .Verifiable();
 
+            _storageService.Setup(mock => mock.GetDeviceIdAsync())
+                .ReturnsAsync(Guid.Empty)
+                .Verifiable();
+            
+            _restService.Setup(mock => mock.DeleteAsync(It.IsAny<string>()))
+                .ThrowsAsync(new Exception());
+            
             // Act
             _baseMasterDetailViewModel.LogoutCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
             _scheduler.Start();
 
             // Assert
-            _navigationService.Verify();
+            _navigationService.Verify(mock => mock.NavigateAsync("/LoginPage"), Times.Once);
         }
 
         [Test]
@@ -89,15 +94,11 @@ namespace Sparky.TrakApp.ViewModel.Test
             _storageService.Setup(mock => mock.GetDeviceIdAsync())
                 .ReturnsAsync(Guid.Empty)
                 .Verifiable();
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token")
+            
+            _restService.Setup(mock => mock.DeleteAsync(It.IsAny<string>()))
                 .Verifiable();
 
             _storageService.Setup(mock => mock.SetUsernameAsync(It.IsAny<string>()))
-                .Verifiable();
-
-            _storageService.Setup(mock => mock.SetPasswordAsync(It.IsAny<string>()))
                 .Verifiable();
 
             _storageService.Setup(mock => mock.SetAuthTokenAsync(It.IsAny<string>()))
@@ -105,10 +106,7 @@ namespace Sparky.TrakApp.ViewModel.Test
 
             _storageService.Setup(mock => mock.SetUserIdAsync(It.IsAny<long>()))
                 .Verifiable();
-
-            _restService.Setup(mock => mock.DeleteAsync(It.IsAny<string>(), It.IsAny<string>()))
-                .Verifiable();
-
+            
             _navigationService.Setup(mock => mock.NavigateAsync("/LoginPage"))
                 .Verifiable();
 

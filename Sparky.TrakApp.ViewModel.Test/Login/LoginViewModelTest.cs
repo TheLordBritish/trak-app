@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Reactive.Testing;
 using Moq;
 using NUnit.Framework;
@@ -20,6 +24,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
         private Mock<IStorageService> _storageService;
         private Mock<INavigationService> _navigationService;
         private Mock<IRestService> _restService;
+        private Mock<SecurityTokenHandler> _securityTokenHandler;
         private TestScheduler _scheduler;
 
         private LoginViewModel _loginViewModel;
@@ -31,10 +36,11 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             _storageService = new Mock<IStorageService>();
             _navigationService = new Mock<INavigationService>();
             _restService = new Mock<IRestService>();
+            _securityTokenHandler = new Mock<SecurityTokenHandler>();
             _scheduler = new TestScheduler();
 
             _loginViewModel = new LoginViewModel(_scheduler, _navigationService.Object, _authService.Object,
-                _storageService.Object, _restService.Object);
+                _storageService.Object, _restService.Object, _securityTokenHandler.Object);
         }
 
         [Test]
@@ -144,21 +150,22 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
 
             _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<UserCredentials>()))
                 .ReturnsAsync("token");
-
-            _authService.Setup(mock => mock.GetFromUsernameAsync(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new UserResponse {Username = "username", Id = 1, Verified = false});
-
+            
+            _securityTokenHandler.Setup(mock => mock.ReadToken(It.IsAny<string>()))
+                .Returns(new JwtSecurityToken(claims: new List<Claim>
+                {
+                    new Claim("userId", 0L.ToString()),
+                    new Claim("verified", bool.FalseString)
+                }));
+            
             _storageService.Setup(mock => mock.SetAuthTokenAsync(It.IsAny<string>()))
                 .Verifiable();
             _storageService.Setup(mock => mock.SetUserIdAsync(It.IsAny<long>()))
                 .Verifiable();
             _storageService.Setup(mock => mock.SetUsernameAsync(It.IsAny<string>()))
                 .Verifiable();
-            _storageService.Setup(mock => mock.SetPasswordAsync(It.IsAny<string>()))
-                .Verifiable();
 
-            _restService.Setup(mock =>
-                    mock.PostAsync(It.IsAny<string>(), It.IsAny<NotificationRegistrationRequest>(), It.IsAny<string>()))
+            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<NotificationRegistrationRequest>()))
                 .Verifiable();
 
             _navigationService.Setup(mock => mock.NavigateAsync("VerificationPage"))
@@ -185,9 +192,13 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
 
             _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<UserCredentials>()))
                 .ReturnsAsync("token");
-
-            _authService.Setup(mock => mock.GetFromUsernameAsync(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new UserResponse {Username = "username", Id = 1, Verified = true});
+            
+            _securityTokenHandler.Setup(mock => mock.ReadToken(It.IsAny<string>()))
+                .Returns(new JwtSecurityToken(claims: new List<Claim>
+                {
+                    new Claim("userId", 0L.ToString()),
+                    new Claim("verified", bool.TrueString)
+                }));
 
             _storageService.Setup(mock => mock.SetAuthTokenAsync(It.IsAny<string>()))
                 .Verifiable();
@@ -195,11 +206,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .Verifiable();
             _storageService.Setup(mock => mock.SetUsernameAsync(It.IsAny<string>()))
                 .Verifiable();
-            _storageService.Setup(mock => mock.SetPasswordAsync(It.IsAny<string>()))
-                .Verifiable();
 
-            _restService.Setup(mock =>
-                    mock.PostAsync(It.IsAny<string>(), It.IsAny<NotificationRegistrationRequest>(), It.IsAny<string>()))
+            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<NotificationRegistrationRequest>()))
                 .Verifiable();
 
             _navigationService.Setup(mock => mock.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage"))

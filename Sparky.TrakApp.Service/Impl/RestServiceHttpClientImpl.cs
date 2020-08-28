@@ -16,7 +16,7 @@ namespace Sparky.TrakApp.Service.Impl
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly JsonSerializerSettings _deserializerSettings;
-        
+
         public RestServiceHttpClientImpl(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
@@ -38,19 +38,21 @@ namespace Sparky.TrakApp.Service.Impl
                 DateParseHandling = DateParseHandling.None
             };
         }
-        
-        public async Task<T> GetAsync<T>(string url, string authToken)
+
+        public async Task<T> GetAsync<T>(string url)
         {
             using var client = _httpClientFactory.CreateClient("Trak");
-            
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0.hal+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
             var request = new HttpRequestMessage
             {
                 RequestUri = new Uri(client.BaseAddress, url),
                 Method = HttpMethod.Get
             };
-            
-            request.Headers.Authorization = AuthenticationHeaderValue.Parse(authToken);
-            
+
             using var response = await client.SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
 
@@ -62,19 +64,22 @@ namespace Sparky.TrakApp.Service.Impl
                     Content = json
                 };
             }
-            
+
             return JsonConvert.DeserializeObject<T>(json, _deserializerSettings);
         }
 
-        public async Task<T> PostAsync<T>(string url, T requestBody, string authToken)
+        public async Task<T> PostAsync<T>(string url, T requestBody)
         {
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
-            
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0.hal+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
             // Serialize the request body to json.
-            var content = new StringContent(JsonConvert.SerializeObject(requestBody, _serializerSettings),
-                Encoding.UTF8, "application/json");
-            
+            var content = new StringContent(JsonConvert.SerializeObject(requestBody, _serializerSettings), Encoding.UTF8);
+
             // Specify the URI and the content of the post request.
             var request = new HttpRequestMessage
             {
@@ -82,14 +87,12 @@ namespace Sparky.TrakApp.Service.Impl
                 Content = content,
                 Method = HttpMethod.Post
             };
-            
-            // Ensure we send up the JWT auth.
-            request.Headers.Authorization = AuthenticationHeaderValue.Parse(authToken);
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             
             // Make the request.
             using var response = await client.SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
-            
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApiException
@@ -98,20 +101,23 @@ namespace Sparky.TrakApp.Service.Impl
                     Content = json
                 };
             }
-            
+
             // Only de-serialize the response on a successful call. 
             return JsonConvert.DeserializeObject<T>(json, _deserializerSettings);
         }
 
-        public async Task<T> PutAsync<T>(string url, T requestBody, string authToken)
+        public async Task<T> PutAsync<T>(string url, T requestBody)
         {
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
-            
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0.hal+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
             // Serialize the request body to json.
-            var content = new StringContent(JsonConvert.SerializeObject(requestBody, _serializerSettings),
-                Encoding.UTF8, "application/json");
-            
+            var content = new StringContent(JsonConvert.SerializeObject(requestBody, _serializerSettings), Encoding.UTF8);
+
             // Specify the URI and the content of the post request.
             var request = new HttpRequestMessage
             {
@@ -119,14 +125,12 @@ namespace Sparky.TrakApp.Service.Impl
                 Content = content,
                 Method = HttpMethod.Put
             };
-            
-            // Ensure we send up the JWT auth.
-            request.Headers.Authorization = AuthenticationHeaderValue.Parse(authToken);
-            
+            request.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
             // Make the request.
             using var response = await client.SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
-            
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApiException
@@ -135,20 +139,24 @@ namespace Sparky.TrakApp.Service.Impl
                     Content = json
                 };
             }
-            
+
             // Only de-serialize the response on a successful call. 
             return JsonConvert.DeserializeObject<T>(json, _deserializerSettings);
         }
 
-        public async Task<T> PatchAsync<T>(string url, IDictionary<string, object> values, string authToken)
+        public async Task<T> PatchAsync<T>(string url, IDictionary<string, object> values)
         {
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
-            
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0.hal+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
             // Serialize the request body to json.
             var content = new StringContent(JsonConvert.SerializeObject(values, _serializerSettings),
                 Encoding.UTF8, "application/merge-patch+json");
-            
+
             // Specify the URI and the content of the post request.
             var request = new HttpRequestMessage
             {
@@ -156,14 +164,11 @@ namespace Sparky.TrakApp.Service.Impl
                 Content = content,
                 Method = new HttpMethod("PATCH")
             };
-            
-            // Ensure we send up the JWT auth.
-            request.Headers.Authorization = AuthenticationHeaderValue.Parse(authToken);
-            
+
             // Make the request.
             using var response = await client.SendAsync(request);
             var json = await response.Content.ReadAsStringAsync();
-            
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApiException
@@ -172,28 +177,29 @@ namespace Sparky.TrakApp.Service.Impl
                     Content = json
                 };
             }
-            
+
             // Only de-serialize the response on a successful call. 
             return JsonConvert.DeserializeObject<T>(json, _deserializerSettings);
         }
 
-        public async Task DeleteAsync(string url, string authToken)
+        public async Task DeleteAsync(string url)
         {
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
-            
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0.hal+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+
             // Specify the URI and that the request is a delete request..
             var request = new HttpRequestMessage
             {
                 RequestUri = new Uri(client.BaseAddress, url),
                 Method = HttpMethod.Delete
             };
-            
-            // Ensure we send up the JWT auth.
-            request.Headers.Authorization = AuthenticationHeaderValue.Parse(authToken);
-            
+
             using var response = await client.SendAsync(request);
-            
+
             if (!response.IsSuccessStatusCode)
             {
                 throw new ApiException

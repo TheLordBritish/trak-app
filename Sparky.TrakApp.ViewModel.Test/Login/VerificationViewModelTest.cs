@@ -68,10 +68,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
 
             _storageService.Setup(mock => mock.GetUsernameAsync())
                 .ReturnsAsync("username");
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
 
-            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.Unauthorized});
 
             // Act
@@ -92,10 +90,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
 
             _storageService.Setup(mock => mock.GetUsernameAsync())
                 .ReturnsAsync("username");
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
 
-            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .Throws(new Exception());
 
             // Act
@@ -116,10 +112,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
 
             _storageService.Setup(mock => mock.GetUsernameAsync())
                 .ReturnsAsync("username");
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
 
-            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new CheckedResponse<bool> {Data = false, Error = true, ErrorMessage = "error message"});
 
             // Act
@@ -143,10 +137,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
 
             _storageService.Setup(mock => mock.GetUsernameAsync())
                 .ReturnsAsync("username");
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
-            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+            
+            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new CheckedResponse<bool> {Data = true});
 
             _navigationService.Setup(mock => mock.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage"))
@@ -169,10 +161,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             // Arrange
             _storageService.Setup(mock => mock.GetUsernameAsync())
                 .ReturnsAsync("username");
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
-            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
+            
+            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<string>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.Unauthorized});
 
             // Act
@@ -192,10 +182,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             // Arrange
             _storageService.Setup(mock => mock.GetUsernameAsync())
                 .ReturnsAsync("username");
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
-            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
+            
+            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<string>()))
                 .Throws(new Exception());
 
             // Act
@@ -215,10 +203,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
             // Arrange
             _storageService.Setup(mock => mock.GetUsernameAsync())
                 .ReturnsAsync("username");
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
-            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
+            
+            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<string>()))
                 .Verifiable();
 
             _userDialogs.Setup(mock => mock.AlertAsync(It.IsAny<string>(), It.IsAny<string>(), null, null))

@@ -104,11 +104,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
         public void LoadGameInfoCommand_ThrowsApiException_SetsIsErrorToTrue()
         {
             // Arrange
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
             _restService
-                .Setup(mock => mock.GetAsync<GameInfo>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<GameInfo>(It.IsAny<string>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.InternalServerError});
 
             // Act
@@ -123,11 +120,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
         public void LoadGameInfoCommand_ThrowsGenericException_SetsIsErrorToTrue()
         {
             // Arrange
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
             _restService
-                .Setup(mock => mock.GetAsync<GameInfo>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<GameInfo>(It.IsAny<string>()))
                 .Throws(new Exception());
 
             // Act
@@ -144,16 +138,43 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             // Arrange
             _gameViewModel.GameUrl = new Uri("https://traklibrary.com");
             _gameViewModel.InLibrary = false;
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
+            
             var gameInfo = new GameInfo
             {
                 Id = 5L,
                 Title = "test-title",
                 ReleaseDate = DateTime.Now,
                 Description = "test-description",
+                Platforms = new List<Platform>
+                {
+                    new Platform
+                    {
+                        Id = 1L
+                    },
+                    new Platform
+                    {
+                        Id = 2L
+                    }
+                },
+                Publishers = new List<Publisher>
+                {
+                    new Publisher()
+                },
+                Genres = new List<Genre>
+                {
+                    new Genre
+                    {
+                        Links = new Dictionary<string, HateoasLink>
+                        {
+                            {
+                                "gameInfos", new HateoasLink
+                                {
+                                    Href = new Uri("https://traklibrary.com")
+                                }
+                            }
+                        }
+                    }
+                },
                 Links = new Dictionary<string, HateoasLink>
                 {
                     {
@@ -184,67 +205,11 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             };
 
             _restService
-                .Setup(mock => mock.GetAsync<GameInfo>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<GameInfo>(It.IsAny<string>()))
                 .ReturnsAsync(gameInfo);
-
-            var publishers = new[]
-            {
-                new Publisher()
-            };
-
+            
             _restService
-                .Setup(mock => mock.GetAsync<HateoasCollection<Publisher>>(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HateoasCollection<Publisher>
-                {
-                    Embedded = new HateoasResources<Publisher>
-                    {
-                        Data = publishers
-                    }
-                });
-
-            var platforms = new[]
-            {
-                new Platform()
-            };
-
-            _restService
-                .Setup(mock => mock.GetAsync<HateoasCollection<Platform>>(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HateoasCollection<Platform>
-                {
-                    Embedded = new HateoasResources<Platform>
-                    {
-                        Data = platforms
-                    }
-                });
-
-            var genres = new[]
-            {
-                new Genre
-                {
-                    Links = new Dictionary<string, HateoasLink>
-                    {
-                        {
-                            "gameInfos", new HateoasLink
-                            {
-                                Href = new Uri("https://traklibrary.com")
-                            }
-                        }
-                    }
-                }
-            };
-
-            _restService
-                .Setup(mock => mock.GetAsync<HateoasCollection<Genre>>(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HateoasCollection<Genre>
-                {
-                    Embedded = new HateoasResources<Genre>
-                    {
-                        Data = genres
-                    }
-                });
-
-            _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
                 .ReturnsAsync(new HateoasPage<GameInfo>
                 {
                     Embedded = new HateoasResources<GameInfo>
@@ -269,9 +234,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             Assert.AreEqual(gameInfo.Title, _gameViewModel.GameTitle, "The titles should match.");
             Assert.AreEqual(gameInfo.ReleaseDate, _gameViewModel.ReleaseDate, "The release dates should match.");
             Assert.AreEqual(gameInfo.Description, _gameViewModel.Description, "The titles should match.");
-            Assert.AreEqual(publishers, _gameViewModel.Publishers, "The publishers should match.");
-            Assert.AreEqual(platforms, _gameViewModel.Platforms, "The platforms should match.");
-            Assert.AreEqual(genres, _gameViewModel.Genres, "The genres should match.");
+            Assert.AreEqual(gameInfo.Publishers, _gameViewModel.Publishers, "The publishers should match.");
+            Assert.AreEqual(gameInfo.Platforms, _gameViewModel.Platforms, "The platforms should match.");
+            Assert.AreEqual(gameInfo.Genres, _gameViewModel.Genres, "The genres should match.");
         }
 
         [Test]
@@ -281,16 +246,43 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             _gameViewModel.GameUrl = new Uri("https://traklibrary.com");
             _gameViewModel.InLibrary = true;
             _gameViewModel.PlatformId = 2L;
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
+            
             var gameInfo = new GameInfo
             {
                 Id = 5L,
                 Title = "test-title",
                 ReleaseDate = DateTime.Now,
                 Description = "test-description",
+                Platforms = new List<Platform>
+                {
+                    new Platform
+                    {
+                        Id = 1L
+                    },
+                    new Platform
+                    {
+                        Id = 2L
+                    }
+                },
+                Publishers = new List<Publisher>
+                {
+                    new Publisher()
+                },
+                Genres = new List<Genre>
+                {
+                    new Genre
+                    {
+                        Links = new Dictionary<string, HateoasLink>
+                        {
+                            {
+                                "gameInfos", new HateoasLink
+                                {
+                                    Href = new Uri("https://traklibrary.com")
+                                }
+                            }
+                        }
+                    }
+                },
                 Links = new Dictionary<string, HateoasLink>
                 {
                     {
@@ -321,74 +313,11 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             };
 
             _restService
-                .Setup(mock => mock.GetAsync<GameInfo>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<GameInfo>(It.IsAny<string>()))
                 .ReturnsAsync(gameInfo);
 
-            var publishers = new[]
-            {
-                new Publisher()
-            };
-
             _restService
-                .Setup(mock => mock.GetAsync<HateoasCollection<Publisher>>(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HateoasCollection<Publisher>
-                {
-                    Embedded = new HateoasResources<Publisher>
-                    {
-                        Data = publishers
-                    }
-                });
-
-            var platforms = new[]
-            {
-                new Platform
-                {
-                    Id = 1L
-                },
-                new Platform
-                {
-                    Id = 2L
-                }
-            };
-
-            _restService
-                .Setup(mock => mock.GetAsync<HateoasCollection<Platform>>(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HateoasCollection<Platform>
-                {
-                    Embedded = new HateoasResources<Platform>
-                    {
-                        Data = platforms
-                    }
-                });
-
-            var genres = new[]
-            {
-                new Genre
-                {
-                    Links = new Dictionary<string, HateoasLink>
-                    {
-                        {
-                            "gameInfos", new HateoasLink
-                            {
-                                Href = new Uri("https://traklibrary.com")
-                            }
-                        }
-                    }
-                }
-            };
-
-            _restService
-                .Setup(mock => mock.GetAsync<HateoasCollection<Genre>>(It.IsAny<string>(), It.IsAny<string>()))
-                .ReturnsAsync(new HateoasCollection<Genre>
-                {
-                    Embedded = new HateoasResources<Genre>
-                    {
-                        Data = genres
-                    }
-                });
-
-            _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
                 .ReturnsAsync(new HateoasPage<GameInfo>
                 {
                     Embedded = new HateoasResources<GameInfo>
@@ -413,11 +342,11 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             Assert.AreEqual(gameInfo.Title, _gameViewModel.GameTitle, "The titles should match.");
             Assert.AreEqual(gameInfo.ReleaseDate, _gameViewModel.ReleaseDate, "The release dates should match.");
             Assert.AreEqual(gameInfo.Description, _gameViewModel.Description, "The titles should match.");
-            Assert.AreEqual(publishers, _gameViewModel.Publishers, "The publishers should match.");
+            Assert.AreEqual(gameInfo.Publishers, _gameViewModel.Publishers, "The publishers should match.");
             Assert.AreEqual(1, _gameViewModel.Platforms.Count(),
                 "There should be only one element in the platforms list.");
-            Assert.AreEqual(platforms[1].Id, _gameViewModel.Platforms.First().Id, "The platform Id should match.");
-            Assert.AreEqual(genres, _gameViewModel.Genres, "The genres should match.");
+            Assert.AreEqual(gameInfo.Platforms.First(p => p.Id == _gameViewModel.PlatformId), _gameViewModel.Platforms.FirstOrDefault());
+            Assert.AreEqual(gameInfo.Genres, _gameViewModel.Genres, "The genres should match.");
         }
 
         [Test]
@@ -426,12 +355,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(5L);
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
+            
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .Throws(new ApiException());
 
             // Act
@@ -448,12 +374,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(5L);
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
+            
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .ReturnsAsync(new HateoasPage<GameUserEntry>());
 
             // Act
@@ -462,8 +385,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
 
             // Assert
             _restService.Verify(
-                mock => mock.PatchAsync<GameUserEntry>(It.IsAny<string>(), It.IsAny<IDictionary<string, object>>(),
-                    It.IsAny<string>()), Times.Never);
+                mock => mock.PatchAsync<GameUserEntry>(It.IsAny<string>(), It.IsAny<IDictionary<string, object>>()), Times.Never);
         }
 
         [Test]
@@ -472,12 +394,9 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(5L);
-
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
+            
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .ReturnsAsync(new HateoasPage<GameUserEntry>
                 {
                     Embedded = new HateoasResources<GameUserEntry>
@@ -490,7 +409,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
                 });
 
             _restService.Setup(mock => mock.PatchAsync<GameUserEntry>(It.IsAny<string>(),
-                    It.IsAny<IDictionary<string, object>>(), It.IsAny<string>()))
+                    It.IsAny<IDictionary<string, object>>()))
                 .ReturnsAsync(new GameUserEntry());
 
             // Act
@@ -499,8 +418,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
 
             // Assert
             _restService.Verify(
-                mock => mock.PatchAsync<GameUserEntry>(It.IsAny<string>(), It.IsAny<IDictionary<string, object>>(),
-                    It.IsAny<string>()), Times.Once);
+                mock => mock.PatchAsync<GameUserEntry>(It.IsAny<string>(), It.IsAny<IDictionary<string, object>>()), Times.Once);
         }
     }
 }

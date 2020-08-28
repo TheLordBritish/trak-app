@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Reactive.Concurrency;
+using Microsoft.IdentityModel.Tokens;
 using Prism.Navigation;
 using Sparky.TrakApp.Model.Login;
 using Sparky.TrakApp.Service;
@@ -15,8 +18,8 @@ namespace Sparky.TrakApp.ViewModel.Login
     public class LoadingViewModel : ReactiveViewModel
     {
         private readonly IStorageService _storageService;
-        private readonly IAuthService _authService;
         private readonly IRestService _restService;
+        private readonly SecurityTokenHandler _securityTokenHandler;
 
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
@@ -26,15 +29,14 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// <param name="scheduler">The <see cref="IScheduler"/> instance to inject.</param>
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
-        /// <param name="authService">The <see cref="IAuthService"/> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
+        /// <param name="securityTokenHandler">The <see cref="SecurityTokenHandler"/> instance to inject.</param>
         public LoadingViewModel(IScheduler scheduler, INavigationService navigationService,
-            IStorageService storageService,
-            IAuthService authService, IRestService restService) : base(scheduler, navigationService)
+            IStorageService storageService, IRestService restService, SecurityTokenHandler securityTokenHandler) : base(scheduler, navigationService)
         {
             _storageService = storageService;
-            _authService = authService;
             _restService = restService;
+            _securityTokenHandler = securityTokenHandler;
         }
 
         /// <summary>
@@ -49,40 +51,46 @@ namespace Sparky.TrakApp.ViewModel.Login
         {
             try
             {
-                // Retrieve any existing credentials.
-                var username = await _storageService.GetUsernameAsync();
-                var password = await _storageService.GetPasswordAsync();
+                // Retrieve existing token.
+                var token = await _storageService.GetAuthTokenAsync();
 
-                // Try to retrieve a token from the credentials in the store.
-                var token = await _authService.GetTokenAsync(new UserCredentials
+                // Only process if the user can log in if they actually have a token stored.
+                if (!string.IsNullOrEmpty(token))
                 {
-                    Username = username,
-                    Password = password
-                });
+                    // decode the jwt.
+                    var jwt = _securityTokenHandler.ReadToken(token) as JwtSecurityToken;
 
-                // We got a valid token, so store it.
-                await _storageService.SetAuthTokenAsync(token);
-
-                // Need to ensure the correct details are registered for push notifications.
-                await _restService.PostAsync("api/notification-management/v1/notifications/register",
-                    new NotificationRegistrationRequest
+                    // Get the needed information from the JWT.
+                    var username = jwt.Subject;
+                    var userId = int.Parse(jwt.Claims.First(c => c.Type == "userId").Value);
+                    var verified = bool.Parse(jwt.Claims.First(c => c.Type == "verified").Value);
+                    
+                    // We'll need to update the information within the store just in case its changed since last the user 
+                    // logged in.
+                    await _storageService.SetUsernameAsync(username);
+                    await _storageService.SetUserIdAsync(userId);
+                    
+                    // Need to ensure the correct details are registered for push notifications.
+                    await _restService.PostAsync("notifications/register",
+                        new NotificationRegistrationRequest
+                        {
+                            UserId = await _storageService.GetUserIdAsync(),
+                            DeviceGuid = (await _storageService.GetDeviceIdAsync()).ToString(),
+                            Token = await _storageService.GetNotificationTokenAsync()
+                        });
+                    
+                    if (!verified)
                     {
-                        UserId = await _storageService.GetUserIdAsync(),
-                        DeviceGuid = (await _storageService.GetDeviceIdAsync()).ToString(),
-                        Token = await _storageService.GetNotificationTokenAsync()
-                    }, token);
-
-                // Need to get details to check if they're verified, if they're not they can go back
-                // to the login page.
-                var userResponse = await _authService.GetFromUsernameAsync(username, token);
-
-                if (!userResponse.Verified)
-                {
-                    await NavigationService.NavigateAsync("/LoginPage");
+                        await NavigationService.NavigateAsync("/LoginPage");
+                    }
+                    else
+                    {
+                        await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");
+                    }
                 }
                 else
                 {
-                    await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");
+                    await NavigationService.NavigateAsync("/LoginPage");
                 }
             }
             catch (Exception)

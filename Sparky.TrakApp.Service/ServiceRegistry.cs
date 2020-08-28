@@ -6,13 +6,14 @@ using Polly.Extensions.Http;
 using Polly.Timeout;
 using Prism.Ioc;
 using Sparky.TrakApp.Service.Exception;
+using Sparky.TrakApp.Service.Handlers;
 using Sparky.TrakApp.Service.Impl;
 
 namespace Sparky.TrakApp.Service
 {
     public static class ServiceRegistry
     {
-        public static void RegisterTypes(IContainerRegistry containerRegistry, string environmentUrl)
+        public static void RegisterTypes(IContainerRegistry containerRegistry, IStorageService storageService, string environmentUrl)
         {
             var retryPolicy = HttpPolicyExtensions
                 .HandleTransientHttpError()
@@ -28,21 +29,26 @@ namespace Sparky.TrakApp.Service
             var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(10);
 
             var serviceCollection = new ServiceCollection();
+
             serviceCollection
                 .AddHttpClient("Trak", client =>
                 {
                     client.BaseAddress = new Uri(environmentUrl);
                 })
                 .AddPolicyHandler(retryPolicy)
-                .AddPolicyHandler(timeoutPolicy);
+                .AddPolicyHandler(timeoutPolicy)
+                .AddHttpMessageHandler(c => new AuthTokenHandler(storageService))
+                .AddHttpMessageHandler(c => new RefreshTokenHandler(storageService));
 
             serviceCollection
                 .AddHttpClient("TrakAuth", client =>
                 {
                     client.BaseAddress = new Uri(environmentUrl);
                 })
-                .AddPolicyHandler(timeoutPolicy);
-            
+                .AddPolicyHandler(timeoutPolicy)
+                .AddHttpMessageHandler(c => new AuthTokenHandler(storageService))
+                .AddHttpMessageHandler(c => new RefreshTokenHandler(storageService));
+
             var serviceProvider = serviceCollection.BuildServiceProvider();
             
             // Services

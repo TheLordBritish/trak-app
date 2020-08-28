@@ -249,16 +249,15 @@ namespace Sparky.TrakApp.ViewModel.Login
                 await _storageService.SetAuthTokenAsync(token);
                 await _storageService.SetUserIdAsync(user.Id);
                 await _storageService.SetUsernameAsync(user.Username);
-                await _storageService.SetPasswordAsync(password);
 
                 // Need to ensure the correct details are registered for push notifications.
-                await _restService.PostAsync("api/notification-management/v1/notifications/register",
+                await _restService.PostAsync("notifications/register",
                     new NotificationRegistrationRequest
                     {
                         UserId = await _storageService.GetUserIdAsync(),
                         DeviceGuid = (await _storageService.GetDeviceIdAsync()).ToString(),
                         Token = await _storageService.GetNotificationTokenAsync()
-                    }, token);
+                    });
 
                 // Navigate to the verification page for the user to verify their account before use.
                 await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");

@@ -197,9 +197,8 @@ namespace Sparky.TrakApp.ViewModel.Login
         private async Task AttemptVerificationAsync(string verificationCode)
         {
             var username = await _storageService.GetUsernameAsync();
-            var authToken = await _storageService.GetAuthTokenAsync();
 
-            var response = await _authService.VerifyAsync(username, verificationCode, authToken);
+            var response = await _authService.VerifyAsync(username, verificationCode);
             if (!response.Data)
             {
                 IsError = response.Error;
@@ -227,10 +226,9 @@ namespace Sparky.TrakApp.ViewModel.Login
 
             // Retrieve the needed credentials from the store.
             var username = await _storageService.GetUsernameAsync();
-            var authToken = await _storageService.GetAuthTokenAsync();
 
             // Send the re-verification request.
-            await _authService.ReVerifyAsync(username, authToken);
+            await _authService.ReVerifyAsync(username);
 
             // On successful request, display a popup to the user stating that the email has been sent.
             await _userDialogs.AlertAsync(Messages.VerificationPageConfirmation, Messages.TrakTitle);

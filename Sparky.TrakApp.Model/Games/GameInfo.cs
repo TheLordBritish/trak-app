@@ -23,10 +23,10 @@ namespace Sparky.TrakApp.Model.Games
         
         public long Version { get; set; }
         
-        public IEnumerable<string> Platforms { get; set; }
+        public IEnumerable<Platform> Platforms { get; set; }
         
-        public IEnumerable<string> Publishers { get; set; }
+        public IEnumerable<Publisher> Publishers { get; set; }
         
-        public IEnumerable<string> Genres { get; set; }
+        public IEnumerable<Genre> Genres { get; set; }
     }
 }

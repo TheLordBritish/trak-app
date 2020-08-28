@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IdentityModel.Tokens.Jwt;
 using System.Reactive.Concurrency;
 using Acr.UserDialogs;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Microsoft.IdentityModel.Tokens;
 using Prism;
 using Prism.Ioc;
 using Prism.Plugin.Popups;
@@ -56,11 +58,12 @@ namespace Sparky.TrakApp
             containerRegistry.RegisterPopupNavigationService<TransitionPopupPageNavigationService>();
 
             // Services
-            ServiceRegistry.RegisterTypes(containerRegistry, Secrets.EnvironmentUrl);
             containerRegistry.Register<IFormsDevice, XamarinFormsDevice>();
             containerRegistry.Register<IStorageService, SecureStorageService>();
             containerRegistry.RegisterInstance(UserDialogs.Instance);
             containerRegistry.RegisterInstance(typeof(IScheduler), RxApp.MainThreadScheduler);
+            containerRegistry.RegisterInstance(typeof(SecurityTokenHandler), new JwtSecurityTokenHandler());
+            ServiceRegistry.RegisterTypes(containerRegistry, Container.Resolve<IStorageService>(), Secrets.EnvironmentUrl);
 
             // Xamarin pages.
             containerRegistry.RegisterForNavigation<BaseMasterDetailPage, BaseMasterDetailViewModel>();

@@ -57,7 +57,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             _scheduler.Start();
             
             // Assert
-            _restService.Verify(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<GameRequest>(), It.IsAny<string>()), Times.Never);
+            _restService.Verify(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<GameRequest>()), Times.Never);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             _scheduler.Start();
             
             // Assert
-            _restService.Verify(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<GameRequest>(), It.IsAny<string>()), Times.Never);
+            _restService.Verify(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<GameRequest>()), Times.Never);
         }
 
         [Test]
@@ -85,10 +85,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(5L);
             
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
-            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<GameRequest>(), It.IsAny<string>()))
+            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<GameRequest>()))
                 .ThrowsAsync(new ApiException());
             
             // Act
@@ -110,10 +107,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(5L);
             
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
-            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<GameRequest>(), It.IsAny<string>()))
+            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<GameRequest>()))
                 .ThrowsAsync(new Exception());
             
             // Act
@@ -135,10 +129,7 @@ namespace Sparky.TrakApp.ViewModel.Test.Games
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(5L);
             
-            _storageService.Setup(mock => mock.GetAuthTokenAsync())
-                .ReturnsAsync("token");
-
-            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<GameRequest>(), It.IsAny<string>()))
+            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<GameRequest>()))
                 .ReturnsAsync(new GameRequest());
             
             _userDialogs.Setup(mock => mock.AlertAsync(It.IsAny<AlertConfig>(), null))

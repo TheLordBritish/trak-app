@@ -181,7 +181,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// <returns>A <see cref="Task"/> which contains all of the <see cref="GameInfo"/> objects associated with the query.</returns>
         private async Task<IEnumerable<GameInfo>> SearchAsync(string query)
         {
-            _nextUri = $"api/game-management/v1/games/info?title={query}&sort=title";
+            _nextUri = $"games/info?title={query}&sort=title";
             return await GetGamesFromUrlAsync(_nextUri);
         }
         
@@ -207,10 +207,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="GameInfo"/> objects from the given page.</returns>
         private async Task<IEnumerable<GameInfo>> GetGamesFromUrlAsync(string url)
         {
-            // Get the needed variables from the store.
-            var authToken = await _storageService.GetAuthTokenAsync();
-
-            var page = await _restService.GetAsync<HateoasPage<GameInfo>>(url, authToken);
+            var page = await _restService.GetAsync<HateoasPage<GameInfo>>(url);
             _nextUri = page.GetLink("next")?.OriginalString;
 
             var result = new List<GameInfo>();
@@ -235,10 +232,10 @@ namespace Sparky.TrakApp.ViewModel.Games
             return new ListItemViewModel
             {
                 ImageUrl = gameInfo.GetLink("image"),
-                Header = string.Join(", ", gameInfo.Platforms),
+                Header = string.Join(", ", gameInfo.Platforms.Select(x => x.Name)),
                 ItemTitle = gameInfo.Title,
                 ItemSubTitle =
-                    $"{gameInfo.ReleaseDate:MMMM yyyy}, {string.Join(", ", gameInfo.Publishers)}",
+                    $"{gameInfo.ReleaseDate:MMMM yyyy}, {string.Join(", ", gameInfo.Publishers.Select(x => x.Name))}",
                 ShowRating = false,
                 TapCommand = new DelegateCommand(async () =>
                 {

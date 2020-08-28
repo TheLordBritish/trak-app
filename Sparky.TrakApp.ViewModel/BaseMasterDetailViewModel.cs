@@ -100,18 +100,15 @@ namespace Sparky.TrakApp.ViewModel
             // Get some values first before removing them all from the secure storage.
             var userId = await _storageService.GetUserIdAsync();
             var deviceId = await _storageService.GetDeviceIdAsync();
-            var token = await _storageService.GetAuthTokenAsync();
-
-            // Remove all of the identifiable information from the secure store.
-            await _storageService.SetUsernameAsync(string.Empty);
-            await _storageService.SetPasswordAsync(string.Empty);
-            await _storageService.SetAuthTokenAsync(string.Empty);
-            await _storageService.SetUserIdAsync(0);
 
             // Need to ensure the correct details are registered for push notifications.
             await _restService.DeleteAsync(
-                $"api/notification-management/v1/notifications/unregister?user-id={userId}&device-guid={deviceId}",
-                token);
+                $"notifications/unregister?user-id={userId}&device-guid={deviceId}");
+
+            // Remove all of the identifiable information from the secure store.
+            await _storageService.SetUsernameAsync(string.Empty);
+            await _storageService.SetAuthTokenAsync(string.Empty);
+            await _storageService.SetUserIdAsync(0);
 
             // Navigate back to the login page.
             await NavigationService.NavigateAsync("/LoginPage");

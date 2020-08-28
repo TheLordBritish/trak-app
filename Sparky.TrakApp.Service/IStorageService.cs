@@ -13,10 +13,6 @@ namespace Sparky.TrakApp.Service
 
         Task SetUsernameAsync(string username);
 
-        Task<string> GetPasswordAsync();
-
-        Task SetPasswordAsync(string password);
-        
         Task<string> GetAuthTokenAsync();
 
         Task SetAuthTokenAsync(string authToken);

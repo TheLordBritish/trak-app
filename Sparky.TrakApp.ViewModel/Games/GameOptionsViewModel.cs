@@ -183,13 +183,11 @@ namespace Sparky.TrakApp.ViewModel.Games
 
             // Get the needed values to make the call from the storage service.
             var userId = await _storageService.GetUserIdAsync();
-            var token = await _storageService.GetAuthTokenAsync();
-
+            
             // Make the request to see if the game they're adding is already in their library.
             var existingEntry =
                 await _restService.GetAsync<HateoasPage<GameUserEntry>>(
-                    $"api/game-management/v1/game-user-entries?user-id={userId}&platform-id={PlatformId}&game-id={GameId}",
-                    token);
+                    $"games/entries?user-id={userId}&platform-id={PlatformId}&game-id={GameId}");
 
             if (existingEntry.Embedded != null)
             {
@@ -198,7 +196,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                 entry.Status = SelectedStatus;
 
                 // Make a request to update the game to their collection.
-                await _restService.PutAsync("api/game-management/v1/game-user-entries", entry, token);
+                await _restService.PutAsync("games/entries", entry);
             }
 
             IsUpdated = true;
@@ -220,19 +218,17 @@ namespace Sparky.TrakApp.ViewModel.Games
 
             // Get the needed values to make the call from the storage service.
             var userId = await _storageService.GetUserIdAsync();
-            var token = await _storageService.GetAuthTokenAsync();
 
             // Make the request to see if the game they're adding is already in their library.
             var existingEntry =
                 await _restService.GetAsync<HateoasPage<GameUserEntry>>(
-                    $"api/game-management/v1/game-user-entries?user-id={userId}&platform-id={PlatformId}&game-id={GameId}",
-                    token);
+                    $"games/entries?user-id={userId}&platform-id={PlatformId}&game-id={GameId}");
 
             if (existingEntry.Embedded != null)
             {
                 // Make a request to delete the game from their collection.
                 await _restService.DeleteAsync(
-                    $"api/game-management/v1/game-user-entries/{existingEntry.Embedded.Data.First().Id}", token);
+                    $"games/entries/{existingEntry.Embedded.Data.First().Id}");
             }
 
             _inLibrary = false;

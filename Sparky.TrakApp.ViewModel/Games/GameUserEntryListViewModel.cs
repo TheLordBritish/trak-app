@@ -190,7 +190,7 @@ namespace Sparky.TrakApp.ViewModel.Games
             var status = _gameUserEntryStatus.GetAttributeValue<EnumMemberAttribute, string>(s => s.Value);
 
             // Make the initial request to load the first page.
-            _nextUri = $"api/game-management/v1/game-user-entries?user-id={userId}&status={status}&sort=gameTitle";
+            _nextUri = $"games/entries?user-id={userId}&status={status}&sort=gameTitle";
             return await LoadFromUrlAsync(_nextUri);
         }
 
@@ -205,10 +205,7 @@ namespace Sparky.TrakApp.ViewModel.Games
         /// </returns>
         private async Task<IEnumerable<GameUserEntry>> LoadFromUrlAsync(string url)
         {
-            // Get the needed variables from the store.
-            var authToken = await _storageService.GetAuthTokenAsync();
-
-            var page = await _restService.GetAsync<HateoasPage<GameUserEntry>>(url, authToken);
+            var page = await _restService.GetAsync<HateoasPage<GameUserEntry>>(url);
 
             _nextUri = page.GetLink("next")?.OriginalString;
 

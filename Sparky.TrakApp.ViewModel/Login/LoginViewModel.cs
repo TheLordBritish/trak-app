@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -7,6 +9,7 @@ using Prism.Navigation;
 using System.Threading.Tasks;
 using FluentValidation;
 using Microsoft.AppCenter.Crashes;
+using Microsoft.IdentityModel.Tokens;
 using Plugin.FluentValidationRules;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -32,7 +35,8 @@ namespace Sparky.TrakApp.ViewModel.Login
         private readonly IAuthService _authService;
         private readonly IStorageService _storageService;
         private readonly IRestService _restService;
-
+        private readonly SecurityTokenHandler _securityTokenHandler;
+        
         private IValidator _validator;
         private Validatables _validatables;
 
@@ -46,13 +50,15 @@ namespace Sparky.TrakApp.ViewModel.Login
         /// <param name="authService">The <see cref="IAuthService"/> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
+        /// <param name="securityTokenHandler">The <see cref="SecurityTokenHandler"/> instance to inject.</param>
         public LoginViewModel(IScheduler scheduler, INavigationService navigationService, IAuthService authService,
-            IStorageService storageService, IRestService restService)
+            IStorageService storageService, IRestService restService, SecurityTokenHandler securityTokenHandler)
             : base(scheduler, navigationService)
         {
             _authService = authService;
             _storageService = storageService;
             _restService = restService;
+            _securityTokenHandler = securityTokenHandler;
 
             SetupForValidation();
 
@@ -192,25 +198,30 @@ namespace Sparky.TrakApp.ViewModel.Login
                     Username = Username.Value,
                     Password = Password.Value
                 });
-
-                var userResponse = await _authService.GetFromUsernameAsync(Username.Value, token);
-
+                
+                // decode the jwt.
+                var jwt = _securityTokenHandler.ReadToken(token) as JwtSecurityToken;
+                
+                // Get the needed information from the JWT.
+                var username = jwt.Subject;
+                var userId = int.Parse(jwt.Claims.First(c => c.Type == "userId").Value);
+                var verified = bool.Parse(jwt.Claims.First(c => c.Type == "verified").Value);
+                
                 // Store the needed credentials in the store.
                 await _storageService.SetAuthTokenAsync(token);
-                await _storageService.SetUserIdAsync(userResponse.Id);
-                await _storageService.SetUsernameAsync(Username.Value);
-                await _storageService.SetPasswordAsync(Password.Value);
+                await _storageService.SetUserIdAsync(userId);
+                await _storageService.SetUsernameAsync(username);
 
                 // Need to ensure the correct details are registered for push notifications.
-                await _restService.PostAsync("api/notification-management/v1/notifications/register",
+                await _restService.PostAsync("notifications/register",
                     new NotificationRegistrationRequest
                     {
                         UserId = await _storageService.GetUserIdAsync(),
                         DeviceGuid = (await _storageService.GetDeviceIdAsync()).ToString(),
                         Token = await _storageService.GetNotificationTokenAsync()
-                    }, token);
+                    });
 
-                if (!userResponse.Verified)
+                if (!verified)
                 {
                     await NavigationService.NavigateAsync("VerificationPage");
                 }

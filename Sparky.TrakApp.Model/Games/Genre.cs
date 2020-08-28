@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Sparky.TrakApp.Model.Response;
 
 namespace Sparky.TrakApp.Model.Games
@@ -13,7 +14,7 @@ namespace Sparky.TrakApp.Model.Games
         public string Description { get; set; }
         
         public long? Version { get; set; }
-
+        
         public override string ToString()
         {
             return Name;

@@ -28,8 +28,8 @@ namespace Sparky.TrakApp.ViewModel.Games
         private readonly IStorageService _storageService;
 
         private long _gameId;
-        private IEnumerable<Platform> _allPlatforms;
-
+        private IEnumerable<Platform> _platforms;
+        
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
@@ -236,7 +236,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                 var parameters = new NavigationParameters
                 {
                     {"game-url", GameUrl},
-                    {"platforms", _allPlatforms},
+                    {"platforms", _platforms},
                     {"game-id", _gameId}
                 };
 
@@ -257,40 +257,28 @@ namespace Sparky.TrakApp.ViewModel.Games
             // We're going to make some requests, so we're busy and remove any current errors.
             IsError = false;
             HasLoaded = false;
-
-            // Get the auth token from the store.
-            var token = await _storageService.GetAuthTokenAsync();
-
+            
             // Retrieve the game and set some game information on the view.
-            var gameInfo = await _restService.GetAsync<GameInfo>(GameUrl.OriginalString, token);
+            var gameInfo = await _restService.GetAsync<GameInfo>(GameUrl.OriginalString);
             _gameId = gameInfo.Id;
             ImageUrl = gameInfo.GetLink("image");
             GameTitle = gameInfo.Title;
             ReleaseDate = gameInfo.ReleaseDate;
             Description = gameInfo.Description;
+            Publishers = gameInfo.Publishers;
+            Genres = gameInfo.Genres;
 
-            // Retrieve the publisher information.
-            var publishers =
-                await _restService.GetAsync<HateoasCollection<Publisher>>(
-                    gameInfo.GetLink("publishers").OriginalString, token);
-
-            Publishers = publishers.Embedded?.Data;
-
-            // Load the platform data from either the supplied platform uri or the platform data with the game info.
-            await GetPlatformsAsync(gameInfo.GetLink("platforms"), token);
-
-            // Retrieve all of the genres the game is and display the names to the user.
-            var genres =
-                await _restService.GetAsync<HateoasCollection<Genre>>(gameInfo.GetLink("genres").OriginalString,
-                    token);
-
-            Genres = genres.Embedded?.Data;
+            _platforms = gameInfo.Platforms;
+            Platforms = InLibrary ? new[] {gameInfo.Platforms.First(p => p.Id == PlatformId)} : _platforms;
 
             // Grab the first genre and load some game information from it.
-            var games = await _restService.GetAsync<HateoasPage<GameInfo>>(
-                genres.Embedded?.Data.First().GetLink("gameInfos").OriginalString, token);
+            if (Genres.Any())
+            {
+                var games = await _restService.GetAsync<HateoasPage<GameInfo>>(
+                    Genres.First().GetLink("gameInfos").OriginalString);
 
-            CreateSimilarGamesList(games.Embedded.Data.Where(x => x.Id != gameInfo.Id));
+                CreateSimilarGamesList(games.Embedded.Data.Where(x => x.Id != gameInfo.Id));
+            }
 
             HasLoaded = true;
         }
@@ -302,21 +290,19 @@ namespace Sparky.TrakApp.ViewModel.Games
             
             // Get the user ID, needed to update the correct game user entry.
             var userId = await _storageService.GetUserIdAsync();
-            // Get the auth token from the store.
-            var token = await _storageService.GetAuthTokenAsync();
-
+            
             // Get the details of the user entry that the rating is going to be updated for.
             var entry = await _restService.GetAsync<HateoasPage<GameUserEntry>>(
-                $"api/game-management/v1/game-user-entries?user-id={userId}&platform-id={PlatformId}&game-id={_gameId}", token);
+                $"games/entries?user-id={userId}&platform-id={PlatformId}&game-id={_gameId}");
 
             if (entry.Embedded != null)
             {
                 // Update the entry via patch with only the rating changed.
-                await _restService.PatchAsync<GameUserEntry>($"api/game-management/v1/game-user-entries/{entry.Embedded.Data.First().Id}",
+                await _restService.PatchAsync<GameUserEntry>($"games/entries/{entry.Embedded.Data.First().Id}",
                     new Dictionary<string, object>
                     {
                         {nameof(GameUserEntry.Rating), Rating}
-                    }, token);
+                    });
             }
             
             return true;
@@ -335,29 +321,12 @@ namespace Sparky.TrakApp.ViewModel.Games
                 similarGames.Add(new ListItemViewModel
                 {
                     ImageUrl = game.GetLink("image"),
-                    Header = string.Join(", ", game.Platforms),
+                    Header = string.Join(", ", game.Platforms.Select(x => x.Name)),
                     ItemTitle = game.Title,
-                    ItemSubTitle = $"{game.ReleaseDate:MMMM yyyy}, {string.Join(", ", game.Publishers)}"
+                    ItemSubTitle = $"{game.ReleaseDate:MMMM yyyy}, {string.Join(", ", game.Publishers.Select(x => x.Name))}"
                 });
 
             SimilarGames = similarGames;
-        }
-
-        /// <summary>
-        /// Private method that is invoked within the <see cref="LoadGameInfoAsync" /> method. Its purpose
-        /// is to load all of the platform data associated with the provided <see cref="GameInfo" /> instance,
-        /// </summary>
-        /// <param name="uri">The uri to call to retrieve the <see cref="Platform" /> data.</param>
-        /// <param name="token">The authentication token to attach to the request.</param>
-        /// <returns>A <see cref="Task" /> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task GetPlatformsAsync(Uri uri, string token)
-        {
-            // We'll need to store all of the platforms for the game so that it can be passed to the popup pages when adding a new
-            // game to the users library.
-            var platforms = await _restService.GetAsync<HateoasCollection<Platform>>(uri.OriginalString, token);
-            _allPlatforms = platforms.Embedded.Data;
-
-            Platforms = InLibrary ? new[] {_allPlatforms.First(p => p.Id == PlatformId)} : _allPlatforms;
         }
     }
 }

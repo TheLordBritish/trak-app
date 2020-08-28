@@ -243,12 +243,10 @@ namespace Sparky.TrakApp.ViewModel.Games
         {
             // Get the needed values to make the call from the storage service.
             var userId = await _storageService.GetUserIdAsync();
-            var token = await _storageService.GetAuthTokenAsync();
 
             // Make the request to see if the game they're adding is already in their library.
             var existingEntry = await _restService.GetAsync<HateoasPage<GameUserEntry>>(
-                $"api/game-management/v1/game-user-entries?user-id={userId}&platform-id={SelectedPlatform.Value.Id}&game-id={GameId}",
-                token);
+                $"games/entries?user-id={userId}&platform-id={SelectedPlatform.Value.Id}&game-id={GameId}");
 
             if (existingEntry.Embedded != null)
             {
@@ -257,7 +255,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                 entry.Status = SelectedStatus.Value;
 
                 // Make a request to update the game to their collection.
-                await _restService.PutAsync("api/game-management/v1/game-user-entries", entry, token);
+                await _restService.PutAsync("games/entries", entry);
             }
             else
             {
@@ -270,7 +268,7 @@ namespace Sparky.TrakApp.ViewModel.Games
                 };
 
                 // Make a request to add the game to their collection.
-                await _restService.PostAsync("api/game-management/v1/game-user-entries", entry, token);
+                await _restService.PostAsync("games/entries", entry);
             }
 
             _inLibrary = true;

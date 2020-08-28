@@ -208,11 +208,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Login
                 .Verifiable();
             _storageService.Setup(mock => mock.SetUsernameAsync(It.IsAny<string>()))
                 .Verifiable();
-            _storageService.Setup(mock => mock.SetPasswordAsync(It.IsAny<string>()))
-                .Verifiable();
 
-            _restService.Setup(mock =>
-                    mock.PostAsync(It.IsAny<string>(), It.IsAny<NotificationRegistrationRequest>(), It.IsAny<string>()))
+            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<NotificationRegistrationRequest>()))
                 .Verifiable();
 
             _navigationService.Setup(mock => mock.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage"))

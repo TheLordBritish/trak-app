@@ -45,7 +45,7 @@ namespace Sparky.TrakApp.Service
                 {
                     client.BaseAddress = new Uri(environmentUrl);
                 })
-                .AddPolicyHandler(timeoutPolicy)
+                .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(20))
                 .AddHttpMessageHandler(c => new AuthTokenHandler(storageService))
                 .AddHttpMessageHandler(c => new RefreshTokenHandler(storageService));
 

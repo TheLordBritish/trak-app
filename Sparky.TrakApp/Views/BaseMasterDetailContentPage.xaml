@@ -86,7 +86,11 @@
                     <Label
                         FontSize="48"
                         Style="{StaticResource TitleLabelStyle}"
-                        Text="{extensions:Translate BaseMasterDetailContentPageSettings}" />
+                        Text="{extensions:Translate BaseMasterDetailContentPageSettings}">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding LoadSettingsCommand}" NumberOfTapsRequired="1" />
+                        </Label.GestureRecognizers>
+                    </Label>
                     <!--  Logout label  -->
                     <Label
                         FontSize="48"

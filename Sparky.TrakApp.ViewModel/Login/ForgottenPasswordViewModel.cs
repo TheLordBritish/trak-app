@@ -2,15 +2,12 @@
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using FluentValidation;
 using Microsoft.AppCenter.Crashes;
 using Plugin.FluentValidationRules;
-using Prism.Commands;
 using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
-using Sparky.TrakApp.Model.Login;
 using Sparky.TrakApp.Model.Login.Validation;
 using Sparky.TrakApp.Service;
 using Sparky.TrakApp.Service.Exception;

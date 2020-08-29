@@ -178,6 +178,69 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change.
+        /// </summary>
+        public static string ChangePasswordPageChange {
+            get {
+                return ResourceManager.GetString("ChangePasswordPageChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm new password.
+        /// </summary>
+        public static string ChangePasswordPageConfirmNewPassword {
+            get {
+                return ResourceManager.GetString("ChangePasswordPageConfirmNewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current password.
+        /// </summary>
+        public static string ChangePasswordPageCurrentPassword {
+            get {
+                return ResourceManager.GetString("ChangePasswordPageCurrentPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New password.
+        /// </summary>
+        public static string ChangePasswordPageNewPassword {
+            get {
+                return ResourceManager.GetString("ChangePasswordPageNewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset token.
+        /// </summary>
+        public static string ChangePasswordPageResetToken {
+            get {
+                return ResourceManager.GetString("ChangePasswordPageResetToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password successfully changed. Please login with your new credentials..
+        /// </summary>
+        public static string ChangePasswordPageSuccess {
+            get {
+                return ResourceManager.GetString("ChangePasswordPageSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change password.
+        /// </summary>
+        public static string ChangePasswordPageTitle {
+            get {
+                return ResourceManager.GetString("ChangePasswordPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Done.
         /// </summary>
         public static string Done {
@@ -1137,6 +1200,78 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         public static string RegistrationErrorMessageUsernameWhitespace {
             get {
                 return ResourceManager.GetString("RegistrationErrorMessageUsernameWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Already have a token?.
+        /// </summary>
+        public static string RequestChangePasswordPageAlreadyHaveToken {
+            get {
+                return ResourceManager.GetString("RequestChangePasswordPageAlreadyHaveToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap below to receive your token to change your password..
+        /// </summary>
+        public static string RequestChangePasswordPageInstructions {
+            get {
+                return ResourceManager.GetString("RequestChangePasswordPageInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send.
+        /// </summary>
+        public static string RequestChangePasswordPageSend {
+            get {
+                return ResourceManager.GetString("RequestChangePasswordPageSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap here.
+        /// </summary>
+        public static string RequestChangePasswordPageTapHere {
+            get {
+                return ResourceManager.GetString("RequestChangePasswordPageTapHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request change password.
+        /// </summary>
+        public static string RequestChangePasswordPageTitle {
+            get {
+                return ResourceManager.GetString("RequestChangePasswordPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account.
+        /// </summary>
+        public static string SettingsPageAccountSubtitle {
+            get {
+                return ResourceManager.GetString("SettingsPageAccountSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change password.
+        /// </summary>
+        public static string SettingsPageChangePassword {
+            get {
+                return ResourceManager.GetString("SettingsPageChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string SettingsPageTitle {
+            get {
+                return ResourceManager.GetString("SettingsPageTitle", resourceCulture);
             }
         }
         

@@ -414,4 +414,49 @@
 	<data name="GameUserEntriesTabbedPageTitle" xml:space="preserve">
 		<value>Games</value>
 	</data>
+	<data name="SettingsPageTitle" xml:space="preserve">
+		<value>Settings</value>
+	</data>
+	<data name="SettingsPageAccountSubtitle" xml:space="preserve">
+		<value>Account</value>
+	</data>
+	<data name="SettingsPageChangePassword" xml:space="preserve">
+		<value>Change password</value>
+	</data>
+	<data name="ChangePasswordPageTitle" xml:space="preserve">
+		<value>Change password</value>
+	</data>
+	<data name="ChangePasswordPageCurrentPassword" xml:space="preserve">
+		<value>Current password</value>
+	</data>
+	<data name="ChangePasswordPageNewPassword" xml:space="preserve">
+		<value>New password</value>
+	</data>
+	<data name="ChangePasswordPageConfirmNewPassword" xml:space="preserve">
+		<value>Confirm new password</value>
+	</data>
+	<data name="ChangePasswordPageChange" xml:space="preserve">
+		<value>Change</value>
+	</data>
+	<data name="ChangePasswordPageResetToken" xml:space="preserve">
+		<value>Reset token</value>
+	</data>
+	<data name="RequestChangePasswordPageTitle" xml:space="preserve">
+		<value>Request change password</value>
+	</data>
+	<data name="RequestChangePasswordPageInstructions" xml:space="preserve">
+		<value>Tap below to receive your token to change your password.</value>
+	</data>
+	<data name="RequestChangePasswordPageSend" xml:space="preserve">
+		<value>Send</value>
+	</data>
+	<data name="RequestChangePasswordPageAlreadyHaveToken" xml:space="preserve">
+		<value>Already have a token?</value>
+	</data>
+	<data name="RequestChangePasswordPageTapHere" xml:space="preserve">
+		<value>Tap here</value>
+	</data>
+	<data name="ChangePasswordPageSuccess" xml:space="preserve">
+		<value>Password successfully changed. Please login with your new credentials.</value>
+	</data>
 </root>

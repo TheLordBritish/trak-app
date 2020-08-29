@@ -38,7 +38,8 @@ namespace Sparky.TrakApp.ViewModel
 
             LoadHomeCommand = ReactiveCommand.CreateFromTask(LoadHomeAsync, outputScheduler: scheduler);
             LoadGamesCommand = ReactiveCommand.CreateFromTask(LoadGamesAsync, outputScheduler: scheduler);
-
+            LoadSettingsCommand = ReactiveCommand.CreateFromTask(LoadSettingsAsync, outputScheduler: scheduler);
+            
             LogoutCommand = ReactiveCommand.CreateFromTask(LogoutAsync, outputScheduler: scheduler);
             // Not much if the logout fails, just still go to the login page.
             LogoutCommand.ThrownExceptions.Subscribe(async ex =>
@@ -60,6 +61,12 @@ namespace Sparky.TrakApp.ViewModel
         /// </summary>
         public ReactiveCommand<Unit, Unit> LoadGamesCommand { get; }
 
+        /// <summary>
+        /// Command that is invoked each time the settings label is tapped by the user on the view.
+        /// When called, the command will propagate the request and call the <see cref="LoadSettingsAsync"/> method.
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> LoadSettingsCommand { get; }
+        
         /// <summary>
         /// Command that is invoked each time the logout label is tapped by the user on the view.
         /// When called, the command will propagate the request and call the <see cref="LogoutAsync"/> method.
@@ -86,6 +93,16 @@ namespace Sparky.TrakApp.ViewModel
             await NavigationService.NavigateAsync("BaseNavigationPage/GameUserEntriesTabbedPage");
         }
 
+        /// <summary>
+        /// Private method that is invoked by the <see cref="LoadSettingsCommand"/>. When called, it will navigate
+        /// the user to the games page.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
+        private async Task LoadSettingsAsync()
+        {
+            await NavigationService.NavigateAsync("BaseNavigationPage/SettingsPage");
+        }
+        
         /// <summary>
         /// Private method that invoked by the <see cref="LogoutCommand"/>. When called, it will remove all of the
         /// personal identifiable information from the <see cref="IStorageService"/> and remove the notification token

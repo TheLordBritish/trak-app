@@ -61,6 +61,21 @@ namespace Sparky.TrakApp.ViewModel.Test
         }
 
         [Test]
+        public void LoadSettingsCommand_WithNoData_DoesntThrowException()
+        {
+            // Arrange
+            _navigationService.Setup(mock => mock.NavigateAsync("BaseNavigationPage/SettingsPage"))
+                .Verifiable();
+
+            // Act
+            _baseMasterDetailViewModel.LoadSettingsCommand.Execute().Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            _navigationService.Verify();
+        }
+
+        [Test]
         public void LogoutCommand_ThrowsException_NavigatesToLoginPage()
         {
             // Arrange

@@ -16,9 +16,11 @@ using Sparky.TrakApp.Service;
 using Sparky.TrakApp.ViewModel;
 using Sparky.TrakApp.ViewModel.Games;
 using Sparky.TrakApp.ViewModel.Login;
+using Sparky.TrakApp.ViewModel.Settings;
 using Sparky.TrakApp.Views;
 using Sparky.TrakApp.Views.Games;
 using Sparky.TrakApp.Views.Login;
+using Sparky.TrakApp.Views.Settings;
 
 namespace Sparky.TrakApp
 {
@@ -79,7 +81,12 @@ namespace Sparky.TrakApp
 
             // Home pages
             containerRegistry.RegisterForNavigation<HomePage, HomeViewModel>();
-
+            
+            // Settings pages
+            containerRegistry.RegisterForNavigation<SettingsPage, SettingsViewModel>();
+            containerRegistry.RegisterForNavigation<ChangePasswordPage, ChangePasswordViewModel>();
+            containerRegistry.RegisterForNavigation<RequestChangePasswordPage, RequestChangePasswordViewModel>();
+            
             // Game pages
             containerRegistry.Register<GameUserEntryBacklogListViewModel>();
             containerRegistry.Register<GameUserEntryInProgressListViewModel>();

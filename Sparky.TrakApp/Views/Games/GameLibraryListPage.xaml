@@ -7,9 +7,11 @@
     xmlns:common="clr-namespace:Sparky.TrakApp.Controls.Common;assembly=Sparky.TrakApp"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:games="clr-namespace:Sparky.TrakApp.ViewModel.Games;assembly=Sparky.TrakApp.ViewModel"
-    Title="{extensions:Translate GameLibraryListPageTitle}">
+    Title="{extensions:Translate GameLibraryListPageTitle}"
+    x:DataType="games:GameLibraryListViewModel"
+    AutomationId="GameLibraryListPage">
     <ContentPage.Content>
-        <StackLayout x:DataType="games:GameLibraryListViewModel">
+        <StackLayout>
             <!--  Search entry field  -->
             <Frame
                 Margin="10"
@@ -24,6 +26,7 @@
                     CornerRadius="0"
                     HasShadow="False">
                     <SearchBar
+                        AutomationId="GameLibraryListPageSearchBar"
                         CancelButtonColor="{StaticResource TrakWhite}"
                         Text="{Binding SearchQuery}"
                         TextColor="{StaticResource TrakWhite}">

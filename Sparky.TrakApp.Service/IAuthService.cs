@@ -21,6 +21,8 @@ namespace Sparky.TrakApp.Service
 
         Task RequestChangePasswordAsync(string username);
 
-        Task<CheckedResponse<bool>> ChangePasswordAsync(ChangePasswordRequest changePasswordRequest);
+        Task<CheckedResponse<bool>> ChangePasswordAsync(string username, ChangePasswordRequest changePasswordRequest);
+
+        Task<CheckedResponse<bool>> ChangeEmailAddressAsync(string username, ChangeEmailAddressRequest changeEmailAddressRequest);
     }
 }

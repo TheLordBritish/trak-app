@@ -40,5 +40,22 @@ namespace Sparky.TrakApp.ViewModel.Test.Settings
             // Assert
             _navigationService.Verify();
         }
+           
+        [Test]
+        public void ChangeEmailAddressCommand_WithNoData_DoesntThrowException()
+        {
+            _navigationService.Setup(mock => mock.NavigateAsync("ChangeEmailAddressPage", It.IsAny<INavigationParameters>()))
+                .Verifiable();
+            
+            Assert.DoesNotThrow(() =>
+            {
+                // Act
+                _settingsViewModel.ChangeEmailAddressCommand.Execute().Subscribe();
+                _scheduler.Start();
+            });    
+            
+            // Assert
+            _navigationService.Verify();
+        }
     }
 }

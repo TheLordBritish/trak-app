@@ -7,12 +7,13 @@
     xmlns:controls="clr-namespace:Sparky.TrakApp.Controls;assembly=Sparky.TrakApp"
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:games="clr-namespace:Sparky.TrakApp.ViewModel.Games;assembly=Sparky.TrakApp.ViewModel"
-    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    x:DataType="games:AddGameViewModel"
+    AutomationId="AddGamePage">
     <pages:PopupPage.Content>
         <StackLayout
             Margin="20,0"
             Padding="15"
-            x:DataType="games:AddGameViewModel"
             BackgroundColor="{StaticResource TrakPrimaryBlue}"
             VerticalOptions="Center">
 
@@ -22,6 +23,7 @@
                 FontAttributes="Bold"
                 Text="{extensions:Translate AddGamePagePlatform}" />
             <controls:BorderedPicker
+                AutomationId="AddGamePagePlatformPicker"
                 BorderColor="{StaticResource TrakWhite}"
                 BorderThickness="1"
                 ItemDisplayBinding="{Binding Name}"
@@ -44,6 +46,7 @@
             </controls:BorderedPicker>
             <!--  Platform error message.  -->
             <Label
+                AutomationId="AddGamePagePlatformPickerErrorMessageLabel"
                 IsEnabled="{Binding SelectedPlatform.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                 IsVisible="{Binding SelectedPlatform.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                 Style="{StaticResource ValidationLabelStyle}"
@@ -55,6 +58,7 @@
                 FontAttributes="Bold"
                 Text="{extensions:Translate AddGamePageStatus}" />
             <controls:BorderedPicker
+                AutomationId="AddGamePageStatusPicker"
                 BorderColor="{StaticResource TrakWhite}"
                 BorderThickness="1"
                 ItemDisplayBinding="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"
@@ -77,6 +81,7 @@
             </controls:BorderedPicker>
             <!--  Status error message.  -->
             <Label
+                AutomationId="AddGamePageStatusPickerErrorMessageLabel"
                 IsEnabled="{Binding SelectedStatus.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                 IsVisible="{Binding SelectedStatus.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                 Style="{StaticResource ValidationLabelStyle}"
@@ -85,6 +90,7 @@
             <!--  Display error messages if anything went wrong.  -->
             <Label
                 Margin="0,5"
+                AutomationId="AddGamePageErrorMessageLabel"
                 IsEnabled="{Binding IsError}"
                 IsVisible="{Binding IsError}"
                 Style="{StaticResource ValidationLabelStyle}"
@@ -93,6 +99,7 @@
             <!--  Add button and activity indicator.  -->
             <Button
                 Margin="0,15,0,0"
+                AutomationId="AddGamePageAddButton"
                 Command="{Binding AddGameCommand}"
                 IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
                 Style="{StaticResource PrimaryButtonStyle}"

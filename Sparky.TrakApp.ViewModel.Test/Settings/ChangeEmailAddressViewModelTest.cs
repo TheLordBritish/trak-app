@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using Acr.UserDialogs;
@@ -17,7 +16,7 @@ using Sparky.TrakApp.ViewModel.Settings;
 namespace Sparky.TrakApp.ViewModel.Test.Settings
 {
     [TestFixture]
-    public class ChangePasswordViewModelTest
+    public class ChangeEmailAddressViewModelTest
     {
         private Mock<INavigationService> _navigationService;
         private Mock<IStorageService> _storageService;
@@ -26,8 +25,8 @@ namespace Sparky.TrakApp.ViewModel.Test.Settings
         private Mock<IUserDialogs> _userDialogs;
         private TestScheduler _scheduler;
 
-        private ChangePasswordViewModel _changePasswordViewModel;
-
+        private ChangeEmailAddressViewModel _changeEmailAddressViewModel;
+        
         [SetUp]
         public void SetUp()
         {
@@ -38,93 +37,87 @@ namespace Sparky.TrakApp.ViewModel.Test.Settings
             _userDialogs = new Mock<IUserDialogs>();
             _scheduler = new TestScheduler();
 
-            _changePasswordViewModel = new ChangePasswordViewModel(_scheduler, _navigationService.Object,
-                _storageService.Object, _restService.Object, _authService.Object, _userDialogs.Object);
+            _changeEmailAddressViewModel = new ChangeEmailAddressViewModel(_scheduler, _navigationService.Object,
+                _storageService.Object, _authService.Object, _restService.Object, _userDialogs.Object);
         }
-
+        
         [Test]
         public void ClearValidationCommand_WithNoData_DoesntThrowException()
         {
             // Assert
             Assert.DoesNotThrow(() =>
             {
-                _changePasswordViewModel.ClearValidationCommand.Execute().Subscribe();
+                _changeEmailAddressViewModel.ClearValidationCommand.Execute().Subscribe();
                 _scheduler.Start();
             });
         }
-
+        
         [Test]
-        public void ChangeCommand_WithInvalidData_DoesntSendChangePasswordRequest()
+        public void ChangeEmailAddressCommand_WithInvalidData_DoesntSendChangePasswordRequest()
         {
             // Act
-            _changePasswordViewModel.ChangeCommand.Execute().Subscribe();
+            _changeEmailAddressViewModel.ChangeEmailAddressCommand.Execute().Subscribe();
             _scheduler.Start();
 
             // Assert
-            _authService.Verify(a => a.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()), Times.Never);
+            _authService.Verify(a => a.ChangeEmailAddressAsync(It.IsAny<string>(), It.IsAny<ChangeEmailAddressRequest>()), Times.Never);
         }
-
+        
         [Test]
-        public void ChangeCommand_ThrowsApiException_SetsErrorMessageAsApiError()
+        public void ChangeEmailAddressCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {
             // Arrange
-            _changePasswordViewModel.ResetToken.Value = string.Concat(Enumerable.Repeat("a", 30));
-            _changePasswordViewModel.NewPassword.Value = "Password123";
-            _changePasswordViewModel.ConfirmNewPassword.Value = "Password123";
+            _changeEmailAddressViewModel.EmailAddress.Value = "test@traklibrary.com";
 
             _storageService.Setup(m => m.GetUsernameAsync())
                 .ReturnsAsync("username");
 
-            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()))
+            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<string>(), It.IsAny<ChangeEmailAddressRequest>()))
                 .Throws(new ApiException());
 
             // Act
-            _changePasswordViewModel.ChangeCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _changeEmailAddressViewModel.ChangeEmailAddressCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
             _scheduler.Start();
             
             // Assert
-            Assert.IsTrue(_changePasswordViewModel.IsError,
-                "_changePasswordViewModel.IsError should be true if an exception is thrown.");
-            Assert.AreEqual(Messages.ErrorMessageApiError, _changePasswordViewModel.ErrorMessage,
+            Assert.IsTrue(_changeEmailAddressViewModel.IsError,
+                "_changeEmailAddressViewModel.IsError should be true if an exception is thrown.");
+            Assert.AreEqual(Messages.ErrorMessageApiError, _changeEmailAddressViewModel.ErrorMessage,
                 "The error message is incorrect.");
             
             _navigationService.Verify(m => m.NavigateAsync(It.IsAny<string>()), Times.Never);
         }
-
+        
         [Test]
-        public void ChangeCommand_ThrowsException_SetsErrorMessageAsApiGeneric()
+        public void ChangeEmailAddressCommand_ThrowsException_SetsErrorMessageAsApiGeneric()
         {
             // Arrange
-            _changePasswordViewModel.ResetToken.Value = string.Concat(Enumerable.Repeat("a", 30));
-            _changePasswordViewModel.NewPassword.Value = "Password123";
-            _changePasswordViewModel.ConfirmNewPassword.Value = "Password123";
+            _changeEmailAddressViewModel.EmailAddress.Value = "test@traklibrary.com";
 
             _storageService.Setup(m => m.GetUsernameAsync())
                 .ReturnsAsync("username");
 
-            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()))
+            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<string>(), It.IsAny<ChangeEmailAddressRequest>()))
                 .Throws(new Exception());
 
             // Act
-            _changePasswordViewModel.ChangeCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _changeEmailAddressViewModel.ChangeEmailAddressCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
             _scheduler.Start();
             
             // Assert
-            Assert.IsTrue(_changePasswordViewModel.IsError,
-                "_changePasswordViewModel.IsError should be true if an exception is thrown.");
-            Assert.AreEqual(Messages.ErrorMessageGeneric, _changePasswordViewModel.ErrorMessage,
+            Assert.IsTrue(_changeEmailAddressViewModel.IsError,
+                "_changeEmailAddressViewModel.IsError should be true if an exception is thrown.");
+            Assert.AreEqual(Messages.ErrorMessageGeneric, _changeEmailAddressViewModel.ErrorMessage,
                 "The error message is incorrect.");
             
             _navigationService.Verify(m => m.NavigateAsync(It.IsAny<string>()), Times.Never);
         }
-
+        
         [Test]
-        public void ChangeCommand_WithCheckedResponseError_SetsErrorMessage()
+        public void ChangeEmailAddressCommand_WithCheckedResponseError_SetsErrorMessage()
         {
             // Arrange
-            _changePasswordViewModel.ResetToken.Value = string.Concat(Enumerable.Repeat("a", 30));
-            _changePasswordViewModel.NewPassword.Value = "Password123";
-            _changePasswordViewModel.ConfirmNewPassword.Value = "Password123";
+            _changeEmailAddressViewModel.EmailAddress.Value = "test@traklibrary.com";
 
             _storageService.Setup(m => m.GetUsernameAsync())
                 .ReturnsAsync("username");
@@ -135,34 +128,32 @@ namespace Sparky.TrakApp.ViewModel.Test.Settings
                 ErrorMessage = "error-message"
             };
             
-            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()))
+            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<string>(), It.IsAny<ChangeEmailAddressRequest>()))
                 .ReturnsAsync(response);
             
             // Act
-            _changePasswordViewModel.ChangeCommand.Execute();
+            _changeEmailAddressViewModel.ChangeEmailAddressCommand.Execute();
             _scheduler.Start();
             
             // Assert
-            Assert.IsTrue(_changePasswordViewModel.IsError,
-                "_changePasswordViewModel.IsError should be true if the response has an error.");
-            Assert.AreEqual(response.ErrorMessage, _changePasswordViewModel.ErrorMessage,
+            Assert.IsTrue(_changeEmailAddressViewModel.IsError,
+                "_changeEmailAddressViewModel.IsError should be true if the response has an error.");
+            Assert.AreEqual(response.ErrorMessage, _changeEmailAddressViewModel.ErrorMessage,
                 "The error message is incorrect.");
             
             _navigationService.Verify(m => m.NavigateAsync(It.IsAny<string>()), Times.Never);
         }
-
+        
         [Test]
-        public void ChangeCommand_WithSuccessfulCheckedResponse_LogsOutAndNavigatesToLoginPage()
+        public void ChangeEmailAddressCommand_WithSuccessfulCheckedResponse_LogsOutAndNavigatesToLoginPage()
         {
             // Arrange
-            _changePasswordViewModel.ResetToken.Value = string.Concat(Enumerable.Repeat("a", 30));
-            _changePasswordViewModel.NewPassword.Value = "Password123";
-            _changePasswordViewModel.ConfirmNewPassword.Value = "Password123";
+            _changeEmailAddressViewModel.EmailAddress.Value = "test@traklibrary.com";
 
             _storageService.Setup(m => m.GetUsernameAsync())
                 .ReturnsAsync("username");
             
-            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()))
+            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<string>(), It.IsAny<ChangeEmailAddressRequest>()))
                 .ReturnsAsync(new CheckedResponse<bool>
                 {
                     Error = false
@@ -191,11 +182,11 @@ namespace Sparky.TrakApp.ViewModel.Test.Settings
                 .Verifiable();
             
             // Act
-            _changePasswordViewModel.ChangeCommand.Execute();
+            _changeEmailAddressViewModel.ChangeEmailAddressCommand.Execute();
             _scheduler.Start();
             
             // Assert
-            Assert.IsFalse(_changePasswordViewModel.IsError, "vm.IsError should be false if login was successful.");
+            Assert.IsFalse(_changeEmailAddressViewModel.IsError, "vm.IsError should be false if login was successful.");
 
             _restService.Verify();
             _storageService.Verify();

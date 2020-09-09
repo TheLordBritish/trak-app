@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-
 <TabbedPage
     x:Class="Sparky.TrakApp.Views.Games.GameUserEntriesTabbedPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
@@ -9,11 +8,24 @@
     xmlns:vms="clr-namespace:Sparky.TrakApp.ViewModel.Games;assembly=Sparky.TrakApp.ViewModel"
     Title="{extensions:Translate GameUserEntriesTabbedPageTitle}"
     x:DataType="vms:GameUserEntriesTabbedViewModel"
+    AutomationId="GameUserEntriesTabbedPage"
     BarBackgroundColor="{StaticResource TrakPrimaryBlue}">
     <TabbedPage.Children>
-        <games:GameUserEntryListPage Title="{extensions:Translate Backlog}" BindingContext="{Binding BacklogViewModel}" />
-        <games:GameUserEntryListPage Title="{extensions:Translate Playing}" BindingContext="{Binding InProgressViewModel}" />
-        <games:GameUserEntryListPage Title="{extensions:Translate Done}" BindingContext="{Binding CompletedViewModel}" />
-        <games:GameUserEntryListPage Title="{extensions:Translate Dropped}" BindingContext="{Binding DroppedViewModel}" />
+        <games:GameUserEntryListPage
+            Title="{extensions:Translate Backlog}"
+            AutomationId="GameUserEntriesTabbedPageBacklogTab"
+            BindingContext="{Binding BacklogViewModel}" />
+        <games:GameUserEntryListPage
+            Title="{extensions:Translate Playing}"
+            AutomationId="GameUserEntriesTabbedPagePlayingTab"
+            BindingContext="{Binding InProgressViewModel}" />
+        <games:GameUserEntryListPage
+            Title="{extensions:Translate Done}"
+            AutomationId="GameUserEntriesTabbedPageDoneTab"
+            BindingContext="{Binding CompletedViewModel}" />
+        <games:GameUserEntryListPage
+            Title="{extensions:Translate Dropped}"
+            AutomationId="GameUserEntriesTabbedPageDroppedTab"
+            BindingContext="{Binding DroppedViewModel}" />
     </TabbedPage.Children>
 </TabbedPage>

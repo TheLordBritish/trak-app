@@ -178,6 +178,51 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can change your email address below. Once, your email has been changed you will receive a verification email. You will have to re-verify your account..
+        /// </summary>
+        public static string ChangeEmailAddressPageInstructions {
+            get {
+                return ResourceManager.GetString("ChangeEmailAddressPageInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New email address.
+        /// </summary>
+        public static string ChangeEmailAddressPageNewEmailAddress {
+            get {
+                return ResourceManager.GetString("ChangeEmailAddressPageNewEmailAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Email address successfully changed. You will have received a new verification email. Please login and verify your account..
+        /// </summary>
+        public static string ChangeEmailAddressPageSuccess {
+            get {
+                return ResourceManager.GetString("ChangeEmailAddressPageSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change email address.
+        /// </summary>
+        public static string ChangeEmailAddressPageTitle {
+            get {
+                return ResourceManager.GetString("ChangeEmailAddressPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        public static string ChangeEmailAddressPageUpdate {
+            get {
+                return ResourceManager.GetString("ChangeEmailAddressPageUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change.
         /// </summary>
         public static string ChangePasswordPageChange {
@@ -615,6 +660,15 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         public static string GameUserEntryListPageEmptyServerError {
             get {
                 return ResourceManager.GetString("GameUserEntryListPageEmptyServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keep track of all your collections here in your library..
+        /// </summary>
+        public static string HomePageSubtitle {
+            get {
+                return ResourceManager.GetString("HomePageSubtitle", resourceCulture);
             }
         }
         
@@ -1254,6 +1308,15 @@ namespace Sparky.TrakApp.ViewModel.Resources {
         public static string SettingsPageAccountSubtitle {
             get {
                 return ResourceManager.GetString("SettingsPageAccountSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change email address.
+        /// </summary>
+        public static string SettingsPageChangeEmailAddress {
+            get {
+                return ResourceManager.GetString("SettingsPageChangeEmailAddress", resourceCulture);
             }
         }
         

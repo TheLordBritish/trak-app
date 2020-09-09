@@ -6,12 +6,11 @@
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:forms="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
     xmlns:games="clr-namespace:Sparky.TrakApp.ViewModel.Games;assembly=Sparky.TrakApp.ViewModel"
-    Title="{extensions:Translate GameBarcodeScannerPageTitle}">
+    Title="{extensions:Translate GameBarcodeScannerPageTitle}"
+    x:DataType="games:GameBarcodeScannerViewModel"
+    AutomationId="GameBarcodeScannerPage">
     <ContentPage.Content>
-        <Grid
-            x:DataType="games:GameBarcodeScannerViewModel"
-            HorizontalOptions="FillAndExpand"
-            VerticalOptions="FillAndExpand">
+        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />

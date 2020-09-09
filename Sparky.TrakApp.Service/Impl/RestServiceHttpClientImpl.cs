@@ -43,8 +43,8 @@ namespace Sparky.TrakApp.Service.Impl
         {
             using var client = _httpClientFactory.CreateClient("Trak");
             client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0.hal+json"));
+                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.hal+json"));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
             var request = new HttpRequestMessage
@@ -73,8 +73,8 @@ namespace Sparky.TrakApp.Service.Impl
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
             client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0.hal+json"));
+                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.hal+json"));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
             // Serialize the request body to json.
@@ -111,8 +111,8 @@ namespace Sparky.TrakApp.Service.Impl
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
             client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0.hal+json"));
+                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.hal+json"));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
             // Serialize the request body to json.
@@ -149,8 +149,8 @@ namespace Sparky.TrakApp.Service.Impl
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
             client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0.hal+json"));
+                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.hal+json"));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
             // Serialize the request body to json.
@@ -187,8 +187,8 @@ namespace Sparky.TrakApp.Service.Impl
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
             client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.0.hal+json"));
+                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1.hal+json"));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
             // Specify the URI and that the request is a delete request..

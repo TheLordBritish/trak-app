@@ -84,6 +84,7 @@ namespace Sparky.TrakApp
             
             // Settings pages
             containerRegistry.RegisterForNavigation<SettingsPage, SettingsViewModel>();
+            containerRegistry.RegisterForNavigation<ChangeEmailAddressPage, ChangeEmailAddressViewModel>();
             containerRegistry.RegisterForNavigation<ChangePasswordPage, ChangePasswordViewModel>();
             containerRegistry.RegisterForNavigation<RequestChangePasswordPage, RequestChangePasswordViewModel>();
             

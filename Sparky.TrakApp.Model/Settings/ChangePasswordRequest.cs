@@ -6,8 +6,6 @@ namespace Sparky.TrakApp.Model.Settings
     public class ChangePasswordRequest
     {
         public string RecoveryToken { get; set; }
-        
-        public string Username { get; set; }
 
         public string NewPassword { get; set; }
     }

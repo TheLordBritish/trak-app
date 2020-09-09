@@ -6,6 +6,7 @@
     xmlns:extensions="clr-namespace:Sparky.TrakApp.Extensions;assembly=Sparky.TrakApp"
     xmlns:viewModel="clr-namespace:Sparky.TrakApp.ViewModel;assembly=Sparky.TrakApp.ViewModel"
     Title="Title"
+    AutomationId="BaseMasterDetailContentPage"
     BackgroundColor="Transparent">
     <ContentPage.Content>
         <ScrollView Padding="35" x:DataType="viewModel:BaseMasterDetailViewModel">
@@ -34,6 +35,7 @@
                     Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
+                    AutomationId="BaseMasterDetailContentPageHomeLabel"
                     FontSize="48"
                     Style="{StaticResource TitleLabelStyle}"
                     Text="{extensions:Translate BaseMasterDetailContentPageHome}">
@@ -46,6 +48,7 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
+                    AutomationId="BaseMasterDetailContentPageGamesLabel"
                     FontSize="48"
                     Style="{StaticResource TitleLabelStyle}"
                     Text="{extensions:Translate BaseMasterDetailContentPageGames}">
@@ -58,6 +61,7 @@
                     Grid.Row="3"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
+                    AutomationId="BaseMasterDetailContentPageBooksLabel"
                     FontSize="48"
                     Style="{StaticResource TitleLabelStyle}"
                     Text="{extensions:Translate BaseMasterDetailContentPageBooks}" />
@@ -66,6 +70,7 @@
                     Grid.Row="4"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
+                    AutomationId="BaseMasterDetailContentPageAnimeLabel"
                     FontSize="48"
                     Style="{StaticResource TitleLabelStyle}"
                     Text="{extensions:Translate BaseMasterDetailContentPageAnime}" />
@@ -74,6 +79,7 @@
                     Grid.Row="5"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
+                    AutomationId="BaseMasterDetailContentPageMangaLabel"
                     FontSize="48"
                     Style="{StaticResource TitleLabelStyle}"
                     Text="{extensions:Translate BaseMasterDetailContentPageManga}" />
@@ -84,6 +90,7 @@
                     Margin="0,0,0,30"
                     VerticalOptions="EndAndExpand">
                     <Label
+                        AutomationId="BaseMasterDetailContentPageSettingsLabel"
                         FontSize="48"
                         Style="{StaticResource TitleLabelStyle}"
                         Text="{extensions:Translate BaseMasterDetailContentPageSettings}">
@@ -93,6 +100,7 @@
                     </Label>
                     <!--  Logout label  -->
                     <Label
+                        AutomationId="BaseMasterDetailContentPageLogoutLabel"
                         FontSize="48"
                         Style="{StaticResource TitleLabelStyle}"
                         Text="{extensions:Translate BaseMasterDetailContentPageLogout}">

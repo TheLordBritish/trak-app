@@ -459,4 +459,25 @@
 	<data name="ChangePasswordPageSuccess" xml:space="preserve">
 		<value>Password successfully changed. Please login with your new credentials.</value>
 	</data>
+	<data name="SettingsPageChangeEmailAddress" xml:space="preserve">
+		<value>Change email address</value>
+	</data>
+	<data name="ChangeEmailAddressPageSuccess" xml:space="preserve">
+		<value>Email address successfully changed. You will have received a new verification email. Please login and verify your account.</value>
+	</data>
+	<data name="ChangeEmailAddressPageInstructions" xml:space="preserve">
+		<value>You can change your email address below. Once, your email has been changed you will receive a verification email. You will have to re-verify your account.</value>
+	</data>
+	<data name="ChangeEmailAddressPageNewEmailAddress" xml:space="preserve">
+		<value>New email address</value>
+	</data>
+	<data name="ChangeEmailAddressPageUpdate" xml:space="preserve">
+		<value>Update</value>
+	</data>
+	<data name="ChangeEmailAddressPageTitle" xml:space="preserve">
+		<value>Change email address</value>
+	</data>
+	<data name="HomePageSubtitle" xml:space="preserve">
+		<value>Keep track of all your collections here in your library.</value>
+	</data>
 </root>

@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SparkyStudios.TrakLibrary.Views.Login.VerificationPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="http://prismlibrary.com"
+    xmlns:controls="clr-namespace:SparkyStudios.TrakLibrary.Controls;assembly=SparkyStudios.TrakLibrary"
+    xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
+    xmlns:login="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Login;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    AutomationId="VerificationPage">
+    <ContentPage.Content>
+        <StackLayout
+            Padding="35"
+            x:DataType="login:VerificationViewModel"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+                <!--  App logo  -->
+                <Image
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,20,0,10"
+                    Source="logo.png" />
+            </Grid>
+            <!--  Subtitle  -->
+            <ScrollView
+                Margin="0,-50,0,0"
+                HorizontalOptions="Fill"
+                HorizontalScrollBarVisibility="Never"
+                Orientation="Horizontal"
+                VerticalOptions="Start"
+                VerticalScrollBarVisibility="Never">
+                <Label Style="{StaticResource SubtitleLabelStyle}" Text="{extensions:Translate Subtitle}" />
+            </ScrollView>
+            <!--  Page title  -->
+            <Label
+                Margin="0,10,0,0"
+                Style="{StaticResource TitleLabelStyle}"
+                Text="{extensions:Translate VerificationPageTitle}" />
+            <!--  Verification code label and entry box.  -->
+            <Label Text="{extensions:Translate VerificationPageConfirmation}" TextColor="{StaticResource TrakGrey}" />
+            <Label
+                Margin="0,10,0,5"
+                Style="{StaticResource EntryLabelStyle}"
+                Text="{extensions:Translate VerificationPageVerificationCode}" />
+            <controls:BorderedEntry
+                AutomationId="VerificationPageVerificationCodeEntry"
+                BorderColor="{StaticResource TrakWhite}"
+                BorderThickness="1"
+                Text="{Binding VerificationCode.Value}">
+                <controls:BorderedEntry.Behaviors>
+                    <behaviors:EventToCommandBehavior
+                        Command="{Binding ClearValidationCommand}"
+                        CommandParameter="VerificationCode"
+                        EventName="Focused" />
+                </controls:BorderedEntry.Behaviors>
+                <controls:BorderedEntry.Triggers>
+                    <DataTrigger
+                        Binding="{Binding VerificationCode.IsValid}"
+                        TargetType="controls:BorderedEntry"
+                        Value="False">
+                        <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
+                    </DataTrigger>
+                </controls:BorderedEntry.Triggers>
+            </controls:BorderedEntry>
+            <Label
+                AutomationId="VerificationPageVerificationCodeErrorLabel"
+                IsEnabled="{Binding VerificationCode.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                IsVisible="{Binding VerificationCode.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                Style="{StaticResource ValidationLabelStyle}"
+                Text="{Binding VerificationCode.FirstError}" />
+            <!--  Display error messages if anything went wrong.  -->
+            <Label
+                Margin="0,5"
+                AutomationId="VerificationErrorMessage"
+                IsEnabled="{Binding IsError}"
+                IsVisible="{Binding IsError}"
+                Style="{StaticResource ValidationLabelStyle}"
+                Text="{Binding ErrorMessage}" />
+            <!--  Verify button and activity indicator.  -->
+            <Button
+                Margin="0,20,0,0"
+                AutomationId="VerificationPageVerifyButton"
+                Command="{Binding VerifyCommand}"
+                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Text="{extensions:Translate VerificationPageVerify}" />
+            <ActivityIndicator
+                Margin="0,20,0,0"
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}" />
+            <!--  Send email again label.  -->
+            <StackLayout VerticalOptions="EndAndExpand">
+                <Label
+                    FontSize="Small"
+                    HorizontalOptions="Center"
+                    HorizontalTextAlignment="End"
+                    VerticalOptions="End">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{extensions:Translate VerificationPageHaventReceivedEmail}" />
+                            <Span
+                                AutomationId="VerificationPageSendAgainLabel"
+                                FontAttributes="Bold"
+                                Text="{extensions:Translate VerificationPageSendAgain}">
+                                <Span.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ResendVerificationCommand}" NumberOfTapsRequired="1" />
+                                </Span.GestureRecognizers>
+                            </Span>
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

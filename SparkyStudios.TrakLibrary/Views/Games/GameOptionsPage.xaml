@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage
+    x:Class="SparkyStudios.TrakLibrary.Views.Games.GameOptionsPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:SparkyStudios.TrakLibrary.Controls;assembly=SparkyStudios.TrakLibrary"
+    xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
+    xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
+    <pages:PopupPage.Content>
+        <StackLayout
+            Margin="20,0"
+            Padding="15"
+            x:DataType="games:GameOptionsViewModel"
+            BackgroundColor="{StaticResource TrakPrimaryBlue}"
+            VerticalOptions="Center">
+            <Label
+                Margin="0,15,0,0"
+                FontAttributes="Bold"
+                Text="{extensions:Translate GameOptionsPageStatus}" />
+            <controls:BorderedPicker
+                BorderColor="{StaticResource TrakWhite}"
+                BorderThickness="1"
+                ItemDisplayBinding="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"
+                ItemsSource="{Binding Statuses}"
+                SelectedItem="{Binding SelectedStatus}" />
+            <!--  Display error messages if anything went wrong.  -->
+            <Label
+                Margin="0,5"
+                AutomationId="AddGamePageErrorMessage"
+                IsEnabled="{Binding IsError}"
+                IsVisible="{Binding IsError}"
+                Style="{StaticResource ValidationLabelStyle}"
+                Text="{Binding ErrorMessage}" />
+            <Button
+                Margin="0,15,0,0"
+                Command="{Binding UpdateGameCommand}"
+                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Text="{extensions:Translate GameOptionsPageUpdate}" />
+            <Button
+                Margin="0,15,0,0"
+                Command="{Binding DeleteGameCommand}"
+                FontSize="Medium"
+                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                Style="{StaticResource SecondaryButtonStyle}"
+                Text="{extensions:Translate GameOptionsPageDelete}" />
+            <ActivityIndicator
+                Margin="0,15,0,0"
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}" />
+        </StackLayout>
+    </pages:PopupPage.Content>
+</pages:PopupPage>

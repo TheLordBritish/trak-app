@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage
+    x:Class="SparkyStudios.TrakLibrary.Views.Games.AddGamePage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="http://prismlibrary.com"
+    xmlns:controls="clr-namespace:SparkyStudios.TrakLibrary.Controls;assembly=SparkyStudios.TrakLibrary"
+    xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
+    xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    x:DataType="games:AddGameViewModel"
+    AutomationId="AddGamePage">
+    <pages:PopupPage.Content>
+        <StackLayout
+            Margin="20,0"
+            Padding="15"
+            BackgroundColor="{StaticResource TrakPrimaryBlue}"
+            VerticalOptions="Center">
+
+            <!--  Platform label and bordered picker.  -->
+            <Label
+                Margin="0,15,0,0"
+                FontAttributes="Bold"
+                Text="{extensions:Translate AddGamePagePlatform}" />
+            <controls:BorderedPicker
+                AutomationId="AddGamePagePlatformPicker"
+                BorderColor="{StaticResource TrakWhite}"
+                BorderThickness="1"
+                ItemDisplayBinding="{Binding Name}"
+                ItemsSource="{Binding Platforms}"
+                SelectedItem="{Binding SelectedPlatform.Value}">
+                <controls:BorderedPicker.Behaviors>
+                    <behaviors:EventToCommandBehavior
+                        Command="{Binding ClearValidationCommand}"
+                        CommandParameter="Platform"
+                        EventName="Focused" />
+                </controls:BorderedPicker.Behaviors>
+                <controls:BorderedPicker.Triggers>
+                    <DataTrigger
+                        Binding="{Binding SelectedPlatform.IsValid}"
+                        TargetType="controls:BorderedPicker"
+                        Value="False">
+                        <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
+                    </DataTrigger>
+                </controls:BorderedPicker.Triggers>
+            </controls:BorderedPicker>
+            <!--  Platform error message.  -->
+            <Label
+                AutomationId="AddGamePagePlatformPickerErrorMessageLabel"
+                IsEnabled="{Binding SelectedPlatform.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                IsVisible="{Binding SelectedPlatform.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                Style="{StaticResource ValidationLabelStyle}"
+                Text="{Binding SelectedPlatform.FirstError}" />
+
+            <!--  Status label and bordered picker.  -->
+            <Label
+                Margin="0,15,0,0"
+                FontAttributes="Bold"
+                Text="{extensions:Translate AddGamePageStatus}" />
+            <controls:BorderedPicker
+                AutomationId="AddGamePageStatusPicker"
+                BorderColor="{StaticResource TrakWhite}"
+                BorderThickness="1"
+                ItemDisplayBinding="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"
+                ItemsSource="{Binding Statuses}"
+                SelectedItem="{Binding SelectedStatus.Value}">
+                <controls:BorderedPicker.Behaviors>
+                    <behaviors:EventToCommandBehavior
+                        Command="{Binding ClearValidationCommand}"
+                        CommandParameter="Status"
+                        EventName="Focused" />
+                </controls:BorderedPicker.Behaviors>
+                <controls:BorderedPicker.Triggers>
+                    <DataTrigger
+                        Binding="{Binding SelectedStatus.IsValid}"
+                        TargetType="controls:BorderedPicker"
+                        Value="False">
+                        <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
+                    </DataTrigger>
+                </controls:BorderedPicker.Triggers>
+            </controls:BorderedPicker>
+            <!--  Status error message.  -->
+            <Label
+                AutomationId="AddGamePageStatusPickerErrorMessageLabel"
+                IsEnabled="{Binding SelectedStatus.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                IsVisible="{Binding SelectedStatus.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                Style="{StaticResource ValidationLabelStyle}"
+                Text="{Binding SelectedStatus.FirstError}" />
+
+            <!--  Display error messages if anything went wrong.  -->
+            <Label
+                Margin="0,5"
+                AutomationId="AddGamePageErrorMessageLabel"
+                IsEnabled="{Binding IsError}"
+                IsVisible="{Binding IsError}"
+                Style="{StaticResource ValidationLabelStyle}"
+                Text="{Binding ErrorMessage}" />
+
+            <!--  Add button and activity indicator.  -->
+            <Button
+                Margin="0,15,0,0"
+                AutomationId="AddGamePageAddButton"
+                Command="{Binding AddGameCommand}"
+                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Text="{extensions:Translate AddGamePageAdd}" />
+            <ActivityIndicator
+                Margin="0,15,0,0"
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}" />
+        </StackLayout>
+    </pages:PopupPage.Content>
+</pages:PopupPage>

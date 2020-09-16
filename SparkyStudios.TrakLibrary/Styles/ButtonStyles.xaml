@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    x:Class="SparkyStudios.TrakLibrary.Styles.ButtonStyles"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:styles="clr-namespace:SparkyStudios.TrakLibrary.Styles;assembly=SparkyStudios.TrakLibrary">
+
+    <ResourceDictionary.MergedDictionaries>
+        <styles:Colors />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--  Base style for all buttons.  -->
+    <Style x:Key="BaseButtonStyle" TargetType="Button">
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+        <Setter Property="CornerRadius" Value="0" />
+    </Style>
+
+    <!--  Apply the base button style to all buttons by default.  -->
+    <Style BasedOn="{StaticResource BaseButtonStyle}" TargetType="Button" />
+
+    <!--  Primary button. Used if only a single button on the page.  -->
+    <Style
+        x:Key="PrimaryButtonStyle"
+        BasedOn="{StaticResource BaseButtonStyle}"
+        TargetType="Button">
+        <Setter Property="FontSize" Value="Medium" />
+        <Setter Property="BackgroundColor" Value="{StaticResource TrakGrey}" />
+    </Style>
+
+    <!--  Secondary button. Used if there is primary button and its used for additional options.  -->
+    <Style
+        x:Key="SecondaryButtonStyle"
+        BasedOn="{StaticResource BaseButtonStyle}"
+        TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource TrakPrimaryBlue}" />
+        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
+    </Style>
+
+    <!--  Button that is only used on the home page  -->
+    <Style
+        x:Key="HomePageButtonStyle"
+        BasedOn="{StaticResource SecondaryButtonStyle}"
+        TargetType="Button">
+        <Setter Property="FontSize" Value="30" />
+    </Style>
+</ResourceDictionary>

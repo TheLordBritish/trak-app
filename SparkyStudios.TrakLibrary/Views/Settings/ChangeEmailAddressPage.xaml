@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<controls:BaseContentPage
+    x:Class="SparkyStudios.TrakLibrary.Views.Settings.ChangeEmailAddressPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="http://prismlibrary.com"
+    xmlns:controls="clr-namespace:SparkyStudios.TrakLibrary.Controls;assembly=SparkyStudios.TrakLibrary"
+    xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
+    xmlns:settings="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Settings;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    Title="{extensions:Translate ChangeEmailAddressPageTitle}"
+    x:DataType="settings:ChangeEmailAddressViewModel">
+    <controls:BaseContentPage.Content>
+        <ScrollView
+            Padding="35"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="1*" />
+                </Grid.ColumnDefinitions>
+
+                <!--  App logo  -->
+                <Image
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,75,0,10"
+                    Source="logo.png" />
+
+                <!--  Subtitle  -->
+                <ScrollView
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,-20,0,0"
+                    HorizontalOptions="Fill"
+                    HorizontalScrollBarVisibility="Never"
+                    Orientation="Horizontal"
+                    VerticalOptions="Start"
+                    VerticalScrollBarVisibility="Never">
+                    <Label Style="{StaticResource SubtitleLabelStyle}" Text="{extensions:Translate Subtitle}" />
+                </ScrollView>
+
+                <StackLayout
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2">
+                    <Label Margin="0,10" Text="{extensions:Translate ChangeEmailAddressPageInstructions}" />
+                    <!--  Email address label and entry box.  -->
+                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate ChangeEmailAddressPageNewEmailAddress}" />
+                    <controls:BorderedEntry
+                        AutomationId="ChangeEmailAddressPageEmailAddressEntry"
+                        BorderColor="{StaticResource TrakWhite}"
+                        BorderThickness="1"
+                        Text="{Binding EmailAddress.Value}">
+                        <controls:BorderedEntry.Behaviors>
+                            <behaviors:EventToCommandBehavior
+                                Command="{Binding ClearValidationCommand}"
+                                CommandParameter="EmailAddress"
+                                EventName="Focused" />
+                        </controls:BorderedEntry.Behaviors>
+                        <controls:BorderedEntry.Triggers>
+                            <DataTrigger
+                                Binding="{Binding EmailAddress.IsValid}"
+                                TargetType="controls:BorderedEntry"
+                                Value="False">
+                                <Setter Property="BorderColor" Value="Red" />
+                            </DataTrigger>
+                        </controls:BorderedEntry.Triggers>
+                    </controls:BorderedEntry>
+                    <!--  Email address validation errors  -->
+                    <Label
+                        IsEnabled="{Binding EmailAddress.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        IsVisible="{Binding EmailAddress.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        Style="{StaticResource ValidationLabelStyle}"
+                        Text="{Binding EmailAddress.FirstError}" />
+
+                    <!--  Display error messages if anything went wrong.  -->
+                    <Label
+                        Margin="0,5"
+                        AutomationId="ChangeEmailAddressPageErrorMessage"
+                        IsEnabled="{Binding IsError}"
+                        IsVisible="{Binding IsError}"
+                        Style="{StaticResource ValidationLabelStyle}"
+                        Text="{Binding ErrorMessage}" />
+
+                    <!--  Update button and activity indicator.  -->
+                    <Button
+                        Margin="0,20,0,0"
+                        AutomationId="ChangePasswordPageSendButton"
+                        Command="{Binding ChangeEmailAddressCommand}"
+                        IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Text="{extensions:Translate ChangeEmailAddressPageUpdate}" />
+                    <ActivityIndicator
+                        Margin="0,20,0,0"
+                        IsRunning="{Binding IsLoading}"
+                        IsVisible="{Binding IsLoading}" />
+                </StackLayout>
+            </Grid>
+        </ScrollView>
+    </controls:BaseContentPage.Content>
+</controls:BaseContentPage>

@@ -286,6 +286,69 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to DELETE ME entered incorrectly..
+        /// </summary>
+        public static string DeleteAccountIncorrectDeleteMessage {
+            get {
+                return ResourceManager.GetString("DeleteAccountIncorrectDeleteMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string DeleteAccountPageDelete {
+            get {
+                return ResourceManager.GetString("DeleteAccountPageDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DELETE ME.
+        /// </summary>
+        public static string DeleteAccountPageDeleteMe {
+            get {
+                return ResourceManager.GetString("DeleteAccountPageDeleteMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account deletion cannot be reversed. If you wish to continue enter  .
+        /// </summary>
+        public static string DeleteAccountPageFirstInstructions {
+            get {
+                return ResourceManager.GetString("DeleteAccountPageFirstInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  and tap Delete below to continue..
+        /// </summary>
+        public static string DeleteAccountPageSecondInstructions {
+            get {
+                return ResourceManager.GetString("DeleteAccountPageSecondInstructions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account has been successfully deleted..
+        /// </summary>
+        public static string DeleteAccountPageSuccess {
+            get {
+                return ResourceManager.GetString("DeleteAccountPageSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete account.
+        /// </summary>
+        public static string DeleteAccountPageTitle {
+            get {
+                return ResourceManager.GetString("DeleteAccountPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Done.
         /// </summary>
         public static string Done {
@@ -1326,6 +1389,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         public static string SettingsPageChangePassword {
             get {
                 return ResourceManager.GetString("SettingsPageChangePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete my account.
+        /// </summary>
+        public static string SettingsPageDeleteMyAccount {
+            get {
+                return ResourceManager.GetString("SettingsPageDeleteMyAccount", resourceCulture);
             }
         }
         

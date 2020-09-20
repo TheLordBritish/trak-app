@@ -26,6 +26,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
             ChangePasswordCommand = ReactiveCommand.CreateFromTask(ChangePasswordAsync, outputScheduler: scheduler);
             ChangeEmailAddressCommand =
                 ReactiveCommand.CreateFromTask(ChangeEmailAddressAsync, outputScheduler: scheduler);
+            DeleteAccountCommand = ReactiveCommand.CreateFromTask(DeleteAccountAsync, outputScheduler: scheduler);
         }
         
         /// <summary>
@@ -39,6 +40,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
         /// When called, the command will propagate the request and call the <see cref="ChangeEmailAddressAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> ChangeEmailAddressCommand { get; }
+        
+        /// <summary>
+        /// Command that is invoked each the time the change delete my account label is tapped by the user on the view.
+        /// When called, the command will propagate the request and call the <see cref="DeleteAccountAsync"/> method.
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> DeleteAccountCommand { get; }
         
         /// <summary>
         /// Private method that is invoked by the <see cref="ChangePasswordCommand"/> when activated by the associated
@@ -61,6 +68,19 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
         private async Task ChangeEmailAddressAsync()
         {
             await NavigationService.NavigateAsync("ChangeEmailAddressPage", new NavigationParameters
+            {
+                { "transition-type", TransitionType.SlideFromRight }
+            });
+        }
+        
+        /// <summary>
+        /// Private method that is invoked by the <see cref="DeleteAccountCommand"/> when activated by the associated
+        /// view. This method will navigate the user to the delete account page.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
+        private async Task DeleteAccountAsync()
+        {
+            await NavigationService.NavigateAsync("DeleteAccountPage", new NavigationParameters
             {
                 { "transition-type", TransitionType.SlideFromRight }
             });

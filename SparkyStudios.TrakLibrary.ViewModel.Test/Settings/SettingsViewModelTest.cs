@@ -57,5 +57,22 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             // Assert
             _navigationService.Verify();
         }
+        
+        [Test]
+        public void DeleteAccountCommand_WithNoData_DoesntThrowException()
+        {
+            _navigationService.Setup(mock => mock.NavigateAsync("DeleteAccountPage", It.IsAny<INavigationParameters>()))
+                .Verifiable();
+            
+            Assert.DoesNotThrow(() =>
+            {
+                // Act
+                _settingsViewModel.DeleteAccountCommand.Execute().Subscribe();
+                _scheduler.Start();
+            });    
+            
+            // Assert
+            _navigationService.Verify();
+        }
     }
 }

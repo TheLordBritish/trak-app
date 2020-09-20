@@ -32,6 +32,16 @@
                             </Label.GestureRecognizers>
                         </Label>
                     </ViewCell>
+                    <ViewCell>
+                        <Label
+                            Padding="10,0"
+                            Text="{extensions:Translate SettingsPageDeleteMyAccount}"
+                            VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding DeleteAccountCommand}" NumberOfTapsRequired="1" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </ViewCell>
                 </TableSection>
             </TableRoot>
         </TableView>

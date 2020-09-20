@@ -242,5 +242,23 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<CheckedResponse<bool>>(json, _deserializerSettings);
         }
+
+        public async Task DeleteByUsername(string username)
+        {
+            using var client = _httpClientFactory.CreateClient("TrakAuth");
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
+            
+            using var response = await client.DeleteAsync($"auth/users/{username}");
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ApiException
+                {
+                    StatusCode = response.StatusCode,
+                    Content = string.Empty
+                };
+            }
+        }
     }
 }

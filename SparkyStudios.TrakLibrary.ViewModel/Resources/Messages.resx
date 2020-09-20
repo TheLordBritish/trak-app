@@ -480,4 +480,28 @@
 	<data name="HomePageSubtitle" xml:space="preserve">
 		<value>Keep track of all your collections here in your library.</value>
 	</data>
+	<data name="SettingsPageDeleteMyAccount" xml:space="preserve">
+		<value>Delete my account</value>
+	</data>
+	<data name="DeleteAccountPageDeleteMe" xml:space="preserve">
+		<value>DELETE ME</value>
+	</data>
+	<data name="DeleteAccountPageTitle" xml:space="preserve">
+		<value>Delete account</value>
+	</data>
+	<data name="DeleteAccountPageFirstInstructions" xml:space="preserve">
+		<value>Account deletion cannot be reversed. If you wish to continue enter  </value>
+	</data>
+	<data name="DeleteAccountPageDelete" xml:space="preserve">
+		<value>Delete</value>
+	</data>
+	<data name="DeleteAccountIncorrectDeleteMessage" xml:space="preserve">
+		<value>DELETE ME entered incorrectly.</value>
+	</data>
+	<data name="DeleteAccountPageSecondInstructions" xml:space="preserve">
+		<value> and tap Delete below to continue.</value>
+	</data>
+	<data name="DeleteAccountPageSuccess" xml:space="preserve">
+		<value>Your account has been successfully deleted.</value>
+	</data>
 </root>

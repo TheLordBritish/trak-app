@@ -24,5 +24,7 @@ namespace SparkyStudios.TrakLibrary.Service
         Task<CheckedResponse<bool>> ChangePasswordAsync(string username, ChangePasswordRequest changePasswordRequest);
 
         Task<CheckedResponse<bool>> ChangeEmailAddressAsync(string username, ChangeEmailAddressRequest changeEmailAddressRequest);
+
+        Task DeleteByUsername(string username);
     }
 }

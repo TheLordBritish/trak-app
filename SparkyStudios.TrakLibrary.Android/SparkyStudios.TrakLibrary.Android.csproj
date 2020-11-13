@@ -215,8 +215,5 @@
   <ItemGroup>
     <GoogleServicesJson Include="google-services.json" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\harmonia_sans_bold.ttf" />
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

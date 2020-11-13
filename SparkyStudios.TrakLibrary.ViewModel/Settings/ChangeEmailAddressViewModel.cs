@@ -122,7 +122,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
         /// <returns>A <see cref="OverallValidationResult"/> which will contain a list of any errors.</returns>
         public OverallValidationResult Validate(ChangeEmailAddressDetails model)
         {
-            return _validator.Validate(model)
+            return _validator.Validate(new ValidationContext<ChangeEmailAddressDetails>(model))
                 .ApplyResultsTo(_validatables);
         }
 

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<StackLayout
+    x:Class="SparkyStudios.TrakLibrary.Controls.Common.DividerControl"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:common="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Common;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    x:Name="DividerControlView"
+    BindableLayout.ItemsSource="{Binding ItemsSource, Source={x:Reference DividerControlView}}"
+    Orientation="Horizontal">
+    <BindableLayout.ItemTemplate>
+        <DataTemplate>
+            <Grid x:DataType="common:ItemEntryViewModel" HeightRequest="30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    FontSize="{Binding FontSize, Source={x:Reference DividerControlView}}"
+                    Text="{Binding Name}"
+                    TextColor="{StaticResource TrakWhite}">
+                    <Label.Triggers>
+                        <DataTrigger
+                            Binding="{Binding IsSelected}"
+                            TargetType="Label"
+                            Value="False">
+                            <Setter Property="TextColor" Value="{StaticResource TrakGrey}" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                </Label>
+                <Label
+                    Grid.Column="1"
+                    FontSize="{Binding FontSize, Source={x:Reference DividerControlView}}"
+                    IsVisible="{Binding HasNext}"
+                    Text="{Binding Divider, Source={x:Reference DividerControlView}}"
+                    TextColor="{StaticResource TrakPrimaryPurple}" />
+            </Grid>
+        </DataTemplate>
+    </BindableLayout.ItemTemplate>
+</StackLayout>

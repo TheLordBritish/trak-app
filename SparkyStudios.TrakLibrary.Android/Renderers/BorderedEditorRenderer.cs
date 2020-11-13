@@ -45,7 +45,7 @@ namespace SparkyStudios.TrakLibrary.Droid.Renderers
                 
             Control.SetBackground(gradientDrawable);
                 
-            Control.SetPadding(50, Control.PaddingTop, Control.PaddingRight,  
+            Control.SetPadding(Control.PaddingLeft, Control.PaddingTop, Control.PaddingRight,  
                 Control.PaddingBottom);
         }
     }

@@ -8,7 +8,6 @@ using Microsoft.AppCenter.Crashes;
 using Microsoft.IdentityModel.Tokens;
 using Prism;
 using Prism.Ioc;
-using Prism.Plugin.Popups;
 using ReactiveUI;
 using SparkyStudios.TrakLibrary.Helpers;
 using SparkyStudios.TrakLibrary.Impl;
@@ -57,8 +56,6 @@ namespace SparkyStudios.TrakLibrary
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterPopupNavigationService<TransitionPopupPageNavigationService>();
-
             // Services
             containerRegistry.Register<IFormsDevice, XamarinFormsDevice>();
             containerRegistry.Register<IStorageService, SecureStorageService>();
@@ -100,7 +97,6 @@ namespace SparkyStudios.TrakLibrary
             containerRegistry.RegisterForNavigation<GameRequestPage, GameRequestViewModel>();
             containerRegistry.RegisterForNavigation<GameBarcodeScannerPage, GameBarcodeScannerViewModel>();
             containerRegistry.RegisterForNavigation<GamePage, GameViewModel>();
-            containerRegistry.RegisterForNavigation<AddGamePage, AddGameViewModel>();
             containerRegistry.RegisterForNavigation<GameOptionsPage, GameOptionsViewModel>();
         }
     }

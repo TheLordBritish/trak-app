@@ -1,7 +1,6 @@
 ﻿using Foundation;
 using Prism;
 using Prism.Ioc;
-using SparkyStudios.TrakLibrary;
 using UIKit;
 
 namespace SparkyStudios.TrakLibrary.iOS
@@ -21,7 +20,6 @@ namespace SparkyStudios.TrakLibrary.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            Rg.Plugins.Popup.Popup.Init();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
             
             Xamarin.Forms.Forms.Init();

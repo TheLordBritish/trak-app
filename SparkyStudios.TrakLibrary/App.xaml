@@ -20,6 +20,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <styles:ButtonStyles />
                 <styles:Colors />
+                <styles:Common />
                 <styles:LabelStyles />
             </ResourceDictionary.MergedDictionaries>
 
@@ -30,6 +31,7 @@
 
             <!--  Entry styling  -->
             <Style ApplyToDerivedTypes="True" TargetType="Entry">
+                <Setter Property="FontFamily" Value="Mulish-Regular" />
                 <Setter Property="BackgroundColor" Value="{StaticResource TrakPrimaryBlue}" />
                 <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
                 <Setter Property="PlaceholderColor" Value="{StaticResource TrakGrey}" />
@@ -38,15 +40,10 @@
 
             <!--  Editor styling  -->
             <Style ApplyToDerivedTypes="True" TargetType="Editor">
+                <Setter Property="FontFamily" Value="Mulish-Regular" />
                 <Setter Property="BackgroundColor" Value="{StaticResource TrakPrimaryBlue}" />
                 <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
                 <Setter Property="PlaceholderColor" Value="{StaticResource TrakGrey}" />
-            </Style>
-
-            <!--  Picker styling  -->
-            <Style ApplyToDerivedTypes="True" TargetType="Picker">
-                <Setter Property="BackgroundColor" Value="{StaticResource TrakPrimaryBlue}" />
-                <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
             </Style>
 
         </ResourceDictionary>

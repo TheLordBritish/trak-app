@@ -15,7 +15,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
         public ForgottenPasswordDetailsValidator()
         {
             RuleFor(f => f.EmailAddress)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.ForgottenPasswordErrorMessageEmailAddressEmpty)
                 .Must(p => !p.Any(char.IsWhiteSpace))

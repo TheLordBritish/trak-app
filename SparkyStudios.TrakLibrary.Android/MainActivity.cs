@@ -2,13 +2,10 @@
 using Android.App;
 using Android.Content.PM;
 using Android.Gms.Common;
-using Android.Graphics;
 using Android.Runtime;
 using Android.OS;
-using Android.Views;
 using Prism;
 using Prism.Ioc;
-using Rg.Plugins.Popup.Services;
 
 namespace SparkyStudios.TrakLibrary.Droid
 {
@@ -26,11 +23,20 @@ namespace SparkyStudios.TrakLibrary.Droid
             base.OnCreate(savedInstanceState);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
-            Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             UserDialogs.Init(this);
+            
+            // Set the default styles for popups used by the ACR User Dialogs library.
+            const int dialogStyle = Resource.Style.AppCompatDialogStyle;
+            AlertConfig.DefaultAndroidStyleId = dialogStyle;
+            PromptConfig.DefaultAndroidStyleId = dialogStyle;
+            ConfirmConfig.DefaultAndroidStyleId = dialogStyle;
+            ActionSheetConfig.DefaultAndroidStyleId = dialogStyle;
+            DatePromptConfig.DefaultAndroidStyleId = dialogStyle;
+            TimePromptConfig.DefaultAndroidStyleId = dialogStyle;
+            LoginConfig.DefaultAndroidStyleId = dialogStyle;
             
             // We only want to generate a notification channel for push notifications if google play is available
             // on the device running it. 
@@ -40,18 +46,6 @@ namespace SparkyStudios.TrakLibrary.Droid
             }
             
             LoadApplication(new App());
-        }
-
-        public override async void OnBackPressed()
-        {
-            if (Rg.Plugins.Popup.Popup.SendBackPressed(base.OnBackPressed))
-            {
-                await PopupNavigation.Instance.PopAsync();
-            }
-            else
-            {
-                base.OnBackPressed();
-            }
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Permission[] grantResults)
@@ -78,7 +72,7 @@ namespace SparkyStudios.TrakLibrary.Droid
             };
 
             var notificationManager = (NotificationManager) GetSystemService(NotificationService);
-            notificationManager.CreateNotificationChannel(channel);
+            notificationManager?.CreateNotificationChannel(channel);
         }
     }
     

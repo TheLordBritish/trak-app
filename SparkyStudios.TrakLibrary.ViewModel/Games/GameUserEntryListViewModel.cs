@@ -231,21 +231,20 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             return new ListItemViewModel
             {
                 ImageUrl = gameUserEntry.GetLink("image"),
-                Header = gameUserEntry.PlatformName,
+                HeaderDetails = gameUserEntry.GameUserEntryPlatforms?.Select(x => new ItemEntryViewModel
+                {
+                    Name = x.PlatformName,
+                    IsSelected = true
+                }).OrderBy(x => x.Name).ToList(),
                 ItemTitle = gameUserEntry.GameTitle,
-                ItemSubTitle =
-                    $"{gameUserEntry.GameReleaseDate:MMMM yyyy}, {string.Join(", ", gameUserEntry.Publishers)}",
+                ItemSubTitle = string.Join(", ", gameUserEntry.Publishers),
                 ShowRating = true,
                 Rating = gameUserEntry.Rating,
                 TapCommand = new DelegateCommand(async () =>
                 {
                     var parameters = new NavigationParameters
                     {
-                        {"game-url", gameUserEntry.GetLink("gameInfo")},
-                        {"platform-id", gameUserEntry.PlatformId},
-                        {"in-library", true},
-                        {"rating", gameUserEntry.Rating},
-                        {"status", gameUserEntry.Status}
+                        {"game-url", gameUserEntry.GetLink("gameDetails")}
                     };
 
                     await NavigationService.NavigateAsync("GamePage", parameters);

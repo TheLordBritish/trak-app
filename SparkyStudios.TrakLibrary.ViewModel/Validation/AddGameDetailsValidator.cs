@@ -15,12 +15,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
         public AddGameDetailsValidator()
         {
             RuleFor(f => f.Platform)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotNull()
                 .WithMessage(Messages.AddGameErrorMessagePlatformNull);
 
             RuleFor(f => f.Status)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEqual(GameUserEntryStatus.None)
                 .WithMessage(Messages.AddGameErrorMessageStatusNone);
         }

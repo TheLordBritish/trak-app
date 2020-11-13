@@ -9,8 +9,12 @@ namespace SparkyStudios.TrakLibrary.Service
 
         Task<T> PostAsync<T>(string url, T requestBody);
 
+        Task<T> PostAsync<T, TRequest>(string url, TRequest requestBody);
+        
         Task<T> PutAsync<T>(string url, T requestBody);
 
+        Task<T> PutAsync<T, TRequest>(string url, TRequest requestBody);
+        
         Task<T> PatchAsync<T>(string url, IDictionary<string, object> values);
         
         Task DeleteAsync(string url);

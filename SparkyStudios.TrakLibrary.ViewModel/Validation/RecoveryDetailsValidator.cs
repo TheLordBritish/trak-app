@@ -16,7 +16,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
         public RecoveryDetailsValidator()
         {
             RuleFor(r => r.Username)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.RecoveryErrorMessageUsernameEmpty)
                 .Must(p => !p.Any(char.IsWhiteSpace))
@@ -27,7 +27,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
                 .WithMessage(Messages.RecoveryErrorMessageUsernameInvalidCharacters);
 
             RuleFor(r => r.RecoveryToken)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.RecoveryErrorMessageRecoveryTokenEmpty)
                 .Must(p => !p.Any(char.IsWhiteSpace))
@@ -38,7 +38,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
                 .WithMessage(Messages.RecoveryErrorMessageRecoveryTokenAlphanumeric);
             
             RuleFor(r => r.Password)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.RecoveryErrorMessagePasswordEmpty)
                 .MinimumLength(8)
@@ -53,7 +53,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
                 .WithMessage(Messages.RecoveryErrorMessagePasswordWhitespace);
 
             RuleFor(r => r.ConfirmPassword)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.RecoveryErrorMessageConfirmPasswordEmpty)
                 .Must((model, field) => string.Equals(model.Password, field))

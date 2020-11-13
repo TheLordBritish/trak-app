@@ -72,7 +72,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                 .ReturnsAsync(0L);
             
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
                 .Throws(new Exception());
 
             // Act
@@ -93,7 +93,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             _scheduler.Start();
             
             // Assert
-            _restService.Verify(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()), Times.Never);
+            _restService.Verify(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()), Times.Never);
             Assert.IsTrue(_gameUserEntryListViewModel.IsEmpty, "_gameUserEntryListViewModel.IsEmpty should be true if the page isn't active.");
         }
         
@@ -138,7 +138,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                         {
                             new GameUserEntry
                             {
-                                GameReleaseDate = DateTime.Now,
                                 Publishers = new []
                                 {
                                     "publisher"
@@ -227,7 +226,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                         {
                             new GameUserEntry
                             {
-                                GameReleaseDate = DateTime.Now,
                                 Publishers = new []
                                 {
                                     "publisher"

@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    x:Class="SparkyStudios.TrakLibrary.Controls.Games.GameUserEntryStatusControl"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
+    xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.Model.Games;assembly=SparkyStudios.TrakLibrary.Model"
+    x:Name="GameUserEntryStatusControlView">
+    <ContentView.Content>
+        <StackLayout>
+            <Label
+                FontSize="{StaticResource TrakFontMedium}"
+                Style="{StaticResource TitleLabelStyle}"
+                Text="{extensions:Translate GamePageCurrentlyIn}" />
+            <Grid HorizontalOptions="FillAndExpand">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Grid.Column="0"
+                    FontSize="{StaticResource TrakFontSmall}"
+                    Text="{extensions:Translate Backlog}"
+                    TextColor="{StaticResource TrakGrey}">
+                    <Label.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Status, Source={x:Reference GameUserEntryStatusControlView}}"
+                            TargetType="Label"
+                            Value="{x:Static games:GameUserEntryStatus.Backlog}">
+                            <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{Binding StatusTappedCommand, Source={x:Reference GameUserEntryStatusControlView}}"
+                            CommandParameter="{x:Static games:GameUserEntryStatus.Backlog}"
+                            NumberOfTapsRequired="1" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label
+                    Grid.Column="1"
+                    FontSize="{StaticResource TrakFontSmall}"
+                    Text="{extensions:Translate Playing}"
+                    TextColor="{StaticResource TrakGrey}">
+                    <Label.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Status, Source={x:Reference GameUserEntryStatusControlView}}"
+                            TargetType="Label"
+                            Value="{x:Static games:GameUserEntryStatus.InProgress}">
+                            <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{Binding StatusTappedCommand, Source={x:Reference GameUserEntryStatusControlView}}"
+                            CommandParameter="{x:Static games:GameUserEntryStatus.InProgress}"
+                            NumberOfTapsRequired="1" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label
+                    Grid.Column="2"
+                    FontSize="{StaticResource TrakFontSmall}"
+                    Text="{extensions:Translate Done}"
+                    TextColor="{StaticResource TrakGrey}">
+                    <Label.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Status, Source={x:Reference GameUserEntryStatusControlView}}"
+                            TargetType="Label"
+                            Value="{x:Static games:GameUserEntryStatus.Completed}">
+                            <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{Binding StatusTappedCommand, Source={x:Reference GameUserEntryStatusControlView}}"
+                            CommandParameter="{x:Static games:GameUserEntryStatus.Completed}"
+                            NumberOfTapsRequired="1" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label
+                    Grid.Column="3"
+                    FontSize="{StaticResource TrakFontSmall}"
+                    Text="{extensions:Translate Dropped}"
+                    TextColor="{StaticResource TrakGrey}">
+                    <Label.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Status, Source={x:Reference GameUserEntryStatusControlView}}"
+                            TargetType="Label"
+                            Value="{x:Static games:GameUserEntryStatus.Dropped}">
+                            <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+                        </DataTrigger>
+                    </Label.Triggers>
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{Binding StatusTappedCommand, Source={x:Reference GameUserEntryStatusControlView}}"
+                            CommandParameter="{x:Static games:GameUserEntryStatus.Dropped}"
+                            NumberOfTapsRequired="1" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

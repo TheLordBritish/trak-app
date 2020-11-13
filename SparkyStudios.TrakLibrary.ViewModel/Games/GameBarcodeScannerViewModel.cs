@@ -26,7 +26,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
     {
         private readonly IFormsDevice _formsDevice;
         private readonly IRestService _restService;
-        private readonly IStorageService _storageService;
         private readonly IUserDialogs _userDialogs;
         
         private bool _isAnalyzing;
@@ -37,14 +36,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// should be handled by the framework.
         /// </summary>
         /// <param name="navigationService">The <see cref="INavigationService" /> instance to inject.</param>
-        /// <param name="storageService">The <see cref="IStorageService" /> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService" /> instance to inject.</param>
         /// <param name="userDialogs">The <see cref="IUserDialogs" /> instance to inject.</param>
         /// <param name="formsDevice">The <see cref="IFormsDevice" /> instance to inject.</param>
-        public GameBarcodeScannerViewModel(INavigationService navigationService, IStorageService storageService,
+        public GameBarcodeScannerViewModel(INavigationService navigationService,
             IRestService restService, IUserDialogs userDialogs, IFormsDevice formsDevice) : base(navigationService)
         {
-            _storageService = storageService;
             _restService = restService;
             _userDialogs = userDialogs;
             _formsDevice = formsDevice;
@@ -167,7 +164,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 // Prompt the user to either go back or navigate to the game request page.
                 var promptConfig = new PromptConfig()
                     .SetTitle(Messages.TrakTitle)
-                    .SetMessage(Messages.GameBarcodeScannerPageMakeARequest)
+                    .SetMessage(Messages.GameBarcodeScannerPageRequestGame)
                     .SetOkText(Messages.Yes)
                     .SetCancelText(Messages.No);
 

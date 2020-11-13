@@ -15,7 +15,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
         public GameRequestDetailsValidator()
         {
             RuleFor(f => f.Title)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.GameRequestErrorMessageTitleEmpty)
                 .MaximumLength(255)

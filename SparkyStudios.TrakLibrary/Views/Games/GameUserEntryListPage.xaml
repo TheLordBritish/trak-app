@@ -21,13 +21,31 @@
                     RemainingItemsThreshold="0"
                     RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
                     VerticalOptions="StartAndExpand">
+                    <CollectionView.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Button
+                                Grid.Column="0"
+                                Margin="20,20,0,0"
+                                FontFamily="Mulish-Regular"
+                                FontSize="{StaticResource TrakFontMedium}"
+                                HorizontalOptions="Start"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Text="Filter" />
+                        </Grid>
+                    </CollectionView.Header>
                     <CollectionView.EmptyView>
                         <StackLayout>
                             <!--  Full-page label telling the user that the request returned no results without error.  -->
                             <Label
                                 HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
                                 IsVisible="False"
-                                VerticalOptions="CenterAndExpand">
+                                VerticalOptions="CenterAndExpand"
+                                VerticalTextAlignment="Center">
                                 <Label.Triggers>
                                     <MultiTrigger TargetType="Label">
                                         <MultiTrigger.Conditions>
@@ -90,7 +108,7 @@
                 VerticalOptions="CenterAndExpand" />
 
             <Button
-                Margin="20,50"
+                Margin="20"
                 Command="{Binding AddGameCommand}"
                 IsVisible="{Binding IsError, Converter={StaticResource NegateBooleanConverter}}"
                 Style="{StaticResource PrimaryButtonStyle}"

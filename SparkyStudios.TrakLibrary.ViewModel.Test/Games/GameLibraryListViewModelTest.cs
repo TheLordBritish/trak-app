@@ -22,7 +22,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
     {
         private Mock<INavigationService> _navigationService;
         private Mock<IRestService> _restService;
-        private Mock<IStorageService> _storageService;
         private Mock<IUserDialogs> _userDialogs;
         private TestScheduler _scheduler;
         
@@ -33,11 +32,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         {
             _navigationService = new Mock<INavigationService>();
             _restService = new Mock<IRestService>();
-            _storageService = new Mock<IStorageService>();
             _userDialogs = new Mock<IUserDialogs>();
             _scheduler = new TestScheduler();
 
-            _gameLibraryListViewModel = new GameLibraryListViewModel(_scheduler, _navigationService.Object, _restService.Object, _storageService.Object, _userDialogs.Object);
+            _gameLibraryListViewModel = new GameLibraryListViewModel(_scheduler, _navigationService.Object, _restService.Object, _userDialogs.Object);
         }
 
         [Test]
@@ -45,11 +43,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         {
             // Arrange
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.InternalServerError});
 
             // Act
-            _gameLibraryListViewModel.SearchCommand.Execute().Catch(Observable.Return(Enumerable.Empty<GameInfo>())).Subscribe();
+            _gameLibraryListViewModel.SearchCommand.Execute().Catch(Observable.Return(Enumerable.Empty<GameDetails>())).Subscribe();
             _scheduler.Start();
 
             // Assert
@@ -63,11 +61,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         {
             // Arrange
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
                 .Throws(new Exception());
 
             // Act
-            _gameLibraryListViewModel.SearchCommand.Execute().Catch(Observable.Return(Enumerable.Empty<GameInfo>())).Subscribe();
+            _gameLibraryListViewModel.SearchCommand.Execute().Catch(Observable.Return(Enumerable.Empty<GameDetails>())).Subscribe();
             _scheduler.Start();
 
             // Assert
@@ -83,8 +81,8 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             _gameLibraryListViewModel.SearchQuery = "search";
             
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
-                .ReturnsAsync(new HateoasPage<GameInfo>());
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
+                .ReturnsAsync(new HateoasPage<GameDetails>());
             
             // Act
             _gameLibraryListViewModel.SearchCommand.Execute().Subscribe();
@@ -94,6 +92,45 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             Assert.IsTrue(_gameLibraryListViewModel.IsEmpty, "_gameLibraryListViewModel.IsEmpty should be true if the API returns no results.");
             Assert.AreEqual(0, _gameLibraryListViewModel.Items.Count, "There should be no items in the list for an empty result.");
         }
+
+        [Test]
+        public void SearchCommand_WithResultsWithNullPlatforms_SetIsEmptyToFalseAndConvertsToItems()
+        {
+            // Arrange
+            _gameLibraryListViewModel.SearchQuery = "search";
+            
+            _restService
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
+                .ReturnsAsync(new HateoasPage<GameDetails>
+                {
+                    Embedded = new HateoasResources<GameDetails>
+                    {
+                        Data = new []
+                        {
+                            new GameDetails
+                            {
+                                Title = "test-title",
+                                Publishers = new SortedSet<Publisher>
+                                {
+                                    new Publisher()
+                                },
+                                Genres = new SortedSet<Genre>
+                                {
+                                    new Genre()
+                                }
+                            }
+                        }
+                    }
+                });
+            
+            // Act
+            _gameLibraryListViewModel.SearchCommand.Execute().Subscribe();
+            _scheduler.Start();
+            
+            // Assert
+            Assert.IsFalse(_gameLibraryListViewModel.IsEmpty, "_gameLibraryListViewModel.IsEmpty should be false if the API returns results.");
+            Assert.AreEqual(1, _gameLibraryListViewModel.Items.Count, "There should be items in the list.");
+        }
         
         [Test]
         public void SearchCommand_WithResults_SetIsEmptyToFalseAndConvertsToItems()
@@ -102,14 +139,14 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             _gameLibraryListViewModel.SearchQuery = "search";
             
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
-                .ReturnsAsync(new HateoasPage<GameInfo>
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
+                .ReturnsAsync(new HateoasPage<GameDetails>
                 {
-                    Embedded = new HateoasResources<GameInfo>
+                    Embedded = new HateoasResources<GameDetails>
                     {
                         Data = new []
                         {
-                            new GameInfo
+                            new GameDetails
                             {
                                 Title = "test-title",
                                 Platforms = new SortedSet<Platform>
@@ -120,8 +157,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                                 {
                                     new Publisher()
                                 },
-                                ReleaseDate = DateTime.Now,
-                                Genres = new SortedSet<Genre>()
+                                Genres = new SortedSet<Genre>
                                 {
                                     new Genre()
                                 }
@@ -144,14 +180,14 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         {
             // Arrange
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.InternalServerError});
 
             _userDialogs.Setup(mock => mock.Toast(It.IsAny<ToastConfig>()))
                 .Verifiable();
             
             // Act
-            _gameLibraryListViewModel.LoadMoreCommand.Execute().Catch(Observable.Return(Enumerable.Empty<GameInfo>())).Subscribe();
+            _gameLibraryListViewModel.LoadMoreCommand.Execute().Catch(Observable.Return(Enumerable.Empty<GameDetails>())).Subscribe();
             _scheduler.Start();
 
             // Assert
@@ -164,14 +200,14 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         {
             // Arrange
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
                 .Throws(new Exception());
 
             _userDialogs.Setup(mock => mock.Toast(It.IsAny<ToastConfig>()))
                 .Verifiable();
             
             // Act
-            _gameLibraryListViewModel.LoadMoreCommand.Execute().Catch(Observable.Return(Enumerable.Empty<GameInfo>())).Subscribe();
+            _gameLibraryListViewModel.LoadMoreCommand.Execute().Catch(Observable.Return(Enumerable.Empty<GameDetails>())).Subscribe();
             _scheduler.Start();
 
             // Assert
@@ -184,8 +220,8 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         {
             // Arrange
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
-                .ReturnsAsync(new HateoasPage<GameInfo>());
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
+                .ReturnsAsync(new HateoasPage<GameDetails>());
             
             // Act
             _gameLibraryListViewModel.LoadMoreCommand.Execute().Subscribe();
@@ -200,14 +236,14 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         {
             // Arrange
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
-                .ReturnsAsync(new HateoasPage<GameInfo>
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
+                .ReturnsAsync(new HateoasPage<GameDetails>
                 {
-                    Embedded = new HateoasResources<GameInfo>
+                    Embedded = new HateoasResources<GameDetails>
                     {
                         Data = new []
                         {
-                            new GameInfo
+                            new GameDetails
                             {
                                 Title = "test-title",
                                 Platforms = new SortedSet<Platform>
@@ -218,7 +254,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                                 {
                                     new Publisher()
                                 },
-                                ReleaseDate = DateTime.Now,
                                 Genres = new SortedSet<Genre>
                                 {
                                     new Genre()

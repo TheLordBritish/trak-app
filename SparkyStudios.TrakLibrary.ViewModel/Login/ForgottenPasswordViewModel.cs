@@ -119,7 +119,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
         /// <returns>A <see cref="OverallValidationResult"/> which will contain a list of any errors.</returns>
         public OverallValidationResult Validate(ForgottenPasswordDetails model)
         {
-            return _validator.Validate(model)
+            return _validator.Validate(new ValidationContext<ForgottenPasswordDetails>(model))
                 .ApplyResultsTo(_validatables);
         }
 

@@ -19,8 +19,8 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
     public class GameViewModelTest
     {
         private Mock<INavigationService> _navigationService;
-        private Mock<IStorageService> _storageService;
         private Mock<IRestService> _restService;
+        private Mock<IStorageService> _storageService;
         private TestScheduler _scheduler;
 
         private GameViewModel _gameViewModel;
@@ -33,45 +33,13 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             _storageService = new Mock<IStorageService>();
             _scheduler = new TestScheduler();
 
-            _gameViewModel = new GameViewModel(_scheduler, _navigationService.Object, _storageService.Object,
-                _restService.Object);
+            _gameViewModel = new GameViewModel(_scheduler, _navigationService.Object, _restService.Object, _storageService.Object);
         }
 
         [Test]
-        public void OnNavigatedTo_WithValidNavigationParameters_PopulatesCorrectValues()
+        public void OptionsCommand_WithNoData_NavigatesToGameOptionsPage()
         {
             // Arrange
-            var gameUrl = new Uri("https://games.url");
-            var platformId = 1L;
-            short rating = 4;
-            var status = GameUserEntryStatus.Completed;
-
-            var parameters = new NavigationParameters
-            {
-                {"game-url", gameUrl},
-                {"platform-id", platformId},
-                {"in-library", true},
-                {"rating", rating},
-                {"status", status}
-            };
-
-            // Act
-            _gameViewModel.OnNavigatedTo(parameters);
-
-            // Assert
-            Assert.AreEqual(gameUrl, _gameViewModel.GameUrl, "The game URL passed in during navigation should match.");
-            Assert.AreEqual(platformId, _gameViewModel.PlatformId, "The platform ID should match.");
-            Assert.AreEqual(true, _gameViewModel.InLibrary, "The in library should match.");
-            Assert.AreEqual(rating, _gameViewModel.Rating, "The rating should match.");
-            Assert.AreEqual(status, _gameViewModel.Status, "The status should match.");
-        }
-
-        [Test]
-        public void OptionsCommand_WithGameInLibrary_NavigatesToGameOptionsPage()
-        {
-            // Arrange
-            _gameViewModel.InLibrary = true;
-
             _navigationService.Setup(mock => mock.NavigateAsync("GameOptionsPage", It.IsAny<INavigationParameters>()))
                 .Verifiable();
 
@@ -84,32 +52,31 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         }
 
         [Test]
-        public void OptionsCommand_WithGameNotInLibrary_NavigatesToAddGamePage()
+        public void LoadGameDetailsCommand_WithShouldReloadFalse_DoesntRetrieveData()
         {
             // Arrange
-            _gameViewModel.InLibrary = false;
-
-            _navigationService.Setup(mock => mock.NavigateAsync("AddGamePage", It.IsAny<INavigationParameters>()))
-                .Verifiable();
-
+            _gameViewModel.ShouldReload = false;
+            
             // Act
-            _gameViewModel.OptionsCommand.Execute().Subscribe();
-            _scheduler.Start();
-
+            _gameViewModel.LoadGameDetailsCommand.Execute().Subscribe();
+            
             // Assert
-            _navigationService.Verify();
+            _restService
+                .Verify(mock => mock.GetAsync<GameDetails>(It.IsAny<string>()), Times.Never);
         }
-
+        
         [Test]
-        public void LoadGameInfoCommand_ThrowsApiException_SetsIsErrorToTrue()
+        public void LoadGameDetailsCommand_ThrowsApiException_SetsIsErrorToTrue()
         {
             // Arrange
+            _gameViewModel.ShouldReload = true;
+            
             _restService
-                .Setup(mock => mock.GetAsync<GameInfo>(It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<GameDetails>(It.IsAny<string>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.InternalServerError});
 
             // Act
-            _gameViewModel.LoadGameInfoCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _gameViewModel.LoadGameDetailsCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
             _scheduler.Start();
 
             // Assert
@@ -117,15 +84,17 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         }
 
         [Test]
-        public void LoadGameInfoCommand_ThrowsGenericException_SetsIsErrorToTrue()
+        public void LoadGameDetailsCommand_ThrowsGenericException_SetsIsErrorToTrue()
         {
             // Arrange
+            _gameViewModel.ShouldReload = true;
+            
             _restService
-                .Setup(mock => mock.GetAsync<GameInfo>(It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<GameDetails>(It.IsAny<string>()))
                 .Throws(new Exception());
 
             // Act
-            _gameViewModel.LoadGameInfoCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _gameViewModel.LoadGameDetailsCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
             _scheduler.Start();
 
             // Assert
@@ -133,27 +102,51 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         }
 
         [Test]
-        public void LoadGameInfoCommand_WithGameNotInLibrary_LoadsDataAndAllPlatforms()
+        public void LoadGameDetailsCommand_WithGameNotInLibrary_LoadsData()
         {
             // Arrange
-            _gameViewModel.GameUrl = new Uri("https://traklibrary.com");
-            _gameViewModel.InLibrary = false;
+            var northAmericaDate = DateTime.Now;
+            var europeDate = DateTime.Now;
+            var japanDate = DateTime.Now;
             
-            var gameInfo = new GameInfo
+            _gameViewModel.ShouldReload = true;
+            _gameViewModel.GameUrl = new Uri("https://traklibrary.com");
+
+            var gameDetails = new GameDetails
             {
                 Id = 5L,
                 Title = "test-title",
-                ReleaseDate = DateTime.Now,
                 Description = "test-description",
+                GameModes = new List<GameMode>(),
                 Platforms = new List<Platform>
                 {
                     new Platform
                     {
-                        Id = 1L
+                        Id = 1L,
+                        Name = "name-1"
                     },
                     new Platform
                     {
-                        Id = 2L
+                        Id = 2L,
+                        Name = "name-2"
+                    }
+                },
+                ReleaseDates = new List<GameReleaseDate>
+                {
+                    new GameReleaseDate
+                    {
+                        Region = GameRegion.NorthAmerica,
+                        ReleaseDate = northAmericaDate
+                    },
+                    new GameReleaseDate
+                    {
+                        Region = GameRegion.Pal,
+                        ReleaseDate = europeDate
+                    },
+                    new GameReleaseDate
+                    {
+                        Region = GameRegion.Japan,
+                        ReleaseDate = japanDate
                     }
                 },
                 Publishers = new List<Publisher>
@@ -167,7 +160,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                         Links = new Dictionary<string, HateoasLink>
                         {
                             {
-                                "gameInfos", new HateoasLink
+                                "gameDetails", new HateoasLink
                                 {
                                     Href = new Uri("https://traklibrary.com")
                                 }
@@ -190,12 +183,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                         }
                     },
                     {
-                        "platforms", new HateoasLink
-                        {
-                            Href = new Uri("https://traklibrary.com")
-                        }
-                    },
-                    {
                         "genres", new HateoasLink
                         {
                             Href = new Uri("https://traklibrary.com")
@@ -205,220 +192,195 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             };
 
             _restService
-                .Setup(mock => mock.GetAsync<GameInfo>(It.IsAny<string>()))
-                .ReturnsAsync(gameInfo);
+                .Setup(mock => mock.GetAsync<GameDetails>(It.IsAny<string>()))
+                .ReturnsAsync(gameDetails);
             
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
-                .ReturnsAsync(new HateoasPage<GameInfo>
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
+                .ReturnsAsync(new HateoasPage<GameDetails>
                 {
-                    Embedded = new HateoasResources<GameInfo>
+                    Embedded = new HateoasResources<GameDetails>
                     {
                         Data = new[]
                         {
-                            new GameInfo
+                            new GameDetails
                             {
-                                Id = gameInfo.Id
+                                Id = gameDetails.Id
                             }
                         }
                     }
                 });
 
-            // Act
-            _gameViewModel.LoadGameInfoCommand.Execute().Subscribe();
-            _scheduler.Start();
-
-            // Assert
-            Assert.AreEqual(gameInfo.GetLink("image").OriginalString, _gameViewModel.ImageUrl.OriginalString,
-                "The image url should match.");
-            Assert.AreEqual(gameInfo.Title, _gameViewModel.GameTitle, "The titles should match.");
-            Assert.AreEqual(gameInfo.ReleaseDate, _gameViewModel.ReleaseDate, "The release dates should match.");
-            Assert.AreEqual(gameInfo.Description, _gameViewModel.Description, "The titles should match.");
-            Assert.AreEqual(gameInfo.Publishers, _gameViewModel.Publishers, "The publishers should match.");
-            Assert.AreEqual(gameInfo.Platforms, _gameViewModel.Platforms, "The platforms should match.");
-            Assert.AreEqual(gameInfo.Genres, _gameViewModel.Genres, "The genres should match.");
-        }
-
-        [Test]
-        public void LoadGameInfoCommand_WithGameInLibrary_LoadsDataAndSpecifiedPlatform()
-        {
-            // Arrange
-            _gameViewModel.GameUrl = new Uri("https://traklibrary.com");
-            _gameViewModel.InLibrary = true;
-            _gameViewModel.PlatformId = 2L;
-            
-            var gameInfo = new GameInfo
-            {
-                Id = 5L,
-                Title = "test-title",
-                ReleaseDate = DateTime.Now,
-                Description = "test-description",
-                Platforms = new List<Platform>
-                {
-                    new Platform
-                    {
-                        Id = 1L
-                    },
-                    new Platform
-                    {
-                        Id = 2L
-                    }
-                },
-                Publishers = new List<Publisher>
-                {
-                    new Publisher()
-                },
-                Genres = new List<Genre>
-                {
-                    new Genre
-                    {
-                        Links = new Dictionary<string, HateoasLink>
-                        {
-                            {
-                                "gameInfos", new HateoasLink
-                                {
-                                    Href = new Uri("https://traklibrary.com")
-                                }
-                            }
-                        }
-                    }
-                },
-                Links = new Dictionary<string, HateoasLink>
-                {
-                    {
-                        "image", new HateoasLink
-                        {
-                            Href = new Uri("https://traklibrary.com/image")
-                        }
-                    },
-                    {
-                        "publishers", new HateoasLink
-                        {
-                            Href = new Uri("https://traklibrary.com")
-                        }
-                    },
-                    {
-                        "platforms", new HateoasLink
-                        {
-                            Href = new Uri("https://traklibrary.com")
-                        }
-                    },
-                    {
-                        "genres", new HateoasLink
-                        {
-                            Href = new Uri("https://traklibrary.com")
-                        }
-                    }
-                }
-            };
-
-            _restService
-                .Setup(mock => mock.GetAsync<GameInfo>(It.IsAny<string>()))
-                .ReturnsAsync(gameInfo);
-
-            _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameInfo>>(It.IsAny<string>()))
-                .ReturnsAsync(new HateoasPage<GameInfo>
-                {
-                    Embedded = new HateoasResources<GameInfo>
-                    {
-                        Data = new[]
-                        {
-                            new GameInfo
-                            {
-                                Id = gameInfo.Id
-                            }
-                        }
-                    }
-                });
-
-            // Act
-            _gameViewModel.LoadGameInfoCommand.Execute().Subscribe();
-            _scheduler.Start();
-
-            // Assert
-            Assert.AreEqual(gameInfo.GetLink("image").OriginalString, _gameViewModel.ImageUrl.OriginalString,
-                "The image url should match.");
-            Assert.AreEqual(gameInfo.Title, _gameViewModel.GameTitle, "The titles should match.");
-            Assert.AreEqual(gameInfo.ReleaseDate, _gameViewModel.ReleaseDate, "The release dates should match.");
-            Assert.AreEqual(gameInfo.Description, _gameViewModel.Description, "The titles should match.");
-            Assert.AreEqual(gameInfo.Publishers, _gameViewModel.Publishers, "The publishers should match.");
-            Assert.AreEqual(1, _gameViewModel.Platforms.Count(),
-                "There should be only one element in the platforms list.");
-            Assert.AreEqual(gameInfo.Platforms.First(p => p.Id == _gameViewModel.PlatformId), _gameViewModel.Platforms.FirstOrDefault());
-            Assert.AreEqual(gameInfo.Genres, _gameViewModel.Genres, "The genres should match.");
-        }
-
-        [Test]
-        public void OnRatingTappedCommand_ThrowsException_SetIsErrorToTrue()
-        {
-            // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
-                .ReturnsAsync(5L);
-            
-            _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
-                .Throws(new ApiException());
+                .ReturnsAsync(0L);
 
-            // Act
-            _gameViewModel.OnRatingTappedCommand.Execute("5").Catch(Observable.Return(true)).Subscribe();
-            _scheduler.Start();
-
-            // Assert
-            Assert.IsTrue(_gameViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
-        }
-
-        [Test]
-        public void OnRatingTappedCommand_WithNoMatchingEntryToUpdate_DoesntPatchGameUserEntry()
-        {
-            // Arrange
-            _storageService.Setup(mock => mock.GetUserIdAsync())
-                .ReturnsAsync(5L);
-            
-            _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
+            _restService.Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .ReturnsAsync(new HateoasPage<GameUserEntry>());
-
+                
             // Act
-            _gameViewModel.OnRatingTappedCommand.Execute("5").Subscribe();
+            _gameViewModel.LoadGameDetailsCommand.Execute().Subscribe();
             _scheduler.Start();
 
             // Assert
-            _restService.Verify(
-                mock => mock.PatchAsync<GameUserEntry>(It.IsAny<string>(), It.IsAny<IDictionary<string, object>>()), Times.Never);
+            Assert.AreEqual(gameDetails.GetLink("image").OriginalString, _gameViewModel.ImageUrl.OriginalString,
+                "The image url should match.");
+            Assert.AreEqual(gameDetails.Title, _gameViewModel.GameTitle, "The titles should match.");
+            Assert.AreEqual(gameDetails.Description, _gameViewModel.Description, "The titles should match.");
+            Assert.AreEqual(gameDetails.Publishers, _gameViewModel.Publishers, "The publishers should match.");
+            Assert.AreEqual(northAmericaDate.ToString("dd MMMM yyyy"), _gameViewModel.NorthAmericaReleaseDate, "The North American dates should match.");
+            Assert.AreEqual(europeDate.ToString("dd MMMM yyyy"), _gameViewModel.EuropeReleaseDate, "The North American dates should match.");
+            Assert.AreEqual(japanDate.ToString("dd MMMM yyyy"), _gameViewModel.JapanReleaseDate, "The North American dates should match.");
+            Assert.AreEqual(gameDetails.Genres, _gameViewModel.Genres, "The genres should match.");
         }
 
         [Test]
-        public void OnRatingTappedCommand_WithMatchingEntryToUpdate_PatchesGameUserEntry()
+        public void LoadGameInfoCommand_WithGameInLibrary_LoadsDataAndGameUserEntryData()
         {
             // Arrange
-            _storageService.Setup(mock => mock.GetUserIdAsync())
-                .ReturnsAsync(5L);
+            var northAmericaDate = DateTime.Now;
+            var europeDate = DateTime.Now;
+            var japanDate = DateTime.Now;
             
+            _gameViewModel.ShouldReload = true;
+            _gameViewModel.GameUrl = new Uri("https://traklibrary.com");
+            
+            var gameDetails = new GameDetails
+            {
+                Id = 5L,
+                Title = "test-title",
+                Description = "test-description",
+                GameModes = new List<GameMode>(),
+                Platforms = new List<Platform>
+                {
+                    new Platform
+                    {
+                        Id = 1L,
+                        Name = "name-1"
+                    },
+                    new Platform
+                    {
+                        Id = 2L,
+                        Name = "name-2"
+                    }
+                },
+                ReleaseDates = new List<GameReleaseDate>
+                {
+                    new GameReleaseDate
+                    {
+                        Region = GameRegion.NorthAmerica,
+                        ReleaseDate = northAmericaDate
+                    },
+                    new GameReleaseDate
+                    {
+                        Region = GameRegion.Pal,
+                        ReleaseDate = europeDate
+                    },
+                    new GameReleaseDate
+                    {
+                        Region = GameRegion.Japan,
+                        ReleaseDate = japanDate
+                    }
+                },
+                Publishers = new List<Publisher>
+                {
+                    new Publisher()
+                },
+                Genres = new List<Genre>
+                {
+                    new Genre
+                    {
+                        Links = new Dictionary<string, HateoasLink>
+                        {
+                            {
+                                "gameDetails", new HateoasLink
+                                {
+                                    Href = new Uri("https://traklibrary.com")
+                                }
+                            }
+                        }
+                    }
+                },
+                Links = new Dictionary<string, HateoasLink>
+                {
+                    {
+                        "image", new HateoasLink
+                        {
+                            Href = new Uri("https://traklibrary.com/image")
+                        }
+                    },
+                    {
+                        "publishers", new HateoasLink
+                        {
+                            Href = new Uri("https://traklibrary.com")
+                        }
+                    },
+                    {
+                        "genres", new HateoasLink
+                        {
+                            Href = new Uri("https://traklibrary.com")
+                        }
+                    }
+                }
+            };
+
             _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
+                .Setup(mock => mock.GetAsync<GameDetails>(It.IsAny<string>()))
+                .ReturnsAsync(gameDetails);
+
+            _restService
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
+                .ReturnsAsync(new HateoasPage<GameDetails>
+                {
+                    Embedded = new HateoasResources<GameDetails>
+                    {
+                        Data = new[]
+                        {
+                            new GameDetails
+                            {
+                                Id = gameDetails.Id
+                            }
+                        }
+                    }
+                });
+            
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(0L);
+
+            _restService.Setup(mock => mock.GetAsync<HateoasPage<GameUserEntry>>(It.IsAny<string>()))
                 .ReturnsAsync(new HateoasPage<GameUserEntry>
                 {
                     Embedded = new HateoasResources<GameUserEntry>
                     {
-                        Data = new[]
+                        Data = new List<GameUserEntry>
                         {
-                            new GameUserEntry()
+                            new GameUserEntry
+                            {
+                                Status = GameUserEntryStatus.Backlog,
+                                Rating = 4,
+                                GameUserEntryPlatforms = new List<GameUserEntryPlatform>()
+                            }
                         }
                     }
                 });
 
-            _restService.Setup(mock => mock.PatchAsync<GameUserEntry>(It.IsAny<string>(),
-                    It.IsAny<IDictionary<string, object>>()))
-                .ReturnsAsync(new GameUserEntry());
-
             // Act
-            _gameViewModel.OnRatingTappedCommand.Execute("5").Subscribe();
+            _gameViewModel.LoadGameDetailsCommand.Execute().Subscribe();
             _scheduler.Start();
 
             // Assert
-            _restService.Verify(
-                mock => mock.PatchAsync<GameUserEntry>(It.IsAny<string>(), It.IsAny<IDictionary<string, object>>()), Times.Once);
+            Assert.AreEqual(gameDetails.GetLink("image").OriginalString, _gameViewModel.ImageUrl.OriginalString,
+                "The image url should match.");
+            Assert.AreEqual(gameDetails.Title, _gameViewModel.GameTitle, "The titles should match.");
+            Assert.AreEqual(gameDetails.Description, _gameViewModel.Description, "The titles should match.");
+            Assert.AreEqual(gameDetails.Publishers, _gameViewModel.Publishers, "The publishers should match.");
+            Assert.AreEqual(2, _gameViewModel.Platforms.Count(),
+                "There should be two elements in the platforms list.");
+            Assert.AreEqual(northAmericaDate.ToString("dd MMMM yyyy"), _gameViewModel.NorthAmericaReleaseDate, "The North American dates should match.");
+            Assert.AreEqual(europeDate.ToString("dd MMMM yyyy"), _gameViewModel.EuropeReleaseDate, "The North American dates should match.");
+            Assert.AreEqual(japanDate.ToString("dd MMMM yyyy"), _gameViewModel.JapanReleaseDate, "The North American dates should match.");
+            Assert.AreEqual(4, _gameViewModel.Rating, "The rating should match the game user entry.");
+            Assert.AreEqual(GameUserEntryStatus.Backlog, _gameViewModel.Status, "The status should match the game user entry.");
+            Assert.AreEqual(gameDetails.Genres, _gameViewModel.Genres, "The genres should match.");
         }
     }
 }

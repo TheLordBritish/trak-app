@@ -14,12 +14,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
         public UserCredentialsValidator()
         {
             RuleFor(r => r.Username)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.LoginErrorMessageUsernameEmpty);
 
             RuleFor(r => r.Password)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.LoginErrorMessagePasswordEmpty);
         }

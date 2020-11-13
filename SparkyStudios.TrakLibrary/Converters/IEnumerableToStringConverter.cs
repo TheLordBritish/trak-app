@@ -11,11 +11,11 @@ namespace SparkyStudios.TrakLibrary.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var values = ((value as IEnumerable) ?? new List<object>())
+            var values = (value as IEnumerable ?? new List<object>())
                 .Cast<object>()
                 .Select(v => v.ToString());
 
-            return string.Join(", ", values);
+            return string.Join(parameter == null ? ", " : parameter.ToString(), values);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

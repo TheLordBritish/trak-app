@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using SparkyStudios.TrakLibrary.Model.Response;
 
@@ -13,13 +14,8 @@ namespace SparkyStudios.TrakLibrary.Model.Games
         
         public string Description { get; set; }
         
-        public DateTime? ReleaseDate { get; set; }
-        
         public long? Version { get; set; }
 
-        public override string ToString()
-        {
-            return Name;
-        }
+        public IEnumerable<GameReleaseDate> ReleaseDates { get; set; }
     }
 }

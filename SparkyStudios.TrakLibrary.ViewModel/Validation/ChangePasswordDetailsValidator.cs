@@ -15,7 +15,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
         public ChangePasswordDetailsValidator()
         {
             RuleFor(r => r.RecoveryToken)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.RecoveryErrorMessageRecoveryTokenEmpty)
                 .Must(p => !p.Any(char.IsWhiteSpace))
@@ -26,7 +26,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
                 .WithMessage(Messages.RecoveryErrorMessageRecoveryTokenAlphanumeric);
             
             RuleFor(r => r.NewPassword)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.RegistrationErrorMessagePasswordEmpty)
                 .MinimumLength(8)
@@ -41,7 +41,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
                 .WithMessage(Messages.RegistrationErrorMessagePasswordWhitespace);
 
             RuleFor(r => r.ConfirmNewPassword)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.RegistrationErrorMessageConfirmPasswordEmpty)
                 .Must((model, field) => string.Equals(model.NewPassword, field))

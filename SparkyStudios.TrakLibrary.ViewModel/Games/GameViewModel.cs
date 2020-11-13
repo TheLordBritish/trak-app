@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
@@ -9,11 +10,14 @@ using Microsoft.AppCenter.Crashes;
 using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SparkyStudios.TrakLibrary.Common.Extensions;
 using SparkyStudios.TrakLibrary.Model.Games;
 using SparkyStudios.TrakLibrary.Model.Response;
 using SparkyStudios.TrakLibrary.Service;
 using SparkyStudios.TrakLibrary.Service.Exception;
 using SparkyStudios.TrakLibrary.ViewModel.Common;
+using SparkyStudios.TrakLibrary.ViewModel.Resources;
+using Xamarin.Forms.Internals;
 
 namespace SparkyStudios.TrakLibrary.ViewModel.Games
 {
@@ -28,8 +32,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         private readonly IStorageService _storageService;
 
         private long _gameId;
-        private IEnumerable<Platform> _platforms;
-        
+
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
@@ -37,25 +40,22 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// </summary>
         /// <param name="scheduler">The <see cref="IScheduler" /> instance to inject.</param>
         /// <param name="navigationService">The <see cref="INavigationService" /> instance to inject.</param>
-        /// <param name="storageService">The <see cref="IStorageService" /> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService" /> instance to inject.</param>
-        public GameViewModel(IScheduler scheduler, INavigationService navigationService, IStorageService storageService,
-            IRestService restService) : base(scheduler, navigationService)
+        /// <param name="storageService">The <see cref="IStorageService" /> instance to inject.</param>
+        public GameViewModel(IScheduler scheduler, INavigationService navigationService, IRestService restService,
+            IStorageService storageService) : base(scheduler, navigationService)
         {
-            _storageService = storageService;
             _restService = restService;
-
-            // Default values
-            Status = GameUserEntryStatus.None;
-
+            _storageService = storageService;
+            
             // The page will be busy by default, as as soon as it's navigated to, API requests are made.
             SimilarGames = new ObservableCollection<ListItemViewModel>();
 
             OptionsCommand = ReactiveCommand.CreateFromTask(OptionsAsync, outputScheduler: scheduler);
 
-            LoadGameInfoCommand = ReactiveCommand.CreateFromTask(LoadGameInfoAsync, outputScheduler: scheduler);
+            LoadGameDetailsCommand = ReactiveCommand.CreateFromTask(LoadGameDetailsAsync, outputScheduler: scheduler);
             // Report errors if an exception was thrown.
-            LoadGameInfoCommand.ThrownExceptions.Subscribe(ex =>
+            LoadGameDetailsCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
                 if (!(ex is ApiException))
@@ -64,23 +64,16 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 }
             });
 
-            OnRatingTappedCommand =
-                ReactiveCommand.CreateFromTask<string, bool>(async rating => await OnRatingTappedAsync(rating),
-                    outputScheduler: scheduler);
-            // Report errors if an exception was thrown.
-            OnRatingTappedCommand.ThrownExceptions.Subscribe(ex =>
-            {
-                IsError = true;
-                if (!(ex is ApiException))
-                {
-                    Crashes.TrackError(ex);
-                }
-            });
-
-            this.WhenAnyObservable(x => x.LoadGameInfoCommand.IsExecuting)
+            this.WhenAnyObservable(x => x.LoadGameDetailsCommand.IsExecuting)
                 .ToPropertyEx(this, x => x.IsLoading, scheduler: scheduler);
         }
 
+        /**
+         * Specifies whether the page should reload the game data when navigating to. Always set to false unless
+         * the user is navigating from the game options page.
+         */
+        public bool ShouldReload { get; set; }
+        
         /// <summary>
         /// A <see cref="bool"/> that specifies whether the page has been fully loaded.
         /// </summary>
@@ -88,16 +81,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         public bool HasLoaded { get; set; }
 
         /// <summary>
-        /// A <see cref="Uri"/> which specifies the URI from which the <see cref="GameInfo"/> was loaded from.
+        /// A <see cref="Uri"/> which specifies the URI from which the <see cref="GameDetails"/> was loaded from.
         /// </summary>
         [Reactive]
         public Uri GameUrl { get; set; }
-
-        /// <summary>
-        /// A ID of the current <see cref="Platform"/> the <see cref="Game"/> has been added for.
-        /// </summary>
-        [Reactive]
-        public long PlatformId { get; set; }
 
         /// <summary>
         /// A <see cref="Uri" /> that contains the URL of the image that is associated with the game within this view model.
@@ -106,23 +93,16 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         public Uri ImageUrl { get; set; }
 
         /// <summary>
-        /// A <see cref="IEnumerable{T}" /> that contains all the platforms for the given game, or a single platform if
-        /// it is already in the users library.
+        /// A <see cref="IEnumerable{T}" /> that contains all the platforms wrapped within a <see cref="ItemEntryViewModel"/>.
         /// </summary>
         [Reactive]
-        public IEnumerable<Platform> Platforms { get; set; }
+        public IEnumerable<ItemEntryViewModel> Platforms { get; set; } = new List<ItemEntryViewModel>();
 
         /// <summary>
         /// A <see cref="string" /> that represents the name of the game.
         /// </summary>
         [Reactive]
         public string GameTitle { get; set; }
-
-        /// <summary>
-        /// A <see cref="DateTime" /> that represents the release date of the game within the view model.
-        /// </summary>
-        [Reactive]
-        public DateTime ReleaseDate { get; set; }
 
         /// <summary>
         /// A <see cref="string" /> that contains a comma-separated list of all publishers associated with the game within
@@ -160,12 +140,50 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         public string Description { get; set; }
 
         /// <summary>
-        /// A <see cref="GameUserEntryStatus" /> that represents the current status of the game. If the game being
-        /// displayed isn't within the users collection, the status will be set to <see cref="GameUserEntryStatus.None" />.
+        /// A <see cref="string"/> that represents the North American release date for the <see cref="Game"/>.
+        /// </summary>
+        [Reactive] 
+        public string NorthAmericaReleaseDate { get; set; } = Messages.GamePageReleaseDateNotReleased;
+
+        /// <summary>
+        /// A <see cref="string"/> that represents the European release date for the <see cref="Game"/>.
+        /// </summary>
+        [Reactive] 
+        public string EuropeReleaseDate { get; set; } = Messages.GamePageReleaseDateNotReleased;
+
+        /// <summary>
+        /// A <see cref="string"/> that represents the Japanese release date for the <see cref="Game"/>.
+        /// </summary>
+        [Reactive] 
+        public string JapanReleaseDate { get; set; } = Messages.GamePageReleaseDateNotReleased;
+
+        /// <summary>
+        /// The title of the <see cref="Franchise"/> of the currently viewed <see cref="Game"/>. Set to
+        /// <code>null</code> if the <see cref="Game"/> isn't in a <see cref="Franchise"/>.
         /// </summary>
         [Reactive]
-        public GameUserEntryStatus Status { get; set; }
+        public string FranchiseTitle { get; set; }
+        
+        /// <summary>
+        /// An <see cref="string"/> that contains a comma-separated value of all of the <see cref="GameModes"/> that the
+        /// selected <see cref="Game"/> has.
+        /// </summary>
+        [Reactive]
+        public string GameModes { get; set; }
+        
+        /// <summary>
+        /// A <see cref="GameUserEntryStatus" /> that represents the current status of the game. If the game being
+        /// displayed isn't within the users collection, the status will be set to <see cref="GameUserEntryStatus.Backlog" />.
+        /// </summary>
+        [Reactive]
+        public GameUserEntryStatus Status { get; private set; }
 
+        /// <summary>
+        /// The current assigned <see cref="AgeRating"/> of the <see cref="Game"/>.
+        /// </summary>
+        [Reactive]
+        public AgeRating AgeRating { get; private set; }
+        
         /// <summary>
         /// A <see cref="ObservableCollection{T}" /> that is used to represent a short collection of games that
         /// are within the same genre as the one that is being loaded by the user.
@@ -181,152 +199,194 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 
         /// <summary>
         /// Command that is invoked each time the page is first navigated to. When called, the command will
-        /// propagate the request and call the <see cref="LoadGameInfoAsync"/> method.
+        /// propagate the request and call the <see cref="LoadGameDetailsAsync"/> method.
         /// </summary>
-        public ReactiveCommand<Unit, Unit> LoadGameInfoCommand { get; }
-
-        /// <summary>
-        /// Command that is invoked each time any of the rating stars are tapped by the user. When called,
-        /// the command will propagate the request and call the <see cref="OnRatingTappedAsync"/> method.
-        /// </summary>
-        public ReactiveCommand<string, bool> OnRatingTappedCommand { get; }
+        public ReactiveCommand<Unit, Unit> LoadGameDetailsCommand { get; }
 
         /// <summary>
         /// Overriden method that is automatically invoked when the page is navigated to. Its purpose is to retrieve
-        /// values from the <see cref="NavigationParameters" /> before invoking <see cref="LoadGameInfoAsync" /> to
+        /// values from the <see cref="NavigationParameters" /> before invoking <see cref="LoadGameDetailsAsync" /> to
         /// load and display additional information to the view.
         /// </summary>
         /// <param name="parameters">The <see cref="NavigationParameters" />, which contains information for display purposes.</param>
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
             // Retrieve the url we're going to use to retrieve the base game data.
-            GameUrl = parameters["game-url"] as Uri;
-            PlatformId = parameters["platform-id"] as long? ?? 0L;
+            ShouldReload = parameters.GetNavigationMode() == NavigationMode.New ||
+                           parameters.GetNavigationMode() == NavigationMode.Forward;
 
-            // This information will only be valid if the user clicked on a game entry from their own collection.
-            InLibrary = parameters["in-library"] as bool? ?? false;
-            Rating = parameters["rating"] as short? ?? (short) 0;
-            Status = parameters["status"] as GameUserEntryStatus? ?? GameUserEntryStatus.None;
+            GameUrl = parameters.GetValue<Uri>("game-url");
+            Rating = parameters.GetValue<short>("rating");
+            Status = parameters.GetValue<GameUserEntryStatus>("status");
+            InLibrary = parameters.GetValue<bool>("in-library");
+            
+            // They'll only be selected platform ID's if the page is being navigated to from the game
+            // options page. 
+            var selectedPlatformIds = parameters.GetValue<IEnumerable<long>>("selected-platforms");
+            UpdateSelectedPlatforms(Platforms, selectedPlatformIds ?? Enumerable.Empty<long>());
 
-            LoadGameInfoCommand.Execute().Subscribe();
+            // Load the game immediately on navigation.
+            LoadGameDetailsCommand.Execute().Subscribe();
         }
 
         /// <summary>
-        /// Private method that is invoked by the <see cref="OptionsCommand"/>. When invoked, it will either navigate the user to the
-        /// game options page or the add game page, depending on whether the currently selected game is already within the user collection
+        /// Private method that is invoked by the <see cref="OptionsCommand"/>. When invoked, it will navigate the user to the
+        /// game options page.
         /// or not.
         /// </summary>
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task OptionsAsync()
         {
-            if (InLibrary)
+            await NavigationService.NavigateAsync("GameOptionsPage", new NavigationParameters
             {
-                var parameters = new NavigationParameters
-                {
-                    {"game-url", GameUrl},
-                    {"game-id", _gameId},
-                    {"platform-id", PlatformId},
-                    {"status", Status}
-                };
-
-                await NavigationService.NavigateAsync("GameOptionsPage", parameters);
-            }
-            else
-            {
-                var parameters = new NavigationParameters
-                {
-                    {"game-url", GameUrl},
-                    {"platforms", _platforms},
-                    {"game-id", _gameId}
-                };
-
-                await NavigationService.NavigateAsync("AddGamePage", parameters);
-            }
+                {"game-url", GameUrl},
+                {"game-id", _gameId}
+            });
         }
 
         /// <summary>
-        /// Private method that is invoked by the <see cref="LoadGameInfoCommand" /> when activated by the associated
+        /// Private method that is invoked by the <see cref="LoadGameDetailsCommand" /> when activated by the associated
         /// view. This method will attempt to retrieve the game information from the url provided by the
         /// <see cref="NavigationParameters" /> and populate all of the information within this view model with data
-        /// from the returned <see cref="GameInfo" />. If any errors occur during the API requests, the exceptions
+        /// from the returned <see cref="GameDetails" />. If any errors occur during the API requests, the exceptions
         /// are caught and the errors the IsError boolean to true.
         /// </summary>
         /// <returns>A <see cref="Task" /> which specifies whether the asynchronous task completed successfully.</returns>
-        private async Task LoadGameInfoAsync()
+        private async Task LoadGameDetailsAsync()
         {
-            // We're going to make some requests, so we're busy and remove any current errors.
-            IsError = false;
-            HasLoaded = false;
-            
-            // Retrieve the game and set some game information on the view.
-            var gameInfo = await _restService.GetAsync<GameInfo>(GameUrl.OriginalString);
-            _gameId = gameInfo.Id;
-            ImageUrl = gameInfo.GetLink("image");
-            GameTitle = gameInfo.Title;
-            ReleaseDate = gameInfo.ReleaseDate;
-            Description = gameInfo.Description;
-            Publishers = gameInfo.Publishers;
-            Genres = gameInfo.Genres;
-
-            _platforms = gameInfo.Platforms;
-            Platforms = InLibrary ? new[] {gameInfo.Platforms.First(p => p.Id == PlatformId)} : _platforms;
-
-            // Grab the first genre and load some game information from it.
-            if (Genres.Any())
+            // If we're coming from the game options page, there's no point in reloading the whole page, only change
+            // what the game options page changed.
+            if (!ShouldReload)
             {
-                var games = await _restService.GetAsync<HateoasPage<GameInfo>>(
-                    Genres.First().GetLink("gameInfos").OriginalString);
-
-                CreateSimilarGamesList(games.Embedded.Data.Where(x => x.Id != gameInfo.Id));
+                return;
             }
 
+            // Remove any previous error messages before loading.
+            IsError = false;
+            HasLoaded = false;
+ 
+            // Retrieve the game and set some game information on the view.
+            var gameDetails = await _restService.GetAsync<GameDetails>(GameUrl.OriginalString);
+            _gameId = gameDetails.Id;
+            ImageUrl = gameDetails.GetLink("image");
+            GameTitle = gameDetails.Title;
+            Description = gameDetails.Description;
+            Publishers = gameDetails.Publishers;
+            Genres = gameDetails.Genres;
+            FranchiseTitle = gameDetails.Franchise?.Title;
+            GameModes = string.Join(", ", gameDetails.GameModes
+                .Select(gameMode => gameMode.GetAttributeValue<DescriptionAttribute, string>(x => x.Description))
+                .ToArray());
+
+            AgeRating = gameDetails.AgeRating;
+            
+            var platforms = gameDetails.Platforms.Select(p => new ItemEntryViewModel
+            {
+                Id = p.Id,
+                Name = p.Name
+            }).ToList();
+            
+            // Set the release dates (if there are any).
+            foreach (var releaseDate in gameDetails.ReleaseDates)
+            {
+                var date = releaseDate.ReleaseDate.ToString("dd MMMM yyyy");
+                switch (releaseDate.Region)
+                {
+                    case GameRegion.NorthAmerica:
+                        NorthAmericaReleaseDate = date;
+                        break;
+
+                    case GameRegion.Pal:
+                        EuropeReleaseDate = date;
+                        break;
+
+                    case GameRegion.Japan:
+                        JapanReleaseDate = date;
+                        break;
+                }
+            }
+
+            // Grab the first genre and load some game information from it.
+            var enumerable = Genres as Genre[] ?? Genres.ToArray();
+            if (enumerable.Any())
+            {
+                var genre = enumerable.First();
+                var games = await _restService.GetAsync<HateoasPage<GameDetails>>(
+                    $"games/genres/{genre.Id}/games/details");
+                CreateSimilarGamesList(games.Embedded.Data.Where(x => x.Id != gameDetails.Id));
+            }
+
+            // Get the ID of the user currently logged in.
+            var userId = await _storageService.GetUserIdAsync();
+
+            // See if there is an existing entry for this game in the users collection.
+            var gameUserEntries =
+                await _restService.GetAsync<HateoasPage<GameUserEntry>>(gameDetails.GetLink("entries") +
+                                                                        $"?game-id={_gameId}&user-id={userId}");
+
+            // See if the game is already in the users collection.
+            if (gameUserEntries.Embedded != null && gameUserEntries.Embedded.Data.Any())
+            {
+                InLibrary = true;
+                var entry = gameUserEntries.Embedded.Data.First();
+
+                // Set the values on the page to those found within the current game user entry.
+                Status = entry.Status;
+                Rating = entry.Rating;
+
+                UpdateSelectedPlatforms(platforms, entry.GameUserEntryPlatforms.Select(g => g.PlatformId).ToList());
+            }
+            else
+            {
+                UpdateSelectedPlatforms(platforms, Enumerable.Empty<long>());
+            }
+            
             HasLoaded = true;
         }
 
-        private async Task<bool> OnRatingTappedAsync(string rating)
-        {
-            // Update the rating to reflect on the view.
-            Rating = short.Parse(rating);
-            
-            // Get the user ID, needed to update the correct game user entry.
-            var userId = await _storageService.GetUserIdAsync();
-            
-            // Get the details of the user entry that the rating is going to be updated for.
-            var entry = await _restService.GetAsync<HateoasPage<GameUserEntry>>(
-                $"games/entries?user-id={userId}&platform-id={PlatformId}&game-id={_gameId}");
-
-            if (entry.Embedded != null)
-            {
-                // Update the entry via patch with only the rating changed.
-                await _restService.PatchAsync<GameUserEntry>($"games/entries/{entry.Embedded.Data.First().Id}",
-                    new Dictionary<string, object>
-                    {
-                        {nameof(GameUserEntry.Rating), Rating}
-                    });
-            }
-            
-            return true;
-        }
-
         /// <summary>
-        /// Private method that is invoked within the <see cref="LoadGameInfoAsync" /> method. Its purpose
-        /// is to convert the provided <see cref="IEnumerable{T}" /> of <see cref="GameInfo" /> instances into
+        /// Private method that is invoked within the <see cref="LoadGameDetailsAsync" /> method. Its purpose
+        /// is to convert the provided <see cref="IEnumerable{T}" /> of <see cref="GameDetails" /> instances into
         /// <see cref="ListItemViewModel" /> instances for displaying within the list on the game page view.
         /// </summary>
         /// <param name="games">The <see cref="IEnumerable{T}" /> to convert into <see cref="ListItemViewModel" /> instances.</param>
-        private void CreateSimilarGamesList(IEnumerable<GameInfo> games)
+        private void CreateSimilarGamesList(IEnumerable<GameDetails> games)
         {
             var similarGames = new ObservableCollection<ListItemViewModel>();
             foreach (var game in games)
                 similarGames.Add(new ListItemViewModel
                 {
                     ImageUrl = game.GetLink("image"),
-                    Header = string.Join(", ", game.Platforms.Select(x => x.Name)),
+                    HeaderDetails = game.Platforms.Select(x => new ItemEntryViewModel
+                    {
+                        Name = x.Name,
+                        IsSelected = true
+                    }).OrderBy(x => x.Name).ToList(),
                     ItemTitle = game.Title,
-                    ItemSubTitle = $"{game.ReleaseDate:MMMM yyyy}, {string.Join(", ", game.Publishers.Select(x => x.Name))}"
+                    ItemSubTitle = string.Join(", ", game.Publishers.Select(x => x.Name))
                 });
 
             SimilarGames = similarGames;
+        }
+
+        private void UpdateSelectedPlatforms(IEnumerable<ItemEntryViewModel> platforms, IEnumerable<long> selectedPlatformIds)
+        {
+            foreach (var platform in platforms)
+            {
+                platform.HasNext = false;
+                platform.IsSelected = selectedPlatformIds.Contains(platform.Id);
+            }
+
+            var sortedPlatforms = platforms.OrderBy(x => !x.IsSelected)
+                .ThenBy(x => x.Name)
+                .ToList();
+            
+            for (var i = 0; i < sortedPlatforms.Count - 1; i++)
+            {
+                sortedPlatforms.ElementAt(i).HasNext = true;
+            }
+
+            Platforms = sortedPlatforms;
         }
     }
 }

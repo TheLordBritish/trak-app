@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using Prism.Mvvm;
 
@@ -7,7 +9,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Common
     public class ListItemViewModel : BindableBase
     {
         private Uri _imageUrl;
-        private string _header;
+        private IEnumerable<ItemEntryViewModel> _headerDetails;
         private string _itemTitle;
         private string _itemSubTitle;
         private bool _showRating;
@@ -21,10 +23,29 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Common
             set => SetProperty(ref _imageUrl, value);
         }
 
-        public string Header
+        public IEnumerable<ItemEntryViewModel> HeaderDetails
         {
-            get => _header;
-            set => SetProperty(ref _header, value);
+            get => _headerDetails;
+            set
+            {
+                if (value != null)
+                {
+                    var details = value.OrderBy(x => !x.IsSelected)
+                        .ThenBy(x => x.Name)
+                        .ToList();
+
+                    for (var i = 0; i < details.Count - 1; i++)
+                    {
+                        details.ElementAt(i).HasNext = true;
+                    }
+                    
+                    SetProperty(ref _headerDetails, details);
+                }
+                else
+                {
+                    SetProperty(ref _headerDetails, null);
+                }
+            }
         }
 
         public string ItemTitle

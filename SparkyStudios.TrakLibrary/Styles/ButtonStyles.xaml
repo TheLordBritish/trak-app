@@ -7,11 +7,13 @@
 
     <ResourceDictionary.MergedDictionaries>
         <styles:Colors />
+        <styles:Common />
     </ResourceDictionary.MergedDictionaries>
 
     <!--  Base style for all buttons.  -->
     <Style x:Key="BaseButtonStyle" TargetType="Button">
-        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontFamily" Value="Mulish-Bold" />
+        <Setter Property="Padding" Value="5" />
         <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
         <Setter Property="CornerRadius" Value="0" />
     </Style>
@@ -24,25 +26,19 @@
         x:Key="PrimaryButtonStyle"
         BasedOn="{StaticResource BaseButtonStyle}"
         TargetType="Button">
-        <Setter Property="FontSize" Value="Medium" />
+        <Setter Property="FontSize" Value="{StaticResource TrakFontMedium}" />
         <Setter Property="BackgroundColor" Value="{StaticResource TrakGrey}" />
     </Style>
 
-    <!--  Secondary button. Used if there is primary button and its used for additional options.  -->
+    <!--  Secondary button. Used on the home page.  -->
     <Style
         x:Key="SecondaryButtonStyle"
         BasedOn="{StaticResource BaseButtonStyle}"
         TargetType="Button">
         <Setter Property="BackgroundColor" Value="{StaticResource TrakPrimaryBlue}" />
-        <Setter Property="BorderWidth" Value="1" />
+        <Setter Property="FontSize" Value="{StaticResource TrakFontLarge}" />
+        <Setter Property="BorderWidth" Value="2" />
         <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
     </Style>
 
-    <!--  Button that is only used on the home page  -->
-    <Style
-        x:Key="HomePageButtonStyle"
-        BasedOn="{StaticResource SecondaryButtonStyle}"
-        TargetType="Button">
-        <Setter Property="FontSize" Value="30" />
-    </Style>
 </ResourceDictionary>

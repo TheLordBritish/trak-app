@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SparkyStudios.TrakLibrary.Model.Response;
@@ -17,12 +15,6 @@ namespace SparkyStudios.TrakLibrary.Model.Games
         
         public string GameTitle { get; set; }
         
-        public DateTime? GameReleaseDate { get; set; }
-        
-        public long PlatformId { get; set; }
-        
-        public string PlatformName { get; set; }
-        
         public long UserId { get; set; }
         
         [JsonConverter(typeof(StringEnumConverter))]
@@ -31,6 +23,8 @@ namespace SparkyStudios.TrakLibrary.Model.Games
         public IEnumerable<string> Publishers { get; set; }
         
         public short Rating { get; set; }
+        
+        public IEnumerable<GameUserEntryPlatform> GameUserEntryPlatforms { get; set; }
         
         public long Version { get; set; }
     }

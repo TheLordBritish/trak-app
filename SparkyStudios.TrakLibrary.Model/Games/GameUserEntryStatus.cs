@@ -7,22 +7,22 @@ namespace SparkyStudios.TrakLibrary.Model.Games
     {
         [Description("None")]
         [EnumMember(Value = "NONE")]
-        None,
+        None = -1,
 
         [Description("Backlog")]
         [EnumMember(Value = "BACKLOG")]
-        Backlog,
+        Backlog = 0,
         
         [Description("Playing")]
         [EnumMember(Value = "IN_PROGRESS")]
-        InProgress,
+        InProgress = 1,
         
         [Description("Done")]
         [EnumMember(Value = "COMPLETED")]
-        Completed,
+        Completed = 2,
         
         [Description("Dropped")]
         [EnumMember(Value = "DROPPED")]
-        Dropped
+        Dropped = 3
     }
 }

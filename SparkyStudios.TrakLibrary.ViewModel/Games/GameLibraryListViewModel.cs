@@ -23,7 +23,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 {
     /// <summary>
     /// The <see cref="GameLibraryListViewModel"/> is the view model that is associated with the game library list page view.
-    /// Its responsibility is to respond to user defined search queries and display a list of <see cref="GameInfo"/> that
+    /// Its responsibility is to respond to user defined search queries and display a list of <see cref="GameDetails"/> that
     /// match the given criteria. The user can click on entries from here to add them to their own library.
     ///
     /// If the user searches for a game that isn't in the library, this view model also allows them to make requests
@@ -32,7 +32,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
     public class GameLibraryListViewModel : ReactiveViewModel
     {
         private readonly IRestService _restService;
-        private readonly IStorageService _storageService;
 
         private string _nextUri;
 
@@ -44,19 +43,16 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// <param name="scheduler">The <see cref="IScheduler"/> instance to inject.</param>
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
-        /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
         /// <param name="userDialogs">The <see cref="IUserDialogs"/> instance to inject.</param>
         public GameLibraryListViewModel(IScheduler scheduler, INavigationService navigationService,
-            IRestService restService,
-            IStorageService storageService, IUserDialogs userDialogs) : base(scheduler, navigationService)
+            IRestService restService, IUserDialogs userDialogs) : base(scheduler, navigationService)
         {
             _restService = restService;
-            _storageService = storageService;
 
             var canSearch = this.WhenAny(x => x.SearchQuery, x => !string.IsNullOrWhiteSpace(x.Value));
 
             SearchCommand =
-                ReactiveCommand.CreateFromTask<string, IEnumerable<GameInfo>>(SearchAsync, canSearch, scheduler);
+                ReactiveCommand.CreateFromTask<string, IEnumerable<GameDetails>>(SearchAsync, canSearch, scheduler);
             // Register to the result of the search command and convert the result into list item view models.
             SearchCommand.Subscribe(results =>
             {
@@ -86,7 +82,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             var canLoadMore = this.WhenAnyValue(x => x._nextUri, x => !string.IsNullOrEmpty(x));
 
             LoadMoreCommand =
-                ReactiveCommand.CreateFromTask<Unit, IEnumerable<GameInfo>>(_ => GetGamesFromUrlAsync(_nextUri),
+                ReactiveCommand.CreateFromTask<Unit, IEnumerable<GameDetails>>(_ => GetGamesFromUrlAsync(_nextUri),
                     canLoadMore, scheduler);
             // Register to the result of the load more command and convert the result into list item view models.
             LoadMoreCommand.Subscribe(results =>
@@ -131,7 +127,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         
         /// <summary>
         /// An <see cref="ObservableRangeCollection{T}"/> that contains all of the <see cref="ListItemViewModel"/>
-        /// items that each represent a separate <see cref="GameInfo"/>.
+        /// items that each represent a separate <see cref="GameDetails"/>.
         /// </summary>
         [Reactive]
         public ObservableRangeCollection<ListItemViewModel> Items { get; private set; } =
@@ -158,14 +154,14 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// Command that is invoked each the time the search query is changed by the user on the view.
         /// When called, the command will propagate the request and call the <see cref="SearchAsync"/> method.
         /// </summary>
-        public ReactiveCommand<string, IEnumerable<GameInfo>> SearchCommand { get; }
+        public ReactiveCommand<string, IEnumerable<GameDetails>> SearchCommand { get; }
 
         /// <summary>
         /// Command that is automatically invoked each the time the user scrolls to the bottom of the list and more
         /// items can be loaded in from the serve. When called, the command will propagate the request and call the
         /// <see cref="GetGamesFromUrlAsync"/> method.
         /// </summary>
-        public ReactiveCommand<Unit, IEnumerable<GameInfo>> LoadMoreCommand { get; }
+        public ReactiveCommand<Unit, IEnumerable<GameDetails>> LoadMoreCommand { get; }
 
         /// <summary>
         /// Command that is invoked each the time the make a request button is tapped by the user on the view.
@@ -175,13 +171,13 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 
         /// <summary>
         /// Private method that is invoked by the <see cref="SearchCommand"/> when activated by the associated
-        /// view. This method will set the URI to call the <see cref="GameInfo"/> data from and return an
+        /// view. This method will set the URI to call the <see cref="GameDetails"/> data from and return an
         /// <see cref="IEnumerable{T}"/> of all games associated with the given query.
         /// </summary>
-        /// <returns>A <see cref="Task"/> which contains all of the <see cref="GameInfo"/> objects associated with the query.</returns>
-        private async Task<IEnumerable<GameInfo>> SearchAsync(string query)
+        /// <returns>A <see cref="Task"/> which contains all of the <see cref="GameDetails"/> objects associated with the query.</returns>
+        private async Task<IEnumerable<GameDetails>> SearchAsync(string query)
         {
-            _nextUri = $"games/info?title={query}&sort=title";
+            _nextUri = $"games/details?title={query}&sort=title";
             return await GetGamesFromUrlAsync(_nextUri);
         }
         
@@ -196,21 +192,21 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         }
 
         /// <summary>
-        /// Retrieves an <see cref="IEnumerable{T}"/> of <see cref="GameInfo"/> objects from the server by
+        /// Retrieves an <see cref="IEnumerable{T}"/> of <see cref="GameDetails"/> objects from the server by
         /// invoking the given url. No error checking is done within this method, it is done by the commands
         /// that invoke it.
         ///
         /// If the data loaded has an additional page, the next URI is set and more data can be loaded when
         /// the user reaches the end of the collection.
         /// </summary>
-        /// <param name="url">The url to invoke to retrieve another page of <see cref="GameInfo"/> instances from.</param>
-        /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="GameInfo"/> objects from the given page.</returns>
-        private async Task<IEnumerable<GameInfo>> GetGamesFromUrlAsync(string url)
+        /// <param name="url">The url to invoke to retrieve another page of <see cref="GameDetails"/> instances from.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="GameDetails"/> objects from the given page.</returns>
+        private async Task<IEnumerable<GameDetails>> GetGamesFromUrlAsync(string url)
         {
-            var page = await _restService.GetAsync<HateoasPage<GameInfo>>(url);
+            var page = await _restService.GetAsync<HateoasPage<GameDetails>>(url);
             _nextUri = page.GetLink("next")?.OriginalString;
 
-            var result = new List<GameInfo>();
+            var result = new List<GameDetails>();
             // If the page returns doesn't contain any data, then it'll be null and not returned in the response.
             if (page.Embedded?.Data != null)
             {
@@ -221,21 +217,26 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         }
 
         /// <summary>
-        /// Utility method used to convert a <see cref="GameInfo"/> instance into a <see cref="ListItemViewModel"/>.
+        /// Utility method used to convert a <see cref="GameDetails"/> instance into a <see cref="ListItemViewModel"/>.
         /// This is done as the list views used by the view accept the values mapped within these view models for
         /// code re-use purposes.
         /// </summary>
-        /// <param name="gameInfo">The <see cref="GameInfo"/> object to convert.</param>
-        /// <returns>A <see cref="ListItemViewModel"/> with the data retrieved from the <see cref="GameInfo"/> instance.</returns>
-        private ListItemViewModel CreateListItemViewModelFromGameInfo(GameInfo gameInfo)
+        /// <param name="gameDetails">The <see cref="GameDetails"/> object to convert.</param>
+        /// <returns>A <see cref="ListItemViewModel"/> with the data retrieved from the <see cref="GameDetails"/> instance.</returns>
+        private ListItemViewModel CreateListItemViewModelFromGameInfo(GameDetails gameDetails)
         {
+            var platforms = gameDetails.Platforms?.Select(x => new ItemEntryViewModel
+            {
+                Name = x.Name,
+                IsSelected = true
+            }).ToList();
+
             return new ListItemViewModel
             {
-                ImageUrl = gameInfo.GetLink("image"),
-                Header = string.Join(", ", gameInfo.Platforms.Select(x => x.Name)),
-                ItemTitle = gameInfo.Title,
-                ItemSubTitle =
-                    $"{gameInfo.ReleaseDate:MMMM yyyy}, {string.Join(", ", gameInfo.Publishers.Select(x => x.Name))}",
+                ImageUrl = gameDetails.GetLink("image"),
+                HeaderDetails = platforms,
+                ItemTitle = gameDetails.Title,
+                ItemSubTitle = string.Join(", ", gameDetails.Publishers.Select(x => x.Name)),
                 ShowRating = false,
                 TapCommand = new DelegateCommand(async () =>
                 {
@@ -244,11 +245,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                     // down to a single console.
                     var parameters = new NavigationParameters
                     {
-                        {"game-url", gameInfo.GetLink("self")},
-                        {"in-library", false}
+                        {"game-url", gameDetails.GetLink("self")},
+                        {"in-library", false},
+                        {"transition-type", TransitionType.SlideFromRight }
                     };
 
-                    await NavigationService.NavigateAsync("GamePage", parameters);
+                    await NavigationService.NavigateAsync("GamePage", parameters, false, false);
                 })
             };
         }

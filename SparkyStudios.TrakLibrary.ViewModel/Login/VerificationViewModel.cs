@@ -89,10 +89,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
                 }
             });
 
-            this.WhenAnyObservable(x => x.VerifyCommand.IsExecuting)
-                .ToPropertyEx(this, x => x.IsLoading);
-
-            this.WhenAnyObservable(x => x.ResendVerificationCommand.IsExecuting)
+            this.WhenAnyObservable(x => x.VerifyCommand.IsExecuting, x => x.ResendVerificationCommand.IsExecuting)
                 .ToPropertyEx(this, x => x.IsLoading);
         }
 
@@ -145,7 +142,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
         /// <returns>A <see cref="OverallValidationResult"/> which will contain a list of any errors.</returns>
         public OverallValidationResult Validate(VerificationDetails model)
         {
-            return _validator.Validate(model)
+            return _validator.Validate(new ValidationContext<VerificationDetails>(model))
                 .ApplyResultsTo(_validatables);
         }
 

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using Android.Content;
-using Android.Support.V4.App;
 using SparkyStudios.TrakLibrary;
 using SparkyStudios.TrakLibrary.Common;
 using SparkyStudios.TrakLibrary.Droid.Renderers;
@@ -28,8 +27,8 @@ namespace SparkyStudios.TrakLibrary.Droid.Renderers
                 UpdateTransitionType();
             }
         }
-
-        protected override void SetupPageTransition(FragmentTransaction transaction, bool isPush)
+        
+        protected override void SetupPageTransition(AndroidX.Fragment.App.FragmentTransaction transaction, bool isPush)
         {
             switch (_transitionType)
             {

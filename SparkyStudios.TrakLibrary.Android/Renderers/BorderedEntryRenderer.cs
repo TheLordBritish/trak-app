@@ -42,10 +42,8 @@ namespace SparkyStudios.TrakLibrary.Droid.Renderers
             gradientDrawable.SetStroke(entry.BorderThickness, entry.BorderColor.ToAndroid());
             gradientDrawable.SetColor(entry.BackgroundColor.ToAndroid());
             Control.SetBackground(gradientDrawable);
-                
-            Control.SetBackground(gradientDrawable);
-                
-            Control.SetPadding(50, Control.PaddingTop, Control.PaddingRight,  
+            
+            Control.SetPadding(Control.PaddingLeft, Control.PaddingTop, Control.PaddingRight,  
                 Control.PaddingBottom);
         }
     }

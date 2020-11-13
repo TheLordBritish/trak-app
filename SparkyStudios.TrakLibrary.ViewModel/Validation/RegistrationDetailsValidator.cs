@@ -16,7 +16,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
         public RegistrationDetailsValidator()
         {
             RuleFor(r => r.Username)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.RegistrationErrorMessageUsernameEmpty)
                 .Must(p => !p.Any(char.IsWhiteSpace))
@@ -27,14 +27,14 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
                 .WithMessage(Messages.RegistrationErrorMessageUsernameInvalidCharacters);
 
             RuleFor(r => r.EmailAddress)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.RegistrationErrorMessageEmailAddressEmpty)
                 .EmailAddress()
                 .WithMessage(Messages.RegistrationErrorMessageEmailAddressInvalid);
 
             RuleFor(r => r.Password)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.RegistrationErrorMessagePasswordEmpty)
                 .MinimumLength(8)
@@ -49,7 +49,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
                 .WithMessage(Messages.RegistrationErrorMessagePasswordWhitespace);
 
             RuleFor(r => r.ConfirmPassword)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.RegistrationErrorMessageConfirmPasswordEmpty)
                 .Must((model, field) => string.Equals(model.Password, field))

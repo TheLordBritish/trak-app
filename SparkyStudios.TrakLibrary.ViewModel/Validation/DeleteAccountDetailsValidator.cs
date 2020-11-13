@@ -14,7 +14,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
         public DeleteAccountDetailsValidator()
         {
             RuleFor(f => f.DeleteMe)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.DeleteAccountIncorrectDeleteMessage)
                 .Must(p => p.Equals(Messages.DeleteAccountPageDeleteMe))

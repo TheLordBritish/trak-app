@@ -5,8 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:common="clr-namespace:SparkyStudios.TrakLibrary.Controls.Common;assembly=SparkyStudios.TrakLibrary"
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
-    xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.Model.Games;assembly=SparkyStudios.TrakLibrary.Model"
-    xmlns:magicGradients="clr-namespace:MagicGradients;assembly=MagicGradients"
+    xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.Controls.Games;assembly=SparkyStudios.TrakLibrary"
     xmlns:vm="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel">
     <ContentPage.Content>
         <Grid x:DataType="vm:GameViewModel">
@@ -16,7 +15,7 @@
                 HorizontalOptions="Center"
                 IsRefreshable="True"
                 IsVisible="False"
-                RefreshCommand="{Binding LoadGameInfoCommand}"
+                RefreshCommand="{Binding LoadGameDetailsCommand}"
                 VerticalOptions="CenterAndExpand">
                 <common:FullPageErrorControl.Triggers>
                     <MultiTrigger TargetType="common:FullPageErrorControl">
@@ -57,6 +56,7 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -72,41 +72,28 @@
                         Aspect="AspectFill"
                         HeightRequest="300"
                         Source="{Binding ImageUrl}" />
-                    <magicGradients:GradientView
+                    <Frame
                         Grid.Row="0"
                         Grid.RowSpan="3"
                         Grid.Column="0"
                         Grid.ColumnSpan="2">
-                        <magicGradients:GradientView.GradientSource>
-                            <magicGradients:GradientCollection>
-                                <magicGradients:LinearGradient>
-                                    <magicGradients:GradientStop Offset="0" Color="{StaticResource TrakPrimaryBlue}" />
-                                    <magicGradients:GradientStop Offset="1" Color="Transparent" />
-                                </magicGradients:LinearGradient>
-                                <magicGradients:LinearGradient>
-                                    <magicGradients:GradientStop Offset="0" Color="Transparent" />
-                                    <magicGradients:GradientStop Offset="1" Color="{StaticResource TrakPrimaryBlue}" />
-                                </magicGradients:LinearGradient>
-                            </magicGradients:GradientCollection>
-                        </magicGradients:GradientView.GradientSource>
-                    </magicGradients:GradientView>
-
-                    <!--  Game platforms/platform you have the game for  -->
-                    <Label
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        Margin="20,0"
-                        LineBreakMode="TailTruncation"
-                        MaxLines="1"
-                        Text="{Binding Platforms, Converter={StaticResource IEnumerableToStringConverter}}"
-                        VerticalTextAlignment="Center" />
+                        <Frame.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                <GradientStop Offset="0.0" Color="{StaticResource TrakPrimaryBlue}" />
+                                <GradientStop Offset="0.3" Color="Transparent" />
+                                <GradientStop Offset="0.0" Color="{StaticResource TrakPrimaryBlue}" />
+                            </LinearGradientBrush>
+                        </Frame.Background>
+                    </Frame>
 
                     <!--  Add to library/game user entry options  -->
                     <Button
                         Grid.Row="1"
                         Grid.Column="1"
                         Margin="20,0"
+                        BackgroundColor="Transparent"
                         Command="{Binding OptionsCommand}"
+                        FontSize="{StaticResource TrakFontMedium}"
                         Style="{StaticResource SecondaryButtonStyle}"
                         Text="{extensions:Translate GamePageAddToLibrary}">
                         <Button.Triggers>
@@ -119,42 +106,42 @@
                         </Button.Triggers>
                     </Button>
 
-                    <!--  Game title  -->
-                    <Label
+                    <!--  Game platforms  -->
+                    <common:DividerControl
                         Grid.Row="2"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        Padding="20,0"
+                        Margin="20,10,20,0"
+                        Divider="|"
+                        FontSize="{StaticResource TrakFontMedium}"
+                        ItemsSource="{Binding Platforms}" />
+
+                    <!--  Game title  -->
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Padding="20,0,20,5"
+                        LineBreakMode="WordWrap"
                         Style="{StaticResource TitleLabelStyle}"
                         Text="{Binding GameTitle}" />
 
                     <!--  Release date and publishers of the game.  -->
                     <StackLayout
-                        Grid.Row="3"
+                        Grid.Row="4"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Margin="20,5">
-                        <Label>
-                            <Label.FormattedText>
-                                <FormattedString>
-                                    <Span Text="{Binding ReleaseDate, StringFormat='{0:MMMM yyyy}'}" />
-                                    <Span Text=", " />
-                                    <Span Text="{Binding Publishers, Converter={StaticResource IEnumerableToStringConverter}}" />
-                                </FormattedString>
-                            </Label.FormattedText>
-                        </Label>
+                        <Label Text="{Binding Publishers, Converter={StaticResource IEnumerableToStringConverter}}" />
 
                         <!--  The star rating for the current game. Only displayed if the game is in the users collection.  -->
-                        <StackLayout
-                            Margin="0,5"
-                            IsEnabled="{Binding InLibrary}"
-                            IsVisible="{Binding InLibrary}"
-                            Orientation="Horizontal">
+                        <StackLayout Margin="0,5" Orientation="Horizontal">
                             <Label
+                                FontSize="{StaticResource TrakFontSmall}"
                                 IsVisible="False"
                                 Text="Not rated yet:"
                                 TextColor="{StaticResource TrakGrey}"
-                                VerticalTextAlignment="Center">
+                                VerticalTextAlignment="End">
                                 <Label.Triggers>
                                     <DataTrigger
                                         Binding="{Binding Rating}"
@@ -164,94 +151,86 @@
                                     </DataTrigger>
                                 </Label.Triggers>
                             </Label>
-                            <common:RatingUserControl OnTappedCommand="{Binding OnRatingTappedCommand}" Rating="{Binding Rating}" />
+                            <common:RatingUserControl Rating="{Binding Rating}" />
                         </StackLayout>
 
                         <!--  A comma separated list of genres.  -->
                         <Label
                             Margin="0,5"
+                            FontSize="{StaticResource TrakFontSmall}"
                             LineBreakMode="HeadTruncation"
                             MaxLines="1"
-                            Text="{Binding Genres, Converter={StaticResource IEnumerableToStringConverter}}"
-                            TextColor="{StaticResource TrakGrey}" />
+                            Text="{Binding Genres, Converter={StaticResource IEnumerableToStringConverter}}" />
 
                         <!--  The description of the game.  -->
                         <Label
                             Margin="0,5"
-                            FontSize="Small"
+                            FontSize="{StaticResource TrakFontSmall}"
                             Text="{Binding Description}" />
 
-                        <!--  A list of games that share the same genre as the one selected.  -->
+                        <!--  Release dates  -->
                         <Label
-                            Margin="0,5,0,0"
-                            FontSize="Large"
+                            Margin="0,15,0,0"
+                            FontSize="{StaticResource TrakFontSmall}"
+                            Style="{StaticResource BaseBoldLabelStyle}"
+                            Text="{extensions:Translate GamePageReleaseDates}" />
+                        <StackLayout Padding="0,-5" Orientation="Horizontal">
+                            <Label FontSize="{StaticResource TrakFontSmall}" Text="North America: " />
+                            <Label FontSize="{StaticResource TrakFontSmall}" Text="{Binding NorthAmericaReleaseDate}" />
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label FontSize="{StaticResource TrakFontSmall}" Text="Europe: " />
+                            <Label FontSize="{StaticResource TrakFontSmall}" Text="{Binding EuropeReleaseDate}" />
+                        </StackLayout>
+                        <StackLayout Padding="0,-5" Orientation="Horizontal">
+                            <Label FontSize="{StaticResource TrakFontSmall}" Text="Japan: " />
+                            <Label FontSize="{StaticResource TrakFontSmall}" Text="{Binding JapanReleaseDate}" />
+                        </StackLayout>
+
+                        <!--  Franchise  -->
+                        <Label
+                            Margin="0,15,0,0"
+                            FontSize="{StaticResource TrakFontSmall}"
+                            IsVisible="{Binding FranchiseTitle, Converter={StaticResource StringEmptyConverter}}"
+                            Style="{StaticResource BaseBoldLabelStyle}"
+                            Text="{extensions:Translate GamePageFranchise}" />
+                        <Label
+                            Margin="0,-5,0,0"
+                            FontSize="{StaticResource TrakFontSmall}"
+                            IsVisible="{Binding FranchiseTitle, Converter={StaticResource StringEmptyConverter}}"
+                            Text="{Binding FranchiseTitle}" />
+
+                        <!--  Game modes  -->
+                        <Label
+                            Margin="0,15,0,0"
+                            FontSize="{StaticResource TrakFontSmall}"
+                            IsVisible="{Binding GameModes, Converter={StaticResource StringEmptyConverter}}"
+                            Style="{StaticResource BaseBoldLabelStyle}"
+                            Text="{extensions:Translate GamePageGameModes}" />
+                        <Label
+                            Margin="0,-5,0,0"
+                            FontSize="{StaticResource TrakFontSmall}"
+                            IsVisible="{Binding GameModes, Converter={StaticResource StringEmptyConverter}}"
+                            Text="{Binding GameModes}" />
+
+                        <!--  Age rating  -->
+                        <Label
+                            Margin="0,15,0,0"
+                            FontSize="{StaticResource TrakFontSmall}"
+                            Style="{StaticResource BaseBoldLabelStyle}"
+                            Text="{extensions:Translate GamePageAgeRating}" />
+                        <Label
+                            Margin="0,-5,0,0"
+                            FontSize="{StaticResource TrakFontSmall}"
+                            Text="{Binding AgeRating, Converter={StaticResource EnumDescriptionConverter}}" />
+
+                        <!--  Displays which status the game is currently assigned to.  -->
+                        <games:GameUserEntryStatusControl
+                            Margin="0,25,0,0"
                             IsEnabled="{Binding InLibrary}"
                             IsVisible="{Binding InLibrary}"
-                            Style="{StaticResource TitleLabelStyle}"
-                            Text="{extensions:Translate GamePageCurrentlyIn}" />
-                        <Grid
-                            HorizontalOptions="FillAndExpand"
-                            IsEnabled="{Binding InLibrary}"
-                            IsVisible="{Binding InLibrary}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-                            <Label
-                                Grid.Column="0"
-                                Text="{extensions:Translate Backlog}"
-                                TextColor="{StaticResource TrakGrey}">
-                                <Label.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding Status}"
-                                        TargetType="Label"
-                                        Value="{x:Static games:GameUserEntryStatus.Backlog}">
-                                        <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
-                            <Label
-                                Grid.Column="1"
-                                Text="{extensions:Translate Playing}"
-                                TextColor="{StaticResource TrakGrey}">
-                                <Label.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding Status}"
-                                        TargetType="Label"
-                                        Value="{x:Static games:GameUserEntryStatus.InProgress}">
-                                        <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
-                            <Label
-                                Grid.Column="2"
-                                Text="{extensions:Translate Done}"
-                                TextColor="{StaticResource TrakGrey}">
-                                <Label.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding Status}"
-                                        TargetType="Label"
-                                        Value="{x:Static games:GameUserEntryStatus.Completed}">
-                                        <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
-                            <Label
-                                Grid.Column="3"
-                                Text="{extensions:Translate Dropped}"
-                                TextColor="{StaticResource TrakGrey}">
-                                <Label.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding Status}"
-                                        TargetType="Label"
-                                        Value="{x:Static games:GameUserEntryStatus.Dropped}">
-                                        <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
-                        </Grid>
+                            Status="{Binding Status}" />
+
                         <Label
                             Margin="0,15,0,10"
                             FontSize="Large"

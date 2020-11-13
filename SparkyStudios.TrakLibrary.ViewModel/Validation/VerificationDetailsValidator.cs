@@ -16,7 +16,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
         public VerificationDetailsValidator()
         {
             RuleFor(v => v.VerificationCode)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.VerificationErrorMessageVerificationCodeEmpty)
                 .Must(p => !p.Any(char.IsWhiteSpace))

@@ -1,10 +1,8 @@
 ﻿using System.Windows.Input;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace SparkyStudios.TrakLibrary.Controls.Common
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class RatingUserControl
     {
         public static readonly BindableProperty RatingProperty = 

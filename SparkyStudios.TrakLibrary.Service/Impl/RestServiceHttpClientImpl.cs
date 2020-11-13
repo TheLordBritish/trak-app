@@ -70,6 +70,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task<T> PostAsync<T>(string url, T requestBody)
         {
+            return await PostAsync<T, T>(url, requestBody);
+        }
+
+        public async Task<T> PostAsync<T, TRequest>(string url, TRequest requestBody)
+        {
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
             client.DefaultRequestHeaders.Accept.Add(
@@ -107,6 +112,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
         }
 
         public async Task<T> PutAsync<T>(string url, T requestBody)
+        {
+            return await PutAsync<T, T>(url, requestBody);
+        }
+
+        public async Task<T> PutAsync<T, TRequest>(string url, TRequest requestBody)
         {
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");

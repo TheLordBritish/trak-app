@@ -477,9 +477,9 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Can&apos;t find the scanned barcode in our library. Would you like to make a request?.
         /// </summary>
-        public static string GameBarcodeScannerPageMakeARequest {
+        public static string GameBarcodeScannerPageRequestGame {
             get {
-                return ResourceManager.GetString("GameBarcodeScannerPageMakeARequest", resourceCulture);
+                return ResourceManager.GetString("GameBarcodeScannerPageRequestGame", resourceCulture);
             }
         }
         
@@ -495,9 +495,9 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Can&apos;t find what you&apos;re looking for?.
         /// </summary>
-        public static string GameLibraryListPageCantFindGame {
+        public static string GameLibraryListPageCantFindInstructions {
             get {
-                return ResourceManager.GetString("GameLibraryListPageCantFindGame", resourceCulture);
+                return ResourceManager.GetString("GameLibraryListPageCantFindInstructions", resourceCulture);
             }
         }
         
@@ -520,7 +520,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the entry above to search for games..
+        ///   Looks up a localized string similar to Discover new games to add to your library.
         /// </summary>
         public static string GameLibraryListPageInstructions {
             get {
@@ -529,11 +529,20 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make a request.
+        ///   Looks up a localized string similar to Request Game.
         /// </summary>
-        public static string GameLibraryListPageMakeARequest {
+        public static string GameLibraryListPageRequestGame {
             get {
-                return ResourceManager.GetString("GameLibraryListPageMakeARequest", resourceCulture);
+                return ResourceManager.GetString("GameLibraryListPageRequestGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string GameLibraryListPageSearchPlaceholder {
+            get {
+                return ResourceManager.GetString("GameLibraryListPageSearchPlaceholder", resourceCulture);
             }
         }
         
@@ -547,11 +556,29 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Game Library.
+        ///   Looks up a localized string similar to Sorry we couldn&apos;t find any results..
+        /// </summary>
+        public static string GameLibraryPageEmptySearchResult {
+            get {
+                return ResourceManager.GetString("GameLibraryPageEmptySearchResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Game.
         /// </summary>
         public static string GameLibraryTabbedPage {
             get {
                 return ResourceManager.GetString("GameLibraryTabbedPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string GameOptionsPageAdd {
+            get {
+                return ResourceManager.GetString("GameOptionsPageAdd", resourceCulture);
             }
         }
         
@@ -561,6 +588,96 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         public static string GameOptionsPageDelete {
             get {
                 return ResourceManager.GetString("GameOptionsPageDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has been added to your library..
+        /// </summary>
+        public static string GameOptionsPageGameAdded {
+            get {
+                return ResourceManager.GetString("GameOptionsPageGameAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has been removed from your library..
+        /// </summary>
+        public static string GameOptionsPageGameRemoved {
+            get {
+                return ResourceManager.GetString("GameOptionsPageGameRemoved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is currently in your library.
+        /// </summary>
+        public static string GameOptionsPageInLibrary {
+            get {
+                return ResourceManager.GetString("GameOptionsPageInLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *No platforms have been selected..
+        /// </summary>
+        public static string GameOptionsPageNoSelectedPlatforms {
+            get {
+                return ResourceManager.GetString("GameOptionsPageNoSelectedPlatforms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *No status has been selected..
+        /// </summary>
+        public static string GameOptionsPageNoSelectedStatus {
+            get {
+                return ResourceManager.GetString("GameOptionsPageNoSelectedStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is currently not in your library.
+        /// </summary>
+        public static string GameOptionsPageNotInLibrary {
+            get {
+                return ResourceManager.GetString("GameOptionsPageNotInLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rating.
+        /// </summary>
+        public static string GameOptionsPageRating {
+            get {
+                return ResourceManager.GetString("GameOptionsPageRating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove from library.
+        /// </summary>
+        public static string GameOptionsPageRemoveFromLibrary {
+            get {
+                return ResourceManager.GetString("GameOptionsPageRemoveFromLibrary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Rating.
+        /// </summary>
+        public static string GameOptionsPageRemoveRating {
+            get {
+                return ResourceManager.GetString("GameOptionsPageRemoveRating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select platforms.
+        /// </summary>
+        public static string GameOptionsPageSelectPlatforms {
+            get {
+                return ResourceManager.GetString("GameOptionsPageSelectPlatforms", resourceCulture);
             }
         }
         
@@ -592,6 +709,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Age rating.
+        /// </summary>
+        public static string GamePageAgeRating {
+            get {
+                return ResourceManager.GetString("GamePageAgeRating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Currently in:.
         /// </summary>
         public static string GamePageCurrentlyIn {
@@ -610,11 +736,47 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Franchise.
+        /// </summary>
+        public static string GamePageFranchise {
+            get {
+                return ResourceManager.GetString("GamePageFranchise", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game modes.
+        /// </summary>
+        public static string GamePageGameModes {
+            get {
+                return ResourceManager.GetString("GamePageGameModes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         public static string GamePageOptions {
             get {
                 return ResourceManager.GetString("GamePageOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not released.
+        /// </summary>
+        public static string GamePageReleaseDateNotReleased {
+            get {
+                return ResourceManager.GetString("GamePageReleaseDateNotReleased", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release dates.
+        /// </summary>
+        public static string GamePageReleaseDates {
+            get {
+                return ResourceManager.GetString("GamePageReleaseDates", resourceCulture);
             }
         }
         
@@ -736,7 +898,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No password has been entered..
+        ///   Looks up a localized string similar to *No password has been entered..
         /// </summary>
         public static string LoginErrorMessagePasswordEmpty {
             get {
@@ -745,7 +907,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No username has been entered..
+        ///   Looks up a localized string similar to *No username has been entered..
         /// </summary>
         public static string LoginErrorMessageUsernameEmpty {
             get {
@@ -772,6 +934,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Join Now.
+        /// </summary>
+        public static string LoginPageJoinNow {
+            get {
+                return ResourceManager.GetString("LoginPageJoinNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log in.
         /// </summary>
         public static string LoginPageLogIn {
@@ -790,15 +961,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sign up.
-        /// </summary>
-        public static string LoginPageSignUp {
-            get {
-                return ResourceManager.GetString("LoginPageSignUp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Log in.
         /// </summary>
         public static string LoginPageTitle {
@@ -808,11 +970,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username.
+        ///   Looks up a localized string similar to Username or Email.
         /// </summary>
-        public static string LoginPageUsername {
+        public static string LoginPageUsernameOrEmail {
             get {
-                return ResourceManager.GetString("LoginPageUsername", resourceCulture);
+                return ResourceManager.GetString("LoginPageUsernameOrEmail", resourceCulture);
             }
         }
         
@@ -1492,7 +1654,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Thank you..
+        ///   Looks up a localized string similar to Verify account.
         /// </summary>
         public static string VerificationPageTitle {
             get {

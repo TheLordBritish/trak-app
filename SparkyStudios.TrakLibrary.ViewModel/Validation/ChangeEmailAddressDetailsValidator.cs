@@ -9,7 +9,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
         public ChangeEmailAddressDetailsValidator()
         {
             RuleFor(r => r.EmailAddress)
-                .Cascade(CascadeMode.StopOnFirstFailure)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage(Messages.RegistrationErrorMessageEmailAddressEmpty)
                 .EmailAddress()

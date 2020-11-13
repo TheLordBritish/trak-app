@@ -21,8 +21,8 @@
 	<data name="LoginPageLogIn" xml:space="preserve">
 		<value>Log in</value>
 	</data>
-	<data name="LoginPageUsername" xml:space="preserve">
-		<value>Username</value>
+	<data name="LoginPageUsernameOrEmail" xml:space="preserve">
+		<value>Username or Email</value>
 	</data>
 	<data name="LoginPagePassword" xml:space="preserve">
 		<value>Password</value>
@@ -33,8 +33,8 @@
 	<data name="LoginPageDontHaveAnAccount" xml:space="preserve">
 		<value>Don't have an account? </value>
 	</data>
-	<data name="LoginPageSignUp" xml:space="preserve">
-		<value>Sign up</value>
+	<data name="LoginPageJoinNow" xml:space="preserve">
+		<value>Join Now</value>
 	</data>
 	<data name="Subtitle" xml:space="preserve">
 		<value>Games, Books, Manga, Anime</value>
@@ -82,7 +82,7 @@
 		<value>Log in</value>
 	</data>
 	<data name="VerificationPageTitle" xml:space="preserve">
-		<value>Thank you.</value>
+		<value>Verify account</value>
 	</data>
 	<data name="VerificationPageConfirmation" xml:space="preserve">
 		<value>We have now sent you a confirmation email with your verification code.</value>
@@ -163,10 +163,10 @@
 		<value>The verification code should only contain letters and numbers.</value>
 	</data>
 	<data name="LoginErrorMessageUsernameEmpty" xml:space="preserve">
-		<value>No username has been entered.</value>
+		<value>*No username has been entered.</value>
 	</data>
 	<data name="LoginErrorMessagePasswordEmpty" xml:space="preserve">
-		<value>No password has been entered.</value>
+		<value>*No password has been entered.</value>
 	</data>
 	<data name="RegisterPageAlreadyHaveAccount" xml:space="preserve">
 		<value>Already have an account?</value>
@@ -213,7 +213,7 @@
 	<data name="GameBarcodeScannerPageInstructions" xml:space="preserve">
 		<value>Place the red line over the barcode you'd like to scan.</value>
 	</data>
-	<data name="GameBarcodeScannerPageMakeARequest" xml:space="preserve">
+	<data name="GameBarcodeScannerPageRequestGame" xml:space="preserve">
 		<value>Can't find the scanned barcode in our library. Would you like to make a request?</value>
 	</data>
 	<data name="GameBarcodeScannerPageApiError" xml:space="preserve">
@@ -328,9 +328,9 @@
 		<value>Library</value>
 	</data>
 	<data name="GameLibraryListPageInstructions" xml:space="preserve">
-		<value>Use the entry above to search for games.</value>
+		<value>Discover new games to add to your library</value>
 	</data>
-	<data name="GameLibraryListPageCantFindGame" xml:space="preserve">
+	<data name="GameLibraryListPageCantFindInstructions" xml:space="preserve">
 		<value>Can't find what you're looking for?</value>
 	</data>
 	<data name="GameLibraryListPageEmptyServerError" xml:space="preserve">
@@ -339,8 +339,8 @@
 	<data name="GameLibraryListPageEmptyGenericError" xml:space="preserve">
 		<value>Failed to load games due to an unexpected error.</value>
 	</data>
-	<data name="GameLibraryListPageMakeARequest" xml:space="preserve">
-		<value>Make a request</value>
+	<data name="GameLibraryListPageRequestGame" xml:space="preserve">
+		<value>Request Game</value>
 	</data>
 	<data name="BaseMasterDetailContentPageHome" xml:space="preserve">
 		<value>Home</value>
@@ -409,7 +409,7 @@
 		<value>Delete</value>
 	</data>
 	<data name="GameLibraryTabbedPage" xml:space="preserve">
-		<value>Game Library</value>
+		<value>Add Game</value>
 	</data>
 	<data name="GameUserEntriesTabbedPageTitle" xml:space="preserve">
 		<value>Games</value>
@@ -503,5 +503,59 @@
 	</data>
 	<data name="DeleteAccountPageSuccess" xml:space="preserve">
 		<value>Your account has been successfully deleted.</value>
+	</data>
+	<data name="GameLibraryPageEmptySearchResult" xml:space="preserve">
+		<value>Sorry we couldn't find any results.</value>
+	</data>
+	<data name="GameLibraryListPageSearchPlaceholder" xml:space="preserve">
+		<value>Search</value>
+	</data>
+	<data name="GamePageReleaseDateNotReleased" xml:space="preserve">
+		<value>Not released</value>
+	</data>
+	<data name="GameOptionsPageNotInLibrary" xml:space="preserve">
+		<value>Is currently not in your library</value>
+	</data>
+	<data name="GameOptionsPageInLibrary" xml:space="preserve">
+		<value>Is currently in your library</value>
+	</data>
+	<data name="GameOptionsPageSelectPlatforms" xml:space="preserve">
+		<value>Select platforms</value>
+	</data>
+	<data name="GameOptionsPageAdd" xml:space="preserve">
+		<value>Add</value>
+	</data>
+	<data name="GameOptionsPageNoSelectedPlatforms" xml:space="preserve">
+		<value>*No platforms have been selected.</value>
+	</data>
+	<data name="GameOptionsPageNoSelectedStatus" xml:space="preserve">
+		<value>*No status has been selected.</value>
+	</data>
+	<data name="GameOptionsPageGameAdded" xml:space="preserve">
+		<value>{0} has been added to your library.</value>
+	</data>
+	<data name="GameOptionsPageGameRemoved" xml:space="preserve">
+		<value>{0} has been removed from your library.</value>
+	</data>
+	<data name="GameOptionsPageRating" xml:space="preserve">
+		<value>Rating</value>
+	</data>
+	<data name="GameOptionsPageRemoveRating" xml:space="preserve">
+		<value>Remove Rating</value>
+	</data>
+	<data name="GameOptionsPageRemoveFromLibrary" xml:space="preserve">
+		<value>Remove from library</value>
+	</data>
+	<data name="GamePageAgeRating" xml:space="preserve">
+		<value>Age rating</value>
+	</data>
+	<data name="GamePageGameModes" xml:space="preserve">
+		<value>Game modes</value>
+	</data>
+	<data name="GamePageFranchise" xml:space="preserve">
+		<value>Franchise</value>
+	</data>
+	<data name="GamePageReleaseDates" xml:space="preserve">
+		<value>Release dates</value>
 	</data>
 </root>

@@ -1,54 +1,217 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<pages:PopupPage
+<ContentPage
     x:Class="SparkyStudios.TrakLibrary.Views.Games.GameOptionsPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls="clr-namespace:SparkyStudios.TrakLibrary.Controls;assembly=SparkyStudios.TrakLibrary"
+    xmlns:behaviors="http://prismlibrary.com"
+    xmlns:common="clr-namespace:SparkyStudios.TrakLibrary.Controls.Common;assembly=SparkyStudios.TrakLibrary"
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
     xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel"
-    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup">
-    <pages:PopupPage.Content>
-        <StackLayout
-            Margin="20,0"
-            Padding="15"
-            x:DataType="games:GameOptionsViewModel"
-            BackgroundColor="{StaticResource TrakPrimaryBlue}"
-            VerticalOptions="Center">
-            <Label
-                Margin="0,15,0,0"
-                FontAttributes="Bold"
-                Text="{extensions:Translate GameOptionsPageStatus}" />
-            <controls:BorderedPicker
-                BorderColor="{StaticResource TrakWhite}"
-                BorderThickness="1"
-                ItemDisplayBinding="{Binding ., Converter={StaticResource EnumDescriptionConverter}}"
-                ItemsSource="{Binding Statuses}"
-                SelectedItem="{Binding SelectedStatus}" />
-            <!--  Display error messages if anything went wrong.  -->
-            <Label
-                Margin="0,5"
-                AutomationId="AddGamePageErrorMessage"
-                IsEnabled="{Binding IsError}"
-                IsVisible="{Binding IsError}"
-                Style="{StaticResource ValidationLabelStyle}"
-                Text="{Binding ErrorMessage}" />
-            <Button
-                Margin="0,15,0,0"
-                Command="{Binding UpdateGameCommand}"
-                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
-                Style="{StaticResource PrimaryButtonStyle}"
-                Text="{extensions:Translate GameOptionsPageUpdate}" />
-            <Button
-                Margin="0,15,0,0"
-                Command="{Binding DeleteGameCommand}"
-                FontSize="Medium"
-                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
-                Style="{StaticResource SecondaryButtonStyle}"
-                Text="{extensions:Translate GameOptionsPageDelete}" />
+    xmlns:gc="clr-namespace:SparkyStudios.TrakLibrary.Controls.Games;assembly=SparkyStudios.TrakLibrary"
+    xmlns:vmCommon="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Common;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    x:Name="GameOptions"
+    x:DataType="games:GameOptionsViewModel"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}">
+    <ContentPage.Content>
+        <Grid>
+            <!--  Full page control that is displayed when there's an error reported by the view model.  -->
+            <common:FullPageErrorControl
+                ErrorMessage="{extensions:Translate GamePageErrorMessage}"
+                HorizontalOptions="Center"
+                IsRefreshable="True"
+                IsVisible="False"
+                RefreshCommand="{Binding LoadGameDetailsCommand}"
+                VerticalOptions="CenterAndExpand">
+                <common:FullPageErrorControl.Triggers>
+                    <MultiTrigger TargetType="common:FullPageErrorControl">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding IsError}" Value="True" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="IsVisible" Value="True" />
+                    </MultiTrigger>
+                </common:FullPageErrorControl.Triggers>
+            </common:FullPageErrorControl>
+
+            <!--  Full page activity indicator that's shown when the game data is being loaded.  -->
             <ActivityIndicator
-                Margin="0,15,0,0"
+                HeightRequest="100"
+                HorizontalOptions="CenterAndExpand"
                 IsRunning="{Binding IsLoading}"
-                IsVisible="{Binding IsLoading}" />
-        </StackLayout>
-    </pages:PopupPage.Content>
-</pages:PopupPage>
+                IsVisible="{Binding IsLoading}"
+                VerticalOptions="CenterAndExpand"
+                WidthRequest="100" />
+
+            <ScrollView Padding="20,0" IsVisible="False">
+                <ScrollView.Triggers>
+                    <MultiTrigger TargetType="ScrollView">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding HasLoaded}" Value="True" />
+                            <BindingCondition Binding="{Binding IsError}" Value="False" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="IsVisible" Value="True" />
+                    </MultiTrigger>
+                </ScrollView.Triggers>
+                <StackLayout>
+                    <!--  Game title  -->
+                    <Label
+                        Margin="0,20,0,0"
+                        LineBreakMode="WordWrap"
+                        Style="{StaticResource TitleLabelStyle}"
+                        Text="{Binding GameTitle}" />
+
+                    <!--  Game library status  -->
+                    <Label Text="{extensions:Translate GameOptionsPageNotInLibrary}">
+                        <Label.Triggers>
+                            <DataTrigger
+                                Binding="{Binding InLibrary}"
+                                TargetType="Label"
+                                Value="True">
+                                <Setter Property="Text" Value="{extensions:Translate GameOptionsPageInLibrary}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+
+                    <!--  Select platforms  -->
+                    <Label
+                        Margin="0,20,0,0"
+                        Style="{StaticResource BaseBoldLabelStyle}"
+                        Text="{extensions:Translate GameOptionsPageSelectPlatforms}" />
+                    <BoxView
+                        HeightRequest="4"
+                        HorizontalOptions="FillAndExpand"
+                        WidthRequest="1"
+                        Color="{StaticResource TrakPrimaryPurple}" />
+
+                    <!--  Platforms  -->
+                    <StackLayout x:Name="PlatformsLayout" BindableLayout.ItemsSource="{Binding Platforms}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,5" x:DataType="vmCommon:ItemEntryViewModel">
+                                    <Label Text="{Binding Name}" TextColor="{StaticResource TrakGrey}">
+                                        <Label.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding Source={x:Reference PlatformSwitch}, Path=IsToggled}"
+                                                TargetType="Label"
+                                                Value="True">
+                                                <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.OnPlatformTappedCommand, Source={x:Reference PlatformsLayout}}" CommandParameter="{Binding}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Switch
+                                        x:Name="PlatformSwitch"
+                                        HorizontalOptions="EndAndExpand"
+                                        IsToggled="{Binding IsSelected, Mode=TwoWay}">
+                                        <Switch.Behaviors>
+                                            <behaviors:EventToCommandBehavior Command="{Binding BindingContext.OnPlatformTappedCommand, Source={x:Reference PlatformsLayout}}" EventName="Toggled" />
+                                        </Switch.Behaviors>
+                                    </Switch>
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+
+                    <gc:GameUserEntryStatusControl
+                        Margin="0,5,0,0"
+                        Status="{Binding Status}"
+                        StatusTappedCommand="{Binding OnStatusTappedCommand}" />
+
+                    <Label
+                        Margin="0,20,0,0"
+                        FontSize="{StaticResource TrakFontMedium}"
+                        Style="{StaticResource TitleLabelStyle}"
+                        Text="{extensions:Translate GameOptionsPageRating}" />
+                    <StackLayout Orientation="Horizontal">
+                        <common:RatingUserControl
+                            HorizontalOptions="StartAndExpand"
+                            OnTappedCommand="{Binding OnRatingTappedCommand}"
+                            Rating="{Binding Rating}" />
+                        <Image HorizontalOptions="End" Source="trash_can.png">
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OnRatingRemovedCommand}" NumberOfTapsRequired="1" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                        <Label
+                            FontSize="{StaticResource TrakFontSmall}"
+                            HorizontalOptions="End"
+                            HorizontalTextAlignment="End"
+                            Text="{extensions:Translate GameOptionsPageRemoveRating}"
+                            TextColor="{StaticResource TrakGrey}"
+                            VerticalOptions="CenterAndExpand"
+                            VerticalTextAlignment="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding OnRatingRemovedCommand}" NumberOfTapsRequired="1" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+
+                    <!--  Error message displayed if validation on the forms fails  -->
+                    <Label
+                        Margin="0,10,0,0"
+                        FontFamily="Mulish-Bold"
+                        IsVisible="{Binding ErrorMessage, Converter={StaticResource StringEmptyConverter}}"
+                        Text="{Binding ErrorMessage}" />
+
+                    <Button
+                        Margin="0,10,0,0"
+                        Command="{Binding AddGameCommand}"
+                        IsVisible="False"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Text="{extensions:Translate GameOptionsPageAdd}">
+                        <Button.Triggers>
+                            <MultiTrigger TargetType="Button">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding InLibrary}" Value="False" />
+                                    <BindingCondition Binding="{Binding IsExecutingLibraryRequest}" Value="False" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="IsVisible" Value="True" />
+                            </MultiTrigger>
+                        </Button.Triggers>
+                    </Button>
+
+                    <Button
+                        Margin="0,10,0,0"
+                        Command="{Binding DeleteGameCommand}"
+                        FontSize="{StaticResource TrakFontMedium}"
+                        IsVisible="False"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Text="{extensions:Translate GameOptionsPageRemoveFromLibrary}">
+                        <Button.Triggers>
+                            <MultiTrigger TargetType="Button">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding InLibrary}" Value="True" />
+                                    <BindingCondition Binding="{Binding IsExecutingLibraryRequest}" Value="False" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="IsVisible" Value="True" />
+                            </MultiTrigger>
+                        </Button.Triggers>
+                    </Button>
+
+                    <Button
+                        Margin="0,10,0,20"
+                        Command="{Binding UpdateGameCommand}"
+                        IsVisible="False"
+                        Style="{StaticResource PrimaryButtonStyle}"
+                        Text="{extensions:Translate GameOptionsPageUpdate}">
+                        <Button.Triggers>
+                            <MultiTrigger TargetType="Button">
+                                <MultiTrigger.Conditions>
+                                    <BindingCondition Binding="{Binding InLibrary}" Value="True" />
+                                    <BindingCondition Binding="{Binding IsExecutingLibraryRequest}" Value="False" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="IsVisible" Value="True" />
+                            </MultiTrigger>
+                        </Button.Triggers>
+                    </Button>
+                    <!--  Add/update button and the activity indicator  -->
+                    <ActivityIndicator
+                        Margin="0,20"
+                        IsRunning="{Binding IsExecutingLibraryRequest}"
+                        IsVisible="{Binding IsExecutingLibraryRequest}" />
+                </StackLayout>
+            </ScrollView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

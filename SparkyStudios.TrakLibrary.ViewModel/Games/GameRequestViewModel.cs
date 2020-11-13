@@ -133,7 +133,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// <returns>A <see cref="OverallValidationResult"/> which will contain a list of any errors.</returns>
         public OverallValidationResult Validate(GameRequestDetails model)
         {
-            return _validator.Validate(model)
+            return _validator.Validate(new ValidationContext<GameRequestDetails>(model))
                 .ApplyResultsTo(_validatables);
         }
 

@@ -141,7 +141,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(new CheckedResponse<bool> {Data = true});
 
-            _navigationService.Setup(mock => mock.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage"))
+            _navigationService.Setup(mock => mock.NavigateAsync("/BaseFlyoutPage/NavigationPage/HomePage"))
                 .ReturnsAsync(new Mock<INavigationResult>().Object);
 
             // Act
@@ -151,7 +151,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             // Assert
             Assert.IsFalse(_verificationViewModel.IsError,
                 "vm.IsError should be false if verification code was successful.");
-            _navigationService.Verify(n => n.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage"),
+            _navigationService.Verify(n => n.NavigateAsync("/BaseFlyoutPage/NavigationPage/HomePage"),
                 Times.Once);
         }
 

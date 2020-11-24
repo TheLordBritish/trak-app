@@ -135,10 +135,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             // given barcode.
             var parameters = new NavigationParameters
             {
-                {"game-url", gameBarcode.GetLink("gameInfo")},
-                {"platform-url", gameBarcode.GetLink("platform")},
-                {"in-library", false},
-                {"transition-type", TransitionType.SlideFromBottom}
+                {"game-url", gameBarcode.GetLink("gameDetails")}
             };
 
             _formsDevice.BeginInvokeOnMainThread(async () =>
@@ -173,10 +170,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                     var result = await _userDialogs.PromptAsync(promptConfig);
                     if (result.Ok)
                     {
-                        await NavigationService.NavigateAsync("GameRequestPage", new NavigationParameters
-                        {
-                            {"transition-type", TransitionType.SlideFromBottom}
-                        });
+                        await NavigationService.NavigateAsync("GameRequestPage");
                     }
                     else
                     {

@@ -73,7 +73,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                     Crashes.TrackError(ex, new Dictionary<string, string>
                     {
                         {"Title", Title.Value},
-                        {"Notes", Notes.Value}
+                        {"Notes", Comments.Value}
                     });
                 }
             });
@@ -90,11 +90,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         public Validatable<string> Title { get; private set; }
 
         /// <summary>
-        /// A <see cref="Validatable{T}"/> that contains the currently populated notes with
+        /// A <see cref="Validatable{T}"/> that contains the currently populated comments with
         /// additional validation information.
         /// </summary>
         [Reactive]
-        public Validatable<string> Notes { get; private set; }
+        public Validatable<string> Comments { get; private set; }
 
         /// <summary>
         /// Command that is invoked each time that the validatable field on the view is changed, which
@@ -118,10 +118,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         public void SetupForValidation()
         {
             Title = new Validatable<string>(nameof(GameRequestDetails.Title));
-            Notes = new Validatable<string>(nameof(GameRequestDetails.Notes));
+            Comments = new Validatable<string>(nameof(GameRequestDetails.Comments));
 
             _validator = new GameRequestDetailsValidator();
-            _validatables = new Validatables(Title, Notes);
+            _validatables = new Validatables(Title, Comments);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 var gameRequest = new GameRequest
                 {
                     Title = Title.Value,
-                    Notes = Notes.Value,
+                    Notes = Comments.Value,
                     UserId = userId
                 };
 

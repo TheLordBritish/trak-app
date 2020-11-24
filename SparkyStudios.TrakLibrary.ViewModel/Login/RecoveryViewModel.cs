@@ -260,7 +260,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
                     });
 
                 // Navigate to the verification page for the user to verify their account before use.
-                await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");
+                await NavigationService.NavigateAsync("/BaseFlyoutPage/NavigationPage/HomePage");
             }
         }
     }

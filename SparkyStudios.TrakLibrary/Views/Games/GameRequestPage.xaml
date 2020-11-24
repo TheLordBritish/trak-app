@@ -8,128 +8,104 @@
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
     xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel">
     <ContentPage.Content>
-        <ScrollView Padding="35" x:DataType="games:GameRequestViewModel">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
+        <ScrollView Padding="20" x:DataType="games:GameRequestViewModel">
+            <StackLayout>
 
-                <!--  App logo  -->
-                <Image
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Margin="0,75,0,10"
-                    Source="logo.png" />
+                <!--  Page title  -->
+                <Label
+                    Margin="0,20,0,15"
+                    LineBreakMode="WordWrap"
+                    Style="{StaticResource TitleLabelStyle}"
+                    Text="{extensions:Translate GameRequestPageTitle}" />
 
-                <!--  Subtitle  -->
-                <ScrollView
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="0,-20,0,0"
-                    HorizontalOptions="Fill"
-                    HorizontalScrollBarVisibility="Never"
-                    Orientation="Horizontal"
-                    VerticalOptions="Start"
-                    VerticalScrollBarVisibility="Never">
-                    <Label Style="{StaticResource SubtitleLabelStyle}" Text="{extensions:Translate Subtitle}" />
-                </ScrollView>
-                <StackLayout
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2">
+                <!--  Instructions  -->
+                <Label Margin="0,10,0,0" Text="{extensions:Translate GameRequestPageInstructionsOne}" />
+                <Label Margin="0,10,0,0" Text="{extensions:Translate GameRequestPageInstructionsTwo}" />
 
-                    <!--  Page title  -->
-                    <Label
-                        Margin="0,20,0,15"
-                        Style="{StaticResource TitleLabelStyle}"
-                        Text="Request a game" />
+                <!--  Title label and entry box.  -->
+                <Label
+                    Margin="0,20,0,0"
+                    Style="{StaticResource EntryLabelStyle}"
+                    Text="{extensions:Translate GameRequestPageGameTitle}" />
+                <controls:BorderedEntry
+                    BorderColor="{StaticResource TrakWhite}"
+                    BorderThickness="4"
+                    Text="{Binding Title.Value}">
+                    <controls:BorderedEntry.Behaviors>
+                        <behaviors:EventToCommandBehavior
+                            Command="{Binding ClearValidationCommand}"
+                            CommandParameter="Title"
+                            EventName="Focused" />
+                    </controls:BorderedEntry.Behaviors>
+                    <controls:BorderedEntry.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Title.IsValid}"
+                            TargetType="controls:BorderedEntry"
+                            Value="False">
+                            <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
+                        </DataTrigger>
+                    </controls:BorderedEntry.Triggers>
+                </controls:BorderedEntry>
+                <Label
+                    IsEnabled="{Binding Title.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                    IsVisible="{Binding Title.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                    Style="{StaticResource ValidationLabelStyle}"
+                    Text="{Binding Title.FirstError}" />
 
-                    <!--  Title label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate GameRequestPageTitle}" />
-                    <controls:BorderedEntry
-                        BorderColor="{StaticResource TrakWhite}"
-                        BorderThickness="1"
-                        Text="{Binding Title.Value}">
-                        <controls:BorderedEntry.Behaviors>
-                            <behaviors:EventToCommandBehavior
-                                Command="{Binding ClearValidationCommand}"
-                                CommandParameter="Title"
-                                EventName="Focused" />
-                        </controls:BorderedEntry.Behaviors>
-                        <controls:BorderedEntry.Triggers>
-                            <DataTrigger
-                                Binding="{Binding Title.IsValid}"
-                                TargetType="controls:BorderedEntry"
-                                Value="False">
-                                <Setter Property="BorderColor" Value="{StaticResource TrakRed}" />
-                            </DataTrigger>
-                        </controls:BorderedEntry.Triggers>
-                    </controls:BorderedEntry>
-                    <Label
-                        IsEnabled="{Binding Title.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        IsVisible="{Binding Title.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        Style="{StaticResource ValidationLabelStyle}"
-                        Text="{Binding Title.FirstError}" />
+                <!--  Comments label and editor.  -->
+                <Label
+                    Margin="0,20,0,0"
+                    Style="{StaticResource EntryLabelStyle}"
+                    Text="{extensions:Translate GameRequestPageAdditionalComments}" />
+                <controls:BorderedEditor
+                    BorderColor="{StaticResource TrakWhite}"
+                    BorderThickness="4"
+                    HeightRequest="200"
+                    MaxLength="2048"
+                    Text="{Binding Comments.Value}">
+                    <controls:BorderedEditor.Behaviors>
+                        <behaviors:EventToCommandBehavior
+                            Command="{Binding ClearValidationCommand}"
+                            CommandParameter="Comments"
+                            EventName="TextChanged" />
+                    </controls:BorderedEditor.Behaviors>
+                    <controls:BorderedEditor.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Comments.IsValid}"
+                            TargetType="controls:BorderedEditor"
+                            Value="False">
+                            <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
+                        </DataTrigger>
+                    </controls:BorderedEditor.Triggers>
+                </controls:BorderedEditor>
+                <Label
+                    IsEnabled="{Binding Comments.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                    IsVisible="{Binding Comments.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                    Style="{StaticResource ValidationLabelStyle}"
+                    Text="{Binding Comments.FirstError}" />
 
-                    <!--  Notes label and editor.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate GameRequestPageAdditionalNotes}" />
-                    <controls:BorderedEditor
-                        AutoSize="TextChanges"
-                        BorderColor="{StaticResource TrakWhite}"
-                        BorderThickness="1"
-                        MaxLength="2048"
-                        Text="{Binding Notes.Value}">
-                        <controls:BorderedEditor.Behaviors>
-                            <behaviors:EventToCommandBehavior
-                                Command="{Binding ClearValidationCommand}"
-                                CommandParameter="Notes"
-                                EventName="TextChanged" />
-                        </controls:BorderedEditor.Behaviors>
-                        <controls:BorderedEditor.Triggers>
-                            <DataTrigger
-                                Binding="{Binding Notes.IsValid}"
-                                TargetType="controls:BorderedEditor"
-                                Value="False">
-                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
-                            </DataTrigger>
-                        </controls:BorderedEditor.Triggers>
-                    </controls:BorderedEditor>
-                    <Label
-                        IsEnabled="{Binding Notes.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        IsVisible="{Binding Notes.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        Style="{StaticResource ValidationLabelStyle}"
-                        Text="{Binding Notes.FirstError}" />
+                <!--  Display error messages if anything went wrong.  -->
+                <Label
+                    Margin="0,5"
+                    AutomationId="GameRequestPageErrorMessage"
+                    IsEnabled="{Binding IsError}"
+                    IsVisible="{Binding IsError}"
+                    Style="{StaticResource ValidationLabelStyle}"
+                    Text="{Binding ErrorMessage}" />
 
-                    <!--  Display error messages if anything went wrong.  -->
-                    <Label
-                        Margin="0,5"
-                        AutomationId="GameRequestPageErrorMessage"
-                        IsEnabled="{Binding IsError}"
-                        IsVisible="{Binding IsError}"
-                        Style="{StaticResource ValidationLabelStyle}"
-                        Text="{Binding ErrorMessage}" />
-
-                    <!--  Submit button and activity indicator.  -->
-                    <Button
-                        Margin="0,20,0,0"
-                        AutomationId="GameRequestPageSubmitButton"
-                        Command="{Binding RequestCommand}"
-                        IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
-                        Style="{StaticResource PrimaryButtonStyle}"
-                        Text="{extensions:Translate GameRequestPageSubmit}" />
-                    <ActivityIndicator
-                        Margin="0,20,0,0"
-                        IsRunning="{Binding IsLoading}"
-                        IsVisible="{Binding IsLoading}" />
-                </StackLayout>
-            </Grid>
+                <!--  Submit button and activity indicator.  -->
+                <Button
+                    Margin="0,20,0,0"
+                    AutomationId="GameRequestPageSubmitButton"
+                    Command="{Binding RequestCommand}"
+                    IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Text="{extensions:Translate GameRequestPageSubmit}" />
+                <ActivityIndicator
+                    Margin="0,20,0,0"
+                    IsRunning="{Binding IsLoading}"
+                    IsVisible="{Binding IsLoading}" />
+            </StackLayout>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

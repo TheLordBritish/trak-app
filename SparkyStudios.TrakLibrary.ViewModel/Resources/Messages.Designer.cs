@@ -178,7 +178,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can change your email address below. Once, your email has been changed you will receive a verification email. You will have to re-verify your account..
+        ///   Looks up a localized string similar to Enter your current email address below to receive an email containing a token, allowing you to update it..
         /// </summary>
         public static string ChangeEmailAddressPageInstructions {
             get {
@@ -205,7 +205,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change email address.
+        ///   Looks up a localized string similar to Change Email Address.
         /// </summary>
         public static string ChangeEmailAddressPageTitle {
             get {
@@ -421,6 +421,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Already have a recovery token?.
+        /// </summary>
+        public static string ForgottenPasswordPageAlreadyHaveToken {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordPageAlreadyHaveToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email address.
         /// </summary>
         public static string ForgottenPasswordPageEmailAddress {
@@ -444,6 +453,24 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         public static string ForgottenPasswordPageSend {
             get {
                 return ResourceManager.GetString("ForgottenPasswordPageSend", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap here.
+        /// </summary>
+        public static string ForgottenPasswordPageTapHere {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordPageTapHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Forgotten Password.
+        /// </summary>
+        public static string ForgottenPasswordPageTitle {
+            get {
+                return ResourceManager.GetString("ForgottenPasswordPageTitle", resourceCulture);
             }
         }
         
@@ -556,7 +583,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sorry we couldn&apos;t find any results..
+        ///   Looks up a localized string similar to Sorry we couldn&apos;t find any results for &quot;{0}&quot;.
         /// </summary>
         public static string GameLibraryPageEmptySearchResult {
             get {
@@ -718,7 +745,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Currently in:.
+        ///   Looks up a localized string similar to Currently in.
         /// </summary>
         public static string GamePageCurrentlyIn {
             get {
@@ -763,6 +790,33 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to America: .
+        /// </summary>
+        public static string GamePageReleaseDateAmerica {
+            get {
+                return ResourceManager.GetString("GamePageReleaseDateAmerica", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Europe: .
+        /// </summary>
+        public static string GamePageReleaseDateEurope {
+            get {
+                return ResourceManager.GetString("GamePageReleaseDateEurope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Japan: .
+        /// </summary>
+        public static string GamePageReleaseDateJapan {
+            get {
+                return ResourceManager.GetString("GamePageReleaseDateJapan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not released.
         /// </summary>
         public static string GamePageReleaseDateNotReleased {
@@ -790,11 +844,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The notes cannot exceed 2048 characters..
+        ///   Looks up a localized string similar to The comments cannot exceed 2048 characters..
         /// </summary>
-        public static string GameRequestErrorMessageNotesMaxLength {
+        public static string GameRequestErrorMessageCommentsMaxLength {
             get {
-                return ResourceManager.GetString("GameRequestErrorMessageNotesMaxLength", resourceCulture);
+                return ResourceManager.GetString("GameRequestErrorMessageCommentsMaxLength", resourceCulture);
             }
         }
         
@@ -817,11 +871,38 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Additional notes.
+        ///   Looks up a localized string similar to Additional comments.
         /// </summary>
-        public static string GameRequestPageAdditionalNotes {
+        public static string GameRequestPageAdditionalComments {
             get {
-                return ResourceManager.GetString("GameRequestPageAdditionalNotes", resourceCulture);
+                return ResourceManager.GetString("GameRequestPageAdditionalComments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game Title.
+        /// </summary>
+        public static string GameRequestPageGameTitle {
+            get {
+                return ResourceManager.GetString("GameRequestPageGameTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send us your requests to add to our game library so you can add them to your collection..
+        /// </summary>
+        public static string GameRequestPageInstructionsOne {
+            get {
+                return ResourceManager.GetString("GameRequestPageInstructionsOne", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please include as much information as possible so our administrators can process your requests more quickly..
+        /// </summary>
+        public static string GameRequestPageInstructionsTwo {
+            get {
+                return ResourceManager.GetString("GameRequestPageInstructionsTwo", resourceCulture);
             }
         }
         
@@ -844,7 +925,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Title.
+        ///   Looks up a localized string similar to Request Game.
         /// </summary>
         public static string GameRequestPageTitle {
             get {
@@ -898,7 +979,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to *No password has been entered..
+        ///   Looks up a localized string similar to No password has been entered..
         /// </summary>
         public static string LoginErrorMessagePasswordEmpty {
             get {
@@ -907,7 +988,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to *No username has been entered..
+        ///   Looks up a localized string similar to No username has been entered..
         /// </summary>
         public static string LoginErrorMessageUsernameEmpty {
             get {
@@ -988,47 +1069,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to - 1 number.
+        ///   Looks up a localized string similar to *Password should contain at least 8 characters, both lowercase and uppercase letters and atleast one number..
         /// </summary>
-        public static string PasswordRuleFour {
+        public static string PasswordRules {
             get {
-                return ResourceManager.GetString("PasswordRuleFour", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to - 8 characters.
-        /// </summary>
-        public static string PasswordRuleOne {
-            get {
-                return ResourceManager.GetString("PasswordRuleOne", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A password must contain:.
-        /// </summary>
-        public static string PasswordRulesHeader {
-            get {
-                return ResourceManager.GetString("PasswordRulesHeader", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to - 1 lower case letter.
-        /// </summary>
-        public static string PasswordRuleThree {
-            get {
-                return ResourceManager.GetString("PasswordRuleThree", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to - 1 upper case letter.
-        /// </summary>
-        public static string PasswordRuleTwo {
-            get {
-                return ResourceManager.GetString("PasswordRuleTwo", resourceCulture);
+                return ResourceManager.GetString("PasswordRules", resourceCulture);
             }
         }
         
@@ -1186,7 +1231,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Confirm password.
+        ///   Looks up a localized string similar to Confirm password*.
         /// </summary>
         public static string RecoveryPageConfirmPassword {
             get {
@@ -1195,7 +1240,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An email has been sent to your email containing your recovery token. Please enter it in the input below along with your username and new password..
+        ///   Looks up a localized string similar to An email has been sent to your email containing your recovery token. Enter below along with your username and new password..
         /// </summary>
         public static string RecoveryPageInstructions {
             get {
@@ -1213,7 +1258,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password.
+        ///   Looks up a localized string similar to Password*.
         /// </summary>
         public static string RecoveryPagePassword {
             get {
@@ -1258,7 +1303,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Recover account.
+        ///   Looks up a localized string similar to Recover Account.
         /// </summary>
         public static string RecoveryPageTitle {
             get {
@@ -1285,7 +1330,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Confirm password.
+        ///   Looks up a localized string similar to Confirm password*.
         /// </summary>
         public static string RegisterPageConfirmPassword {
             get {
@@ -1312,7 +1357,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Password.
+        ///   Looks up a localized string similar to Password*.
         /// </summary>
         public static string RegisterPagePassword {
             get {
@@ -1339,7 +1384,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create account.
+        ///   Looks up a localized string similar to Create Account.
         /// </summary>
         public static string RegisterPageTitle {
             get {
@@ -1537,7 +1582,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change email address.
+        ///   Looks up a localized string similar to Change Email Address.
         /// </summary>
         public static string SettingsPageChangeEmailAddress {
             get {
@@ -1546,7 +1591,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change password.
+        ///   Looks up a localized string similar to Change Password.
         /// </summary>
         public static string SettingsPageChangePassword {
             get {
@@ -1555,11 +1600,29 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Delete my account.
+        ///   Looks up a localized string similar to Change Username.
+        /// </summary>
+        public static string SettingsPageChangeUsername {
+            get {
+                return ResourceManager.GetString("SettingsPageChangeUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete Account.
         /// </summary>
         public static string SettingsPageDeleteMyAccount {
             get {
                 return ResourceManager.GetString("SettingsPageDeleteMyAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  please find settings below to make changes to your account..
+        /// </summary>
+        public static string SettingsPageInstructions {
+            get {
+                return ResourceManager.GetString("SettingsPageInstructions", resourceCulture);
             }
         }
         
@@ -1569,6 +1632,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         public static string SettingsPageTitle {
             get {
                 return ResourceManager.GetString("SettingsPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome, .
+        /// </summary>
+        public static string SettingsPageWelcome {
+            get {
+                return ResourceManager.GetString("SettingsPageWelcome", resourceCulture);
             }
         }
         
@@ -1627,7 +1699,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to We have now sent you a confirmation email with your verification code..
+        ///   Looks up a localized string similar to Thank you, we have now sent you a confirmation email with your verification code..
         /// </summary>
         public static string VerificationPageConfirmation {
             get {
@@ -1654,7 +1726,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verify account.
+        ///   Looks up a localized string similar to Verify Account.
         /// </summary>
         public static string VerificationPageTitle {
             get {
@@ -1663,7 +1735,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verification code.
+        ///   Looks up a localized string similar to Verification Code.
         /// </summary>
         public static string VerificationPageVerificationCode {
             get {

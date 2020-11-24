@@ -55,7 +55,8 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
             SetupForValidation();
 
             ClearValidationCommand = ReactiveCommand.Create<string>(ClearValidation);
-
+            LogoTappedCommand = ReactiveCommand.CreateFromTask(LogoTappedAsync, outputScheduler: scheduler);
+            
             RegisterCommand = ReactiveCommand.CreateFromTask(RegisterAsync, outputScheduler: scheduler);
             // Report errors if an exception was thrown.
             RegisterCommand.ThrownExceptions.Subscribe(ex =>
@@ -118,6 +119,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
         public ReactiveCommand<string, Unit> ClearValidationCommand { get; }
 
         /// <summary>
+        /// Command that is invoked by the view when the Trak logo is tapped. When called, the command
+        /// will propagate the request and call the <see cref="LogoTappedAsync"/> method.
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> LogoTappedCommand { get; }
+        
+        /// <summary>
         /// Command that is invoked by the view when the register button is tapped. When called, the command
         /// will propagate the request and call the <see cref="RegisterAsync"/> method.
         /// </summary>
@@ -168,7 +175,17 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
         {
             _validatables.Clear(clearOptions);
         }
-
+        
+        /// <summary>
+        /// Private method that is invoked by the <see cref="LogoTappedCommand"/> when activated by the
+        /// associated view. This method will merely trigger the navigation stack to go back a single page.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
+        private async Task LogoTappedAsync()
+        {
+            await NavigationService.GoBackAsync();
+        }
+        
         /// <summary>
         /// Private method that is invoked by the <see cref="RegisterCommand"/> when activated by the associated
         /// view. This method will validate the different member variables within this view model, the username, email

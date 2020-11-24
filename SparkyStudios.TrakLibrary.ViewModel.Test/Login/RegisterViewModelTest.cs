@@ -47,6 +47,20 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
                 _scheduler.Start();
             });    
         }
+
+        [Test]
+        public void LogoTappedCommand_WithNoData_NavigatesBack()
+        {
+            // Arrange
+            _navigationService.Setup(mock => mock.GoBackAsync())
+                .ReturnsAsync(new NavigationResult());
+            
+            // Act
+            _registerViewModel.LogoTappedCommand.Execute().Subscribe();
+            
+            // Assert
+            _navigationService.Verify(mock => mock.GoBackAsync(), Times.Once);
+        }
         
         [Test]
         public void RegisterCommand_WithInvalidUsername_doesntCallRegister()

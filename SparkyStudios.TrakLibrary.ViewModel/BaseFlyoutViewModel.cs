@@ -2,8 +2,6 @@
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using Prism.Commands;
 using Prism.Navigation;
 using ReactiveUI;
 using SparkyStudios.TrakLibrary.Service;
@@ -12,11 +10,11 @@ using SparkyStudios.TrakLibrary.ViewModel.Common;
 namespace SparkyStudios.TrakLibrary.ViewModel
 {
     /// <summary>
-    /// The <see cref="BaseMasterDetailViewModel" /> is a simple view model that is associated with the master details view.
+    /// The <see cref="BaseFlyoutViewModel" /> is a simple view model that is associated with the master details view.
     /// Its responsibility is to respond to the user tapping on any of the subcategories displayed within the master details
     /// view, such as games, settings or logout.
     /// </summary>
-    public class BaseMasterDetailViewModel : ReactiveViewModel
+    public class BaseFlyoutViewModel : ReactiveViewModel
     {
         private readonly IStorageService _storageService;
         private readonly IRestService _restService;
@@ -30,7 +28,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel
         /// <param name="navigationService">The <see cref="INavigationService" /> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService" /> instance to inject.</param>
         /// <param name="restService">The <see cref="IRestService" /> instance to inject.</param>
-        public BaseMasterDetailViewModel(IScheduler scheduler, INavigationService navigationService,
+        public BaseFlyoutViewModel(IScheduler scheduler, INavigationService navigationService,
             IStorageService storageService, IRestService restService) : base(scheduler, navigationService)
         {
             _storageService = storageService;
@@ -80,7 +78,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task LoadHomeAsync()
         {
-            await NavigationService.NavigateAsync("BaseNavigationPage/HomePage");
+            await NavigationService.NavigateAsync("NavigationPage/HomePage");
         }
 
         /// <summary>
@@ -90,7 +88,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task LoadGamesAsync()
         {
-            await NavigationService.NavigateAsync("BaseNavigationPage/GameUserEntriesTabbedPage");
+            await NavigationService.NavigateAsync("NavigationPage/GameUserEntriesTabbedPage");
         }
 
         /// <summary>
@@ -100,7 +98,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task LoadSettingsAsync()
         {
-            await NavigationService.NavigateAsync("BaseNavigationPage/SettingsPage");
+            await NavigationService.NavigateAsync("NavigationPage/SettingsPage");
         }
         
         /// <summary>

@@ -21,9 +21,9 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
                 .MaximumLength(255)
                 .WithMessage(Messages.GameRequestErrorMessageTitleMaxLength);
 
-            RuleFor(f => f.Notes)
+            RuleFor(f => f.Comments)
                 .MaximumLength(2048)
-                .WithMessage(Messages.GameRequestErrorMessageNotesMaxLength);
+                .WithMessage(Messages.GameRequestErrorMessageCommentsMaxLength);
         }
     }
 }

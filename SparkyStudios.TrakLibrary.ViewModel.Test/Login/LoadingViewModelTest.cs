@@ -127,7 +127,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<NotificationRegistrationRequest>()))
                 .Verifiable();
 
-            _navigationService.Setup(mock => mock.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage"))
+            _navigationService.Setup(mock => mock.NavigateAsync("/BaseFlyoutPage/NavigationPage/HomePage"))
                 .ReturnsAsync(new Mock<INavigationResult>().Object);
 
             // Act
@@ -136,7 +136,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             // Assert
             _storageService.Verify();
             _restService.Verify();
-            _navigationService.Verify(mock => mock.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage"),
+            _navigationService.Verify(mock => mock.NavigateAsync("/BaseFlyoutPage/NavigationPage/HomePage"),
                 Times.Once);
         }
     }

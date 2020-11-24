@@ -6,7 +6,8 @@
     xmlns:common="clr-namespace:SparkyStudios.TrakLibrary.Controls.Common;assembly=SparkyStudios.TrakLibrary"
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
     xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.Controls.Games;assembly=SparkyStudios.TrakLibrary"
-    xmlns:vm="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel">
+    xmlns:vm="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}">
     <ContentPage.Content>
         <Grid x:DataType="vm:GameViewModel">
             <!--  Full page control that is displayed when there's an error reported by the view model.  -->
@@ -52,6 +53,22 @@
                 </ScrollView.Triggers>
                 <Grid RowSpacing="0">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
@@ -111,9 +128,10 @@
                         Grid.Row="2"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        Margin="20,10,20,0"
+                        Margin="20,0"
                         Divider="|"
                         FontSize="{StaticResource TrakFontMedium}"
+                        HeightRequest="25"
                         ItemsSource="{Binding Platforms}" />
 
                     <!--  Game title  -->
@@ -121,130 +139,187 @@
                         Grid.Row="3"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        Padding="20,0,20,5"
+                        Margin="20,0,20,5"
                         LineBreakMode="WordWrap"
                         Style="{StaticResource TitleLabelStyle}"
                         Text="{Binding GameTitle}" />
 
-                    <!--  Release date and publishers of the game.  -->
-                    <StackLayout
+                    <!--  The publishers  -->
+                    <Label
                         Grid.Row="4"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        Margin="20,5">
-                        <Label Text="{Binding Publishers, Converter={StaticResource IEnumerableToStringConverter}}" />
+                        Margin="20,0"
+                        Text="{Binding Publishers, Converter={StaticResource IEnumerableToStringConverter}}" />
 
-                        <!--  The star rating for the current game. Only displayed if the game is in the users collection.  -->
-                        <StackLayout Margin="0,5" Orientation="Horizontal">
-                            <Label
-                                FontSize="{StaticResource TrakFontSmall}"
-                                IsVisible="False"
-                                Text="Not rated yet:"
-                                TextColor="{StaticResource TrakGrey}"
-                                VerticalTextAlignment="End">
-                                <Label.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding Rating}"
-                                        TargetType="Label"
-                                        Value="0">
-                                        <Setter Property="IsVisible" Value="True" />
-                                    </DataTrigger>
-                                </Label.Triggers>
-                            </Label>
-                            <common:RatingUserControl Rating="{Binding Rating}" />
-                        </StackLayout>
-
-                        <!--  A comma separated list of genres.  -->
+                    <!--  The star rating for the current game. Only displayed if the game is in the users collection.  -->
+                    <StackLayout
+                        Grid.Row="5"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,5"
+                        Orientation="Horizontal">
                         <Label
-                            Margin="0,5"
                             FontSize="{StaticResource TrakFontSmall}"
-                            LineBreakMode="HeadTruncation"
-                            MaxLines="1"
-                            Text="{Binding Genres, Converter={StaticResource IEnumerableToStringConverter}}" />
+                            IsVisible="False"
+                            Text="Not rated yet:"
+                            TextColor="{StaticResource TrakGrey}"
+                            VerticalTextAlignment="End">
+                            <Label.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding Rating}"
+                                    TargetType="Label"
+                                    Value="0">
+                                    <Setter Property="IsVisible" Value="True" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                        <common:RatingUserControl Rating="{Binding Rating}" />
+                    </StackLayout>
 
-                        <!--  The description of the game.  -->
-                        <Label
-                            Margin="0,5"
-                            FontSize="{StaticResource TrakFontSmall}"
-                            Text="{Binding Description}" />
+                    <!--  A comma separated list of genres.  -->
+                    <Label
+                        Grid.Row="6"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,5"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        LineBreakMode="HeadTruncation"
+                        MaxLines="1"
+                        Text="{Binding Genres, Converter={StaticResource IEnumerableToStringConverter}}" />
 
-                        <!--  Release dates  -->
-                        <Label
-                            Margin="0,15,0,0"
-                            FontSize="{StaticResource TrakFontSmall}"
-                            Style="{StaticResource BaseBoldLabelStyle}"
-                            Text="{extensions:Translate GamePageReleaseDates}" />
-                        <StackLayout Padding="0,-5" Orientation="Horizontal">
-                            <Label FontSize="{StaticResource TrakFontSmall}" Text="North America: " />
-                            <Label FontSize="{StaticResource TrakFontSmall}" Text="{Binding NorthAmericaReleaseDate}" />
-                        </StackLayout>
-                        <StackLayout Orientation="Horizontal">
-                            <Label FontSize="{StaticResource TrakFontSmall}" Text="Europe: " />
-                            <Label FontSize="{StaticResource TrakFontSmall}" Text="{Binding EuropeReleaseDate}" />
-                        </StackLayout>
-                        <StackLayout Padding="0,-5" Orientation="Horizontal">
-                            <Label FontSize="{StaticResource TrakFontSmall}" Text="Japan: " />
-                            <Label FontSize="{StaticResource TrakFontSmall}" Text="{Binding JapanReleaseDate}" />
-                        </StackLayout>
+                    <!--  The description of the game.  -->
+                    <Label
+                        Grid.Row="7"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,5"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        Text="{Binding Description}" />
 
-                        <!--  Franchise  -->
-                        <Label
-                            Margin="0,15,0,0"
-                            FontSize="{StaticResource TrakFontSmall}"
-                            IsVisible="{Binding FranchiseTitle, Converter={StaticResource StringEmptyConverter}}"
-                            Style="{StaticResource BaseBoldLabelStyle}"
-                            Text="{extensions:Translate GamePageFranchise}" />
-                        <Label
-                            Margin="0,-5,0,0"
-                            FontSize="{StaticResource TrakFontSmall}"
-                            IsVisible="{Binding FranchiseTitle, Converter={StaticResource StringEmptyConverter}}"
-                            Text="{Binding FranchiseTitle}" />
+                    <!--  Release dates  -->
+                    <Label
+                        Grid.Row="8"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,15,20,0"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        Style="{StaticResource BaseBoldLabelStyle}"
+                        Text="{extensions:Translate GamePageReleaseDates}" />
+                    <StackLayout
+                        Grid.Row="9"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,0"
+                        Orientation="Horizontal">
+                        <Label FontSize="{StaticResource TrakFontSmall}" Text="{extensions:Translate GamePageReleaseDateAmerica}" />
+                        <Label FontSize="{StaticResource TrakFontSmall}" Text="{Binding NorthAmericaReleaseDate}" />
+                    </StackLayout>
+                    <StackLayout
+                        Grid.Row="10"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,0"
+                        Orientation="Horizontal">
+                        <Label FontSize="{StaticResource TrakFontSmall}" Text="{extensions:Translate GamePageReleaseDateEurope}" />
+                        <Label FontSize="{StaticResource TrakFontSmall}" Text="{Binding EuropeReleaseDate}" />
+                    </StackLayout>
+                    <StackLayout
+                        Grid.Row="11"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,0"
+                        Orientation="Horizontal">
+                        <Label FontSize="{StaticResource TrakFontSmall}" Text="{extensions:Translate GamePageReleaseDateJapan}" />
+                        <Label FontSize="{StaticResource TrakFontSmall}" Text="{Binding JapanReleaseDate}" />
+                    </StackLayout>
 
-                        <!--  Game modes  -->
-                        <Label
-                            Margin="0,15,0,0"
-                            FontSize="{StaticResource TrakFontSmall}"
-                            IsVisible="{Binding GameModes, Converter={StaticResource StringEmptyConverter}}"
-                            Style="{StaticResource BaseBoldLabelStyle}"
-                            Text="{extensions:Translate GamePageGameModes}" />
-                        <Label
-                            Margin="0,-5,0,0"
-                            FontSize="{StaticResource TrakFontSmall}"
-                            IsVisible="{Binding GameModes, Converter={StaticResource StringEmptyConverter}}"
-                            Text="{Binding GameModes}" />
+                    <!--  Franchise  -->
+                    <Label
+                        Grid.Row="12"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,15,20,0"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        IsVisible="{Binding FranchiseTitle, Converter={StaticResource StringEmptyConverter}}"
+                        Style="{StaticResource BaseBoldLabelStyle}"
+                        Text="{extensions:Translate GamePageFranchise}" />
+                    <Label
+                        Grid.Row="13"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,0,20,0"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        IsVisible="{Binding FranchiseTitle, Converter={StaticResource StringEmptyConverter}}"
+                        Text="{Binding FranchiseTitle}" />
 
-                        <!--  Age rating  -->
-                        <Label
-                            Margin="0,15,0,0"
-                            FontSize="{StaticResource TrakFontSmall}"
-                            Style="{StaticResource BaseBoldLabelStyle}"
-                            Text="{extensions:Translate GamePageAgeRating}" />
-                        <Label
-                            Margin="0,-5,0,0"
-                            FontSize="{StaticResource TrakFontSmall}"
-                            Text="{Binding AgeRating, Converter={StaticResource EnumDescriptionConverter}}" />
+                    <!--  Game modes  -->
+                    <Label
+                        Grid.Row="14"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,15,20,0"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        IsVisible="{Binding GameModes, Converter={StaticResource StringEmptyConverter}}"
+                        Style="{StaticResource BaseBoldLabelStyle}"
+                        Text="{extensions:Translate GamePageGameModes}" />
+                    <Label
+                        Grid.Row="15"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,0"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        IsVisible="{Binding GameModes, Converter={StaticResource StringEmptyConverter}}"
+                        Text="{Binding GameModes}" />
 
-                        <!--  Displays which status the game is currently assigned to.  -->
-                        <games:GameUserEntryStatusControl
-                            Margin="0,25,0,0"
-                            IsEnabled="{Binding InLibrary}"
-                            IsVisible="{Binding InLibrary}"
-                            Status="{Binding Status}" />
+                    <!--  Age rating  -->
+                    <Label
+                        Grid.Row="16"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,15,20,0"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        Style="{StaticResource BaseBoldLabelStyle}"
+                        Text="{extensions:Translate GamePageAgeRating}" />
+                    <Label
+                        Grid.Row="17"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,0"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        Text="{Binding AgeRating, Converter={StaticResource EnumDescriptionConverter}}" />
 
-                        <Label
-                            Margin="0,15,0,10"
-                            FontSize="Large"
-                            Style="{StaticResource TitleLabelStyle}"
-                            Text="{extensions:Translate GamePageSimilarGames}" />
+                    <!--  Displays which status the game is currently assigned to.  -->
+                    <games:GameUserEntryStatusControl
+                        Grid.Row="18"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,15,20,0"
+                        IsEnabled="{Binding InLibrary}"
+                        IsVisible="{Binding InLibrary}"
+                        Status="{Binding Status}" />
 
-                        <!--  List that is displayed if there are any results returned from the initial request.  -->
-                        <StackLayout BindableLayout.ItemsSource="{Binding SimilarGames}">
-                            <BindableLayout.ItemTemplate>
-                                <DataTemplate>
-                                    <common:UserEntryItemTemplateControl Margin="0,10" />
-                                </DataTemplate>
-                            </BindableLayout.ItemTemplate>
-                        </StackLayout>
+                    <Label
+                        Grid.Row="19"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,15,20,10"
+                        FontSize="{StaticResource TrakFontLarge}"
+                        Style="{StaticResource TitleLabelStyle}"
+                        Text="{extensions:Translate GamePageSimilarGames}" />
+
+                    <!--  List that is displayed if there are any results returned from the initial request.  -->
+                    <StackLayout
+                        Grid.Row="20"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Margin="20,0"
+                        BindableLayout.ItemsSource="{Binding SimilarGames}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <common:UserEntryItemTemplateControl Margin="0,10" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
                     </StackLayout>
                 </Grid>
             </ScrollView>

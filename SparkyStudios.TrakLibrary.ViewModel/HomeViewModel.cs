@@ -3,7 +3,6 @@ using System.Reactive.Concurrency;
 using System.Threading.Tasks;
 using Prism.Navigation;
 using ReactiveUI;
-using SparkyStudios.TrakLibrary.Common;
 using SparkyStudios.TrakLibrary.ViewModel.Common;
 
 namespace SparkyStudios.TrakLibrary.ViewModel
@@ -42,10 +41,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task ExecuteLoadGamesAsync()
         {
-            await NavigationService.NavigateAsync("GameUserEntriesTabbedPage", new NavigationParameters
-            {
-                {"transition-type", TransitionType.SlideFromRight}
-            });
+            await NavigationService.NavigateAsync("GameUserEntriesTabbedPage");
         }
     }
 }

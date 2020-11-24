@@ -9,14 +9,14 @@ using SparkyStudios.TrakLibrary.Service;
 
 namespace SparkyStudios.TrakLibrary.ViewModel.Test
 {
-    public class BaseMasterDetailViewModelTest
+    public class BaseFlyoutViewModelTest
     {
         private Mock<INavigationService> _navigationService;
         private Mock<IStorageService> _storageService;
         private Mock<IRestService> _restService;
         private TestScheduler _scheduler;
 
-        private BaseMasterDetailViewModel _baseMasterDetailViewModel;
+        private BaseFlyoutViewModel _baseFlyoutViewModel;
 
         [SetUp]
         public void SetUp()
@@ -26,7 +26,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test
             _restService = new Mock<IRestService>();
             _scheduler = new TestScheduler();
 
-            _baseMasterDetailViewModel = new BaseMasterDetailViewModel(_scheduler, _navigationService.Object,
+            _baseFlyoutViewModel = new BaseFlyoutViewModel(_scheduler, _navigationService.Object,
                 _storageService.Object, _restService.Object);
         }
 
@@ -38,7 +38,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test
                 .Verifiable();
 
             // Act
-            _baseMasterDetailViewModel.LoadHomeCommand.Execute().Subscribe();
+            _baseFlyoutViewModel.LoadHomeCommand.Execute().Subscribe();
             _scheduler.Start();
 
             // Assert
@@ -53,7 +53,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test
                 .Verifiable();
 
             // Act
-            _baseMasterDetailViewModel.LoadGamesCommand.Execute().Subscribe();
+            _baseFlyoutViewModel.LoadGamesCommand.Execute().Subscribe();
             _scheduler.Start();
 
             // Assert
@@ -68,7 +68,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test
                 .Verifiable();
 
             // Act
-            _baseMasterDetailViewModel.LoadSettingsCommand.Execute().Subscribe();
+            _baseFlyoutViewModel.LoadSettingsCommand.Execute().Subscribe();
             _scheduler.Start();
 
             // Assert
@@ -91,7 +91,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test
                 .ThrowsAsync(new Exception());
             
             // Act
-            _baseMasterDetailViewModel.LogoutCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _baseFlyoutViewModel.LogoutCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
             _scheduler.Start();
 
             // Assert
@@ -126,7 +126,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test
                 .Verifiable();
 
             // Act
-            _baseMasterDetailViewModel.LogoutCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _baseFlyoutViewModel.LogoutCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
             _scheduler.Start();
 
             // Assert

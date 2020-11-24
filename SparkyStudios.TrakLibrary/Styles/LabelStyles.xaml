@@ -11,7 +11,6 @@
         <styles:Common />
     </ResourceDictionary.MergedDictionaries>
 
-
     <!--  Base style for all labels.  -->
     <Style x:Key="BaseLabelStyle" TargetType="Label">
         <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
@@ -46,7 +45,6 @@
         BasedOn="{StaticResource BaseBoldLabelStyle}"
         TargetType="Label">
         <Setter Property="LineBreakMode" Value="NoWrap" />
-        <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="FontSize" Value="70" />
         <Setter Property="TextColor" Value="{StaticResource TrakGrey}" />
     </Style>
@@ -63,10 +61,10 @@
     <!--  Style that is used to represent validation errors.  -->
     <Style
         x:Key="ValidationLabelStyle"
-        BasedOn="{StaticResource BaseLabelStyle}"
+        BasedOn="{StaticResource BaseBoldLabelStyle}"
         TargetType="Label">
         <Setter Property="FontSize" Value="{StaticResource TrakFontSmall}" />
-        <Setter Property="TextColor" Value="{StaticResource TrakRed}" />
+        <Setter Property="FontFamily" Value="" />
     </Style>
 
 </ResourceDictionary>

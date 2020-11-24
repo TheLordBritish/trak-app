@@ -7,6 +7,6 @@ namespace SparkyStudios.TrakLibrary.Model.Games.Validation
     {
         public string Title { get; set; }
         
-        public string Notes { get; set; }
+        public string Comments { get; set; }
     }
 }

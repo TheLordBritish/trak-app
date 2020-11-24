@@ -8404,41 +8404,17 @@ namespace SparkyStudios.TrakLibrary.Droid
 			// aapt resource value: 0x7F01001B
 			public const int design_snackbar_out = 2130771995;
 			
-			// aapt resource value: 0x7F010020
-			public const int EnterFromLeft = 2130772000;
-			
-			// aapt resource value: 0x7F010021
-			public const int EnterFromRight = 2130772001;
-			
 			// aapt resource value: 0x7F01001C
-			public const int enter_bottom = 2130771996;
+			public const int EnterFromLeft = 2130771996;
 			
 			// aapt resource value: 0x7F01001D
-			public const int enter_left = 2130771997;
+			public const int EnterFromRight = 2130771997;
 			
 			// aapt resource value: 0x7F01001E
-			public const int enter_right = 2130771998;
+			public const int ExitToLeft = 2130771998;
 			
 			// aapt resource value: 0x7F01001F
-			public const int enter_top = 2130771999;
-			
-			// aapt resource value: 0x7F010026
-			public const int ExitToLeft = 2130772006;
-			
-			// aapt resource value: 0x7F010027
-			public const int ExitToRight = 2130772007;
-			
-			// aapt resource value: 0x7F010022
-			public const int exit_bottom = 2130772002;
-			
-			// aapt resource value: 0x7F010023
-			public const int exit_left = 2130772003;
-			
-			// aapt resource value: 0x7F010024
-			public const int exit_right = 2130772004;
-			
-			// aapt resource value: 0x7F010025
-			public const int exit_top = 2130772005;
+			public const int ExitToRight = 2130771999;
 			
 			static Animation()
 			{

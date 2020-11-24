@@ -9,7 +9,7 @@
     AutomationId="BaseMasterDetailContentPage"
     BackgroundColor="Transparent">
     <ContentPage.Content>
-        <ScrollView Padding="35" x:DataType="viewModel:BaseMasterDetailViewModel">
+        <ScrollView Padding="35" x:DataType="viewModel:BaseFlyoutViewModel">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />

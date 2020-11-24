@@ -203,7 +203,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
             }
             else
             {
-                await NavigationService.NavigateAsync("/BaseMasterDetailPage/BaseNavigationPage/HomePage");
+                await NavigationService.NavigateAsync("/BaseFlyoutPage/NavigationPage/HomePage");
             }
         }
 

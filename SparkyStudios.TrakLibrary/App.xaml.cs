@@ -20,6 +20,7 @@ using SparkyStudios.TrakLibrary.Views;
 using SparkyStudios.TrakLibrary.Views.Games;
 using SparkyStudios.TrakLibrary.Views.Login;
 using SparkyStudios.TrakLibrary.Views.Settings;
+using Xamarin.Forms;
 
 namespace SparkyStudios.TrakLibrary
 {
@@ -50,8 +51,8 @@ namespace SparkyStudios.TrakLibrary
             {
                 await storageService.SetDeviceIdAsync(Guid.NewGuid());
             }
-            
-            await NavigationService.NavigateAsync("LoadingPage");
+
+            await NavigationService.NavigateAsync("/LoadingPage");
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -65,8 +66,8 @@ namespace SparkyStudios.TrakLibrary
             ServiceRegistry.RegisterTypes(containerRegistry, Container.Resolve<IStorageService>(), Secrets.EnvironmentUrl);
 
             // Xamarin pages.
-            containerRegistry.RegisterForNavigation<BaseMasterDetailPage, BaseMasterDetailViewModel>();
-            containerRegistry.RegisterForNavigation<BaseNavigationPage>();
+            containerRegistry.RegisterForNavigation<BaseFlyoutPage, BaseFlyoutViewModel>();
+            containerRegistry.RegisterForNavigation<BaseNavigationPage, NavigationViewModel>("NavigationPage");
 
             // Login pages.
             containerRegistry.RegisterForNavigation<LoadingPage, LoadingViewModel>();

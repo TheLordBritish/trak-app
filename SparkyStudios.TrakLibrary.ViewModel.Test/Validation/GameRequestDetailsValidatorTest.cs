@@ -69,11 +69,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             var result = validator.Validate(new GameRequestDetails
             {
                 Title = "test-title",
-                Notes = string.Concat(Enumerable.Repeat("a", 3000))
+                Comments = string.Concat(Enumerable.Repeat("a", 3000))
             });
 
             // Assert
-            Assert.AreEqual(Messages.GameRequestErrorMessageNotesMaxLength,
+            Assert.AreEqual(Messages.GameRequestErrorMessageCommentsMaxLength,
                 result.Errors.First().ErrorMessage);
             Assert.IsFalse(result.IsValid, "result.IsValid should be false if notes exceed 2048 characters.");
         }
@@ -88,7 +88,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             var result = validator.Validate(new GameRequestDetails
             {
                 Title = "test-title",
-                Notes = "test-notes"
+                Comments = "test-notes"
             });
 
             // Assert

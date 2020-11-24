@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Microsoft.AppCenter.Crashes;
@@ -59,7 +60,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 Items.Clear();
                 Items.AddRange(results.Select(CreateListItemViewModelFromGameInfo));
 
-                IsEmpty = Items.Count == 0;
+                if (Items.Count == 0)
+                {
+                    Message = string.Format(Messages.GameLibraryPageEmptySearchResult, SearchQuery);
+                }
             });
             // Report errors if an exception was thrown.
             SearchCommand.ThrownExceptions.Subscribe(ex =>
@@ -67,11 +71,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 IsError = true;
                 if (ex is ApiException)
                 {
-                    ErrorMessage = Messages.GameLibraryListPageEmptyServerError;
+                    Message = Messages.GameLibraryListPageEmptyServerError;
                 }
                 else
                 {
-                    ErrorMessage = Messages.GameLibraryListPageEmptyGenericError;
+                    Message = Messages.GameLibraryListPageEmptyGenericError;
                     Crashes.TrackError(ex, new Dictionary<string, string>
                     {
                         {"Search query", SearchQuery}
@@ -116,6 +120,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 }
             });
 
+            this.WhenAnyValue(x => x.SearchQuery)
+                .ObserveOn(scheduler)
+                .Where(string.IsNullOrEmpty)
+                .Subscribe(x => Message = Messages.GameLibraryListPageInstructions);
+            
             this.WhenAnyObservable(x => x.SearchCommand.IsExecuting, x => x.LoadMoreCommand.IsExecuting)
                 .ToPropertyEx(this, x => x.IsLoading, scheduler: scheduler);
 
@@ -134,9 +143,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             new ObservableRangeCollection<ListItemViewModel>();
 
         /// <summary>
-        /// A <see cref="bool"/> which dictates whether the user entered query has returned any results.
+        /// A <see cref="string"/> that represents the current message to display to the user if there are empty
+        /// results. 
         /// </summary>
-        [Reactive] public bool IsEmpty { get; set; } = true;
+        [Reactive] 
+        public string Message { get; set; } = Messages.GameLibraryListPageInstructions;
         
         /// <summary>
         /// A <see cref="string"/> that contains the currently populated user defined query to search
@@ -245,9 +256,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                     // down to a single console.
                     var parameters = new NavigationParameters
                     {
-                        {"game-url", gameDetails.GetLink("self")},
-                        {"in-library", false},
-                        {"transition-type", TransitionType.SlideFromRight }
+                        {"game-url", gameDetails.GetLink("self")}
                     };
 
                     await NavigationService.NavigateAsync("GamePage", parameters, false, false);

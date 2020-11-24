@@ -162,11 +162,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         private async Task AddGameAsync()
         {
             await NavigationService.NavigateAsync(
-                "GameLibraryTabbedPage?createTab=GameLibraryListPage&createTab=GameBarcodeScannerPage",
-                new NavigationParameters
-                {
-                    {"transition-type", TransitionType.SlideFromBottom}
-                });
+                "GameLibraryTabbedPage?createTab=GameLibraryListPage&createTab=GameBarcodeScannerPage");
         }
 
         /// <summary>

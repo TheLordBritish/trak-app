@@ -3,6 +3,7 @@ using Microsoft.Reactive.Testing;
 using Moq;
 using NUnit.Framework;
 using Prism.Navigation;
+using SparkyStudios.TrakLibrary.Service;
 using SparkyStudios.TrakLibrary.ViewModel.Settings;
 
 namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
@@ -11,6 +12,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
     public class SettingsViewModelTest
     {
         private Mock<INavigationService> _navigationService;
+        private Mock<IStorageService> _storageService;
         private TestScheduler _scheduler;
 
         private SettingsViewModel _settingsViewModel;
@@ -19,9 +21,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
         public void SetUp()
         {
             _navigationService = new Mock<INavigationService>();
+            _storageService = new Mock<IStorageService>();
             _scheduler = new TestScheduler();
 
-            _settingsViewModel = new SettingsViewModel(_scheduler, _navigationService.Object);
+            _settingsViewModel = new SettingsViewModel(_scheduler, _navigationService.Object, _storageService.Object);
         }
         
         [Test]

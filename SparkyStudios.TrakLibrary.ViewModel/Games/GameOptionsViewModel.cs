@@ -446,7 +446,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 .SetTitle(Messages.TrakTitle)
                 .SetMessage(string.Format(Messages.GameOptionsPageGameRemoved, GameTitle));
 
-
             await _userDialogs.AlertAsync(alertConfig);
         }
     }

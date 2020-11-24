@@ -91,10 +91,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
             var username = await _storageService.GetUsernameAsync();
 
             await _authService.RequestChangePasswordAsync(username);
-            await NavigationService.NavigateAsync("ChangePasswordPage", new NavigationParameters
-            {
-                { "transition-type", TransitionType.SlideFromBottom }
-            });
+            await NavigationService.NavigateAsync("ChangePasswordPage");
         }
 
         /// <summary>
@@ -104,10 +101,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task ChangePasswordAsync()
         {
-            await NavigationService.NavigateAsync("ChangePasswordPage", new NavigationParameters
-            {
-                { "transition-type", TransitionType.SlideFromBottom }
-            });
+            await NavigationService.NavigateAsync("ChangePasswordPage");
         }
     }
 }

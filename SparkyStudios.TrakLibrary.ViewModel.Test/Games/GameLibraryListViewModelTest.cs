@@ -39,7 +39,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         }
 
         [Test]
-        public void SearchCommand_ThrowsApiException_SetsErrorMessageAsApiError()
+        public void SearchCommand_ThrowsApiException_SetsMessageAsApiError()
         {
             // Arrange
             _restService
@@ -52,12 +52,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
 
             // Assert
             Assert.IsTrue(_gameLibraryListViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
-            Assert.AreEqual(Messages.GameLibraryListPageEmptyServerError, _gameLibraryListViewModel.ErrorMessage,
-                "The error message is incorrect.");
+            Assert.AreEqual(Messages.GameLibraryListPageEmptyServerError, _gameLibraryListViewModel.Message,
+                "The message is incorrect.");
         }
 
         [Test]
-        public void SearchCommand_ThrowsGenericException_SetsErrorMessageAsGenericError()
+        public void SearchCommand_ThrowsGenericException_SetsMessageAsGenericError()
         {
             // Arrange
             _restService
@@ -70,27 +70,8 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
 
             // Assert
             Assert.IsTrue(_gameLibraryListViewModel.IsError, "vm.IsError should be true if a generic exception is thrown.");
-            Assert.AreEqual(Messages.GameLibraryListPageEmptyGenericError, _gameLibraryListViewModel.ErrorMessage,
-                "The error message is incorrect.");
-        }
-
-        [Test]
-        public void SearchCommand_WithEmptyResult_SetIsEmptyToTrue()
-        {
-            // Arrange
-            _gameLibraryListViewModel.SearchQuery = "search";
-            
-            _restService
-                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
-                .ReturnsAsync(new HateoasPage<GameDetails>());
-            
-            // Act
-            _gameLibraryListViewModel.SearchCommand.Execute().Subscribe();
-            _scheduler.Start();
-            
-            // Assert
-            Assert.IsTrue(_gameLibraryListViewModel.IsEmpty, "_gameLibraryListViewModel.IsEmpty should be true if the API returns no results.");
-            Assert.AreEqual(0, _gameLibraryListViewModel.Items.Count, "There should be no items in the list for an empty result.");
+            Assert.AreEqual(Messages.GameLibraryListPageEmptyGenericError, _gameLibraryListViewModel.Message,
+                "The message is incorrect.");
         }
 
         [Test]
@@ -128,7 +109,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             _scheduler.Start();
             
             // Assert
-            Assert.IsFalse(_gameLibraryListViewModel.IsEmpty, "_gameLibraryListViewModel.IsEmpty should be false if the API returns results.");
             Assert.AreEqual(1, _gameLibraryListViewModel.Items.Count, "There should be items in the list.");
         }
         
@@ -171,7 +151,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             _scheduler.Start();
             
             // Assert
-            Assert.IsFalse(_gameLibraryListViewModel.IsEmpty, "_gameLibraryListViewModel.IsEmpty should be false if the API returns results.");
             Assert.AreEqual(1, _gameLibraryListViewModel.Items.Count, "There should be items in the list.");
         }
         

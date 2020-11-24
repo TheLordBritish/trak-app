@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<controls:BaseContentPage
+<ContentPage
     x:Class="SparkyStudios.TrakLibrary.Views.Settings.DeleteAccountPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -10,7 +10,7 @@
     Title="{extensions:Translate DeleteAccountPageTitle}"
     x:DataType="settings:DeleteAccountViewModel"
     AutomationId="DeleteAccountPage">
-    <controls:BaseContentPage.Content>
+    <ContentPage.Content>
         <ScrollView
             Padding="35"
             HorizontalOptions="FillAndExpand"
@@ -118,5 +118,5 @@
                 </StackLayout>
             </Grid>
         </ScrollView>
-    </controls:BaseContentPage.Content>
-</controls:BaseContentPage>
+    </ContentPage.Content>
+</ContentPage>

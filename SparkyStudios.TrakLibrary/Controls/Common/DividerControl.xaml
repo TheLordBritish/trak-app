@@ -9,7 +9,7 @@
     Orientation="Horizontal">
     <BindableLayout.ItemTemplate>
         <DataTemplate>
-            <Grid x:DataType="common:ItemEntryViewModel" HeightRequest="30">
+            <Grid x:DataType="common:ItemEntryViewModel">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />

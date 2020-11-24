@@ -24,7 +24,13 @@
                 <Image
                     Grid.Row="0"
                     Grid.Column="0"
-                    Source="logo.png" />
+                    Margin="0,20,0,0"
+                    HorizontalOptions="StartAndExpand"
+                    Source="logo.png">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding LogoTappedCommand}" NumberOfTapsRequired="1" />
+                    </Image.GestureRecognizers>
+                </Image>
 
                 <StackLayout
                     Grid.Row="1"
@@ -33,7 +39,7 @@
 
                     <!--  Page title  -->
                     <Label
-                        Margin="0,20,0,15"
+                        Margin="0,25,0,20"
                         LineBreakMode="WordWrap"
                         Style="{StaticResource TitleLabelStyle}"
                         Text="{extensions:Translate RegisterPageTitle}" />
@@ -56,7 +62,7 @@
                                 Binding="{Binding Username.IsValid}"
                                 TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
+                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
                             </DataTrigger>
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
@@ -67,7 +73,10 @@
                         Text="{Binding Username.FirstError}" />
 
                     <!--  Email address label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPageEmailAddress}" />
+                    <Label
+                        Margin="0,20,0,0"
+                        Style="{StaticResource EntryLabelStyle}"
+                        Text="{extensions:Translate RegisterPageEmailAddress}" />
                     <controls:BorderedEntry
                         AutomationId="RegisterPageEmailAddressEntry"
                         BorderColor="{StaticResource TrakWhite}"
@@ -84,7 +93,7 @@
                                 Binding="{Binding EmailAddress.IsValid}"
                                 TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
+                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
                             </DataTrigger>
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
@@ -95,7 +104,10 @@
                         Text="{Binding EmailAddress.FirstError}" />
 
                     <!--  Password label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPagePassword}" />
+                    <Label
+                        Margin="0,20,0,0"
+                        Style="{StaticResource EntryLabelStyle}"
+                        Text="{extensions:Translate RegisterPagePassword}" />
                     <controls:BorderedEntry
                         AutomationId="RegisterPagePasswordEntry"
                         BorderColor="{StaticResource TrakWhite}"
@@ -113,7 +125,7 @@
                                 Binding="{Binding Password.IsValid}"
                                 TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
+                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
                             </DataTrigger>
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
@@ -123,17 +135,11 @@
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding Password.FirstError}" />
 
-                    <!--  Password rules.  -->
-                    <StackLayout>
-                        <Label Style="{StaticResource BaseBoldLabelStyle}" Text="{extensions:Translate PasswordRulesHeader}" />
-                        <Label FontSize="{StaticResource TrakFontSmall}" Text="{extensions:Translate PasswordRuleOne}" />
-                        <Label FontSize="{StaticResource TrakFontSmall}" Text="{extensions:Translate PasswordRuleTwo}" />
-                        <Label FontSize="{StaticResource TrakFontSmall}" Text="{extensions:Translate PasswordRuleThree}" />
-                        <Label FontSize="{StaticResource TrakFontSmall}" Text="{extensions:Translate PasswordRuleFour}" />
-                    </StackLayout>
-
                     <!--  Confirm password label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPageConfirmPassword}" />
+                    <Label
+                        Margin="0,20,0,0"
+                        Style="{StaticResource EntryLabelStyle}"
+                        Text="{extensions:Translate RegisterPageConfirmPassword}" />
                     <controls:BorderedEntry
                         AutomationId="RegisterPageConfirmPasswordEntry"
                         BorderColor="{StaticResource TrakWhite}"
@@ -151,7 +157,7 @@
                                 Binding="{Binding ConfirmPassword.IsValid}"
                                 TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
+                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
                             </DataTrigger>
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
@@ -160,6 +166,19 @@
                         IsVisible="{Binding ConfirmPassword.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding ConfirmPassword.FirstError}" />
+
+                    <!--  Privacy policy and terms of use label.  -->
+                    <Label
+                        Margin="0,10,0,0"
+                        AutomationId="RegisterPagePrivacyPolicyLabel"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        Text="{extensions:Translate RegisterPagePrivacyPolicyAndTermsOfUse}" />
+
+                    <!--  Password rules label.  -->
+                    <Label
+                        Margin="0,10,0,0"
+                        Style="{StaticResource ValidationLabelStyle}"
+                        Text="{extensions:Translate PasswordRules}" />
 
                     <!--  Display error messages if anything went wrong.  -->
                     <Label
@@ -183,19 +202,13 @@
                         IsRunning="{Binding IsLoading}"
                         IsVisible="{Binding IsLoading}" />
 
-                    <!--  Privacy policy and terms of use label.  -->
-                    <Label
-                        Margin="0,10,0,0"
-                        AutomationId="RegisterPagePrivacyPolicyLabel"
-                        FontSize="Small"
-                        HorizontalOptions="Center"
-                        Text="{extensions:Translate RegisterPagePrivacyPolicyAndTermsOfUse}" />
                     <!--  Log in label.  -->
                     <Label
-                        Margin="0,10,0,0"
+                        Margin="0,20,0,0"
                         FontSize="{StaticResource TrakFontSmall}"
                         HorizontalOptions="Center"
-                        Text="{extensions:Translate RegisterPageAlreadyHaveAccount}" />
+                        Text="{extensions:Translate RegisterPageAlreadyHaveAccount}"
+                        VerticalOptions="EndAndExpand" />
                     <Label
                         FontSize="{StaticResource TrakFontSmall}"
                         HorizontalOptions="Center"

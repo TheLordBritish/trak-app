@@ -29,6 +29,8 @@
                 <Image
                     Grid.Row="0"
                     Grid.Column="0"
+                    Margin="0,20,0,0"
+                    HorizontalOptions="StartAndExpand"
                     Source="logo.png" />
 
                 <!--  Page title  -->
@@ -36,7 +38,7 @@
                     Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2"
-                    Margin="0,10,0,0"
+                    Margin="0,25,0,20"
                     LineBreakMode="WordWrap"
                     Style="{StaticResource TitleLabelStyle}"
                     Text="{extensions:Translate VerificationPageTitle}" />
@@ -45,6 +47,7 @@
                     Grid.Row="2"
                     Grid.Column="0"
                     Grid.ColumnSpan="2">
+
                     <!--  Verification code label and entry box.  -->
                     <Label Text="{extensions:Translate VerificationPageConfirmation}" />
                     <Label
@@ -67,7 +70,7 @@
                                 Binding="{Binding VerificationCode.IsValid}"
                                 TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
+                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
                             </DataTrigger>
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
@@ -77,6 +80,7 @@
                         IsVisible="{Binding VerificationCode.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding VerificationCode.FirstError}" />
+
                     <!--  Display error messages if anything went wrong.  -->
                     <Label
                         Margin="0,5"
@@ -85,6 +89,7 @@
                         IsVisible="{Binding IsError}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding ErrorMessage}" />
+
                     <!--  Verify button and activity indicator.  -->
                     <Button
                         Margin="0,20,0,0"

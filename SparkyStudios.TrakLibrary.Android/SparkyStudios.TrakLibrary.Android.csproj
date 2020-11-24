@@ -85,8 +85,8 @@
     <Compile Include="MyFirebaseMessagingService.cs" />
     <Compile Include="Renderers\BorderedEditorRenderer.cs" />
     <Compile Include="Renderers\BorderedEntryRenderer.cs" />
-    <Compile Include="Renderers\BaseNavigationPageRenderer.cs" />
     <Compile Include="Renderers\ButtonRenderer.cs" />
+    <Compile Include="Renderers\SearchBarRenderer.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SplashScreenActivity.cs" />
@@ -97,14 +97,6 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\anim\enter_bottom.xml" />
-    <AndroidResource Include="Resources\anim\enter_left.xml" />
-    <AndroidResource Include="Resources\anim\enter_right.xml" />
-    <AndroidResource Include="Resources\anim\enter_top.xml" />
-    <AndroidResource Include="Resources\anim\exit_bottom.xml" />
-    <AndroidResource Include="Resources\anim\exit_left.xml" />
-    <AndroidResource Include="Resources\anim\exit_right.xml" />
-    <AndroidResource Include="Resources\anim\exit_top.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\arrow_left_purple.png" />
     <AndroidResource Include="Resources\drawable-hdpi\arrow_left_white.png" />
     <AndroidResource Include="Resources\drawable-hdpi\arrow_right_purple.png" />

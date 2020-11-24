@@ -48,9 +48,6 @@
     <Compile Update="Views\Games\GameUserEntriesTabbedPage.xaml.cs">
       <DependentUpon>GameUserEntriesTabbedPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="BaseNavigationPage.xaml.cs">
-      <DependentUpon>BaseNavigationPage.xaml</DependentUpon>
-    </Compile>
     <Compile Update="Controls\Common\FullPageErrorControl.xaml.cs">
       <DependentUpon>FullPageErrorControl.xaml</DependentUpon>
     </Compile>
@@ -96,7 +93,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Views\BaseMasterDetailPage.xaml">
+    <EmbeddedResource Update="Views\BaseFlyoutPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\HomePage.xaml">
@@ -115,9 +112,6 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Games\GameUserEntriesTabbedPage.xaml">
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Update="BaseNavigationPage.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Update="Controls\Common\FullPageErrorControl.xaml">
@@ -152,19 +146,15 @@
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Games\GameRequestPage.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Styles\ButtonStyles.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Styles\Colors.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Styles\LabelStyles.xaml">
       <SubType>Designer</SubType>
-      <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>
 

@@ -12,7 +12,6 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -24,46 +23,34 @@
                 <Image
                     Grid.Row="0"
                     Grid.Column="0"
-                    Margin="0,75,0,10"
+                    Margin="0,20,0,0"
+                    HorizontalOptions="StartAndExpand"
                     Source="logo.png" />
 
-                <!--  Subtitle  -->
-                <ScrollView
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2"
-                    Margin="0,-20,0,0"
-                    HorizontalOptions="Fill"
-                    HorizontalScrollBarVisibility="Never"
-                    Orientation="Horizontal"
-                    VerticalOptions="Start"
-                    VerticalScrollBarVisibility="Never">
-                    <Label Style="{StaticResource SubtitleLabelStyle}" Text="{extensions:Translate Subtitle}" />
-                </ScrollView>
-
                 <StackLayout
-                    Grid.Row="2"
+                    Grid.Row="1"
                     Grid.Column="0"
                     Grid.ColumnSpan="2">
 
-                    <!--  Reset instructions  -->
-                    <Label
-                        Margin="0,10,0,0"
-                        Text="{extensions:Translate RecoveryPageInstructions}"
-                        TextColor="{StaticResource TrakGrey}" />
-
                     <!--  Page title  -->
                     <Label
-                        Margin="0,20,0,15"
+                        Margin="0,25,0,0"
+                        LineBreakMode="WordWrap"
                         Style="{StaticResource TitleLabelStyle}"
                         Text="{extensions:Translate RecoveryPageTitle}" />
 
+                    <!--  Reset instructions  -->
+                    <Label Margin="0,10,0,0" Text="{extensions:Translate RecoveryPageInstructions}" />
+
                     <!--  Username label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RecoveryPageUsername}" />
+                    <Label
+                        Margin="0,20,0,0"
+                        Style="{StaticResource EntryLabelStyle}"
+                        Text="{extensions:Translate RecoveryPageUsername}" />
                     <controls:BorderedEntry
                         AutomationId="RecoveryPageUsernameEntry"
                         BorderColor="{StaticResource TrakWhite}"
-                        BorderThickness="1"
+                        BorderThickness="4"
                         Text="{Binding Username.Value}">
                         <controls:BorderedEntry.Behaviors>
                             <behaviors:EventToCommandBehavior
@@ -76,7 +63,7 @@
                                 Binding="{Binding Username.IsValid}"
                                 TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
+                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
                             </DataTrigger>
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
@@ -88,11 +75,14 @@
                         Text="{Binding Username.FirstError}" />
 
                     <!--  Recovery token label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RecoveryPageRecoveryToken}" />
+                    <Label
+                        Margin="0,20,0,0"
+                        Style="{StaticResource EntryLabelStyle}"
+                        Text="{extensions:Translate RecoveryPageRecoveryToken}" />
                     <controls:BorderedEntry
                         AutomationId="RecoveryPageRecoveryTokenEntry"
                         BorderColor="{StaticResource TrakWhite}"
-                        BorderThickness="1"
+                        BorderThickness="4"
                         Text="{Binding RecoveryToken.Value}">
                         <controls:BorderedEntry.Behaviors>
                             <behaviors:EventToCommandBehavior
@@ -105,7 +95,7 @@
                                 Binding="{Binding RecoveryToken.IsValid}"
                                 TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="Red" />
+                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
                             </DataTrigger>
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
@@ -117,11 +107,14 @@
                         Text="{Binding RecoveryToken.FirstError}" />
 
                     <!--  Password label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RecoveryPagePassword}" />
+                    <Label
+                        Margin="0,20,0,0"
+                        Style="{StaticResource EntryLabelStyle}"
+                        Text="{extensions:Translate RecoveryPagePassword}" />
                     <controls:BorderedEntry
                         AutomationId="RecoveryPagePasswordEntry"
                         BorderColor="{StaticResource TrakWhite}"
-                        BorderThickness="1"
+                        BorderThickness="4"
                         IsPassword="True"
                         Text="{Binding Password.Value}">
                         <controls:BorderedEntry.Behaviors>
@@ -135,7 +128,7 @@
                                 Binding="{Binding Password.IsValid}"
                                 TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
+                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
                             </DataTrigger>
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
@@ -146,21 +139,15 @@
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding Password.FirstError}" />
 
-                    <!--  Password rules.  -->
-                    <StackLayout>
-                        <Label FontAttributes="Bold" Text="{extensions:Translate PasswordRulesHeader}" />
-                        <Label FontSize="Small" Text="{extensions:Translate PasswordRuleOne}" />
-                        <Label FontSize="Small" Text="{extensions:Translate PasswordRuleTwo}" />
-                        <Label FontSize="Small" Text="{extensions:Translate PasswordRuleThree}" />
-                        <Label FontSize="Small" Text="{extensions:Translate PasswordRuleFour}" />
-                    </StackLayout>
-
                     <!--  Confirm password label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RecoveryPageConfirmPassword}" />
+                    <Label
+                        Margin="0,20,0,0"
+                        Style="{StaticResource EntryLabelStyle}"
+                        Text="{extensions:Translate RecoveryPageConfirmPassword}" />
                     <controls:BorderedEntry
                         AutomationId="RecoveryPageConfirmPasswordEntry"
                         BorderColor="{StaticResource TrakWhite}"
-                        BorderThickness="1"
+                        BorderThickness="4"
                         IsPassword="True"
                         Text="{Binding ConfirmPassword.Value}">
                         <controls:BorderedEntry.Behaviors>
@@ -174,7 +161,7 @@
                                 Binding="{Binding ConfirmPassword.IsValid}"
                                 TargetType="controls:BorderedEntry"
                                 Value="False">
-                                <Setter Property="BackgroundColor" Value="{StaticResource TrakRed}" />
+                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
                             </DataTrigger>
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
@@ -184,6 +171,19 @@
                         IsVisible="{Binding ConfirmPassword.IsValid, Converter={StaticResource NegateBooleanConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding ConfirmPassword.FirstError}" />
+
+                    <!--  Privacy policy and terms of use label.  -->
+                    <Label
+                        Margin="0,10,0,0"
+                        AutomationId="RegisterPagePrivacyPolicyLabel"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        Text="{extensions:Translate RegisterPagePrivacyPolicyAndTermsOfUse}" />
+
+                    <!--  Password rules label.  -->
+                    <Label
+                        Margin="0,10,0,0"
+                        Style="{StaticResource ValidationLabelStyle}"
+                        Text="{extensions:Translate PasswordRules}" />
 
                     <!--  Display error messages if anything went wrong.  -->
                     <Label
@@ -207,33 +207,21 @@
                         IsRunning="{Binding IsLoading}"
                         IsVisible="{Binding IsLoading}" />
 
-                    <!--  Privacy policy and terms of use label.  -->
-                    <Label
-                        Margin="0,10"
-                        AutomationId="RecoveryPagePrivacyPolicyLabel"
-                        FontSize="Small"
-                        HorizontalOptions="Center"
-                        Text="{extensions:Translate RecoveryPagePrivacyPolicyAndTermsOfUse}" />
-
                     <!--  Log in label.  -->
                     <Label
-                        Margin="0,10"
-                        FontSize="Small"
-                        HorizontalOptions="Center">
-                        <Label.FormattedText>
-                            <FormattedString>
-                                <Span FontSize="Small" Text="{extensions:Translate RecoveryPageRememberedPassword}" />
-                                <Span
-                                    AutomationId="RecoveryPageLogInLabel"
-                                    FontAttributes="Bold"
-                                    FontSize="Small"
-                                    Text="{extensions:Translate RecoveryPageLogIn}">
-                                    <Span.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding LoginCommand}" NumberOfTapsRequired="1" />
-                                    </Span.GestureRecognizers>
-                                </Span>
-                            </FormattedString>
-                        </Label.FormattedText>
+                        Margin="0,20,0,0"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        HorizontalOptions="Center"
+                        Text="{extensions:Translate RecoveryPageRememberedPassword}"
+                        VerticalOptions="EndAndExpand" />
+                    <Label
+                        FontSize="{StaticResource TrakFontSmall}"
+                        HorizontalOptions="Center"
+                        Style="{StaticResource BaseBoldLabelStyle}"
+                        Text="{extensions:Translate RecoveryPageLogIn}">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding LoginCommand}" NumberOfTapsRequired="1" />
+                        </Label.GestureRecognizers>
                     </Label>
                 </StackLayout>
             </Grid>

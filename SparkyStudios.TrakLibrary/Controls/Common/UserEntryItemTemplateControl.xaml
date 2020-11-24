@@ -8,12 +8,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="UserEntryItemTemplateControlView"
     HeightRequest="150"
+    RowSpacing="0"
     mc:Ignorable="d">
     <Grid.GestureRecognizers>
         <TapGestureRecognizer Command="{Binding TapCommand}" NumberOfTapsRequired="1" />
     </Grid.GestureRecognizers>
     <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="1*" />
         <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
 
@@ -32,28 +33,51 @@
         IsRunning="{Binding IsLoading}"
         IsVisible="{Binding IsLoading}" />
 
-    <StackLayout
+    <Grid
         Grid.Row="0"
         Grid.Column="1"
-        Margin="5,0,0,0">
+        Margin="5,0,0,0"
+        RowSpacing="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
         <!--  The header above the title  -->
         <common:DividerControl
+            Grid.Row="0"
             Divider="|"
             FontSize="{StaticResource TrakFontSmall}"
+            HeightRequest="15"
             ItemsSource="{Binding HeaderDetails}" />
 
         <!--  The user entry item title  -->
         <Label
+            Grid.Row="1"
             FontSize="{StaticResource TrakFontMedium}"
+            HorizontalOptions="Start"
+            HorizontalTextAlignment="Start"
             LineBreakMode="TailTruncation"
             MaxLines="2"
             Style="{StaticResource TitleLabelStyle}"
-            Text="{Binding ItemTitle}" />
+            Text="{Binding ItemTitle}"
+            VerticalOptions="Start"
+            VerticalTextAlignment="Start" />
 
         <!--  The user entry sub title information.  -->
-        <Label FontSize="{StaticResource TrakFontSmall}" Text="{Binding ItemSubTitle}" />
+        <Label
+            Grid.Row="2"
+            FontSize="{StaticResource TrakFontSmall}"
+            Text="{Binding ItemSubTitle}" />
 
         <!--  The rating  -->
-        <common:RatingUserControl IsVisible="{Binding ShowRating}" Rating="{Binding Rating}" />
-    </StackLayout>
+        <common:RatingUserControl
+            Grid.Row="3"
+            Margin="0,5"
+            IsVisible="{Binding ShowRating}"
+            Rating="{Binding Rating}"
+            VerticalOptions="EndAndExpand" />
+    </Grid>
 </Grid>

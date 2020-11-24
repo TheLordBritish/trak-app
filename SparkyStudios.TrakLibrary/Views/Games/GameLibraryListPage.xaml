@@ -9,10 +9,12 @@
     xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel"
     Title="{extensions:Translate GameLibraryListPageTitle}"
     x:DataType="games:GameLibraryListViewModel"
-    AutomationId="GameLibraryListPage">
+    AutomationId="GameLibraryListPage"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}">
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
@@ -21,12 +23,15 @@
             <!--  Search entry field  -->
             <SearchBar
                 Grid.Row="0"
+                Margin="10,0"
                 AutomationId="GameLibraryListPageSearchBar"
                 CancelButtonColor="{StaticResource TrakWhite}"
+                FontSize="{StaticResource TrakFontSmall}"
                 Placeholder="{extensions:Translate GameLibraryListPageSearchPlaceholder}"
-                PlaceholderColor="{StaticResource TrakGrey}"
+                PlaceholderColor="{StaticResource TrakWhite}"
                 Text="{Binding SearchQuery}"
-                TextColor="{StaticResource TrakWhite}">
+                TextColor="{StaticResource TrakWhite}"
+                VerticalTextAlignment="End">
                 <SearchBar.Behaviors>
                     <behaviors:EventToCommandBehavior
                         Command="{Binding SearchCommand}"
@@ -34,10 +39,17 @@
                         EventName="Unfocused" />
                 </SearchBar.Behaviors>
             </SearchBar>
+            <BoxView
+                Grid.Row="1"
+                Margin="20,0"
+                HeightRequest="2"
+                HorizontalOptions="FillAndExpand"
+                WidthRequest="1"
+                Color="{StaticResource TrakPrimaryPurple}" />
 
             <!--  A list of all games that match the given query.  -->
             <RefreshView
-                Grid.Row="1"
+                Grid.Row="2"
                 Command="{Binding SearchCommand}"
                 CommandParameter="{Binding SearchQuery}"
                 IsEnabled="{Binding IsSearching, Converter={StaticResource NegateBooleanConverter}}"
@@ -48,46 +60,17 @@
                     RemainingItemsThreshold="0"
                     RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}">
                     <CollectionView.EmptyView>
-                        <Grid Padding="20">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Label
-                                Grid.Row="0"
-                                HorizontalOptions="Center"
-                                HorizontalTextAlignment="Center"
-                                VerticalOptions="EndAndExpand">
-                                <Label.Triggers>
-                                    <!--  Displays instructions when a search has yet to be done.  -->
-                                    <MultiTrigger TargetType="Label">
-                                        <MultiTrigger.Conditions>
-                                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
-                                            <BindingCondition Binding="{Binding SearchQuery, Converter={StaticResource StringEmptyConverter}}" Value="True" />
-                                            <BindingCondition Binding="{Binding IsError}" Value="False" />
-                                        </MultiTrigger.Conditions>
-                                        <Setter Property="Text" Value="{extensions:Translate GameLibraryListPageInstructions}" />
-                                    </MultiTrigger>
-                                    <!--  Displayed if the search query returned an empty result.  -->
-                                    <MultiTrigger TargetType="Label">
-                                        <MultiTrigger.Conditions>
-                                            <BindingCondition Binding="{Binding SearchQuery, Converter={StaticResource StringEmptyConverter}}" Value="False" />
-                                            <BindingCondition Binding="{Binding IsLoading}" Value="False" />
-                                            <BindingCondition Binding="{Binding IsError}" Value="False" />
-                                        </MultiTrigger.Conditions>
-                                        <Setter Property="Text" Value="{extensions:Translate GameLibraryPageEmptySearchResult}" />
-                                    </MultiTrigger>
-                                    <!--  Displayed if the page is empty and failed to make the request.  -->
-                                    <MultiTrigger TargetType="Label">
-                                        <MultiTrigger.Conditions>
-                                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
-                                            <BindingCondition Binding="{Binding IsError}" Value="True" />
-                                        </MultiTrigger.Conditions>
-                                        <Setter Property="Text" Value="{Binding ErrorMessage}" />
-                                    </MultiTrigger>
-                                </Label.Triggers>
-                            </Label>
-                        </Grid>
+                        <ContentView>
+                            <StackLayout
+                                Padding="20"
+                                HorizontalOptions="CenterAndExpand"
+                                VerticalOptions="CenterAndExpand">
+                                <Label
+                                    HorizontalOptions="Fill"
+                                    HorizontalTextAlignment="Center"
+                                    Text="{Binding Message}" />
+                            </StackLayout>
+                        </ContentView>
                     </CollectionView.EmptyView>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -99,7 +82,7 @@
                 </CollectionView>
             </RefreshView>
             <ActivityIndicator
-                Grid.Row="1"
+                Grid.Row="2"
                 Margin="0,15,0,0"
                 HorizontalOptions="CenterAndExpand"
                 IsEnabled="{Binding IsSearching}"
@@ -111,13 +94,13 @@
 
             <!--  Button to make a new game request.  -->
             <Label
-                Grid.Row="2"
+                Grid.Row="3"
                 FontSize="{StaticResource TrakFontSmall}"
                 HorizontalTextAlignment="Center"
                 Text="{extensions:Translate GameLibraryListPageCantFindInstructions}"
                 VerticalOptions="EndAndExpand" />
             <Button
-                Grid.Row="3"
+                Grid.Row="4"
                 Margin="20,10,20,20"
                 Command="{Binding RequestCommand}"
                 Style="{StaticResource PrimaryButtonStyle}"

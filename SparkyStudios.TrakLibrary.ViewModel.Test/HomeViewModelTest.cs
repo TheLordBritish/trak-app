@@ -36,7 +36,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test
 
             // Assert
             _navigationService.Verify(
-                n => n.NavigateAsync("GameUserEntriesTabbedPage", It.IsAny<NavigationParameters>()), Times.Once);
+                n => n.NavigateAsync("GameUserEntriesTabbedPage"), Times.Once);
         }
     }
 }

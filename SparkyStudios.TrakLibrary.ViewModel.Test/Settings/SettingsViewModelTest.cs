@@ -30,7 +30,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
         [Test]
         public void ChangePasswordCommand_WithNoData_DoesntThrowException()
         {
-            _navigationService.Setup(mock => mock.NavigateAsync("RequestChangePasswordPage", It.IsAny<INavigationParameters>()))
+            _navigationService.Setup(mock => mock.NavigateAsync("RequestChangePasswordPage"))
                 .Verifiable();
             
             Assert.DoesNotThrow(() =>
@@ -47,7 +47,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
         [Test]
         public void ChangeEmailAddressCommand_WithNoData_DoesntThrowException()
         {
-            _navigationService.Setup(mock => mock.NavigateAsync("ChangeEmailAddressPage", It.IsAny<INavigationParameters>()))
+            _navigationService.Setup(mock => mock.NavigateAsync("ChangeEmailAddressPage"))
                 .Verifiable();
             
             Assert.DoesNotThrow(() =>
@@ -64,7 +64,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
         [Test]
         public void DeleteAccountCommand_WithNoData_DoesntThrowException()
         {
-            _navigationService.Setup(mock => mock.NavigateAsync("DeleteAccountPage", It.IsAny<INavigationParameters>()))
+            _navigationService.Setup(mock => mock.NavigateAsync("DeleteAccountPage"))
                 .Verifiable();
             
             Assert.DoesNotThrow(() =>

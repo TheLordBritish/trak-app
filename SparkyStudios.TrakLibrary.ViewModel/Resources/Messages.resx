@@ -1,585 +1,720 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-		<xsd:element name="root" msdata:IsDataSet="true"></xsd:element>
-	</xsd:schema>
-	<resheader name="resmimetype">
-		<value>text/microsoft-resx</value>
-	</resheader>
-	<resheader name="version">
-		<value>1.3</value>
-	</resheader>
-	<resheader name="reader">
-		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<resheader name="writer">
-		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-	</resheader>
-	<data name="TrakTitle" xml:space="preserve">
-		<value>Trak</value>
-	</data>
-	<data name="LoginPageLogIn" xml:space="preserve">
-		<value>Log in</value>
-	</data>
-	<data name="LoginPageUsernameOrEmail" xml:space="preserve">
-		<value>Username or Email</value>
-	</data>
-	<data name="LoginPagePassword" xml:space="preserve">
-		<value>Password</value>
-	</data>
-	<data name="LoginPageForgottenPassword" xml:space="preserve">
-		<value>Forgotten password?</value>
-	</data>
-	<data name="LoginPageDontHaveAnAccount" xml:space="preserve">
-		<value>Don't have an account? </value>
-	</data>
-	<data name="LoginPageJoinNow" xml:space="preserve">
-		<value>Join Now</value>
-	</data>
-	<data name="Subtitle" xml:space="preserve">
-		<value>Games, Books, Manga, Anime</value>
-	</data>
-	<data name="RegisterPageTitle" xml:space="preserve">
-		<value>Create Account</value>
-	</data>
-	<data name="RegisterPageUsername" xml:space="preserve">
-		<value>Username</value>
-	</data>
-	<data name="RegisterPageEmailAddress" xml:space="preserve">
-		<value>Email address</value>
-	</data>
-	<data name="RegisterPagePassword" xml:space="preserve">
-		<value>Password*</value>
-	</data>
-	<data name="RegisterPageConfirmPassword" xml:space="preserve">
-		<value>Confirm password*</value>
-	</data>
-	<data name="RegisterPageSignUp" xml:space="preserve">
-		<value>Sign up</value>
-	</data>
-	<data name="RegisterPagePrivacyPolicyAndTermsOfUse" xml:space="preserve">
-		<value>Privacy Policy &amp; Terms of Use</value>
-	</data>
-	<data name="RegisterPageLogIn" xml:space="preserve">
-		<value>Log in</value>
-	</data>
-	<data name="LoginPageTitle" xml:space="preserve">
-		<value>Log in</value>
-	</data>
-	<data name="VerificationPageTitle" xml:space="preserve">
-		<value>Verify Account</value>
-	</data>
-	<data name="VerificationPageConfirmation" xml:space="preserve">
-		<value>Thank you, we have now sent you a confirmation email with your verification code.</value>
-	</data>
-	<data name="VerificationPageVerificationCode" xml:space="preserve">
-		<value>Verification Code</value>
-	</data>
-	<data name="VerificationPageVerify" xml:space="preserve">
-		<value>Verify</value>
-	</data>
-	<data name="VerificationPageHaventReceivedEmail" xml:space="preserve">
-		<value>Haven't received an email? </value>
-	</data>
-	<data name="VerificationPageSendAgain" xml:space="preserve">
-		<value>Send again</value>
-	</data>
-	<data name="ErrorMessageIncorrectCredentials" xml:space="preserve">
-		<value>Your credentials were incorrect. Please try again.</value>
-	</data>
-	<data name="ErrorMessageApiError" xml:space="preserve">
-		<value>An error occurred making the request. Please try again.</value>
-	</data>
-	<data name="ErrorMessageGeneric" xml:space="preserve">
-		<value>An error occurred making the request.</value>
-	</data>
-	<data name="RegistrationErrorMessageUsernameEmpty" xml:space="preserve">
-		<value>Username cannot be empty or only contain whitespace.</value>
-	</data>
-	<data name="RegistrationErrorMessageUsernameWhitespace" xml:space="preserve">
-		<value>Username cannot contain any spaces.</value>
-	</data>
-	<data name="RegistrationErrorMessageUsernameLength" xml:space="preserve">
-		<value>Username must be between 1 and 255 characters.</value>
-	</data>
-	<data name="RegistrationErrorMessageUsernameInvalidCharacters" xml:space="preserve">
-		<value>The username can only contain letters, numbers, under-scores and hyphens.</value>
-	</data>
-	<data name="RegistrationErrorMessageEmailAddressEmpty" xml:space="preserve">
-		<value>Email address cannot be empty or only contain whitespace.</value>
-	</data>
-	<data name="RegistrationErrorMessageEmailAddressInvalid" xml:space="preserve">
-		<value>Email address is invalid.</value>
-	</data>
-	<data name="RegistrationErrorMessagePasswordEmpty" xml:space="preserve">
-		<value>Password cannot be empty or only contain whitespace.</value>
-	</data>
-	<data name="RegistrationErrorMessagePasswordMinimumLength" xml:space="preserve">
-		<value>Password must be at least 8 characters.</value>
-	</data>
-	<data name="RegistrationErrorMessagePasswordUppercaseCharacter" xml:space="preserve">
-		<value>Password must contain at least one uppercase character.</value>
-	</data>
-	<data name="RegistrationErrorMessagePasswordLowercaseCharacter" xml:space="preserve">
-		<value>Password must contain at least one lowercase character.</value>
-	</data>
-	<data name="RegistrationErrorMessagePasswordNumber" xml:space="preserve">
-		<value>Password must contain at least one number.</value>
-	</data>
-	<data name="RegistrationErrorMessagePasswordWhitespace" xml:space="preserve">
-		<value>Password should not contain any spaces.</value>
-	</data>
-	<data name="RegistrationErrorMessageConfirmPasswordEmpty" xml:space="preserve">
-		<value>Confirm password cannot be empty or only contain whitespace.</value>
-	</data>
-	<data name="RegistrationErrorMessageConfirmPasswordMismatch" xml:space="preserve">
-		<value>The passwords must match.</value>
-	</data>
-	<data name="VerificationErrorMessageVerificationCodeEmpty" xml:space="preserve">
-		<value>The verification code cannot be empty or only contain whitespace.</value>
-	</data>
-	<data name="VerificationErrorMessageVerificationCodeWhitespace" xml:space="preserve">
-		<value>The verification code cannot contain any spaces.</value>
-	</data>
-	<data name="VerificationErrorMessageVerificationCodeLength" xml:space="preserve">
-		<value>Incorrect number of characters. The verification code will be between 1 and 5 characters.</value>
-	</data>
-	<data name="VerificationErrorMessageVerificationCodeInvalidCharacters" xml:space="preserve">
-		<value>The verification code should only contain letters and numbers.</value>
-	</data>
-	<data name="LoginErrorMessageUsernameEmpty" xml:space="preserve">
-		<value>No username has been entered.</value>
-	</data>
-	<data name="LoginErrorMessagePasswordEmpty" xml:space="preserve">
-		<value>No password has been entered.</value>
-	</data>
-	<data name="RegisterPageAlreadyHaveAccount" xml:space="preserve">
-		<value>Already have an account?</value>
-	</data>
-	<data name="GameUserEntryListPageEmpty" xml:space="preserve">
-		<value>You currently have no games in </value>
-	</data>
-	<data name="GameUserEntryListPageEmptyServerError" xml:space="preserve">
-		<value>Failed to load your games due to an error on the server.</value>
-	</data>
-	<data name="GameUserEntryListPageEmptyGenericError" xml:space="preserve">
-		<value>Failed to load your games due to an unexpected error.</value>
-	</data>
-	<data name="Backlog" xml:space="preserve">
-		<value>Backlog</value>
-	</data>
-	<data name="Playing" xml:space="preserve">
-		<value>Playing</value>
-	</data>
-	<data name="Done" xml:space="preserve">
-		<value>Done</value>
-	</data>
-	<data name="Dropped" xml:space="preserve">
-		<value>Dropped</value>
-	</data>
-	<data name="GamePageErrorMessage" xml:space="preserve">
-		<value>Failed to load the selected game.</value>
-	</data>
-	<data name="GamePageCurrentlyIn" xml:space="preserve">
-		<value>Currently in</value>
-	</data>
-	<data name="GamePageSimilarGames" xml:space="preserve">
-		<value>Similar Games</value>
-	</data>
-	<data name="GamePageAddToLibrary" xml:space="preserve">
-		<value>Add to library</value>
-	</data>
-	<data name="GamePageOptions" xml:space="preserve">
-		<value>Options</value>
-	</data>
-	<data name="GameBarcodeScannerPageTitle" xml:space="preserve">
-		<value>Barcode</value>
-	</data>
-	<data name="GameBarcodeScannerPageInstructions" xml:space="preserve">
-		<value>Place the red line over the barcode you'd like to scan.</value>
-	</data>
-	<data name="GameBarcodeScannerPageRequestGame" xml:space="preserve">
-		<value>Can't find the scanned barcode in our library. Would you like to make a request?</value>
-	</data>
-	<data name="GameBarcodeScannerPageApiError" xml:space="preserve">
-		<value>An error occurred scanning the barcode. Please try again.</value>
-	</data>
-	<data name="GameBarcodeScannerPageGenericError" xml:space="preserve">
-		<value>An error occurred scanning the barcode.</value>
-	</data>
-	<data name="Yes" xml:space="preserve">
-		<value>Yes</value>
-	</data>
-	<data name="No" xml:space="preserve">
-		<value>No</value>
-	</data>
-	<data name="ForgottenPasswordPageInstructions" xml:space="preserve">
-		<value>Please enter the email address associated with your account.</value>
-	</data>
-	<data name="ForgottenPasswordPageEmailAddress" xml:space="preserve">
-		<value>Email address</value>
-	</data>
-	<data name="ForgottenPasswordPageSend" xml:space="preserve">
-		<value>Send</value>
-	</data>
-	<data name="ForgottenPasswordErrorMessageEmailAddressEmpty" xml:space="preserve">
-		<value>The email address cannot be empty or only contain whitespace.</value>
-	</data>
-	<data name="ForgottenPasswordErrorMessageEmailAddressWhitespace" xml:space="preserve">
-		<value>The email address cannot contain any spaces.</value>
-	</data>
-	<data name="ForgottenPasswordErrorMessageEmailAddressInvalid" xml:space="preserve">
-		<value>The email address is invalid.</value>
-	</data>
-	<data name="RecoveryPageInstructions" xml:space="preserve">
-		<value>An email has been sent to your email containing your recovery token. Enter below along with your username and new password.</value>
-	</data>
-	<data name="RecoveryPageTitle" xml:space="preserve">
-		<value>Recover Account</value>
-	</data>
-	<data name="RecoveryPageUsername" xml:space="preserve">
-		<value>Username</value>
-	</data>
-	<data name="RecoveryPageRecoveryToken" xml:space="preserve">
-		<value>Recovery token</value>
-	</data>
-	<data name="RecoveryPagePassword" xml:space="preserve">
-		<value>Password*</value>
-	</data>
-	<data name="RecoveryPageConfirmPassword" xml:space="preserve">
-		<value>Confirm password*</value>
-	</data>
-	<data name="RecoveryPageRecover" xml:space="preserve">
-		<value>Recover</value>
-	</data>
-	<data name="RecoveryPageRememberedPassword" xml:space="preserve">
-		<value>Remembered your password? </value>
-	</data>
-	<data name="RecoveryPageLogIn" xml:space="preserve">
-		<value>Log in</value>
-	</data>
-	<data name="RecoveryPagePrivacyPolicyAndTermsOfUse" xml:space="preserve">
-		<value>Privacy Policy &amp; Terms of Use</value>
-	</data>
-	<data name="RecoveryErrorMessageUsernameEmpty" xml:space="preserve">
-		<value>Username cannot be empty or only contain whitespace.</value>
-	</data>
-	<data name="RecoveryErrorMessageUsernameWhitespace" xml:space="preserve">
-		<value>Username cannot contain any spaces.</value>
-	</data>
-	<data name="RecoveryErrorMessageUsernameLength" xml:space="preserve">
-		<value>Username must be between 1 and 255 characters.</value>
-	</data>
-	<data name="RecoveryErrorMessageUsernameInvalidCharacters" xml:space="preserve">
-		<value>The username can only contain letters, numbers, under-scores and hyphens.</value>
-	</data>
-	<data name="RecoveryErrorMessageRecoveryTokenEmpty" xml:space="preserve">
-		<value>Recovery token cannot be empty or only contain whitespace.</value>
-	</data>
-	<data name="RecoveryErrorMessageRecoveryTokenWhitespace" xml:space="preserve">
-		<value>Recovery token cannot contain any spaces.</value>
-	</data>
-	<data name="RecoveryErrorMessageRecoveryTokenLength" xml:space="preserve">
-		<value>Recovery token must be exactly 30 characters long.</value>
-	</data>
-	<data name="RecoveryErrorMessageRecoveryTokenAlphanumeric" xml:space="preserve">
-		<value>Recovery token should only contain alphanumeric characters.</value>
-	</data>
-	<data name="RecoveryErrorMessagePasswordEmpty" xml:space="preserve">
-		<value>Password cannot be empty or only contain whitespace.</value>
-	</data>
-	<data name="RecoveryErrorMessagePasswordMinimumLength" xml:space="preserve">
-		<value>Password must be at least 8 characters.</value>
-	</data>
-	<data name="RecoveryErrorMessagePasswordUppercaseCharacter" xml:space="preserve">
-		<value>Password must contain at least one uppercase character.</value>
-	</data>
-	<data name="RecoveryErrorMessagePasswordLowercaseCharacter" xml:space="preserve">
-		<value>Password must contain at least one lowercase character.</value>
-	</data>
-	<data name="RecoveryErrorMessagePasswordNumber" xml:space="preserve">
-		<value>Password must contain at least one number.</value>
-	</data>
-	<data name="RecoveryErrorMessagePasswordWhitespace" xml:space="preserve">
-		<value>Password should not contain any spaces.</value>
-	</data>
-	<data name="RecoveryErrorMessageConfirmPasswordEmpty" xml:space="preserve">
-		<value>Confirm password cannot be empty or only contain whitespace.</value>
-	</data>
-	<data name="RecoveryErrorMessageConfirmPasswordMismatch" xml:space="preserve">
-		<value>The passwords must match.</value>
-	</data>
-	<data name="GameLibraryListPageTitle" xml:space="preserve">
-		<value>Library</value>
-	</data>
-	<data name="GameLibraryListPageInstructions" xml:space="preserve">
-		<value>Discover new games to add to your library</value>
-	</data>
-	<data name="GameLibraryListPageCantFindInstructions" xml:space="preserve">
-		<value>Can't find what you're looking for?</value>
-	</data>
-	<data name="GameLibraryListPageEmptyServerError" xml:space="preserve">
-		<value>Failed to load games due to an error on the server.</value>
-	</data>
-	<data name="GameLibraryListPageEmptyGenericError" xml:space="preserve">
-		<value>Failed to load games due to an unexpected error.</value>
-	</data>
-	<data name="GameLibraryListPageRequestGame" xml:space="preserve">
-		<value>Request Game</value>
-	</data>
-	<data name="BaseMasterDetailContentPageHome" xml:space="preserve">
-		<value>Home</value>
-	</data>
-	<data name="BaseMasterDetailContentPageBooks" xml:space="preserve">
-		<value>Books</value>
-	</data>
-	<data name="BaseMasterDetailContentPageAnime" xml:space="preserve">
-		<value>Anime</value>
-	</data>
-	<data name="BaseMasterDetailContentPageManga" xml:space="preserve">
-		<value>Manga</value>
-	</data>
-	<data name="BaseMasterDetailContentPageGames" xml:space="preserve">
-		<value>Games</value>
-	</data>
-	<data name="BaseMasterDetailContentPageSettings" xml:space="preserve">
-		<value>Settings</value>
-	</data>
-	<data name="BaseMasterDetailContentPageLogout" xml:space="preserve">
-		<value>Log out</value>
-	</data>
-	<data name="GameRequestPageGameTitle" xml:space="preserve">
-		<value>Game Title</value>
-	</data>
-	<data name="GameRequestPageAdditionalComments" xml:space="preserve">
-		<value>Additional comments</value>
-	</data>
-	<data name="GameRequestPageSubmit" xml:space="preserve">
-		<value>Submit</value>
-	</data>
-	<data name="GameRequestPageRequestComplete" xml:space="preserve">
-		<value>Thank you for your request. An admin will add the request game to the library as soon as possible. You will receive a notification when the request has been completed.</value>
-	</data>
-	<data name="GameRequestErrorMessageTitleEmpty" xml:space="preserve">
-		<value>The title cannot be empty or only contain whitespace.</value>
-	</data>
-	<data name="GameRequestErrorMessageTitleMaxLength" xml:space="preserve">
-		<value>The title cannot exceed 255 characters.</value>
-	</data>
-	<data name="GameRequestErrorMessageCommentsMaxLength" xml:space="preserve">
-		<value>The comments cannot exceed 2048 characters.</value>
-	</data>
-	<data name="AddGameErrorMessagePlatformNull" xml:space="preserve">
-		<value>The platform cannot be empty.</value>
-	</data>
-	<data name="AddGameErrorMessageStatusNone" xml:space="preserve">
-		<value>The status cannot be empty.</value>
-	</data>
-	<data name="AddGamePagePlatform" xml:space="preserve">
-		<value>Platform</value>
-	</data>
-	<data name="AddGamePageStatus" xml:space="preserve">
-		<value>Status</value>
-	</data>
-	<data name="AddGamePageAdd" xml:space="preserve">
-		<value>Add</value>
-	</data>
-	<data name="GameOptionsPageStatus" xml:space="preserve">
-		<value>Status</value>
-	</data>
-	<data name="GameOptionsPageUpdate" xml:space="preserve">
-		<value>Update</value>
-	</data>
-	<data name="GameOptionsPageDelete" xml:space="preserve">
-		<value>Delete</value>
-	</data>
-	<data name="GameLibraryTabbedPage" xml:space="preserve">
-		<value>Add Game</value>
-	</data>
-	<data name="GameUserEntriesTabbedPageTitle" xml:space="preserve">
-		<value>Games</value>
-	</data>
-	<data name="SettingsPageTitle" xml:space="preserve">
-		<value>Settings</value>
-	</data>
-	<data name="SettingsPageAccountSubtitle" xml:space="preserve">
-		<value>Account</value>
-	</data>
-	<data name="SettingsPageChangePassword" xml:space="preserve">
-		<value>Change Password</value>
-	</data>
-	<data name="ChangePasswordPageTitle" xml:space="preserve">
-		<value>Change password</value>
-	</data>
-	<data name="ChangePasswordPageCurrentPassword" xml:space="preserve">
-		<value>Current password</value>
-	</data>
-	<data name="ChangePasswordPageNewPassword" xml:space="preserve">
-		<value>New password</value>
-	</data>
-	<data name="ChangePasswordPageConfirmNewPassword" xml:space="preserve">
-		<value>Confirm new password</value>
-	</data>
-	<data name="ChangePasswordPageChange" xml:space="preserve">
-		<value>Change</value>
-	</data>
-	<data name="ChangePasswordPageResetToken" xml:space="preserve">
-		<value>Reset token</value>
-	</data>
-	<data name="RequestChangePasswordPageTitle" xml:space="preserve">
-		<value>Request change password</value>
-	</data>
-	<data name="RequestChangePasswordPageInstructions" xml:space="preserve">
-		<value>Tap below to receive your token to change your password.</value>
-	</data>
-	<data name="RequestChangePasswordPageSend" xml:space="preserve">
-		<value>Send</value>
-	</data>
-	<data name="RequestChangePasswordPageAlreadyHaveToken" xml:space="preserve">
-		<value>Already have a token?</value>
-	</data>
-	<data name="RequestChangePasswordPageTapHere" xml:space="preserve">
-		<value>Tap here</value>
-	</data>
-	<data name="ChangePasswordPageSuccess" xml:space="preserve">
-		<value>Password successfully changed. Please login with your new credentials.</value>
-	</data>
-	<data name="SettingsPageChangeEmailAddress" xml:space="preserve">
-		<value>Change Email Address</value>
-	</data>
-	<data name="ChangeEmailAddressPageSuccess" xml:space="preserve">
-		<value>Email address successfully changed. You will have received a new verification email. Please login and verify your account.</value>
-	</data>
-	<data name="ChangeEmailAddressPageInstructions" xml:space="preserve">
-		<value>Enter your current email address below to receive an email containing a token, allowing you to update it.</value>
-	</data>
-	<data name="ChangeEmailAddressPageNewEmailAddress" xml:space="preserve">
-		<value>New email address</value>
-	</data>
-	<data name="ChangeEmailAddressPageUpdate" xml:space="preserve">
-		<value>Update</value>
-	</data>
-	<data name="ChangeEmailAddressPageTitle" xml:space="preserve">
-		<value>Change Email Address</value>
-	</data>
-	<data name="HomePageSubtitle" xml:space="preserve">
-		<value>Keep track of all your collections here in your library.</value>
-	</data>
-	<data name="SettingsPageDeleteMyAccount" xml:space="preserve">
-		<value>Delete Account</value>
-	</data>
-	<data name="DeleteAccountPageDeleteMe" xml:space="preserve">
-		<value>DELETE ME</value>
-	</data>
-	<data name="DeleteAccountPageTitle" xml:space="preserve">
-		<value>Delete account</value>
-	</data>
-	<data name="DeleteAccountPageFirstInstructions" xml:space="preserve">
-		<value>Account deletion cannot be reversed. If you wish to continue enter  </value>
-	</data>
-	<data name="DeleteAccountPageDelete" xml:space="preserve">
-		<value>Delete</value>
-	</data>
-	<data name="DeleteAccountIncorrectDeleteMessage" xml:space="preserve">
-		<value>DELETE ME entered incorrectly.</value>
-	</data>
-	<data name="DeleteAccountPageSecondInstructions" xml:space="preserve">
-		<value> and tap Delete below to continue.</value>
-	</data>
-	<data name="DeleteAccountPageSuccess" xml:space="preserve">
-		<value>Your account has been successfully deleted.</value>
-	</data>
-	<data name="GameLibraryPageEmptySearchResult" xml:space="preserve">
-		<value>Sorry we couldn't find any results for "{0}"</value>
-	</data>
-	<data name="GameLibraryListPageSearchPlaceholder" xml:space="preserve">
-		<value>Search</value>
-	</data>
-	<data name="GamePageReleaseDateNotReleased" xml:space="preserve">
-		<value>Not released</value>
-	</data>
-	<data name="GameOptionsPageNotInLibrary" xml:space="preserve">
-		<value>Is currently not in your library</value>
-	</data>
-	<data name="GameOptionsPageInLibrary" xml:space="preserve">
-		<value>Is currently in your library</value>
-	</data>
-	<data name="GameOptionsPageSelectPlatforms" xml:space="preserve">
-		<value>Select platforms</value>
-	</data>
-	<data name="GameOptionsPageAdd" xml:space="preserve">
-		<value>Add</value>
-	</data>
-	<data name="GameOptionsPageNoSelectedPlatforms" xml:space="preserve">
-		<value>*No platforms have been selected.</value>
-	</data>
-	<data name="GameOptionsPageNoSelectedStatus" xml:space="preserve">
-		<value>*No status has been selected.</value>
-	</data>
-	<data name="GameOptionsPageGameAdded" xml:space="preserve">
-		<value>{0} has been added to your library.</value>
-	</data>
-	<data name="GameOptionsPageGameRemoved" xml:space="preserve">
-		<value>{0} has been removed from your library.</value>
-	</data>
-	<data name="GameOptionsPageRating" xml:space="preserve">
-		<value>Rating</value>
-	</data>
-	<data name="GameOptionsPageRemoveRating" xml:space="preserve">
-		<value>Remove Rating</value>
-	</data>
-	<data name="GameOptionsPageRemoveFromLibrary" xml:space="preserve">
-		<value>Remove from library</value>
-	</data>
-	<data name="GamePageAgeRating" xml:space="preserve">
-		<value>Age rating</value>
-	</data>
-	<data name="GamePageGameModes" xml:space="preserve">
-		<value>Game modes</value>
-	</data>
-	<data name="GamePageFranchise" xml:space="preserve">
-		<value>Franchise</value>
-	</data>
-	<data name="GamePageReleaseDates" xml:space="preserve">
-		<value>Release dates</value>
-	</data>
-	<data name="PasswordRules" xml:space="preserve">
-		<value>*Password should contain at least 8 characters, both lowercase and uppercase letters and atleast one number.</value>
-	</data>
-	<data name="ForgottenPasswordPageTitle" xml:space="preserve">
-		<value>Forgotten Password</value>
-	</data>
-	<data name="ForgottenPasswordPageAlreadyHaveToken" xml:space="preserve">
-		<value>Already have a recovery token?</value>
-	</data>
-	<data name="ForgottenPasswordPageTapHere" xml:space="preserve">
-		<value>Tap here</value>
-	</data>
-	<data name="GameRequestPageTitle" xml:space="preserve">
-		<value>Request Game</value>
-	</data>
-	<data name="GameRequestPageInstructionsOne" xml:space="preserve">
-		<value>Send us your requests to add to our game library so you can add them to your collection.</value>
-	</data>
-	<data name="GameRequestPageInstructionsTwo" xml:space="preserve">
-		<value>Please include as much information as possible so our administrators can process your requests more quickly.</value>
-	</data>
-	<data name="SettingsPageWelcome" xml:space="preserve">
-		<value>Welcome, </value>
-	</data>
-	<data name="SettingsPageInstructions" xml:space="preserve">
-		<value> please find settings below to make changes to your account.</value>
-	</data>
-	<data name="SettingsPageChangeUsername" xml:space="preserve">
-		<value>Change Username</value>
-	</data>
-	<data name="GamePageReleaseDateAmerica" xml:space="preserve">
-		<value>America: </value>
-	</data>
-	<data name="GamePageReleaseDateJapan" xml:space="preserve">
-		<value>Japan: </value>
-	</data>
-	<data name="GamePageReleaseDateEurope" xml:space="preserve">
-		<value>Europe: </value>
-	</data>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="TrakTitle" xml:space="preserve">
+    <value>Trak</value>
+  </data>
+  <data name="LoginPageLogIn" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="LoginPageUsernameOrEmail" xml:space="preserve">
+    <value>Username or Email</value>
+  </data>
+  <data name="LoginPagePassword" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="LoginPageForgottenPassword" xml:space="preserve">
+    <value>Forgotten password?</value>
+  </data>
+  <data name="LoginPageDontHaveAnAccount" xml:space="preserve">
+    <value>Don't have an account? </value>
+  </data>
+  <data name="LoginPageJoinNow" xml:space="preserve">
+    <value>Join Now</value>
+  </data>
+  <data name="Subtitle" xml:space="preserve">
+    <value>Games, Books, Manga, Anime</value>
+  </data>
+  <data name="RegisterPageTitle" xml:space="preserve">
+    <value>Create Account</value>
+  </data>
+  <data name="RegisterPageUsername" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="RegisterPageEmailAddress" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="RegisterPagePassword" xml:space="preserve">
+    <value>Password*</value>
+  </data>
+  <data name="RegisterPageConfirmPassword" xml:space="preserve">
+    <value>Confirm password*</value>
+  </data>
+  <data name="RegisterPageSignUp" xml:space="preserve">
+    <value>Sign up</value>
+  </data>
+  <data name="RegisterPagePrivacyPolicyAndTermsOfUse" xml:space="preserve">
+    <value>Privacy Policy &amp; Terms of Use</value>
+  </data>
+  <data name="RegisterPageLogIn" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="LoginPageTitle" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="VerificationPageTitle" xml:space="preserve">
+    <value>Verify Account</value>
+  </data>
+  <data name="VerificationPageConfirmation" xml:space="preserve">
+    <value>Thank you, we have now sent you a confirmation email with your verification code.</value>
+  </data>
+  <data name="VerificationPageVerificationCode" xml:space="preserve">
+    <value>Verification Code</value>
+  </data>
+  <data name="VerificationPageVerify" xml:space="preserve">
+    <value>Verify</value>
+  </data>
+  <data name="VerificationPageHaventReceivedEmail" xml:space="preserve">
+    <value>Haven't received an email? </value>
+  </data>
+  <data name="VerificationPageSendAgain" xml:space="preserve">
+    <value>Send again</value>
+  </data>
+  <data name="ErrorMessageIncorrectCredentials" xml:space="preserve">
+    <value>Your credentials were incorrect. Please try again.</value>
+  </data>
+  <data name="ErrorMessageApiError" xml:space="preserve">
+    <value>An error occurred making the request. Please try again.</value>
+  </data>
+  <data name="ErrorMessageGeneric" xml:space="preserve">
+    <value>An error occurred making the request.</value>
+  </data>
+  <data name="RegistrationErrorMessageUsernameEmpty" xml:space="preserve">
+    <value>Username cannot be empty or only contain whitespace.</value>
+  </data>
+  <data name="RegistrationErrorMessageUsernameWhitespace" xml:space="preserve">
+    <value>Username cannot contain any spaces.</value>
+  </data>
+  <data name="RegistrationErrorMessageUsernameLength" xml:space="preserve">
+    <value>Username must be between 1 and 255 characters.</value>
+  </data>
+  <data name="RegistrationErrorMessageUsernameInvalidCharacters" xml:space="preserve">
+    <value>The username can only contain letters, numbers, under-scores and hyphens.</value>
+  </data>
+  <data name="RegistrationErrorMessageEmailAddressEmpty" xml:space="preserve">
+    <value>Email address cannot be empty or only contain whitespace.</value>
+  </data>
+  <data name="RegistrationErrorMessageEmailAddressInvalid" xml:space="preserve">
+    <value>Email address is invalid.</value>
+  </data>
+  <data name="RegistrationErrorMessagePasswordEmpty" xml:space="preserve">
+    <value>Password cannot be empty or only contain whitespace.</value>
+  </data>
+  <data name="RegistrationErrorMessagePasswordMinimumLength" xml:space="preserve">
+    <value>Password must be at least 8 characters.</value>
+  </data>
+  <data name="RegistrationErrorMessagePasswordUppercaseCharacter" xml:space="preserve">
+    <value>Password must contain at least one uppercase character.</value>
+  </data>
+  <data name="RegistrationErrorMessagePasswordLowercaseCharacter" xml:space="preserve">
+    <value>Password must contain at least one lowercase character.</value>
+  </data>
+  <data name="RegistrationErrorMessagePasswordNumber" xml:space="preserve">
+    <value>Password must contain at least one number.</value>
+  </data>
+  <data name="RegistrationErrorMessagePasswordWhitespace" xml:space="preserve">
+    <value>Password should not contain any spaces.</value>
+  </data>
+  <data name="RegistrationErrorMessageConfirmPasswordEmpty" xml:space="preserve">
+    <value>Confirm password cannot be empty or only contain whitespace.</value>
+  </data>
+  <data name="RegistrationErrorMessageConfirmPasswordMismatch" xml:space="preserve">
+    <value>The passwords must match.</value>
+  </data>
+  <data name="VerificationErrorMessageVerificationCodeEmpty" xml:space="preserve">
+    <value>The verification code cannot be empty or only contain whitespace.</value>
+  </data>
+  <data name="VerificationErrorMessageVerificationCodeWhitespace" xml:space="preserve">
+    <value>The verification code cannot contain any spaces.</value>
+  </data>
+  <data name="VerificationErrorMessageVerificationCodeLength" xml:space="preserve">
+    <value>Incorrect number of characters. The verification code will be between 1 and 5 characters.</value>
+  </data>
+  <data name="VerificationErrorMessageVerificationCodeInvalidCharacters" xml:space="preserve">
+    <value>The verification code should only contain letters and numbers.</value>
+  </data>
+  <data name="LoginErrorMessageUsernameEmpty" xml:space="preserve">
+    <value>No username has been entered.</value>
+  </data>
+  <data name="LoginErrorMessagePasswordEmpty" xml:space="preserve">
+    <value>No password has been entered.</value>
+  </data>
+  <data name="RegisterPageAlreadyHaveAccount" xml:space="preserve">
+    <value>Already have an account?</value>
+  </data>
+  <data name="GameUserEntryListPageEmpty" xml:space="preserve">
+    <value>You currently have no games in </value>
+  </data>
+  <data name="GameUserEntryListPageEmptyServerError" xml:space="preserve">
+    <value>Failed to load your games due to an error on the server.</value>
+  </data>
+  <data name="GameUserEntryListPageEmptyGenericError" xml:space="preserve">
+    <value>Failed to load your games due to an unexpected error.</value>
+  </data>
+  <data name="Backlog" xml:space="preserve">
+    <value>Backlog</value>
+  </data>
+  <data name="Playing" xml:space="preserve">
+    <value>Playing</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
+  <data name="Dropped" xml:space="preserve">
+    <value>Dropped</value>
+  </data>
+  <data name="GamePageErrorMessage" xml:space="preserve">
+    <value>Failed to load the selected game.</value>
+  </data>
+  <data name="GamePageCurrentlyIn" xml:space="preserve">
+    <value>Currently in</value>
+  </data>
+  <data name="GamePageSimilarGames" xml:space="preserve">
+    <value>Similar Games</value>
+  </data>
+  <data name="GamePageAddToLibrary" xml:space="preserve">
+    <value>Add to library</value>
+  </data>
+  <data name="GamePageOptions" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="GameBarcodeScannerPageTitle" xml:space="preserve">
+    <value>Barcode</value>
+  </data>
+  <data name="GameBarcodeScannerPageInstructions" xml:space="preserve">
+    <value>Place the red line over the barcode you'd like to scan.</value>
+  </data>
+  <data name="GameBarcodeScannerPageRequestGame" xml:space="preserve">
+    <value>Can't find the scanned barcode in our library. Would you like to make a request?</value>
+  </data>
+  <data name="GameBarcodeScannerPageApiError" xml:space="preserve">
+    <value>An error occurred scanning the barcode. Please try again.</value>
+  </data>
+  <data name="GameBarcodeScannerPageGenericError" xml:space="preserve">
+    <value>An error occurred scanning the barcode.</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="ForgottenPasswordPageInstructions" xml:space="preserve">
+    <value>Please enter the email address associated with your account.</value>
+  </data>
+  <data name="ForgottenPasswordPageEmailAddress" xml:space="preserve">
+    <value>Email address</value>
+  </data>
+  <data name="ForgottenPasswordPageSend" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="ForgottenPasswordErrorMessageEmailAddressEmpty" xml:space="preserve">
+    <value>The email address cannot be empty or only contain whitespace.</value>
+  </data>
+  <data name="ForgottenPasswordErrorMessageEmailAddressWhitespace" xml:space="preserve">
+    <value>The email address cannot contain any spaces.</value>
+  </data>
+  <data name="ForgottenPasswordErrorMessageEmailAddressInvalid" xml:space="preserve">
+    <value>The email address is invalid.</value>
+  </data>
+  <data name="RecoveryPageInstructions" xml:space="preserve">
+    <value>An email has been sent to your email containing your recovery token. Enter below along with your username and new password.</value>
+  </data>
+  <data name="RecoveryPageTitle" xml:space="preserve">
+    <value>Recover Account</value>
+  </data>
+  <data name="RecoveryPageUsername" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="RecoveryPageRecoveryToken" xml:space="preserve">
+    <value>Recovery token</value>
+  </data>
+  <data name="RecoveryPagePassword" xml:space="preserve">
+    <value>Password*</value>
+  </data>
+  <data name="RecoveryPageConfirmPassword" xml:space="preserve">
+    <value>Confirm password*</value>
+  </data>
+  <data name="RecoveryPageRecover" xml:space="preserve">
+    <value>Recover</value>
+  </data>
+  <data name="RecoveryPageRememberedPassword" xml:space="preserve">
+    <value>Remembered your password? </value>
+  </data>
+  <data name="RecoveryPageLogIn" xml:space="preserve">
+    <value>Log in</value>
+  </data>
+  <data name="RecoveryPagePrivacyPolicyAndTermsOfUse" xml:space="preserve">
+    <value>Privacy Policy &amp; Terms of Use</value>
+  </data>
+  <data name="RecoveryErrorMessageUsernameEmpty" xml:space="preserve">
+    <value>Username cannot be empty or only contain whitespace.</value>
+  </data>
+  <data name="RecoveryErrorMessageUsernameWhitespace" xml:space="preserve">
+    <value>Username cannot contain any spaces.</value>
+  </data>
+  <data name="RecoveryErrorMessageUsernameLength" xml:space="preserve">
+    <value>Username must be between 1 and 255 characters.</value>
+  </data>
+  <data name="RecoveryErrorMessageUsernameInvalidCharacters" xml:space="preserve">
+    <value>The username can only contain letters, numbers, under-scores and hyphens.</value>
+  </data>
+  <data name="RecoveryErrorMessageRecoveryTokenEmpty" xml:space="preserve">
+    <value>Recovery token cannot be empty or only contain whitespace.</value>
+  </data>
+  <data name="RecoveryErrorMessageRecoveryTokenWhitespace" xml:space="preserve">
+    <value>Recovery token cannot contain any spaces.</value>
+  </data>
+  <data name="RecoveryErrorMessageRecoveryTokenLength" xml:space="preserve">
+    <value>Recovery token must be exactly 30 characters long.</value>
+  </data>
+  <data name="RecoveryErrorMessageRecoveryTokenAlphanumeric" xml:space="preserve">
+    <value>Recovery token should only contain alphanumeric characters.</value>
+  </data>
+  <data name="RecoveryErrorMessagePasswordEmpty" xml:space="preserve">
+    <value>Password cannot be empty or only contain whitespace.</value>
+  </data>
+  <data name="RecoveryErrorMessagePasswordMinimumLength" xml:space="preserve">
+    <value>Password must be at least 8 characters.</value>
+  </data>
+  <data name="RecoveryErrorMessagePasswordUppercaseCharacter" xml:space="preserve">
+    <value>Password must contain at least one uppercase character.</value>
+  </data>
+  <data name="RecoveryErrorMessagePasswordLowercaseCharacter" xml:space="preserve">
+    <value>Password must contain at least one lowercase character.</value>
+  </data>
+  <data name="RecoveryErrorMessagePasswordNumber" xml:space="preserve">
+    <value>Password must contain at least one number.</value>
+  </data>
+  <data name="RecoveryErrorMessagePasswordWhitespace" xml:space="preserve">
+    <value>Password should not contain any spaces.</value>
+  </data>
+  <data name="RecoveryErrorMessageConfirmPasswordEmpty" xml:space="preserve">
+    <value>Confirm password cannot be empty or only contain whitespace.</value>
+  </data>
+  <data name="RecoveryErrorMessageConfirmPasswordMismatch" xml:space="preserve">
+    <value>The passwords must match.</value>
+  </data>
+  <data name="GameLibraryListPageTitle" xml:space="preserve">
+    <value>Library</value>
+  </data>
+  <data name="GameLibraryListPageInstructions" xml:space="preserve">
+    <value>Discover new games to add to your library</value>
+  </data>
+  <data name="GameLibraryListPageCantFindInstructions" xml:space="preserve">
+    <value>Can't find what you're looking for?</value>
+  </data>
+  <data name="GameLibraryListPageEmptyServerError" xml:space="preserve">
+    <value>Failed to load games due to an error on the server.</value>
+  </data>
+  <data name="GameLibraryListPageEmptyGenericError" xml:space="preserve">
+    <value>Failed to load games due to an unexpected error.</value>
+  </data>
+  <data name="GameLibraryListPageRequestGame" xml:space="preserve">
+    <value>Request Game</value>
+  </data>
+  <data name="BaseMasterDetailContentPageHome" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="BaseMasterDetailContentPageBooks" xml:space="preserve">
+    <value>Books</value>
+  </data>
+  <data name="BaseMasterDetailContentPageAnime" xml:space="preserve">
+    <value>Anime</value>
+  </data>
+  <data name="BaseMasterDetailContentPageManga" xml:space="preserve">
+    <value>Manga</value>
+  </data>
+  <data name="BaseMasterDetailContentPageGames" xml:space="preserve">
+    <value>Games</value>
+  </data>
+  <data name="BaseMasterDetailContentPageSettings" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="BaseMasterDetailContentPageLogout" xml:space="preserve">
+    <value>Log out</value>
+  </data>
+  <data name="GameRequestPageGameTitle" xml:space="preserve">
+    <value>Game Title</value>
+  </data>
+  <data name="GameRequestPageAdditionalComments" xml:space="preserve">
+    <value>Additional comments</value>
+  </data>
+  <data name="GameRequestPageSubmit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
+  <data name="GameRequestPageRequestComplete" xml:space="preserve">
+    <value>Thank you for your request. An admin will add the request game to the library as soon as possible. You will receive a notification when the request has been completed.</value>
+  </data>
+  <data name="GameRequestErrorMessageTitleEmpty" xml:space="preserve">
+    <value>The title cannot be empty or only contain whitespace.</value>
+  </data>
+  <data name="GameRequestErrorMessageTitleMaxLength" xml:space="preserve">
+    <value>The title cannot exceed 255 characters.</value>
+  </data>
+  <data name="GameRequestErrorMessageCommentsMaxLength" xml:space="preserve">
+    <value>The comments cannot exceed 2048 characters.</value>
+  </data>
+  <data name="AddGameErrorMessagePlatformNull" xml:space="preserve">
+    <value>The platform cannot be empty.</value>
+  </data>
+  <data name="AddGameErrorMessageStatusNone" xml:space="preserve">
+    <value>The status cannot be empty.</value>
+  </data>
+  <data name="AddGamePagePlatform" xml:space="preserve">
+    <value>Platform</value>
+  </data>
+  <data name="AddGamePageStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="AddGamePageAdd" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="GameOptionsPageStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="GameOptionsPageUpdate" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="GameOptionsPageDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="GameLibraryTabbedPage" xml:space="preserve">
+    <value>Add Game</value>
+  </data>
+  <data name="GameUserEntriesTabbedPageTitle" xml:space="preserve">
+    <value>Games</value>
+  </data>
+  <data name="SettingsPageTitle" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsPageAccountSubtitle" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="SettingsPageChangePassword" xml:space="preserve">
+    <value>Change Password</value>
+  </data>
+  <data name="ChangePasswordPageTitle" xml:space="preserve">
+    <value>Change password</value>
+  </data>
+  <data name="ChangePasswordPageCurrentPassword" xml:space="preserve">
+    <value>Current password</value>
+  </data>
+  <data name="ChangePasswordPageNewPassword" xml:space="preserve">
+    <value>New password</value>
+  </data>
+  <data name="ChangePasswordPageConfirmNewPassword" xml:space="preserve">
+    <value>Confirm new password</value>
+  </data>
+  <data name="ChangePasswordPageChange" xml:space="preserve">
+    <value>Change</value>
+  </data>
+  <data name="ChangePasswordPageResetToken" xml:space="preserve">
+    <value>Reset token</value>
+  </data>
+  <data name="RequestChangePasswordPageTitle" xml:space="preserve">
+    <value>Request change password</value>
+  </data>
+  <data name="RequestChangePasswordPageInstructions" xml:space="preserve">
+    <value>Tap below to receive your token to change your password.</value>
+  </data>
+  <data name="RequestChangePasswordPageSend" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="RequestChangePasswordPageAlreadyHaveToken" xml:space="preserve">
+    <value>Already have a token?</value>
+  </data>
+  <data name="RequestChangePasswordPageTapHere" xml:space="preserve">
+    <value>Tap here</value>
+  </data>
+  <data name="ChangePasswordPageSuccess" xml:space="preserve">
+    <value>Password successfully changed. Please login with your new credentials.</value>
+  </data>
+  <data name="SettingsPageChangeEmailAddress" xml:space="preserve">
+    <value>Change Email Address</value>
+  </data>
+  <data name="ChangeEmailAddressPageSuccess" xml:space="preserve">
+    <value>Email address successfully changed. You will have received a new verification email. Please login and verify your account.</value>
+  </data>
+  <data name="ChangeEmailAddressPageInstructions" xml:space="preserve">
+    <value>Enter your current email address below to receive an email containing a token, allowing you to update it.</value>
+  </data>
+  <data name="ChangeEmailAddressPageNewEmailAddress" xml:space="preserve">
+    <value>New email address</value>
+  </data>
+  <data name="ChangeEmailAddressPageUpdate" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="ChangeEmailAddressPageTitle" xml:space="preserve">
+    <value>Change Email Address</value>
+  </data>
+  <data name="HomePageSubtitle" xml:space="preserve">
+    <value>Keep track of all your collections here in your library.</value>
+  </data>
+  <data name="SettingsPageDeleteMyAccount" xml:space="preserve">
+    <value>Delete Account</value>
+  </data>
+  <data name="DeleteAccountPageDeleteMe" xml:space="preserve">
+    <value>DELETE ME</value>
+  </data>
+  <data name="DeleteAccountPageTitle" xml:space="preserve">
+    <value>Delete account</value>
+  </data>
+  <data name="DeleteAccountPageFirstInstructions" xml:space="preserve">
+    <value>Account deletion cannot be reversed. If you wish to continue enter  </value>
+  </data>
+  <data name="DeleteAccountPageDelete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteAccountIncorrectDeleteMessage" xml:space="preserve">
+    <value>DELETE ME entered incorrectly.</value>
+  </data>
+  <data name="DeleteAccountPageSecondInstructions" xml:space="preserve">
+    <value> and tap Delete below to continue.</value>
+  </data>
+  <data name="DeleteAccountPageSuccess" xml:space="preserve">
+    <value>Your account has been successfully deleted.</value>
+  </data>
+  <data name="GameLibraryPageEmptySearchResult" xml:space="preserve">
+    <value>Sorry we couldn't find any results for "{0}"</value>
+  </data>
+  <data name="GameLibraryListPageSearchPlaceholder" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="GamePageReleaseDateNotReleased" xml:space="preserve">
+    <value>Not released</value>
+  </data>
+  <data name="GameOptionsPageNotInLibrary" xml:space="preserve">
+    <value>Is currently not in your library</value>
+  </data>
+  <data name="GameOptionsPageInLibrary" xml:space="preserve">
+    <value>Is currently in your library</value>
+  </data>
+  <data name="GameOptionsPageSelectPlatforms" xml:space="preserve">
+    <value>Select platforms</value>
+  </data>
+  <data name="GameOptionsPageAdd" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="GameOptionsPageNoSelectedPlatforms" xml:space="preserve">
+    <value>*No platforms have been selected.</value>
+  </data>
+  <data name="GameOptionsPageNoSelectedStatus" xml:space="preserve">
+    <value>*No status has been selected.</value>
+  </data>
+  <data name="GameOptionsPageGameAdded" xml:space="preserve">
+    <value>{0} has been added to your library.</value>
+  </data>
+  <data name="GameOptionsPageGameRemoved" xml:space="preserve">
+    <value>{0} has been removed from your library.</value>
+  </data>
+  <data name="GameOptionsPageRating" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="GameOptionsPageRemoveRating" xml:space="preserve">
+    <value>Remove Rating</value>
+  </data>
+  <data name="GameOptionsPageRemoveFromLibrary" xml:space="preserve">
+    <value>Remove from library</value>
+  </data>
+  <data name="GamePageAgeRating" xml:space="preserve">
+    <value>Age rating</value>
+  </data>
+  <data name="GamePageGameModes" xml:space="preserve">
+    <value>Game modes</value>
+  </data>
+  <data name="GamePageFranchise" xml:space="preserve">
+    <value>Franchise</value>
+  </data>
+  <data name="GamePageReleaseDates" xml:space="preserve">
+    <value>Release dates</value>
+  </data>
+  <data name="PasswordRules" xml:space="preserve">
+    <value>*Password should contain at least 8 characters, both lowercase and uppercase letters and atleast one number.</value>
+  </data>
+  <data name="ForgottenPasswordPageTitle" xml:space="preserve">
+    <value>Forgotten Password</value>
+  </data>
+  <data name="ForgottenPasswordPageAlreadyHaveToken" xml:space="preserve">
+    <value>Already have a recovery token?</value>
+  </data>
+  <data name="ForgottenPasswordPageTapHere" xml:space="preserve">
+    <value>Tap here</value>
+  </data>
+  <data name="GameRequestPageTitle" xml:space="preserve">
+    <value>Request Game</value>
+  </data>
+  <data name="GameRequestPageInstructionsOne" xml:space="preserve">
+    <value>Send us your requests to add to our game library so you can add them to your collection.</value>
+  </data>
+  <data name="GameRequestPageInstructionsTwo" xml:space="preserve">
+    <value>Please include as much information as possible so our administrators can process your requests more quickly.</value>
+  </data>
+  <data name="SettingsPageWelcome" xml:space="preserve">
+    <value>Welcome, </value>
+  </data>
+  <data name="SettingsPageInstructions" xml:space="preserve">
+    <value> please find settings below to make changes to your account.</value>
+  </data>
+  <data name="SettingsPageChangeUsername" xml:space="preserve">
+    <value>Change Username</value>
+  </data>
+  <data name="GamePageReleaseDateAmerica" xml:space="preserve">
+    <value>America: </value>
+  </data>
+  <data name="GamePageReleaseDateJapan" xml:space="preserve">
+    <value>Japan: </value>
+  </data>
+  <data name="GamePageReleaseDateEurope" xml:space="preserve">
+    <value>Europe: </value>
+  </data>
+  <data name="GameUserEntryFilterPageAgeRatings" xml:space="preserve">
+    <value>Age ratings</value>
+  </data>
+  <data name="GameUserEntryFilterPageApply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="GameUserEntryFilterPageGameModes" xml:space="preserve">
+    <value>Game modes</value>
+  </data>
+  <data name="GameUserEntryFilterPageGenres" xml:space="preserve">
+    <value>Genres</value>
+  </data>
+  <data name="GameUserEntryFilterPagePlatforms" xml:space="preserve">
+    <value>Platforms</value>
+  </data>
+  <data name="GameUserEntryFilterPageStatuses" xml:space="preserve">
+    <value>Statuses</value>
+  </data>
+  <data name="GameUserEntryFilterPageTitle" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="GamePageNotRatedYet" xml:space="preserve">
+    <value>Not rated yet:</value>
+  </data>
+  <data name="GameUserEntryListPageAddGame" xml:space="preserve">
+    <value>Add game</value>
+  </data>
+  <data name="GameUserEntryListPageTitle" xml:space="preserve">
+    <value>Entries</value>
+  </data>
+  <data name="GameUserEntryListPageEmptyResults" xml:space="preserve">
+    <value>No entries match the given query.</value>
+  </data>
 </root>

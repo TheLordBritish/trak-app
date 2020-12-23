@@ -4,13 +4,17 @@ using System.Drawing;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Microsoft.AppCenter.Crashes;
+using Prism;
 using Prism.Commands;
 using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
+using SparkyStudios.TrakLibrary.Common.Extensions;
 using SparkyStudios.TrakLibrary.Model.Games;
 using SparkyStudios.TrakLibrary.Model.Response;
 using SparkyStudios.TrakLibrary.Service;
@@ -20,19 +24,40 @@ using SparkyStudios.TrakLibrary.ViewModel.Resources;
 
 namespace SparkyStudios.TrakLibrary.ViewModel.Games
 {
-    public class GameUserEntryListViewModel : BaseListViewModel<GameUserEntry, ListItemViewModel>
+    /// <summary>
+    /// The <see cref="GameLibraryListViewModel"/> is the view model that is associated with a game user entry tabbed list page view.
+    /// Its responsibility is to display the users personal collection of games within each of the different <see cref="GameUserEntryStatus"/>
+    /// categories. It also allows for the user to add games into their collection from the user agnostic game library.
+    /// </summary>
+    public abstract class GameUserEntryTabbedListViewModel : BaseListViewModel<GameUserEntry, ListItemViewModel>, IActiveAware
     {
         private readonly IRestService _restService;
+        private readonly IStorageService _storageService;
 
-        private string _firstUri;
+        private readonly GameUserEntryStatus _gameUserEntryStatus;
         private string _nextUri;
-        
-        public GameUserEntryListViewModel(IScheduler scheduler, INavigationService navigationService, IRestService restService, IUserDialogs userDialogs) : base(scheduler, navigationService)
+
+        /// <summary>
+        /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
+        /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
+        /// should be handled by the framework.
+        /// </summary>
+        /// <param name="scheduler">The <see cref="IScheduler"/> instance to inject.</param>
+        /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
+        /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
+        /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
+        /// <param name="userDialogs">The <see cref="IUserDialogs"/> instance to inject.</param>
+        /// <param name="gameUserEntryStatus">The <see cref="GameUserEntryStatus"/> that the list reflects user entries on.</param>
+        protected GameUserEntryTabbedListViewModel(IScheduler scheduler, INavigationService navigationService,
+            IStorageService storageService,
+            IUserDialogs userDialogs, IRestService restService, GameUserEntryStatus gameUserEntryStatus) : base(
+            scheduler, navigationService)
         {
             _restService = restService;
-            
-            AddGameCommand = ReactiveCommand.CreateFromTask(AddGameAsync, outputScheduler: scheduler);
-            
+            _storageService = storageService;
+
+            _gameUserEntryStatus = gameUserEntryStatus;
+
             LoadCommand = ReactiveCommand.CreateFromTask(LoadAsync, outputScheduler: scheduler);
             // Register to the result of the search command and convert the result into list item view models.
             LoadCommand.Subscribe(results =>
@@ -43,14 +68,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 Items.AddRange(results.Select(CreateListItemViewModelFromGameUserEntry));
 
                 IsEmpty = Items.Count == 0;
-                HasLoaded = true;
             });
             // Report errors if an exception was thrown.
             LoadCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                HasLoaded = true;
-                
                 Items.Clear();
                 
                 if (ex is ApiException)
@@ -99,25 +121,46 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                     Crashes.TrackError(ex);
                 }
             });
+
+            AddGameCommand = ReactiveCommand.CreateFromTask(AddGameAsync, outputScheduler: scheduler);
+
+            FilterCommand = ReactiveCommand.CreateFromTask(FilterAsync, outputScheduler: scheduler);
             
             this.WhenAnyObservable(x => x.LoadCommand.IsExecuting)
                 .ToPropertyEx(this, x => x.IsLoading, scheduler: scheduler);
+
+            this.WhenAnyObservable(x => x.LoadMoreCommand.IsExecuting)
+                .ToPropertyEx(this, x => x.IsRefreshing, scheduler: scheduler);
+
+            this.WhenAnyValue(x => x.IsActive)
+                .Where(x => x)
+                .Select(x => Unit.Default)
+                .InvokeCommand(LoadCommand);
         }
 
-        public override void OnNavigatedTo(INavigationParameters parameters)
-        {
-            if (parameters.GetNavigationMode() == NavigationMode.New)
-            {
-                _firstUri = parameters.GetValue<string>("base-url");
-                LoadCommand.Execute().Subscribe();
-            }
-        }
-        
+        /// <summary>
+        /// Whether the current <see cref="GameUserEntryTabbedListViewModel"/> instance is the active tab within
+        /// the tab page.
+        /// </summary>
+        [Reactive]
+        public bool IsActive { get; set; }
+
+        // Disabled as not used but has to be declared to implement IActiveAware.
+#pragma warning disable 067
+        public event EventHandler IsActiveChanged;
+#pragma warning restore 067
+
         /// <summary>
         /// Command that is invoked each the time the add game button is tapped by the user on the view.
         /// When called, the command will propagate the request and call the <see cref="AddGameAsync"/> method.
         /// </summary>
         public ReactiveCommand<Unit, Unit> AddGameCommand { get; }
+
+        /// <summary>
+        /// Command that is invoked each the time the filter button is tapped by the user on the view.
+        /// When called, the command will propagate the request and call the <see cref="FilterAsync"/> method.
+        /// </summary>
+        public ReactiveCommand<Unit, Unit> FilterCommand { get; }
         
         /// <summary>
         /// Private method that is invoked by the <see cref="AddGameCommand"/>. When invoked, it will navigate the user
@@ -130,6 +173,16 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             await NavigationService.NavigateAsync(
                 "GameLibraryTabbedPage?createTab=GameLibraryListPage&createTab=GameBarcodeScannerPage");
         }
+
+        /// <summary>
+        /// Private method that is invoked by the <see cref="FilterCommand"/>. When invoked, it will navigate the user
+        /// to the game user entry filter page which will allow the user to filter results in their own library.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
+        private async Task FilterAsync()
+        {
+            await NavigationService.NavigateAsync("GameUserEntryFilterPage");
+        }
         
         /// <summary>
         /// Private method that is invoked by the <see cref="LoadCommand"/>. When invoked, it will first check that the view model
@@ -141,11 +194,21 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// </returns>
         private async Task<IEnumerable<GameUserEntry>> LoadAsync()
         {
-            HasLoaded = false;
+            if (!IsActive)
+            {
+                return Enumerable.Empty<GameUserEntry>();
+            }
+
+            // Get the ID of the user currently logged in.
+            var userId = await _storageService.GetUserIdAsync();
+            // Get the name of the status for the currently selected tab.
+            var status = _gameUserEntryStatus.GetAttributeValue<EnumMemberAttribute, string>(s => s.Value);
+
             // Make the initial request to load the first page.
-            return await LoadFromUrlAsync(_firstUri);
+            _nextUri = $"games/entries?user-id={userId}&status={status}&sort=gameTitle";
+            return await LoadFromUrlAsync(_nextUri);
         }
-        
+
         /// <summary>
         /// Private method that is invoked by the <see cref="LoadMoreCommand"/> command and the <see cref="LoadAsync"/> method.
         /// When invoked, it will call off to the API and retrieve a page of <see cref="GameUserEntry"/>'s for the given user.
@@ -170,7 +233,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 
             return result;
         }
-        
+
         /// <summary>
         /// Utility method used to convert a <see cref="GameUserEntry"/> instance into a <see cref="ListItemViewModel"/>.
         /// This is done as the list views used by the view accept the values mapped within these view models for

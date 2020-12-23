@@ -101,14 +101,14 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
                 "vm.IsError should be false if login was successful.");
 
             _authService.Verify();
-            _navigationService.Verify(m => m.NavigateAsync("ChangePasswordPage", It.IsAny<INavigationParameters>()),
+            _navigationService.Verify(m => m.NavigateAsync("ChangePasswordPage"),
                 Times.Once);
         }
         
         [Test]
         public void ChangePasswordCommand_WithNoData_DoesntThrowException()
         {
-            _navigationService.Setup(mock => mock.NavigateAsync("ChangePasswordPage", It.IsAny<INavigationParameters>()))
+            _navigationService.Setup(mock => mock.NavigateAsync("ChangePasswordPage"))
                 .Verifiable();
             
             Assert.DoesNotThrow(() =>

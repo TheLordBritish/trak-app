@@ -27,7 +27,10 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 TypeNameHandling = TypeNameHandling.Objects,
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                }
             };
             // Deserialization settings.
             _deserializerSettings = new JsonSerializerSettings
@@ -35,12 +38,26 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 TypeNameHandling = TypeNameHandling.Objects,
                 MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
-                DateParseHandling = DateParseHandling.None
+                DateParseHandling = DateParseHandling.None,
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                }
             };
         }
 
         public async Task<T> GetAsync<T>(string url)
         {
+            if (url == null)
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new ArgumentException(nameof(url));
+            }
+            
             using var client = _httpClientFactory.CreateClient("Trak");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
@@ -75,6 +92,16 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task<T> PostAsync<T, TRequest>(string url, TRequest requestBody)
         {
+            if (url == null)
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new ArgumentException(nameof(url));
+            }
+            
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
             client.DefaultRequestHeaders.Accept.Add(
@@ -118,6 +145,16 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task<T> PutAsync<T, TRequest>(string url, TRequest requestBody)
         {
+            if (url == null)
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new ArgumentException(nameof(url));
+            }
+            
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
             client.DefaultRequestHeaders.Accept.Add(
@@ -156,6 +193,16 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task<T> PatchAsync<T>(string url, IDictionary<string, object> values)
         {
+            if (url == null)
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new ArgumentException(nameof(url));
+            }
+            
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
             client.DefaultRequestHeaders.Accept.Add(
@@ -194,6 +241,16 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task DeleteAsync(string url)
         {
+            if (url == null)
+            {
+                throw new ArgumentNullException(nameof(url));
+            }
+
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                throw new ArgumentException(nameof(url));
+            }
+            
             // Create the client to send the requests to.
             using var client = _httpClientFactory.CreateClient("Trak");
             client.DefaultRequestHeaders.Accept.Add(

@@ -781,6 +781,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not rated yet:.
+        /// </summary>
+        public static string GamePageNotRatedYet {
+            get {
+                return ResourceManager.GetString("GamePageNotRatedYet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         public static string GamePageOptions {
@@ -943,6 +952,78 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Age ratings.
+        /// </summary>
+        public static string GameUserEntryFilterPageAgeRatings {
+            get {
+                return ResourceManager.GetString("GameUserEntryFilterPageAgeRatings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        public static string GameUserEntryFilterPageApply {
+            get {
+                return ResourceManager.GetString("GameUserEntryFilterPageApply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Game modes.
+        /// </summary>
+        public static string GameUserEntryFilterPageGameModes {
+            get {
+                return ResourceManager.GetString("GameUserEntryFilterPageGameModes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Genres.
+        /// </summary>
+        public static string GameUserEntryFilterPageGenres {
+            get {
+                return ResourceManager.GetString("GameUserEntryFilterPageGenres", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Platforms.
+        /// </summary>
+        public static string GameUserEntryFilterPagePlatforms {
+            get {
+                return ResourceManager.GetString("GameUserEntryFilterPagePlatforms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Statuses.
+        /// </summary>
+        public static string GameUserEntryFilterPageStatuses {
+            get {
+                return ResourceManager.GetString("GameUserEntryFilterPageStatuses", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter.
+        /// </summary>
+        public static string GameUserEntryFilterPageTitle {
+            get {
+                return ResourceManager.GetString("GameUserEntryFilterPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add game.
+        /// </summary>
+        public static string GameUserEntryListPageAddGame {
+            get {
+                return ResourceManager.GetString("GameUserEntryListPageAddGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You currently have no games in .
         /// </summary>
         public static string GameUserEntryListPageEmpty {
@@ -961,11 +1042,29 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No entries match the given query..
+        /// </summary>
+        public static string GameUserEntryListPageEmptyResults {
+            get {
+                return ResourceManager.GetString("GameUserEntryListPageEmptyResults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to load your games due to an error on the server..
         /// </summary>
         public static string GameUserEntryListPageEmptyServerError {
             get {
                 return ResourceManager.GetString("GameUserEntryListPageEmptyServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Entries.
+        /// </summary>
+        public static string GameUserEntryListPageTitle {
+            get {
+                return ResourceManager.GetString("GameUserEntryListPageTitle", resourceCulture);
             }
         }
         

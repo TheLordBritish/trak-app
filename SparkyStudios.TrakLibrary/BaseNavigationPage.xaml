@@ -6,4 +6,5 @@
     xmlns:viewModel="clr-namespace:SparkyStudios.TrakLibrary.ViewModel;assembly=SparkyStudios.TrakLibrary.ViewModel"
     Title="Title"
     x:DataType="viewModel:NavigationViewModel"
-    BarTextColor="{StaticResource TrakWhite}" />
+    BarTextColor="{StaticResource TrakWhite}"
+    NavigationPage.BackButtonTitle=" " />

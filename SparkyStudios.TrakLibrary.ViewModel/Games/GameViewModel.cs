@@ -17,7 +17,6 @@ using SparkyStudios.TrakLibrary.Service;
 using SparkyStudios.TrakLibrary.Service.Exception;
 using SparkyStudios.TrakLibrary.ViewModel.Common;
 using SparkyStudios.TrakLibrary.ViewModel.Resources;
-using Xamarin.Forms.Internals;
 
 namespace SparkyStudios.TrakLibrary.ViewModel.Games
 {
@@ -73,15 +72,9 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
          * the user is navigating from the game options page.
          */
         public bool ShouldReload { get; set; }
-        
-        /// <summary>
-        /// A <see cref="bool"/> that specifies whether the page has been fully loaded.
-        /// </summary>
-        [Reactive]
-        public bool HasLoaded { get; set; }
 
         /// <summary>
-        /// A <see cref="Uri"/> which specifies the URI from which the <see cref="GameDetails"/> was loaded from.
+        /// A <see cref="Uri"/> which specifies the URI from which the <see cref="game_details"/> was loaded from.
         /// </summary>
         [Reactive]
         public Uri GameUrl { get; set; }
@@ -321,8 +314,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 
             // See if there is an existing entry for this game in the users collection.
             var gameUserEntries =
-                await _restService.GetAsync<HateoasPage<GameUserEntry>>(gameDetails.GetLink("entries") +
-                                                                        $"?game-id={_gameId}&user-id={userId}");
+                await _restService.GetAsync<HateoasPage<GameUserEntry>>($"{gameDetails.GetLink("entries")}?user-id={userId}");
 
             // See if the game is already in the users collection.
             if (gameUserEntries.Embedded != null && gameUserEntries.Embedded.Data.Any())
@@ -346,7 +338,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 
         /// <summary>
         /// Private method that is invoked within the <see cref="LoadGameDetailsAsync" /> method. Its purpose
-        /// is to convert the provided <see cref="IEnumerable{T}" /> of <see cref="GameDetails" /> instances into
+        /// is to convert the provided <see cref="IEnumerable{T}" /> of <see cref="game_details" /> instances into
         /// <see cref="ListItemViewModel" /> instances for displaying within the list on the game page view.
         /// </summary>
         /// <param name="games">The <see cref="IEnumerable{T}" /> to convert into <see cref="ListItemViewModel" /> instances.</param>

@@ -24,7 +24,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         private Mock<IRestService> _restService;
         private TestScheduler _scheduler;
 
-        private GameUserEntryListViewModel _gameUserEntryListViewModel;
+        private GameUserEntryTabbedListViewModel _gameUserEntryListViewModel;
 
         [SetUp]
         public void SetUp()
@@ -246,7 +246,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         [Test]
         public void AddCommand_WithNoData_DoesntThrowException()
         {
-            _navigationService.Setup(mock => mock.NavigateAsync(It.IsAny<string>(), It.IsAny<INavigationParameters>()))
+            _navigationService.Setup(mock => mock.NavigateAsync(It.IsAny<string>()))
                 .Verifiable();
             
             Assert.DoesNotThrow(() =>

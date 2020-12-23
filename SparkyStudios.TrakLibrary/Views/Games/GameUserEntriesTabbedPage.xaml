@@ -11,19 +11,19 @@
     AutomationId="GameUserEntriesTabbedPage"
     BarBackgroundColor="{StaticResource TrakPrimaryBlue}">
     <TabbedPage.Children>
-        <games:GameUserEntryListPage
+        <games:GameUserEntryTabbedListPage
             Title="{extensions:Translate Backlog}"
             AutomationId="GameUserEntriesTabbedPageBacklogTab"
             BindingContext="{Binding BacklogViewModel}" />
-        <games:GameUserEntryListPage
+        <games:GameUserEntryTabbedListPage
             Title="{extensions:Translate Playing}"
             AutomationId="GameUserEntriesTabbedPagePlayingTab"
             BindingContext="{Binding InProgressViewModel}" />
-        <games:GameUserEntryListPage
+        <games:GameUserEntryTabbedListPage
             Title="{extensions:Translate Done}"
             AutomationId="GameUserEntriesTabbedPageDoneTab"
             BindingContext="{Binding CompletedViewModel}" />
-        <games:GameUserEntryListPage
+        <games:GameUserEntryTabbedListPage
             Title="{extensions:Translate Dropped}"
             AutomationId="GameUserEntriesTabbedPageDroppedTab"
             BindingContext="{Binding DroppedViewModel}" />

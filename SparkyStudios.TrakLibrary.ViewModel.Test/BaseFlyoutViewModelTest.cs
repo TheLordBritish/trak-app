@@ -34,7 +34,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test
         public void LoadHomeCommand_WithNoData_DoesntThrowException()
         {
             // Arrange
-            _navigationService.Setup(mock => mock.NavigateAsync("BaseNavigationPage/HomePage"))
+            _navigationService.Setup(mock => mock.NavigateAsync("NavigationPage/HomePage"))
                 .Verifiable();
 
             // Act
@@ -49,7 +49,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test
         public void LoadGamesCommand_WithNoData_DoesntThrowException()
         {
             // Arrange
-            _navigationService.Setup(mock => mock.NavigateAsync("BaseNavigationPage/GameUserEntriesTabbedPage"))
+            _navigationService.Setup(mock => mock.NavigateAsync("NavigationPage/GameUserEntriesTabbedPage"))
                 .Verifiable();
 
             // Act
@@ -64,7 +64,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test
         public void LoadSettingsCommand_WithNoData_DoesntThrowException()
         {
             // Arrange
-            _navigationService.Setup(mock => mock.NavigateAsync("BaseNavigationPage/SettingsPage"))
+            _navigationService.Setup(mock => mock.NavigateAsync("NavigationPage/SettingsPage"))
                 .Verifiable();
 
             // Act

@@ -85,7 +85,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
                     }
                     else
                     {
-                        await NavigationService.NavigateAsync(new Uri("/BaseFlyoutPage/NavigationPage/HomePage", UriKind.Absolute));
+                        await NavigationService.NavigateAsync("/BaseFlyoutPage/NavigationPage/HomePage");
                     }
                 }
                 else

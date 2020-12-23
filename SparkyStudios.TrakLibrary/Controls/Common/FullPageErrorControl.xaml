@@ -11,7 +11,10 @@
     <ContentView.Content>
         <!--  Full-page label telling the user that the request returned no results without error.  -->
         <StackLayout HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-            <Label Text="{Binding ErrorMessage, Source={x:Reference FullPageErrorControlView}}" />
+            <Label
+                HorizontalOptions="CenterAndExpand"
+                HorizontalTextAlignment="Center"
+                Text="{Binding ErrorMessage, Source={x:Reference FullPageErrorControlView}}" />
             <Image
                 HeightRequest="125"
                 IsVisible="{Binding IsRefreshable, Source={x:Reference FullPageErrorControlView}}"

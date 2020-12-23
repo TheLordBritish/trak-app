@@ -160,7 +160,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                         Links = new Dictionary<string, HateoasLink>
                         {
                             {
-                                "gameDetails", new HateoasLink
+                                "game_details", new HateoasLink
                                 {
                                     Href = new Uri("https://traklibrary.com")
                                 }
@@ -292,7 +292,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                         Links = new Dictionary<string, HateoasLink>
                         {
                             {
-                                "gameDetails", new HateoasLink
+                                "game_details", new HateoasLink
                                 {
                                     Href = new Uri("https://traklibrary.com")
                                 }

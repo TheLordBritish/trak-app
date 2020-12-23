@@ -12,7 +12,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
     /// list page view. Its responsibility is to display the users personal collection of games within the completed status.
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class GameUserEntryCompletedListViewModel : GameUserEntryListViewModel
+    public class GameUserEntryCompletedListViewModel : GameUserEntryTabbedListViewModel
     {
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.

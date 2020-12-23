@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SparkyStudios.TrakLibrary.Views.Games.GameUserEntryTabbedListPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:common="clr-namespace:SparkyStudios.TrakLibrary.Controls.Common;assembly=SparkyStudios.TrakLibrary"
+    xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
+    xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    x:Name="GameUserEntryList"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}">
+    <ContentPage.Content>
+        <StackLayout x:DataType="games:GameUserEntryTabbedListViewModel">
+            <RefreshView
+                Command="{Binding LoadCommand}"
+                IsEnabled="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                IsRefreshing="{Binding IsRefreshing}"
+                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}">
+                <CollectionView
+                    HorizontalOptions="StartAndExpand"
+                    ItemsSource="{Binding Items}"
+                    RemainingItemsThreshold="0"
+                    RemainingItemsThresholdReachedCommand="{Binding LoadMoreCommand}"
+                    VerticalOptions="StartAndExpand">
+                    <CollectionView.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Button
+                                Grid.Column="0"
+                                Margin="20,20,0,0"
+                                Command="{Binding FilterCommand}"
+                                FontFamily="Mulish-Regular"
+                                FontSize="{StaticResource TrakFontMedium}"
+                                HorizontalOptions="Start"
+                                Style="{StaticResource SecondaryButtonStyle}"
+                                Text="Filter" />
+                        </Grid>
+                    </CollectionView.Header>
+                    <CollectionView.EmptyView>
+                        <StackLayout>
+                            <!--  Full-page label telling the user that the request returned no results without error.  -->
+                            <Label
+                                Margin="20,0"
+                                HorizontalOptions="Center"
+                                HorizontalTextAlignment="Center"
+                                IsVisible="False"
+                                VerticalOptions="CenterAndExpand"
+                                VerticalTextAlignment="Center">
+                                <Label.Triggers>
+                                    <MultiTrigger TargetType="Label">
+                                        <MultiTrigger.Conditions>
+                                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
+                                            <BindingCondition Binding="{Binding IsError}" Value="False" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="IsVisible" Value="True" />
+                                    </MultiTrigger>
+                                </Label.Triggers>
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{extensions:Translate GameUserEntryListPageEmpty}" />
+                                        <Span Text="&quot;" />
+                                        <Span
+                                            FontAttributes="Bold"
+                                            FontSize="Medium"
+                                            Text="{Binding Source={x:Reference GameUserEntryList}, Path=Title}" />
+                                        <Span Text="&quot;" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                            <!--  Full page control that is displayed when the page results are empty and an error was returned.  -->
+                            <common:FullPageErrorControl
+                                ErrorMessage="{extensions:Translate GameUserEntryListPageEmptyServerError}"
+                                HorizontalOptions="Center"
+                                IsRefreshable="True"
+                                IsVisible="False"
+                                RefreshCommand="{Binding LoadCommand}"
+                                VerticalOptions="CenterAndExpand">
+                                <common:FullPageErrorControl.Triggers>
+                                    <MultiTrigger TargetType="common:FullPageErrorControl">
+                                        <MultiTrigger.Conditions>
+                                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
+                                            <BindingCondition Binding="{Binding IsError}" Value="True" />
+                                        </MultiTrigger.Conditions>
+                                        <Setter Property="IsVisible" Value="True" />
+                                    </MultiTrigger>
+                                </common:FullPageErrorControl.Triggers>
+                            </common:FullPageErrorControl>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <common:UserEntryItemTemplateControl Margin="20,10" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+
+            <ActivityIndicator
+                HorizontalOptions="CenterAndExpand"
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}"
+                MinimumHeightRequest="100"
+                MinimumWidthRequest="100"
+                VerticalOptions="CenterAndExpand" />
+
+            <Button
+                Margin="20"
+                Command="{Binding AddGameCommand}"
+                IsVisible="{Binding IsError, Converter={StaticResource NegateBooleanConverter}}"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Text="{extensions:Translate GameUserEntryListPageAddGame}" />
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

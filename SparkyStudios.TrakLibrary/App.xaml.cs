@@ -20,7 +20,6 @@ using SparkyStudios.TrakLibrary.Views;
 using SparkyStudios.TrakLibrary.Views.Games;
 using SparkyStudios.TrakLibrary.Views.Login;
 using SparkyStudios.TrakLibrary.Views.Settings;
-using Xamarin.Forms;
 
 namespace SparkyStudios.TrakLibrary
 {
@@ -99,6 +98,9 @@ namespace SparkyStudios.TrakLibrary
             containerRegistry.RegisterForNavigation<GameBarcodeScannerPage, GameBarcodeScannerViewModel>();
             containerRegistry.RegisterForNavigation<GamePage, GameViewModel>();
             containerRegistry.RegisterForNavigation<GameOptionsPage, GameOptionsViewModel>();
+            containerRegistry.RegisterForNavigation<GameUserEntryTabbedListPage, GameUserEntryTabbedListViewModel>();
+            containerRegistry.RegisterForNavigation<GameUserEntryListPage, GameUserEntryListViewModel>();
+            containerRegistry.RegisterForNavigation<GameUserEntryFilterPage, GameUserEntryFilterViewModel>();
         }
     }
 }

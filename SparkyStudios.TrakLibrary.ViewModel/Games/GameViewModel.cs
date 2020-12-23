@@ -17,7 +17,6 @@ using SparkyStudios.TrakLibrary.Service;
 using SparkyStudios.TrakLibrary.Service.Exception;
 using SparkyStudios.TrakLibrary.ViewModel.Common;
 using SparkyStudios.TrakLibrary.ViewModel.Resources;
-using Xamarin.Forms.Internals;
 
 namespace SparkyStudios.TrakLibrary.ViewModel.Games
 {
@@ -242,7 +241,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// Private method that is invoked by the <see cref="LoadGameDetailsCommand" /> when activated by the associated
         /// view. This method will attempt to retrieve the game information from the url provided by the
         /// <see cref="NavigationParameters" /> and populate all of the information within this view model with data
-        /// from the returned <see cref="game_details" />. If any errors occur during the API requests, the exceptions
+        /// from the returned <see cref="GameDetails" />. If any errors occur during the API requests, the exceptions
         /// are caught and the errors the IsError boolean to true.
         /// </summary>
         /// <returns>A <see cref="Task" /> which specifies whether the asynchronous task completed successfully.</returns>

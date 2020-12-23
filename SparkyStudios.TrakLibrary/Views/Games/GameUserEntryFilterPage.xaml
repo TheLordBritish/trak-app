@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="SparkyStudios.TrakLibrary.Views.Games.GameUserEntryFilterPage"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:common="clr-namespace:SparkyStudios.TrakLibrary.Controls.Common;assembly=SparkyStudios.TrakLibrary"
+    xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
+    xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel">
+    <ContentPage.Content>
+        <Grid x:DataType="games:GameUserEntryFilterViewModel">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <!--  Full page control that is displayed when there's an error reported by the view model.  -->
+            <common:FullPageErrorControl
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                ErrorMessage="ERROR"
+                HorizontalOptions="Center"
+                IsRefreshable="True"
+                IsVisible="False"
+                RefreshCommand="{Binding LoadGameFiltersCommand}"
+                VerticalOptions="CenterAndExpand">
+                <common:FullPageErrorControl.Triggers>
+                    <MultiTrigger TargetType="common:FullPageErrorControl">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding IsError}" Value="True" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="IsVisible" Value="True" />
+                    </MultiTrigger>
+                </common:FullPageErrorControl.Triggers>
+            </common:FullPageErrorControl>
+
+            <!--  Full page activity indicator that's shown when the game data is being loaded.  -->
+            <ActivityIndicator
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                HeightRequest="100"
+                HorizontalOptions="CenterAndExpand"
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}"
+                VerticalOptions="CenterAndExpand"
+                WidthRequest="100" />
+
+            <ScrollView
+                Grid.Row="0"
+                HorizontalOptions="FillAndExpand"
+                IsClippedToBounds="True"
+                IsVisible="False"
+                VerticalOptions="FillAndExpand">
+                <ScrollView.Triggers>
+                    <MultiTrigger TargetType="ScrollView">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding HasLoaded}" Value="True" />
+                            <BindingCondition Binding="{Binding IsError}" Value="False" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="IsVisible" Value="True" />
+                    </MultiTrigger>
+                </ScrollView.Triggers>
+                <StackLayout Margin="20,0">
+                    <!--  Page title  -->
+                    <Label
+                        Margin="0,25,0,20"
+                        Style="{StaticResource TitleLabelStyle}"
+                        Text="{extensions:Translate GameUserEntryFilterPageTitle}" />
+
+                    <!--  Platform filters  -->
+                    <common:FilterControl
+                        GroupTappedCommand="{Binding PlatformGroupTappedCommand}"
+                        Header="{extensions:Translate GameUserEntryFilterPagePlatforms}"
+                        IsGroupExpanded="{Binding IsPlatformGroupExpanded}"
+                        ItemTappedCommand="{Binding PlatformTappedCommand}"
+                        ItemsSource="{Binding Platforms}" />
+
+                    <!--  Genre filters  -->
+                    <common:FilterControl
+                        Margin="0,15,0,0"
+                        GroupTappedCommand="{Binding GenreGroupTappedCommand}"
+                        Header="{extensions:Translate GameUserEntryFilterPageGenres}"
+                        IsGroupExpanded="{Binding IsGenreGroupExpanded}"
+                        ItemTappedCommand="{Binding GenreTappedCommand}"
+                        ItemsSource="{Binding Genres}" />
+
+                    <!--  Game mode filters  -->
+                    <common:FilterControl
+                        Margin="0,15,0,0"
+                        GroupTappedCommand="{Binding GameModeGroupTappedCommand}"
+                        Header="{extensions:Translate GameUserEntryFilterPageGameModes}"
+                        IsGroupExpanded="{Binding IsGameModeGroupExpanded}"
+                        ItemTappedCommand="{Binding GameModeTappedCommand}"
+                        ItemsSource="{Binding GameModes}" />
+
+                    <!--  Age rating filters  -->
+                    <common:FilterControl
+                        Margin="0,15,0,0"
+                        GroupTappedCommand="{Binding AgeRatingGroupTappedCommand}"
+                        Header="{extensions:Translate GameUserEntryFilterPageAgeRatings}"
+                        IsGroupExpanded="{Binding IsAgeRatingGroupExpanded}"
+                        ItemTappedCommand="{Binding AgeRatingTappedCommand}"
+                        ItemsSource="{Binding AgeRatings}" />
+
+                    <!--  Statuses filters  -->
+                    <common:FilterControl
+                        Margin="0,15,0,0"
+                        GroupTappedCommand="{Binding StatusGroupTappedCommand}"
+                        Header="{extensions:Translate GameUserEntryFilterPageStatuses}"
+                        IsGroupExpanded="{Binding IsStatusGroupExpanded}"
+                        ItemTappedCommand="{Binding StatusTappedCommand}"
+                        ItemsSource="{Binding Statuses}" />
+                </StackLayout>
+            </ScrollView>
+            <Button
+                Grid.Row="1"
+                Margin="20"
+                Command="{Binding ApplyCommand}"
+                IsVisible="False"
+                Style="{StaticResource PrimaryButtonStyle}"
+                Text="{extensions:Translate GameUserEntryFilterPageApply}">
+                <Button.Triggers>
+                    <MultiTrigger TargetType="Button">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding HasLoaded}" Value="True" />
+                            <BindingCondition Binding="{Binding IsError}" Value="False" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="IsVisible" Value="True" />
+                    </MultiTrigger>
+                </Button.Triggers>
+            </Button>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

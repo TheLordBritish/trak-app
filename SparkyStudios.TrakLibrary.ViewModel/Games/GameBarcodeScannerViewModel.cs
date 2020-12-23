@@ -7,7 +7,6 @@ using Acr.UserDialogs;
 using Microsoft.AppCenter.Crashes;
 using Prism.Commands;
 using Prism.Navigation;
-using SparkyStudios.TrakLibrary.Common;
 using SparkyStudios.TrakLibrary.Model.Games;
 using SparkyStudios.TrakLibrary.Service;
 using SparkyStudios.TrakLibrary.Service.Exception;
@@ -135,7 +134,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             // given barcode.
             var parameters = new NavigationParameters
             {
-                {"game-url", gameBarcode.GetLink("gameDetails")}
+                {"game-url", gameBarcode.GetLink("game_details")}
             };
 
             _formsDevice.BeginInvokeOnMainThread(async () =>

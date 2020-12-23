@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Grid
+    x:Class="SparkyStudios.TrakLibrary.Controls.Common.FilterControl"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:behaviors="http://prismlibrary.com"
+    xmlns:common="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Common;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    x:Name="FilterControlView">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+    </Grid.ColumnDefinitions>
+    <Label
+        Grid.Row="0"
+        Grid.Column="0"
+        Style="{StaticResource BaseBoldLabelStyle}"
+        Text="{Binding Header, Source={x:Reference FilterControlView}}">
+        <Label.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding GroupTappedCommand, Source={x:Reference FilterControlView}}" NumberOfTapsRequired="1" />
+        </Label.GestureRecognizers>
+    </Label>
+    <Image
+        Grid.Row="0"
+        Grid.Column="1"
+        Source="hamburger.png">
+        <Image.GestureRecognizers>
+            <TapGestureRecognizer Command="{Binding GroupTappedCommand, Source={x:Reference FilterControlView}}" NumberOfTapsRequired="1" />
+        </Image.GestureRecognizers>
+    </Image>
+
+    <!--  Filters  -->
+    <StackLayout
+        x:Name="SwitchControlLayout"
+        Grid.Row="1"
+        Grid.Column="0"
+        Grid.ColumnSpan="2"
+        BindableLayout.ItemsSource="{Binding ItemsSource, Source={x:Reference FilterControlView}}"
+        IsVisible="{Binding IsGroupExpanded, Source={x:Reference FilterControlView}}">
+        <BindableLayout.ItemTemplate>
+            <DataTemplate>
+                <Grid Margin="0,5" x:DataType="common:ItemEntryViewModel">
+                    <Label Text="{Binding Name}" TextColor="{StaticResource TrakGrey}">
+                        <Label.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Source={x:Reference FilterControlSwitch}, Path=IsToggled}"
+                                TargetType="Label"
+                                Value="True">
+                                <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding ItemTappedCommand, Source={x:Reference FilterControlView}}" CommandParameter="{Binding}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <Switch
+                        x:Name="FilterControlSwitch"
+                        HorizontalOptions="EndAndExpand"
+                        IsToggled="{Binding IsSelected, Mode=TwoWay}">
+                        <Switch.Behaviors>
+                            <behaviors:EventToCommandBehavior Command="{Binding ItemTappedCommand, Source={x:Reference FilterControlView}}" EventName="Toggled" />
+                        </Switch.Behaviors>
+                    </Switch>
+                </Grid>
+            </DataTemplate>
+        </BindableLayout.ItemTemplate>
+    </StackLayout>
+    <BoxView
+        Grid.Row="2"
+        Grid.Column="0"
+        Grid.ColumnSpan="2"
+        HeightRequest="2"
+        HorizontalOptions="FillAndExpand"
+        WidthRequest="1"
+        Color="{StaticResource TrakPrimaryPurple}" />
+</Grid>

@@ -33,6 +33,9 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Compile Update="Views\Games\GameUserEntryFilterPage.xaml.cs">
+      <DependentUpon>GameUserEntryFilterPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Login\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
@@ -42,7 +45,7 @@
     <Compile Update="Views\BaseMasterDetailContentPage.xaml.cs">
       <DependentUpon>BaseMasterDetailContentPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\Games\GameUserEntryListPage.xaml.cs">
+    <Compile Update="Views\Games\GameUserEntryTabbedListPage.xaml.cs">
       <DependentUpon>GameUserEntryListPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Views\Games\GameUserEntriesTabbedPage.xaml.cs">
@@ -108,7 +111,7 @@
     <EmbeddedResource Update="Views\BaseMasterDetailContentPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\Games\GameUserEntryListPage.xaml">
+    <EmbeddedResource Update="Views\Games\GameUserEntryTabbedListPage.xaml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\Games\GameUserEntriesTabbedPage.xaml">

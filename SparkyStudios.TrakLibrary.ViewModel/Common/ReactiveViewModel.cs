@@ -25,6 +25,9 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Common
 
         public bool IsLoading { [ObservableAsProperty] get; }
         
+        [Reactive]
+        public bool HasLoaded { get; set; }
+        
         public virtual void Initialize(INavigationParameters parameters)
         {
             

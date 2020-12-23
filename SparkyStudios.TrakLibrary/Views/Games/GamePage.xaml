@@ -150,6 +150,8 @@
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
                         Margin="20,0"
+                        FontSize="{StaticResource TrakFontSmall}"
+                        LineBreakMode="WordWrap"
                         Text="{Binding Publishers, Converter={StaticResource IEnumerableToStringConverter}}" />
 
                     <!--  The star rating for the current game. Only displayed if the game is in the users collection.  -->
@@ -162,7 +164,7 @@
                         <Label
                             FontSize="{StaticResource TrakFontSmall}"
                             IsVisible="False"
-                            Text="Not rated yet:"
+                            Text="{extensions:Translate GamePageNotRatedYet}"
                             TextColor="{StaticResource TrakGrey}"
                             VerticalTextAlignment="End">
                             <Label.Triggers>
@@ -303,8 +305,10 @@
                         Grid.Row="19"
                         Grid.Column="0"
                         Grid.ColumnSpan="2"
-                        Margin="20,15,20,10"
-                        FontSize="{StaticResource TrakFontLarge}"
+                        Margin="20,25,20,10"
+                        FontSize="{StaticResource TrakFontMedium}"
+                        LineBreakMode="WordWrap"
+                        MaxLines="2"
                         Style="{StaticResource TitleLabelStyle}"
                         Text="{extensions:Translate GamePageSimilarGames}" />
 

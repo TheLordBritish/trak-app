@@ -24,7 +24,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         private Mock<IRestService> _restService;
         private TestScheduler _scheduler;
 
-        private GameUserEntryListViewModel _gameUserEntryListViewModel;
+        private GameUserEntryTabbedListViewModel _gameUserEntryListViewModel;
 
         [SetUp]
         public void SetUp()

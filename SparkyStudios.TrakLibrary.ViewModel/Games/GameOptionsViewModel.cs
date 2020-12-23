@@ -161,12 +161,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         public Uri GameUrl { get; set; }
 
         /// <summary>
-        /// A <see cref="bool"/> that specifies whether the page has been fully loaded.
-        /// </summary>
-        [Reactive]
-        public bool HasLoaded { get; set; }
-
-        /// <summary>
         /// A <see cref="bool"/> that specifies whether any game user entries are currently being made.
         /// </summary>
         public bool IsExecutingLibraryRequest { [ObservableAsProperty] get; }

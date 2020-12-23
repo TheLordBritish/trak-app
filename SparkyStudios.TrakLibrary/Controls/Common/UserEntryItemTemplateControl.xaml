@@ -14,7 +14,7 @@
         <TapGestureRecognizer Command="{Binding TapCommand}" NumberOfTapsRequired="1" />
     </Grid.GestureRecognizers>
     <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="1*" />
+        <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="Auto" />
     </Grid.ColumnDefinitions>
 
@@ -25,7 +25,8 @@
         Grid.Column="0"
         Aspect="AspectFit"
         Source="{Binding ImageUrl}"
-        VerticalOptions="Start" />
+        VerticalOptions="Start"
+        WidthRequest="75" />
     <ActivityIndicator
         Grid.Row="0"
         Grid.Column="0"
@@ -36,7 +37,6 @@
     <Grid
         Grid.Row="0"
         Grid.Column="1"
-        Margin="5,0,0,0"
         RowSpacing="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -70,6 +70,8 @@
         <Label
             Grid.Row="2"
             FontSize="{StaticResource TrakFontSmall}"
+            LineBreakMode="TailTruncation"
+            MaxLines="1"
             Text="{Binding ItemSubTitle}" />
 
         <!--  The rating  -->

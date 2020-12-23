@@ -10,7 +10,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
     /// The <see cref="GameUserEntryBacklogListViewModel"/> is the view model that is associated with a backlog game user entry
     /// list page view. Its responsibility is to display the users personal collection of games within the backlog status.
     /// </summary>
-    public class GameUserEntryBacklogListViewModel : GameUserEntryListViewModel
+    public class GameUserEntryBacklogListViewModel : GameUserEntryTabbedListViewModel
     {
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.

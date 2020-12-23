@@ -73,15 +73,9 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
          * the user is navigating from the game options page.
          */
         public bool ShouldReload { get; set; }
-        
-        /// <summary>
-        /// A <see cref="bool"/> that specifies whether the page has been fully loaded.
-        /// </summary>
-        [Reactive]
-        public bool HasLoaded { get; set; }
 
         /// <summary>
-        /// A <see cref="Uri"/> which specifies the URI from which the <see cref="GameDetails"/> was loaded from.
+        /// A <see cref="Uri"/> which specifies the URI from which the <see cref="game_details"/> was loaded from.
         /// </summary>
         [Reactive]
         public Uri GameUrl { get; set; }
@@ -248,7 +242,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// Private method that is invoked by the <see cref="LoadGameDetailsCommand" /> when activated by the associated
         /// view. This method will attempt to retrieve the game information from the url provided by the
         /// <see cref="NavigationParameters" /> and populate all of the information within this view model with data
-        /// from the returned <see cref="GameDetails" />. If any errors occur during the API requests, the exceptions
+        /// from the returned <see cref="game_details" />. If any errors occur during the API requests, the exceptions
         /// are caught and the errors the IsError boolean to true.
         /// </summary>
         /// <returns>A <see cref="Task" /> which specifies whether the asynchronous task completed successfully.</returns>
@@ -321,8 +315,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 
             // See if there is an existing entry for this game in the users collection.
             var gameUserEntries =
-                await _restService.GetAsync<HateoasPage<GameUserEntry>>(gameDetails.GetLink("entries") +
-                                                                        $"?game-id={_gameId}&user-id={userId}");
+                await _restService.GetAsync<HateoasPage<GameUserEntry>>($"{gameDetails.GetLink("entries")}?user-id={userId}");
 
             // See if the game is already in the users collection.
             if (gameUserEntries.Embedded != null && gameUserEntries.Embedded.Data.Any())
@@ -346,7 +339,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 
         /// <summary>
         /// Private method that is invoked within the <see cref="LoadGameDetailsAsync" /> method. Its purpose
-        /// is to convert the provided <see cref="IEnumerable{T}" /> of <see cref="GameDetails" /> instances into
+        /// is to convert the provided <see cref="IEnumerable{T}" /> of <see cref="game_details" /> instances into
         /// <see cref="ListItemViewModel" /> instances for displaying within the list on the game page view.
         /// </summary>
         /// <param name="games">The <see cref="IEnumerable{T}" /> to convert into <see cref="ListItemViewModel" /> instances.</param>

@@ -61,17 +61,21 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
             RecoverCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                if (ex is ApiException)
+                switch (ex)
                 {
-                    ErrorMessage = Messages.ErrorMessageApiError;
-                }
-                else
-                {
-                    ErrorMessage = Messages.ErrorMessageGeneric;
-                    Crashes.TrackError(ex, new Dictionary<string, string>
-                    {
-                        {"Username", Username.Value}
-                    });
+                    case TaskCanceledException _:
+                        ErrorMessage = Messages.ErrorMessageNoInternet;
+                        break;
+                    case ApiException _:
+                        ErrorMessage = Messages.ErrorMessageApiError;
+                        break;
+                    default:
+                        ErrorMessage = Messages.ErrorMessageGeneric;
+                        Crashes.TrackError(ex, new Dictionary<string, string>
+                        {
+                            {"Username", Username.Value}
+                        });
+                        break;
                 }
             });
 

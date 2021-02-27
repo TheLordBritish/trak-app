@@ -121,9 +121,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel
                 $"notifications/unregister?user-id={userId}&device-guid={deviceId}");
 
             // Remove all of the identifiable information from the secure store.
-            await _storageService.SetUsernameAsync(string.Empty);
-            await _storageService.SetAuthTokenAsync(string.Empty);
-            await _storageService.SetUserIdAsync(0);
+            await _storageService.ClearCredentialsAsync();
 
             // Navigate back to the login page.
             await NavigationService.NavigateAsync("/LoginPage");

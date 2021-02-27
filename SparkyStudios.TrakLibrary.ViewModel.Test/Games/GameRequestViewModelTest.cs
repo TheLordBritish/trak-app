@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Microsoft.Reactive.Testing;
 using Moq;
@@ -76,6 +77,28 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             _restService.Verify(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<GameRequest>()), Times.Never);
         }
 
+        [Test]
+        public void RequestCommand_ThrowsTaskCanceledException_SetsErrorMessageAsNoInternet()
+        {
+            // Arrange
+            _gameRequestViewModel.Title.Value = "Title";
+
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(5L);
+            
+            _restService.Setup(mock => mock.PostAsync(It.IsAny<string>(), It.IsAny<GameRequest>()))
+                .ThrowsAsync(new TaskCanceledException());
+            
+            // Act
+            _gameRequestViewModel.RequestCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+            
+            // Assert
+            Assert.IsTrue(_gameRequestViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
+            Assert.AreEqual(Messages.ErrorMessageNoInternet, _gameRequestViewModel.ErrorMessage,
+                "The error message is incorrect.");
+        }
+        
         [Test]
         public void RequestCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {

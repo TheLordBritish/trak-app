@@ -43,24 +43,6 @@
                         Command="{Binding LoadGamesCommand}"
                         Style="{StaticResource SecondaryButtonStyle}"
                         Text="Games" />
-                    <!--  Books list button  -->
-                    <Button
-                        Margin="0,10"
-                        AutomationId="HomePageBooksButton"
-                        Style="{StaticResource SecondaryButtonStyle}"
-                        Text="Books" />
-                    <!--  Anime list button  -->
-                    <Button
-                        Margin="0,10"
-                        AutomationId="HomePageAnimeButton"
-                        Style="{StaticResource SecondaryButtonStyle}"
-                        Text="Anime" />
-                    <!--  Manga list button  -->
-                    <Button
-                        Margin="0,10"
-                        AutomationId="HomePageMangaButton"
-                        Style="{StaticResource SecondaryButtonStyle}"
-                        Text="Manga" />
                 </StackLayout>
             </Grid>
         </ScrollView>

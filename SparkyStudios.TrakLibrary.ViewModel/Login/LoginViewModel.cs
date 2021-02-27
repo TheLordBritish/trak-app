@@ -70,20 +70,24 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
             {
                 IsError = true;
 
-                if (ex is ApiException e)
+                switch (ex)
                 {
-                    ErrorMessage = e.StatusCode == HttpStatusCode.Unauthorized ||
-                                   e.StatusCode == HttpStatusCode.Forbidden
-                        ? Messages.ErrorMessageIncorrectCredentials
-                        : Messages.ErrorMessageApiError;
-                }
-                else
-                {
-                    ErrorMessage = Messages.ErrorMessageGeneric;
-                    Crashes.TrackError(ex, new Dictionary<string, string>
-                    {
-                        {"Username", Username.Value}
-                    });
+                    case TaskCanceledException _:
+                        ErrorMessage = Messages.ErrorMessageNoInternet;
+                        break;
+                    case ApiException ae:
+                        ErrorMessage = ae.StatusCode == HttpStatusCode.Unauthorized ||
+                                       ae.StatusCode == HttpStatusCode.Forbidden
+                            ? Messages.ErrorMessageIncorrectCredentials
+                            : Messages.ErrorMessageApiError;
+                        break;
+                    default:
+                        ErrorMessage = Messages.ErrorMessageGeneric;
+                        Crashes.TrackError(ex, new Dictionary<string, string>
+                        {
+                            {"Username", Username.Value}
+                        });
+                        break;
                 }
             });
 
@@ -190,7 +194,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
 
             var registration = _validatables.Populate<UserCredentials>();
             var validationResult = Validate(registration);
-
+            
             if (validationResult.IsValidOverall)
             {
                 var token = await _authService.GetTokenAsync(new UserCredentials

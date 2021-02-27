@@ -14,12 +14,15 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
     internal class RestServiceHttpClientImpl : IRestService
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConnectionService _connectionService;
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly JsonSerializerSettings _deserializerSettings;
 
-        public RestServiceHttpClientImpl(IHttpClientFactory httpClientFactory)
+        public RestServiceHttpClientImpl(IHttpClientFactory httpClientFactory, IConnectionService connectionService)
         {
             _httpClientFactory = httpClientFactory;
+            _connectionService = connectionService;
+            
             // Ensure we use the correct TLS version before making the request.
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             // Serialization settings.
@@ -48,6 +51,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task<T> GetAsync<T>(string url)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             if (url == null)
             {
                 throw new ArgumentNullException(nameof(url));
@@ -92,6 +100,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task<T> PostAsync<T, TRequest>(string url, TRequest requestBody)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             if (url == null)
             {
                 throw new ArgumentNullException(nameof(url));
@@ -145,6 +158,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task<T> PutAsync<T, TRequest>(string url, TRequest requestBody)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             if (url == null)
             {
                 throw new ArgumentNullException(nameof(url));
@@ -193,6 +211,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task<T> PatchAsync<T>(string url, IDictionary<string, object> values)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             if (url == null)
             {
                 throw new ArgumentNullException(nameof(url));
@@ -241,6 +264,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task DeleteAsync(string url)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             if (url == null)
             {
                 throw new ArgumentNullException(nameof(url));

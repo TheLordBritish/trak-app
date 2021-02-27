@@ -2,6 +2,7 @@
 using System.Net;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Moq;
 using NUnit.Framework;
@@ -127,6 +128,28 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _authService.Verify(a => a.RegisterAsync(It.IsAny<RegistrationRequest>()), Times.Never);
         }
 
+        [Test]
+        public void RegisterCommand_ThrowsTaskCanceledException_SetsErrorMessageAsNoInternet()
+        {
+            // Arrange
+            _registerViewModel.Username.Value = "Username";
+            _registerViewModel.EmailAddress.Value = "email@address.com";
+            _registerViewModel.Password.Value = "Password123";
+            _registerViewModel.ConfirmPassword.Value = "Password123";
+
+            _authService.Setup(mock => mock.RegisterAsync(It.IsAny<RegistrationRequest>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _registerViewModel.RegisterCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.IsTrue(_registerViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
+            Assert.AreEqual(Messages.ErrorMessageNoInternet, _registerViewModel.ErrorMessage,
+                "The error message is incorrect.");
+        }
+        
         [Test]
         public void RegisterCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {

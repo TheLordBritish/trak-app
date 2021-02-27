@@ -63,18 +63,22 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             RequestCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                if (ex is ApiException)
+                switch (ex)
                 {
-                    ErrorMessage = Messages.ErrorMessageApiError;
-                }
-                else
-                {
-                    ErrorMessage = Messages.ErrorMessageGeneric;
-                    Crashes.TrackError(ex, new Dictionary<string, string>
-                    {
-                        {"Title", Title.Value},
-                        {"Notes", Comments.Value}
-                    });
+                    case TaskCanceledException _:
+                        ErrorMessage = Messages.ErrorMessageNoInternet;
+                        break;
+                    case ApiException _:
+                        ErrorMessage = Messages.ErrorMessageApiError;
+                        break;
+                    default:
+                        ErrorMessage = Messages.ErrorMessageGeneric;
+                        Crashes.TrackError(ex, new Dictionary<string, string>
+                        {
+                            {"Title", Title.Value},
+                            {"Notes", Comments.Value}
+                        });
+                        break;
                 }
             });
 

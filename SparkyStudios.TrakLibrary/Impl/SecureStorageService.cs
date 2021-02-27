@@ -26,17 +26,7 @@ namespace SparkyStudios.TrakLibrary.Impl
         {
             await SecureStorage.SetAsync("username", username);
         }
-
-        public async Task<string> GetPasswordAsync()
-        {
-            return await SecureStorage.GetAsync("password");
-        }
-
-        public async Task SetPasswordAsync(string password)
-        {
-            await SecureStorage.SetAsync("password", password);
-        }
-
+        
         public async Task<string> GetAuthTokenAsync()
         {
             return await SecureStorage.GetAsync("auth-token");
@@ -66,6 +56,14 @@ namespace SparkyStudios.TrakLibrary.Impl
         public async Task SetDeviceIdAsync(Guid deviceId)
         {
             await SecureStorage.SetAsync("device-id", deviceId.ToString());
+        }
+
+        public async Task ClearCredentialsAsync()
+        {
+            // Remove all of the identifiable information from the secure store.
+            await SetUsernameAsync(string.Empty);
+            await SetAuthTokenAsync(string.Empty);
+            await SetUserIdAsync(0);
         }
     }
 }

@@ -30,15 +30,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel
             navigationService)
         {
             Items = new ObservableRangeCollection<TViewModel>();
-            IsEmpty = true;
         }
-        
-        /// <summary>
-        /// Used to specify whether the list view that is bound to this view model currently contains
-        /// any items within the <see cref="Items"/>. Set to false by default.
-        /// </summary>
-        [Reactive]
-        public bool IsEmpty { get; set; }
 
         /// <summary>
         /// Used to specify whether the list view that is bound to this view model is currently

@@ -717,4 +717,10 @@
   <data name="GameUserEntryListPageEmptyResults" xml:space="preserve">
     <value>No entries match the given query.</value>
   </data>
+  <data name="ErrorMessageNoInternet" xml:space="preserve">
+    <value>No internet connection detected. Please reconnect and try again.</value>
+  </data>
+  <data name="GameOptionsPageSelectDlc" xml:space="preserve">
+    <value>Select DLC</value>
+  </data>
 </root>

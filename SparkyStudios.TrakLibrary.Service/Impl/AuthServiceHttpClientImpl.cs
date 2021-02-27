@@ -15,12 +15,15 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
     internal class AuthServiceHttpClientImpl : IAuthService
     {
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IConnectionService _connectionService;
         private readonly JsonSerializerSettings _serializerSettings;
         private readonly JsonSerializerSettings _deserializerSettings;
 
-        public AuthServiceHttpClientImpl(IHttpClientFactory httpClientFactory)
+        public AuthServiceHttpClientImpl(IHttpClientFactory httpClientFactory, IConnectionService connectionService)
         {
             _httpClientFactory = httpClientFactory;
+            _connectionService = connectionService;
+            
             // Ensure we use the correct TLS version before making the request.
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
             // Serialization settings.
@@ -28,7 +31,10 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             {
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 TypeNameHandling = TypeNameHandling.Objects,
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                }
             };
             // Deserialization settings.
             _deserializerSettings = new JsonSerializerSettings
@@ -36,12 +42,21 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
                 PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 TypeNameHandling = TypeNameHandling.Objects,
                 MetadataPropertyHandling = MetadataPropertyHandling.ReadAhead,
-                DateParseHandling = DateParseHandling.None
+                DateParseHandling = DateParseHandling.None,
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new SnakeCaseNamingStrategy()
+                }
             };
         }
 
         public async Task<string> GetTokenAsync(UserCredentials userCredentials)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
@@ -61,11 +76,16 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             }
 
             var json = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<TokenResponse>(json, _deserializerSettings)?.Token;
+            return JsonConvert.DeserializeObject<TokenResponse>(json, _deserializerSettings)?.AccessToken;
         }
 
         public async Task<CheckedResponse<bool>> VerifyAsync(string username, string verificationCode)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
@@ -89,6 +109,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task ReVerifyAsync(string username)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
@@ -109,6 +134,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task RequestRecoveryAsync(string emailAddress)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
@@ -129,6 +159,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task<CheckedResponse<UserResponse>> RegisterAsync(RegistrationRequest registrationRequest)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
@@ -153,6 +188,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task<CheckedResponse<UserResponse>> RecoverAsync(RecoveryRequest recoveryRequest)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
@@ -177,6 +217,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task RequestChangePasswordAsync(string username)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
@@ -197,6 +242,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task<CheckedResponse<bool>> ChangePasswordAsync(string username, ChangePasswordRequest changePasswordRequest)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
@@ -221,6 +271,11 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
 
         public async Task<CheckedResponse<bool>> ChangeEmailAddressAsync(string username, ChangeEmailAddressRequest changeEmailAddressRequest)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
@@ -243,8 +298,13 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             return JsonConvert.DeserializeObject<CheckedResponse<bool>>(json, _deserializerSettings);
         }
 
-        public async Task DeleteByUsername(string username)
+        public async Task DeleteByUsernameAsync(string username)
         {
+            if (!_connectionService.IsConnected())
+            {
+                throw new TaskCanceledException();
+            }
+            
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));

@@ -16,7 +16,7 @@
             <common:FullPageErrorControl
                 Grid.Row="0"
                 Grid.RowSpan="2"
-                ErrorMessage="ERROR"
+                ErrorMessage="{Binding ErrorMessage}"
                 HorizontalOptions="Center"
                 IsRefreshable="True"
                 IsVisible="False"

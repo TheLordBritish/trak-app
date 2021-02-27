@@ -69,17 +69,21 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             SearchCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                if (ex is ApiException)
+                switch (ex)
                 {
-                    Message = Messages.GameLibraryListPageEmptyServerError;
-                }
-                else
-                {
-                    Message = Messages.GameLibraryListPageEmptyGenericError;
-                    Crashes.TrackError(ex, new Dictionary<string, string>
-                    {
-                        {"Search query", SearchQuery}
-                    });
+                    case TaskCanceledException _:
+                        Message = Messages.ErrorMessageNoInternet;
+                        break;
+                    case ApiException _:
+                        Message = Messages.GameLibraryListPageEmptyServerError;
+                        break;
+                    default:
+                        Message = Messages.GameLibraryListPageEmptyGenericError;
+                        Crashes.TrackError(ex, new Dictionary<string, string>
+                        {
+                            {"Search query", SearchQuery}
+                        });
+                        break;
                 }
             });
 
@@ -97,26 +101,34 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             LoadMoreCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                if (ex is ApiException)
+                switch (ex)
                 {
-                    userDialogs.Toast(new ToastConfig(Messages.GameLibraryListPageEmptyServerError)
-                        .SetBackgroundColor(Color.Red)
-                        .SetMessageTextColor(Color.White)
-                        .SetDuration(TimeSpan.FromSeconds(5))
-                        .SetPosition(ToastPosition.Bottom));
-                }
-                else
-                {
-                    userDialogs.Toast(new ToastConfig(Messages.GameLibraryListPageEmptyGenericError)
-                        .SetBackgroundColor(Color.Red)
-                        .SetMessageTextColor(Color.White)
-                        .SetDuration(TimeSpan.FromSeconds(5))
-                        .SetPosition(ToastPosition.Bottom));
+                    case TaskCanceledException _:
+                        userDialogs.Toast(new ToastConfig(Messages.ErrorMessageNoInternet)
+                            .SetBackgroundColor(Color.Red)
+                            .SetMessageTextColor(Color.White)
+                            .SetDuration(TimeSpan.FromSeconds(5))
+                            .SetPosition(ToastPosition.Bottom));
+                        break;
+                    case ApiException _:
+                        userDialogs.Toast(new ToastConfig(Messages.GameLibraryListPageEmptyServerError)
+                            .SetBackgroundColor(Color.Red)
+                            .SetMessageTextColor(Color.White)
+                            .SetDuration(TimeSpan.FromSeconds(5))
+                            .SetPosition(ToastPosition.Bottom));
+                        break;
+                    default:
+                        userDialogs.Toast(new ToastConfig(Messages.GameLibraryListPageEmptyGenericError)
+                            .SetBackgroundColor(Color.Red)
+                            .SetMessageTextColor(Color.White)
+                            .SetDuration(TimeSpan.FromSeconds(5))
+                            .SetPosition(ToastPosition.Bottom));
                     
-                    Crashes.TrackError(ex, new Dictionary<string, string>
-                    {
-                        {"Search query", SearchQuery}
-                    });
+                        Crashes.TrackError(ex, new Dictionary<string, string>
+                        {
+                            {"Search query", SearchQuery}
+                        });
+                        break;
                 }
             });
 

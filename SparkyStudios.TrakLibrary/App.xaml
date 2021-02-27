@@ -8,15 +8,18 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="clr-namespace:Prism.DryIoc;assembly=Prism.DryIoc.Forms"
     xmlns:styles="clr-namespace:SparkyStudios.TrakLibrary.Styles;assembly=SparkyStudios.TrakLibrary"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     mc:Ignorable="d">
     <Application.Resources>
         <ResourceDictionary>
             <!--  Converters  -->
             <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
-            <converters:IEnumerableToStringConverter x:Key="IEnumerableToStringConverter" />
-            <converters:NegateBooleanConverter x:Key="NegateBooleanConverter" />
-            <converters:StringEmptyConverter x:Key="StringEmptyConverter" />
-
+            <xct:ListToStringConverter x:Key="ListToStringCommaConverter" Separator=", " />
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <xct:IsNotNullOrEmptyConverter x:Key="IsNotNullOrEmptyConverter" />
+            <xct:IsNullOrEmptyConverter x:Key="IsNullOrEmptyConverter" />
+            <xct:ListIsNotNullOrEmptyConverter x:Key="ListIsNotNullOrEmptyConverter" />
+            <xct:ListIsNullOrEmptyConverter x:Key="ListIsNullOrEmptyConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <styles:ButtonStyles />
                 <styles:Colors />

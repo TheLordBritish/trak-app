@@ -16,7 +16,7 @@
         <PackageReference Include="ReactiveUI.Testing" Version="12.1.1" />
         <PackageReference Include="ReactiveUI.XamForms" Version="12.1.1" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.8.0" />
-        <PackageReference Include="Xamarin.Forms" Version="5.0.0.1558-pre3" />
+        <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
     </ItemGroup>
 
     <ItemGroup>

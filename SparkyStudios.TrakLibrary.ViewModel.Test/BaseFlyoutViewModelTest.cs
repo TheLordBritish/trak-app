@@ -99,7 +99,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test
         }
 
         [Test]
-        public void LogoutCommand_WithNoissues_NavigatesToLoginPage()
+        public void LogoutCommand_WithNoIssues_NavigatesToLoginPage()
         {
             // Arrange
             _storageService.Setup(mock => mock.GetUserIdAsync())
@@ -113,13 +113,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test
             _restService.Setup(mock => mock.DeleteAsync(It.IsAny<string>()))
                 .Verifiable();
 
-            _storageService.Setup(mock => mock.SetUsernameAsync(It.IsAny<string>()))
-                .Verifiable();
-
-            _storageService.Setup(mock => mock.SetAuthTokenAsync(It.IsAny<string>()))
-                .Verifiable();
-
-            _storageService.Setup(mock => mock.SetUserIdAsync(It.IsAny<long>()))
+            _storageService.Setup(m => m.ClearCredentialsAsync())
                 .Verifiable();
             
             _navigationService.Setup(mock => mock.NavigateAsync("/LoginPage"))

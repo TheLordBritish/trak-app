@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Microsoft.Reactive.Testing;
 using Moq;
@@ -64,6 +65,33 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             _authService.Verify(a => a.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()), Times.Never);
         }
 
+        [Test]
+        public void ChangeCommand_ThrowsTaskCanceledException_SetsErrorMessageAsNoInternet()
+        {
+            // Arrange
+            _changePasswordViewModel.ResetToken.Value = string.Concat(Enumerable.Repeat("a", 30));
+            _changePasswordViewModel.NewPassword.Value = "Password123";
+            _changePasswordViewModel.ConfirmNewPassword.Value = "Password123";
+
+            _storageService.Setup(m => m.GetUsernameAsync())
+                .ReturnsAsync("username");
+
+            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _changePasswordViewModel.ChangeCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+            
+            // Assert
+            Assert.IsTrue(_changePasswordViewModel.IsError,
+                "_changePasswordViewModel.IsError should be true if an exception is thrown.");
+            Assert.AreEqual(Messages.ErrorMessageNoInternet, _changePasswordViewModel.ErrorMessage,
+                "The error message is incorrect.");
+            
+            _navigationService.Verify(m => m.NavigateAsync(It.IsAny<string>()), Times.Never);
+        }
+        
         [Test]
         public void ChangeCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {
@@ -177,11 +205,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             _restService.Setup(m => m.DeleteAsync(It.IsAny<string>()))
                 .Verifiable();
 
-            _storageService.Setup(m => m.SetUsernameAsync(It.IsAny<string>()))
-                .Verifiable();
-            _storageService.Setup(m => m.SetAuthTokenAsync(It.IsAny<string>()))
-                .Verifiable();
-            _storageService.Setup(m => m.SetUserIdAsync(It.IsAny<long>()))
+            _storageService.Setup(m => m.ClearCredentialsAsync())
                 .Verifiable();
 
             _navigationService.Setup(m => m.NavigateAsync("/LoginPage"))

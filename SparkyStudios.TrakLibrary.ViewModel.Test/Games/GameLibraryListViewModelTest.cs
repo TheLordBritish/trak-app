@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Microsoft.Reactive.Testing;
 using Moq;
@@ -38,6 +39,24 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             _gameLibraryListViewModel = new GameLibraryListViewModel(_scheduler, _navigationService.Object, _restService.Object, _userDialogs.Object);
         }
 
+        [Test]
+        public void SearchCommand_ThrowsTaskCanceledException_SetsMessageAsNoInternet()
+        {
+            // Arrange
+            _restService
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _gameLibraryListViewModel.SearchCommand.Execute().Catch(Observable.Return(Enumerable.Empty<GameDetails>())).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.IsTrue(_gameLibraryListViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
+            Assert.AreEqual(Messages.ErrorMessageNoInternet, _gameLibraryListViewModel.Message,
+                "The message is incorrect.");
+        }
+        
         [Test]
         public void SearchCommand_ThrowsApiException_SetsMessageAsApiError()
         {
@@ -75,7 +94,33 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         }
 
         [Test]
-        public void SearchCommand_WithResultsWithNullPlatforms_SetIsEmptyToFalseAndConvertsToItems()
+        public void SearchCommand_WithNoGames_SetMessageToEmpty()
+        {
+            // Arrange
+            _gameLibraryListViewModel.SearchQuery = "search";
+            
+            _restService
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
+                .ReturnsAsync(new HateoasPage<GameDetails>
+                {
+                    Embedded = new HateoasResources<GameDetails>
+                    {
+                        Data = Enumerable.Empty<GameDetails>()
+                    }
+                });
+            
+            // Act
+            _gameLibraryListViewModel.SearchCommand.Execute().Subscribe();
+            _scheduler.Start();
+            
+            // Assert
+            Assert.AreEqual(0, _gameLibraryListViewModel.Items.Count, "There should be no items in the list.");
+            Assert.AreEqual(
+                string.Format(Messages.GameLibraryPageEmptySearchResult, _gameLibraryListViewModel.SearchQuery), _gameLibraryListViewModel.Message);
+        }
+        
+        [Test]
+        public void SearchCommand_WithResultsWithNullPlatforms_ConvertsToItems()
         {
             // Arrange
             _gameLibraryListViewModel.SearchQuery = "search";
@@ -113,7 +158,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         }
         
         [Test]
-        public void SearchCommand_WithResults_SetIsEmptyToFalseAndConvertsToItems()
+        public void SearchCommand_WithResults_ConvertsToItems()
         {
             // Arrange
             _gameLibraryListViewModel.SearchQuery = "search";
@@ -152,6 +197,26 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             
             // Assert
             Assert.AreEqual(1, _gameLibraryListViewModel.Items.Count, "There should be items in the list.");
+        }
+        
+        [Test]
+        public void LoadMoreCommand_ThrowsTaskCanceledException_CallsUserDialog()
+        {
+            // Arrange
+            _restService
+                .Setup(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()))
+                .Throws(new TaskCanceledException());
+
+            _userDialogs.Setup(mock => mock.Toast(It.IsAny<ToastConfig>()))
+                .Verifiable();
+            
+            // Act
+            _gameLibraryListViewModel.LoadMoreCommand.Execute().Catch(Observable.Return(Enumerable.Empty<GameDetails>())).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.IsTrue(_gameLibraryListViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
+            _userDialogs.Verify();
         }
         
         [Test]
@@ -211,7 +276,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         }
         
         [Test]
-        public void LoadMoreCommand_WithResults_SetIsEmptyToFalseAndConvertsToItems()
+        public void LoadMoreCommand_WithResults_ConvertsToItems()
         {
             // Arrange
             _restService

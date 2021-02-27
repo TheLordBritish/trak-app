@@ -3,8 +3,8 @@
     x:Class="SparkyStudios.TrakLibrary.Controls.Common.FilterControl"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:behaviors="http://prismlibrary.com"
     xmlns:common="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Common;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     x:Name="FilterControlView">
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
@@ -62,7 +62,7 @@
                         HorizontalOptions="EndAndExpand"
                         IsToggled="{Binding IsSelected, Mode=TwoWay}">
                         <Switch.Behaviors>
-                            <behaviors:EventToCommandBehavior Command="{Binding ItemTappedCommand, Source={x:Reference FilterControlView}}" EventName="Toggled" />
+                            <xct:EventToCommandBehavior Command="{Binding ItemTappedCommand, Source={x:Reference FilterControlView}}" EventName="Toggled" />
                         </Switch.Behaviors>
                     </Switch>
                 </Grid>

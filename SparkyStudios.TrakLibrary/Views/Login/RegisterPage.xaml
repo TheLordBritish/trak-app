@@ -3,10 +3,10 @@
     x:Class="SparkyStudios.TrakLibrary.Views.Login.RegisterPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:behaviors="http://prismlibrary.com"
     xmlns:controls="clr-namespace:SparkyStudios.TrakLibrary.Controls"
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
     xmlns:login="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Login;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     AutomationId="RegisterPage">
     <ContentPage.Content>
         <ScrollView Padding="20" x:DataType="login:RegisterViewModel">
@@ -52,7 +52,7 @@
                         BorderThickness="4"
                         Text="{Binding Username.Value}">
                         <controls:BorderedEntry.Behaviors>
-                            <behaviors:EventToCommandBehavior
+                            <xct:EventToCommandBehavior
                                 Command="{Binding ClearValidationCommand}"
                                 CommandParameter="Username"
                                 EventName="Focused" />
@@ -67,8 +67,8 @@
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
                     <Label
-                        IsEnabled="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        IsVisible="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        IsEnabled="{Binding Username.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                        IsVisible="{Binding Username.IsValid, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding Username.FirstError}" />
 
@@ -83,7 +83,7 @@
                         BorderThickness="4"
                         Text="{Binding EmailAddress.Value}">
                         <controls:BorderedEntry.Behaviors>
-                            <behaviors:EventToCommandBehavior
+                            <xct:EventToCommandBehavior
                                 Command="{Binding ClearValidationCommand}"
                                 CommandParameter="EmailAddress"
                                 EventName="Focused" />
@@ -98,8 +98,8 @@
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
                     <Label
-                        IsEnabled="{Binding EmailAddress.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        IsVisible="{Binding EmailAddress.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        IsEnabled="{Binding EmailAddress.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                        IsVisible="{Binding EmailAddress.IsValid, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding EmailAddress.FirstError}" />
 
@@ -115,7 +115,7 @@
                         IsPassword="True"
                         Text="{Binding Password.Value}">
                         <controls:BorderedEntry.Behaviors>
-                            <behaviors:EventToCommandBehavior
+                            <xct:EventToCommandBehavior
                                 Command="{Binding ClearValidationCommand}"
                                 CommandParameter="Password"
                                 EventName="Focused" />
@@ -130,8 +130,8 @@
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
                     <Label
-                        IsEnabled="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        IsVisible="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        IsEnabled="{Binding Password.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                        IsVisible="{Binding Password.IsValid, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding Password.FirstError}" />
 
@@ -147,7 +147,7 @@
                         IsPassword="True"
                         Text="{Binding ConfirmPassword.Value}">
                         <controls:BorderedEntry.Behaviors>
-                            <behaviors:EventToCommandBehavior
+                            <xct:EventToCommandBehavior
                                 Command="{Binding ClearValidationCommand}"
                                 CommandParameter="ConfirmPassword"
                                 EventName="Focused" />
@@ -162,8 +162,8 @@
                         </controls:BorderedEntry.Triggers>
                     </controls:BorderedEntry>
                     <Label
-                        IsEnabled="{Binding ConfirmPassword.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        IsVisible="{Binding ConfirmPassword.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        IsEnabled="{Binding ConfirmPassword.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                        IsVisible="{Binding ConfirmPassword.IsValid, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding ConfirmPassword.FirstError}" />
 
@@ -194,7 +194,7 @@
                         Margin="0,20,0,0"
                         AutomationId="RegisterPageSignUpButton"
                         Command="{Binding RegisterCommand}"
-                        IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                        IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource PrimaryButtonStyle}"
                         Text="{extensions:Translate RegisterPageSignUp}" />
                     <ActivityIndicator

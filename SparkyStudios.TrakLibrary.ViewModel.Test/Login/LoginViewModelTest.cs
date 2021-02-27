@@ -5,6 +5,7 @@ using System.Net;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Reactive.Testing;
 using Moq;
@@ -81,6 +82,26 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _authService.Verify(a => a.GetTokenAsync(It.IsAny<UserCredentials>()), Times.Never);
         }
 
+        [Test]
+        public void LoginCommand_ThrowsTaskCanceledException_SetsErrorMessageAsNoInternet()
+        {
+            // Arrange
+            _loginViewModel.Username.Value = "Username";
+            _loginViewModel.Password.Value = "Password";
+
+            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<UserCredentials>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _loginViewModel.LoginCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.IsTrue(_loginViewModel.IsError, "vm.IsError should be true if an exception is thrown.");
+            Assert.AreEqual(Messages.ErrorMessageNoInternet, _loginViewModel.ErrorMessage,
+                "The error message is incorrect.");
+        }
+        
         [Test]
         public void LoginCommand_ThrowsUnauthorizedApiException_SetsErrorMessageAsUnauthorized()
         {

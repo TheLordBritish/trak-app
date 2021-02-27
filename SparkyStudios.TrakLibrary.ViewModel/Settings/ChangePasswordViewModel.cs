@@ -67,15 +67,18 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
             ChangeCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-
-                if (ex is ApiException)
+                switch (ex)
                 {
-                    ErrorMessage = Messages.ErrorMessageApiError;
-                }
-                else
-                {
-                    ErrorMessage = Messages.ErrorMessageGeneric;
-                    Crashes.TrackError(ex);
+                    case TaskCanceledException _:
+                        ErrorMessage = Messages.ErrorMessageNoInternet;
+                        break;
+                    case ApiException _:
+                        ErrorMessage = Messages.ErrorMessageApiError;
+                        break;
+                    default:
+                        ErrorMessage = Messages.ErrorMessageGeneric;
+                        Crashes.TrackError(ex);
+                        break;
                 }
             });
             
@@ -216,9 +219,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
                     $"notifications/unregister?user-id={userId}&device-guid={deviceId}");
 
                 // Remove all of the identifiable information from the secure store.
-                await _storageService.SetUsernameAsync(string.Empty);
-                await _storageService.SetAuthTokenAsync(string.Empty);
-                await _storageService.SetUserIdAsync(0);
+                await _storageService.ClearCredentialsAsync();
 
                 // Navigate back to the login page.
                 await NavigationService.NavigateAsync("/LoginPage");

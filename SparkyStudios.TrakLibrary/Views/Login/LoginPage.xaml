@@ -3,10 +3,10 @@
     x:Class="SparkyStudios.TrakLibrary.Views.Login.LoginPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:behaviors="http://prismlibrary.com"
     xmlns:controls="clr-namespace:SparkyStudios.TrakLibrary.Controls"
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
     xmlns:login="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Login;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     AutomationId="LoginPage">
     <ScrollView Padding="20" x:DataType="login:LoginViewModel">
         <Grid>
@@ -46,7 +46,7 @@
                     BorderThickness="4"
                     Text="{Binding Username.Value}">
                     <controls:BorderedEntry.Behaviors>
-                        <behaviors:EventToCommandBehavior
+                        <xct:EventToCommandBehavior
                             Command="{Binding ClearValidationCommand}"
                             CommandParameter="Username"
                             EventName="Focused" />
@@ -62,8 +62,8 @@
                 </controls:BorderedEntry>
                 <Label
                     AutomationId="LoginPageUsernameErrorLabel"
-                    IsEnabled="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                    IsVisible="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                    IsEnabled="{Binding Username.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                    IsVisible="{Binding Username.IsValid, Converter={StaticResource InvertedBoolConverter}}"
                     Style="{StaticResource ValidationLabelStyle}"
                     Text="{Binding Username.FirstError}" />
                 <!--  Password label and entry box.  -->
@@ -78,7 +78,7 @@
                     IsPassword="True"
                     Text="{Binding Password.Value}">
                     <controls:BorderedEntry.Behaviors>
-                        <behaviors:EventToCommandBehavior
+                        <xct:EventToCommandBehavior
                             Command="{Binding ClearValidationCommand}"
                             CommandParameter="Password"
                             EventName="Focused" />
@@ -94,8 +94,8 @@
                 </controls:BorderedEntry>
                 <Label
                     AutomationId="LoginPagePasswordErrorLabel"
-                    IsEnabled="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                    IsVisible="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                    IsEnabled="{Binding Password.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                    IsVisible="{Binding Password.IsValid, Converter={StaticResource InvertedBoolConverter}}"
                     Style="{StaticResource ValidationLabelStyle}"
                     Text="{Binding Password.FirstError}" />
                 <!--  Display error messages if anything went wrong.  -->
@@ -121,7 +121,7 @@
                     Margin="0,20"
                     AutomationId="LoginPageLoginButton"
                     Command="{Binding LoginCommand}"
-                    IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                    IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
                     Style="{StaticResource PrimaryButtonStyle}"
                     Text="{extensions:Translate LoginPageLogIn}" />
                 <ActivityIndicator

@@ -14,9 +14,9 @@
         <StackLayout x:DataType="games:GameUserEntryListViewModel">
             <RefreshView
                 Command="{Binding LoadCommand}"
-                IsEnabled="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
                 IsRefreshing="{Binding IsRefreshing}"
-                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}">
+                IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}">
                 <CollectionView
                     HorizontalOptions="StartAndExpand"
                     ItemsSource="{Binding Items}"
@@ -37,7 +37,7 @@
                                 <Label.Triggers>
                                     <MultiTrigger TargetType="Label">
                                         <MultiTrigger.Conditions>
-                                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
+                                            <BindingCondition Binding="{Binding Items, Converter={StaticResource ListIsNullOrEmptyConverter}}" Value="True" />
                                             <BindingCondition Binding="{Binding IsError}" Value="False" />
                                             <BindingCondition Binding="{Binding HasLoaded}" Value="True" />
                                         </MultiTrigger.Conditions>
@@ -86,7 +86,7 @@
             <Button
                 Margin="20"
                 Command="{Binding AddGameCommand}"
-                IsVisible="{Binding IsError, Converter={StaticResource NegateBooleanConverter}}"
+                IsVisible="{Binding IsError, Converter={StaticResource InvertedBoolConverter}}"
                 Style="{StaticResource PrimaryButtonStyle}"
                 Text="{extensions:Translate GameUserEntryListPageAddGame}" />
         </StackLayout>

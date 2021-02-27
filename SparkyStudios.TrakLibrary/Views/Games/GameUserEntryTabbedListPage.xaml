@@ -12,9 +12,9 @@
         <StackLayout x:DataType="games:GameUserEntryTabbedListViewModel">
             <RefreshView
                 Command="{Binding LoadCommand}"
-                IsEnabled="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
                 IsRefreshing="{Binding IsRefreshing}"
-                IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}">
+                IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}">
                 <CollectionView
                     HorizontalOptions="StartAndExpand"
                     ItemsSource="{Binding Items}"
@@ -51,7 +51,7 @@
                                 <Label.Triggers>
                                     <MultiTrigger TargetType="Label">
                                         <MultiTrigger.Conditions>
-                                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
+                                            <BindingCondition Binding="{Binding Items, Converter={StaticResource ListIsNullOrEmptyConverter}}" Value="True" />
                                             <BindingCondition Binding="{Binding IsError}" Value="False" />
                                         </MultiTrigger.Conditions>
                                         <Setter Property="IsVisible" Value="True" />
@@ -71,7 +71,7 @@
                             </Label>
                             <!--  Full page control that is displayed when the page results are empty and an error was returned.  -->
                             <common:FullPageErrorControl
-                                ErrorMessage="{extensions:Translate GameUserEntryListPageEmptyServerError}"
+                                ErrorMessage="{Binding ErrorMessage}"
                                 HorizontalOptions="Center"
                                 IsRefreshable="True"
                                 IsVisible="False"
@@ -80,7 +80,7 @@
                                 <common:FullPageErrorControl.Triggers>
                                     <MultiTrigger TargetType="common:FullPageErrorControl">
                                         <MultiTrigger.Conditions>
-                                            <BindingCondition Binding="{Binding IsEmpty}" Value="True" />
+                                            <BindingCondition Binding="{Binding Items, Converter={StaticResource ListIsNullOrEmptyConverter}}" Value="True" />
                                             <BindingCondition Binding="{Binding IsError}" Value="True" />
                                         </MultiTrigger.Conditions>
                                         <Setter Property="IsVisible" Value="True" />
@@ -110,7 +110,7 @@
             <Button
                 Margin="20"
                 Command="{Binding AddGameCommand}"
-                IsVisible="{Binding IsError, Converter={StaticResource NegateBooleanConverter}}"
+                IsVisible="{Binding IsError, Converter={StaticResource InvertedBoolConverter}}"
                 Style="{StaticResource PrimaryButtonStyle}"
                 Text="{extensions:Translate GameUserEntryListPageAddGame}" />
         </StackLayout>

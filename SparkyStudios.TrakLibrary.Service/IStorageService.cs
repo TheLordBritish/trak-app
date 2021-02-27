@@ -24,5 +24,7 @@ namespace SparkyStudios.TrakLibrary.Service
         Task<Guid> GetDeviceIdAsync();
 
         Task SetDeviceIdAsync(Guid deviceId);
+
+        Task ClearCredentialsAsync();
     }
 }

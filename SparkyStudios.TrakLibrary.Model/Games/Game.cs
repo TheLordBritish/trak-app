@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -25,6 +24,8 @@ namespace SparkyStudios.TrakLibrary.Model.Games
         public int? FranchiseId { get; set; }
         
         public IEnumerable<GameReleaseDate> ReleaseDates { get; set; }
+        
+        public IEnumerable<DownloadableContent> DownloadableContents { get; set; }
         
         public long Version { get; set; }
     }

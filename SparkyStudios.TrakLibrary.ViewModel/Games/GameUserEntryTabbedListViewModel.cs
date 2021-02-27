@@ -66,23 +66,25 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 
                 Items.Clear();
                 Items.AddRange(results.Select(CreateListItemViewModelFromGameUserEntry));
-
-                IsEmpty = Items.Count == 0;
             });
             // Report errors if an exception was thrown.
             LoadCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
                 Items.Clear();
-                
-                if (ex is ApiException)
+
+                switch (ex)
                 {
-                    ErrorMessage = Messages.GameLibraryListPageEmptyServerError;
-                }
-                else
-                {
-                    ErrorMessage = Messages.GameLibraryListPageEmptyGenericError;
-                    Crashes.TrackError(ex);
+                    case TaskCanceledException _:
+                        ErrorMessage = Messages.ErrorMessageNoInternet;
+                        break;
+                    case ApiException _:
+                        ErrorMessage = Messages.GameLibraryListPageEmptyServerError;
+                        break;
+                    default:
+                        ErrorMessage = Messages.GameLibraryListPageEmptyGenericError;
+                        Crashes.TrackError(ex);
+                        break;
                 }
             });
 
@@ -102,23 +104,31 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             LoadMoreCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                if (ex is ApiException)
+                switch (ex)
                 {
-                    userDialogs.Toast(new ToastConfig(Messages.GameUserEntryListPageEmptyServerError)
-                        .SetBackgroundColor(Color.Red)
-                        .SetMessageTextColor(Color.White)
-                        .SetDuration(TimeSpan.FromSeconds(5))
-                        .SetPosition(ToastPosition.Bottom));
-                }
-                else
-                {
-                    userDialogs.Toast(new ToastConfig(Messages.GameUserEntryListPageEmptyGenericError)
-                        .SetBackgroundColor(Color.Red)
-                        .SetMessageTextColor(Color.White)
-                        .SetDuration(TimeSpan.FromSeconds(5))
-                        .SetPosition(ToastPosition.Bottom));
+                    case TaskCanceledException _:
+                        userDialogs.Toast(new ToastConfig(Messages.ErrorMessageNoInternet)
+                            .SetBackgroundColor(Color.Red)
+                            .SetMessageTextColor(Color.White)
+                            .SetDuration(TimeSpan.FromSeconds(5))
+                            .SetPosition(ToastPosition.Bottom));
+                        break;
+                    case ApiException _:
+                        userDialogs.Toast(new ToastConfig(Messages.GameUserEntryListPageEmptyServerError)
+                            .SetBackgroundColor(Color.Red)
+                            .SetMessageTextColor(Color.White)
+                            .SetDuration(TimeSpan.FromSeconds(5))
+                            .SetPosition(ToastPosition.Bottom));
+                        break;
+                    default:
+                        userDialogs.Toast(new ToastConfig(Messages.GameUserEntryListPageEmptyGenericError)
+                            .SetBackgroundColor(Color.Red)
+                            .SetMessageTextColor(Color.White)
+                            .SetDuration(TimeSpan.FromSeconds(5))
+                            .SetPosition(ToastPosition.Bottom));
                     
-                    Crashes.TrackError(ex);
+                        Crashes.TrackError(ex);
+                        break;
                 }
             });
 

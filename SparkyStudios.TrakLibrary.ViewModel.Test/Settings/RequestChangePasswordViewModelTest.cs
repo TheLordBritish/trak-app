@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Moq;
 using NUnit.Framework;
@@ -34,6 +35,29 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
                 _storageService.Object, _authService.Object);
         }
 
+        [Test]
+        public void SendCommand_ThrowsTaskCanceledException_SetsErrorMessageAsNoInternet()
+        {
+            // Arrange
+            _storageService.Setup(m => m.GetUsernameAsync())
+                .ReturnsAsync("username");
+
+            _authService.Setup(m => m.RequestChangePasswordAsync(It.IsAny<string>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _requestChangePasswordViewModel.SendCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.IsTrue(_requestChangePasswordViewModel.IsError,
+                "_requestChangePasswordViewModel.IsError should be true if an exception is thrown.");
+            Assert.AreEqual(Messages.ErrorMessageNoInternet, _requestChangePasswordViewModel.ErrorMessage,
+                "The error message is incorrect.");
+
+            _navigationService.Verify(m => m.NavigateAsync("ChangePasswordPage"), Times.Never);
+        }
+        
         [Test]
         public void SendCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Microsoft.Reactive.Testing;
 using Moq;
@@ -60,6 +61,28 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _storageService.Verify(s => s.GetUsernameAsync(), Times.Never);
         }
 
+        [Test]
+        public void VerifyCommand_ThrowsTaskCanceledException_SetsErrorMessageAsNoInternet()
+        {
+            // Arrange
+            _verificationViewModel.VerificationCode.Value = "SV1SD";
+
+            _storageService.Setup(mock => mock.GetUsernameAsync())
+                .ReturnsAsync("username");
+
+            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _verificationViewModel.VerifyCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.IsTrue(_verificationViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
+            Assert.AreEqual(Messages.ErrorMessageNoInternet, _verificationViewModel.ErrorMessage,
+                "The error message is incorrect.");
+        }
+        
         [Test]
         public void VerifyCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {
@@ -155,6 +178,27 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
                 Times.Once);
         }
 
+        [Test]
+        public void ResendVerificationCommand_ThrowsTaskCanceledException_SetsErrorMessageAsNoInternet()
+        {
+            // Arrange
+            _storageService.Setup(mock => mock.GetUsernameAsync())
+                .ReturnsAsync("username");
+            
+            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<string>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _verificationViewModel.ResendVerificationCommand.Execute().Catch(Observable.Return(Unit.Default))
+                .Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.IsTrue(_verificationViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
+            Assert.AreEqual(Messages.ErrorMessageNoInternet, _verificationViewModel.ErrorMessage,
+                "The error message is incorrect.");
+        }
+        
         [Test]
         public void ResendVerificationCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {

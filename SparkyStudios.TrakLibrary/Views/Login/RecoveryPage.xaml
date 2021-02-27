@@ -3,10 +3,10 @@
     x:Class="SparkyStudios.TrakLibrary.Views.Login.RecoveryPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:behaviors="http://prismlibrary.com"
     xmlns:controls="clr-namespace:SparkyStudios.TrakLibrary.Controls;assembly=SparkyStudios.TrakLibrary"
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
-    xmlns:login="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Login;assembly=SparkyStudios.TrakLibrary.ViewModel">
+    xmlns:login="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Login;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
     <ContentPage.Content>
         <ScrollView Padding="35" x:DataType="login:RecoveryViewModel">
             <Grid>
@@ -53,7 +53,7 @@
                         BorderThickness="4"
                         Text="{Binding Username.Value}">
                         <controls:BorderedEntry.Behaviors>
-                            <behaviors:EventToCommandBehavior
+                            <xct:EventToCommandBehavior
                                 Command="{Binding ClearValidationCommand}"
                                 CommandParameter="Username"
                                 EventName="Focused" />
@@ -69,8 +69,8 @@
                     </controls:BorderedEntry>
                     <!--  Username validation errors  -->
                     <Label
-                        IsEnabled="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        IsVisible="{Binding Username.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        IsEnabled="{Binding Username.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                        IsVisible="{Binding Username.IsValid, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding Username.FirstError}" />
 
@@ -85,7 +85,7 @@
                         BorderThickness="4"
                         Text="{Binding RecoveryToken.Value}">
                         <controls:BorderedEntry.Behaviors>
-                            <behaviors:EventToCommandBehavior
+                            <xct:EventToCommandBehavior
                                 Command="{Binding ClearValidationCommand}"
                                 CommandParameter="RecoveryToken"
                                 EventName="Focused" />
@@ -101,8 +101,8 @@
                     </controls:BorderedEntry>
                     <!--  Recovery token validation errors  -->
                     <Label
-                        IsEnabled="{Binding RecoveryToken.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        IsVisible="{Binding RecoveryToken.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        IsEnabled="{Binding RecoveryToken.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                        IsVisible="{Binding RecoveryToken.IsValid, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding RecoveryToken.FirstError}" />
 
@@ -118,7 +118,7 @@
                         IsPassword="True"
                         Text="{Binding Password.Value}">
                         <controls:BorderedEntry.Behaviors>
-                            <behaviors:EventToCommandBehavior
+                            <xct:EventToCommandBehavior
                                 Command="{Binding ClearValidationCommand}"
                                 CommandParameter="Password"
                                 EventName="Focused" />
@@ -134,8 +134,8 @@
                     </controls:BorderedEntry>
                     <!--  Password validation errors  -->
                     <Label
-                        IsEnabled="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        IsVisible="{Binding Password.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        IsEnabled="{Binding Password.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                        IsVisible="{Binding Password.IsValid, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding Password.FirstError}" />
 
@@ -151,7 +151,7 @@
                         IsPassword="True"
                         Text="{Binding ConfirmPassword.Value}">
                         <controls:BorderedEntry.Behaviors>
-                            <behaviors:EventToCommandBehavior
+                            <xct:EventToCommandBehavior
                                 Command="{Binding ClearValidationCommand}"
                                 CommandParameter="ConfirmPassword"
                                 EventName="Focused" />
@@ -167,8 +167,8 @@
                     </controls:BorderedEntry>
                     <!--  Confirm password validation errors  -->
                     <Label
-                        IsEnabled="{Binding ConfirmPassword.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        IsVisible="{Binding ConfirmPassword.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        IsEnabled="{Binding ConfirmPassword.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                        IsVisible="{Binding ConfirmPassword.IsValid, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding ConfirmPassword.FirstError}" />
 
@@ -199,7 +199,7 @@
                         Margin="0,20,0,0"
                         AutomationId="RecoveryPageRecoverButton"
                         Command="{Binding RecoverCommand}"
-                        IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                        IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource PrimaryButtonStyle}"
                         Text="{extensions:Translate RecoveryPageRecover}" />
                     <ActivityIndicator

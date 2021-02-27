@@ -9,6 +9,7 @@
     xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel"
     xmlns:gc="clr-namespace:SparkyStudios.TrakLibrary.Controls.Games;assembly=SparkyStudios.TrakLibrary"
     xmlns:vmCommon="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Common;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     x:Name="GameOptions"
     x:DataType="games:GameOptionsViewModel"
     BackgroundColor="{StaticResource TrakPrimaryBlue}">
@@ -16,7 +17,7 @@
         <Grid>
             <!--  Full page control that is displayed when there's an error reported by the view model.  -->
             <common:FullPageErrorControl
-                ErrorMessage="{extensions:Translate GamePageErrorMessage}"
+                ErrorMessage="{Binding ErrorMessage}"
                 HorizontalOptions="Center"
                 IsRefreshable="True"
                 IsVisible="False"
@@ -87,7 +88,20 @@
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
                                 <Grid Margin="0,5" x:DataType="vmCommon:ItemEntryViewModel">
-                                    <Label Text="{Binding Name}" TextColor="{StaticResource TrakGrey}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Label
+                                        Grid.Column="0"
+                                        LineBreakMode="WordWrap"
+                                        MaxLines="2"
+                                        Text="{Binding Name}"
+                                        TextColor="{StaticResource TrakGrey}"
+                                        VerticalOptions="StartAndExpand">
                                         <Label.Triggers>
                                             <DataTrigger
                                                 Binding="{Binding Source={x:Reference PlatformSwitch}, Path=IsToggled}"
@@ -102,12 +116,63 @@
                                     </Label>
                                     <Switch
                                         x:Name="PlatformSwitch"
+                                        Grid.Column="1"
                                         HorizontalOptions="EndAndExpand"
-                                        IsToggled="{Binding IsSelected, Mode=TwoWay}">
-                                        <Switch.Behaviors>
-                                            <behaviors:EventToCommandBehavior Command="{Binding BindingContext.OnPlatformTappedCommand, Source={x:Reference PlatformsLayout}}" EventName="Toggled" />
-                                        </Switch.Behaviors>
-                                    </Switch>
+                                        IsToggled="{Binding IsSelected, Mode=TwoWay}" />
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+
+                    <!--  Select DLC  -->
+                    <Label
+                        Margin="0,20,0,0"
+                        IsVisible="{Binding DownloadableContents, Converter={StaticResource ListIsNotNullOrEmptyConverter}}"
+                        Style="{StaticResource BaseBoldLabelStyle}"
+                        Text="{extensions:Translate GameOptionsPageSelectDlc}" />
+                    <BoxView
+                        HeightRequest="2"
+                        HorizontalOptions="FillAndExpand"
+                        IsVisible="{Binding DownloadableContents, Converter={StaticResource ListIsNotNullOrEmptyConverter}}"
+                        WidthRequest="1"
+                        Color="{StaticResource TrakPrimaryPurple}" />
+
+                    <!--  DLC  -->
+                    <StackLayout x:Name="DownloadableContentLayout" BindableLayout.ItemsSource="{Binding DownloadableContents}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,5" x:DataType="vmCommon:ItemEntryViewModel">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Label
+                                        Grid.Column="0"
+                                        LineBreakMode="WordWrap"
+                                        MaxLines="2"
+                                        Text="{Binding Name}"
+                                        TextColor="{StaticResource TrakGrey}"
+                                        VerticalOptions="StartAndExpand">
+                                        <Label.Triggers>
+                                            <DataTrigger
+                                                Binding="{Binding Source={x:Reference DownloadableContentSwitch}, Path=IsToggled}"
+                                                TargetType="Label"
+                                                Value="True">
+                                                <Setter Property="TextColor" Value="{StaticResource TrakWhite}" />
+                                            </DataTrigger>
+                                        </Label.Triggers>
+                                        <Label.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding BindingContext.OnDownloadableContentTappedCommand, Source={x:Reference DownloadableContentLayout}}" CommandParameter="{Binding}" />
+                                        </Label.GestureRecognizers>
+                                    </Label>
+                                    <Switch
+                                        x:Name="DownloadableContentSwitch"
+                                        Grid.Column="1"
+                                        HorizontalOptions="EndAndExpand"
+                                        IsToggled="{Binding IsSelected, Mode=TwoWay}" />
                                 </Grid>
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
@@ -152,7 +217,7 @@
                         Margin="0,10,0,0"
                         FontFamily="Mulish-Bold"
                         FontSize="{StaticResource TrakFontSmall}"
-                        IsVisible="{Binding ErrorMessage, Converter={StaticResource StringEmptyConverter}}"
+                        IsVisible="{Binding ErrorMessage, Converter={StaticResource IsNotNullOrEmptyConverter}}"
                         Text="{Binding ErrorMessage}" />
 
                     <Button

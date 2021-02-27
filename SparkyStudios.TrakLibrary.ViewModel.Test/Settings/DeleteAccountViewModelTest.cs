@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Microsoft.Reactive.Testing;
 using Moq;
@@ -61,9 +62,34 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             _scheduler.Start();
 
             // Assert
-            _authService.Verify(a => a.DeleteByUsername(It.IsAny<string>()), Times.Never);
+            _authService.Verify(a => a.DeleteByUsernameAsync(It.IsAny<string>()), Times.Never);
         }
 
+        [Test]
+        public void DeleteAccountCommand_ThrowsTaskCanceledException_SetsErrorMessageAsNoInternet()
+        {
+            // Arrange
+            _deleteAccountViewModel.DeleteMe.Value = Messages.DeleteAccountPageDeleteMe;
+
+            _storageService.Setup(m => m.GetUsernameAsync())
+                .ReturnsAsync("username");
+
+            _authService.Setup(m => m.DeleteByUsernameAsync(It.IsAny<string>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _deleteAccountViewModel.DeleteAccountCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+            
+            // Assert
+            Assert.IsTrue(_deleteAccountViewModel.IsError,
+                "_deleteAccountViewModel.IsError should be true if an exception is thrown.");
+            Assert.AreEqual(Messages.ErrorMessageNoInternet, _deleteAccountViewModel.ErrorMessage,
+                "The error message is incorrect.");
+            
+            _navigationService.Verify(m => m.NavigateAsync(It.IsAny<string>()), Times.Never);
+        }
+        
         [Test]
         public void DeleteAccountCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {
@@ -73,7 +99,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             _storageService.Setup(m => m.GetUsernameAsync())
                 .ReturnsAsync("username");
 
-            _authService.Setup(m => m.DeleteByUsername(It.IsAny<string>()))
+            _authService.Setup(m => m.DeleteByUsernameAsync(It.IsAny<string>()))
                 .Throws(new ApiException());
 
             // Act
@@ -98,7 +124,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             _storageService.Setup(m => m.GetUsernameAsync())
                 .ReturnsAsync("username");
 
-            _authService.Setup(m => m.DeleteByUsername(It.IsAny<string>()))
+            _authService.Setup(m => m.DeleteByUsernameAsync(It.IsAny<string>()))
                 .Throws(new Exception());
             
             // Act
@@ -123,7 +149,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             _storageService.Setup(m => m.GetUsernameAsync())
                 .ReturnsAsync("username");
             
-            _authService.Setup(m => m.DeleteByUsername(It.IsAny<string>()))
+            _authService.Setup(m => m.DeleteByUsernameAsync(It.IsAny<string>()))
                 .Verifiable();
 
             _storageService.Setup(m => m.GetUserIdAsync())
@@ -135,11 +161,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             _restService.Setup(m => m.DeleteAsync(It.IsAny<string>()))
                 .Verifiable();
 
-            _storageService.Setup(m => m.SetUsernameAsync(It.IsAny<string>()))
-                .Verifiable();
-            _storageService.Setup(m => m.SetAuthTokenAsync(It.IsAny<string>()))
-                .Verifiable();
-            _storageService.Setup(m => m.SetUserIdAsync(It.IsAny<long>()))
+            _storageService.Setup(m => m.ClearCredentialsAsync())
                 .Verifiable();
 
             _navigationService.Setup(m => m.NavigateAsync("/LoginPage"))

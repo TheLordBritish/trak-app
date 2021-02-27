@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Microsoft.Reactive.Testing;
 using Moq;
@@ -62,6 +63,24 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         }
         
         [Test]
+        public void LoadGameDetailsCommand_ThrowsTaskCanceledException_SetsIsErrorToTrue()
+        {
+            // Arrange
+            _gameOptionsViewModel.GameUrl = new Uri("https://traklibrary.com");
+            
+            _restService
+                .Setup(mock => mock.GetAsync<GameDetails>(It.IsAny<string>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _gameOptionsViewModel.LoadGameDetailsCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.IsTrue(_gameOptionsViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
+        }
+        
+        [Test]
         public void LoadGameDetailsCommand_ThrowsApiException_SetsIsErrorToTrue()
         {
             // Arrange
@@ -78,7 +97,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             // Assert
             Assert.IsTrue(_gameOptionsViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
         }
-        
         
         [Test]
         public void LoadGameDetailsCommand_ThrowsGenericException_SetsIsErrorToTrue()
@@ -119,6 +137,14 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                     {
                         Id = 2L,
                         Name = "name-2"
+                    }
+                },
+                DownloadableContents = new List<DownloadableContent>
+                {
+                    new DownloadableContent
+                    {
+                        Id = 1L,
+                        Name = "dlc-1"
                     }
                 },
                 Links = new Dictionary<string, HateoasLink>
@@ -175,6 +201,19 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                         Name = "name-2"
                     }
                 },
+                DownloadableContents = new List<DownloadableContent>
+                {
+                    new DownloadableContent
+                    {
+                        Id = 1,
+                        Name = "dlc-1"
+                    },
+                    new DownloadableContent
+                    {
+                        Id = 2,
+                        Name = "dlc-2"
+                    }
+                },
                 Links = new Dictionary<string, HateoasLink>
                 {
                     {
@@ -209,6 +248,13 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                                     new GameUserEntryPlatform
                                     {
                                         PlatformId = 1L
+                                    }
+                                },
+                                GameUserEntryDownloadableContents = new List<GameUserEntryDownloadableContent>
+                                {
+                                    new GameUserEntryDownloadableContent
+                                    {
+                                        DownloadableContentId = 2L
                                     }
                                 }
                             }
@@ -305,6 +351,36 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         }
         
         [Test]
+        public void AddGameCommand_ThrowsTaskCanceledException_SetsIsErrorToTrue()
+        {
+            // Arrange
+            _gameOptionsViewModel.Platforms = new ObservableCollection<ItemEntryViewModel>
+            {
+                new ItemEntryViewModel
+                {
+                    IsSelected = true
+                }
+            };
+
+            _gameOptionsViewModel.Status = GameUserEntryStatus.InProgress;
+            
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(0L);
+            
+            _restService
+                .Setup(mock => mock.PostAsync<GameUserEntry, GameUserEntryRequest>(It.IsAny<string>(),
+                    It.IsAny<GameUserEntryRequest>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _gameOptionsViewModel.AddGameCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.AreEqual( Messages.ErrorMessageNoInternet, _gameOptionsViewModel.ErrorMessage, "The error message is incorrect.");
+        }
+        
+        [Test]
         public void AddGameCommand_ThrowsApiException_SetsIsErrorToTrue()
         {
             // Arrange
@@ -333,7 +409,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             // Assert
             Assert.AreEqual( Messages.ErrorMessageApiError, _gameOptionsViewModel.ErrorMessage, "The error message is incorrect.");
         }
-        
         
         [Test]
         public void AddGameCommand_ThrowsGenericException_SetsIsErrorToTrue()
@@ -426,6 +501,34 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         }
         
         [Test]
+        public void UpdateGameCommand_ThrowsTaskCanceledException_SetsIsErrorToTrue()
+        {
+            // Arrange
+            _gameOptionsViewModel.Platforms = new ObservableCollection<ItemEntryViewModel>
+            {
+                new ItemEntryViewModel
+                {
+                    IsSelected = true
+                }
+            };
+            
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(0L);
+            
+            _restService
+                .Setup(mock => mock.PutAsync<GameUserEntry, GameUserEntryRequest>(It.IsAny<string>(),
+                    It.IsAny<GameUserEntryRequest>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _gameOptionsViewModel.UpdateGameCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.AreEqual(Messages.ErrorMessageNoInternet, _gameOptionsViewModel.ErrorMessage, "The error message is incorrect.");
+        }
+        
+        [Test]
         public void UpdateGameCommand_ThrowsApiException_SetsIsErrorToTrue()
         {
             // Arrange
@@ -452,7 +555,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             // Assert
             Assert.AreEqual(Messages.ErrorMessageApiError, _gameOptionsViewModel.ErrorMessage, "The error message is incorrect.");
         }
-        
         
         [Test]
         public void UpdateGameCommand_ThrowsGenericException_SetsIsErrorToTrue()
@@ -521,6 +623,22 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         }
         
         [Test]
+        public void DeleteGameCommand_ThrowsTaskCanceledException_SetsIsErrorToTrue()
+        {
+            // Arrange
+            _restService
+                .Setup(mock => mock.DeleteAsync(It.IsAny<string>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _gameOptionsViewModel.DeleteGameCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.AreEqual(Messages.ErrorMessageNoInternet, _gameOptionsViewModel.ErrorMessage, "The error message is incorrect.");
+        }
+        
+        [Test]
         public void DeleteGameCommand_ThrowsApiException_SetsIsErrorToTrue()
         {
             // Arrange
@@ -535,7 +653,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             // Assert
             Assert.AreEqual(Messages.ErrorMessageApiError, _gameOptionsViewModel.ErrorMessage, "The error message is incorrect.");
         }
-        
         
         [Test]
         public void DeleteGameCommand_ThrowsGenericException_SetsIsErrorToTrue()

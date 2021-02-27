@@ -29,17 +29,10 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="NUnit" Version="2.6.4" />
-        <PackageReference Include="Xamarin.UITest" Version="3.0.7" />
+        <PackageReference Include="Xamarin.UITest" Version="3.0.14" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="BaseTestFixture.cs" />
         <Compile Include="AppManager.cs" />
-        <Compile Include="Pages\BasePage.cs" />
-        <Compile Include="Pages\Login\LoginPage.cs" />
-        <Compile Include="PlatformQuery.cs" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Tests" />
     </ItemGroup>
     <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

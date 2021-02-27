@@ -394,6 +394,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No internet connection detected. Please reconnect and try again..
+        /// </summary>
+        public static string ErrorMessageNoInternet {
+            get {
+                return ResourceManager.GetString("ErrorMessageNoInternet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The email address cannot be empty or only contain whitespace..
         /// </summary>
         public static string ForgottenPasswordErrorMessageEmailAddressEmpty {
@@ -696,6 +705,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         public static string GameOptionsPageRemoveRating {
             get {
                 return ResourceManager.GetString("GameOptionsPageRemoveRating", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select DLC.
+        /// </summary>
+        public static string GameOptionsPageSelectDlc {
+            get {
+                return ResourceManager.GetString("GameOptionsPageSelectDlc", resourceCulture);
             }
         }
         

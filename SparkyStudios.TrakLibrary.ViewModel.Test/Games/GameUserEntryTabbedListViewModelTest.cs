@@ -94,11 +94,9 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             
             // Assert
             _restService.Verify(mock => mock.GetAsync<HateoasPage<GameDetails>>(It.IsAny<string>()), Times.Never);
-            Assert.IsTrue(_gameUserEntryListViewModel.IsEmpty, "_gameUserEntryListViewModel.IsEmpty should be true if the page isn't active.");
         }
-        
-        [Test]
-        public void LoadCommand_WithEmptyResult_SetIsEmptyToTrue()
+
+        [Test] public void LoadCommand_WithEmptyResult_ShouldntSetItems()
         {
             // Arrange
             _gameUserEntryListViewModel.IsActive = true;
@@ -115,12 +113,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             _scheduler.Start();
             
             // Assert
-            Assert.IsTrue(_gameUserEntryListViewModel.IsEmpty, "_gameUserEntryListViewModel.IsEmpty should be true if the API returns no results.");
             Assert.AreEqual(0, _gameUserEntryListViewModel.Items.Count, "There should be no items in the list for an empty result.");
         }
         
         [Test]
-        public void LoadCommand_WithResults_SetIsEmptyToFalseAndConvertsToItems()
+        public void LoadCommand_WithResults_ConvertsToItems()
         {
             // Arrange
             _gameUserEntryListViewModel.IsActive = true;
@@ -152,7 +149,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             _scheduler.Start();
             
             // Assert
-            Assert.IsFalse(_gameUserEntryListViewModel.IsEmpty, "_gameUserEntryListViewModel.IsEmpty should be false if the API returns results.");
             Assert.AreEqual(1, _gameUserEntryListViewModel.Items.Count, "There should be items in the list.");
         }
         
@@ -213,7 +209,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
         }
         
         [Test]
-        public void LoadMoreCommand_WithResults_SetIsEmptyToFalseAndConvertsToItems()
+        public void LoadMoreCommand_WithResults_ConvertsToItems()
         {
             // Arrange
             _restService

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Moq;
 using NUnit.Framework;
@@ -113,6 +114,28 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _authService.Verify(a => a.RecoverAsync(It.IsAny<RecoveryRequest>()), Times.Never);
         }
 
+        [Test]
+        public void RecoverCommand_ThrowsTaskCanceledException_SetsErrorMessageAsNoInternet()
+        {
+            // Arrange
+            _recoveryViewModel.Username.Value = "TestUsername";
+            _recoveryViewModel.RecoveryToken.Value = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+            _recoveryViewModel.Password.Value = "Password123";
+            _recoveryViewModel.ConfirmPassword.Value = "Password123";
+
+            _authService.Setup(mock => mock.RecoverAsync(It.IsAny<RecoveryRequest>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _recoveryViewModel.RecoverCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.IsTrue(_recoveryViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
+            Assert.AreEqual(Messages.ErrorMessageNoInternet, _recoveryViewModel.ErrorMessage,
+                "The error message is incorrect.");
+        }
+        
         [Test]
         public void RecoverCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {

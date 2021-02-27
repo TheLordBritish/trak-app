@@ -15,5 +15,7 @@ namespace SparkyStudios.TrakLibrary.Model.Games.Request
         public GameUserEntryStatus Status { get; set; }
         
         public IEnumerable<long> PlatformIds { get; set; }
+        
+        public IEnumerable<long> DownloadableContentIds { get; set; }
     }
 }

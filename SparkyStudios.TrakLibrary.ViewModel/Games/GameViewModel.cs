@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Microsoft.AppCenter.Crashes;
 using Prism.Navigation;
@@ -57,9 +58,18 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             LoadGameDetailsCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                if (!(ex is ApiException))
+                switch (ex)
                 {
-                    Crashes.TrackError(ex);
+                    case TaskCanceledException _:
+                        ErrorMessage = Messages.ErrorMessageNoInternet;
+                        break;
+                    case ApiException _:
+                        ErrorMessage = Messages.ErrorMessageApiError;
+                        break;
+                    default:
+                        ErrorMessage = Messages.ErrorMessageGeneric;
+                        Crashes.TrackError(ex);
+                        break;
                 }
             });
 
@@ -219,7 +229,9 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             UpdateSelectedPlatforms(Platforms, selectedPlatformIds ?? Enumerable.Empty<long>());
 
             // Load the game immediately on navigation.
-            LoadGameDetailsCommand.Execute().Subscribe();
+            LoadGameDetailsCommand.Execute()
+                .Catch(Observable.Return(Unit.Default))
+                .Subscribe();
         }
 
         /// <summary>

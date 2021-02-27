@@ -25,6 +25,6 @@ namespace SparkyStudios.TrakLibrary.Service
 
         Task<CheckedResponse<bool>> ChangeEmailAddressAsync(string username, ChangeEmailAddressRequest changeEmailAddressRequest);
 
-        Task DeleteByUsername(string username);
+        Task DeleteByUsernameAsync(string username);
     }
 }

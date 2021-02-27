@@ -12,7 +12,7 @@
         <Grid x:DataType="vm:GameViewModel">
             <!--  Full page control that is displayed when there's an error reported by the view model.  -->
             <common:FullPageErrorControl
-                ErrorMessage="{extensions:Translate GamePageErrorMessage}"
+                ErrorMessage="{Binding ErrorMessage}"
                 HorizontalOptions="Center"
                 IsRefreshable="True"
                 IsVisible="False"
@@ -75,25 +75,15 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
 
                     <!--  Game image and image-to-background gradient  -->
                     <Image
                         Grid.Row="0"
                         Grid.RowSpan="3"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Aspect="AspectFill"
                         HeightRequest="300"
                         Source="{Binding ImageUrl}" />
-                    <Frame
-                        Grid.Row="0"
-                        Grid.RowSpan="3"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2">
+                    <Frame Grid.Row="0" Grid.RowSpan="3">
                         <Frame.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                                 <GradientStop Offset="0.0" Color="{StaticResource TrakPrimaryBlue}" />
@@ -104,30 +94,34 @@
                     </Frame>
 
                     <!--  Add to library/game user entry options  -->
-                    <Button
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Margin="20,0"
-                        BackgroundColor="Transparent"
-                        Command="{Binding OptionsCommand}"
-                        FontSize="{StaticResource TrakFontMedium}"
-                        Style="{StaticResource SecondaryButtonStyle}"
-                        Text="{extensions:Translate GamePageAddToLibrary}">
-                        <Button.Triggers>
-                            <DataTrigger
-                                Binding="{Binding InLibrary}"
-                                TargetType="Button"
-                                Value="True">
-                                <Setter Property="Text" Value="{extensions:Translate GamePageOptions}" />
-                            </DataTrigger>
-                        </Button.Triggers>
-                    </Button>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="2*" />
+                        </Grid.ColumnDefinitions>
+                        <Button
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="20,0"
+                            BackgroundColor="Transparent"
+                            Command="{Binding OptionsCommand}"
+                            FontSize="{StaticResource TrakFontMedium}"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Text="{extensions:Translate GamePageAddToLibrary}">
+                            <Button.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding InLibrary}"
+                                    TargetType="Button"
+                                    Value="True">
+                                    <Setter Property="Text" Value="{extensions:Translate GamePageOptions}" />
+                                </DataTrigger>
+                            </Button.Triggers>
+                        </Button>
+                    </Grid>
 
                     <!--  Game platforms  -->
                     <common:DividerControl
                         Grid.Row="2"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,0"
                         Divider="|"
                         FontSize="{StaticResource TrakFontMedium}"
@@ -137,8 +131,6 @@
                     <!--  Game title  -->
                     <Label
                         Grid.Row="3"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,0,20,5"
                         LineBreakMode="WordWrap"
                         Style="{StaticResource TitleLabelStyle}"
@@ -147,18 +139,14 @@
                     <!--  The publishers  -->
                     <Label
                         Grid.Row="4"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,0"
                         FontSize="{StaticResource TrakFontSmall}"
                         LineBreakMode="WordWrap"
-                        Text="{Binding Publishers, Converter={StaticResource IEnumerableToStringConverter}}" />
+                        Text="{Binding Publishers, Converter={StaticResource ListToStringCommaConverter}}" />
 
                     <!--  The star rating for the current game. Only displayed if the game is in the users collection.  -->
                     <StackLayout
                         Grid.Row="5"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,5"
                         Orientation="Horizontal">
                         <Label
@@ -182,19 +170,15 @@
                     <!--  A comma separated list of genres.  -->
                     <Label
                         Grid.Row="6"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,5"
                         FontSize="{StaticResource TrakFontSmall}"
                         LineBreakMode="HeadTruncation"
                         MaxLines="1"
-                        Text="{Binding Genres, Converter={StaticResource IEnumerableToStringConverter}}" />
+                        Text="{Binding Genres, Converter={StaticResource ListToStringCommaConverter}}" />
 
                     <!--  The description of the game.  -->
                     <Label
                         Grid.Row="7"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,5"
                         FontSize="{StaticResource TrakFontSmall}"
                         Text="{Binding Description}" />
@@ -202,16 +186,12 @@
                     <!--  Release dates  -->
                     <Label
                         Grid.Row="8"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,15,20,0"
                         FontSize="{StaticResource TrakFontSmall}"
                         Style="{StaticResource BaseBoldLabelStyle}"
                         Text="{extensions:Translate GamePageReleaseDates}" />
                     <StackLayout
                         Grid.Row="9"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,0"
                         Orientation="Horizontal">
                         <Label FontSize="{StaticResource TrakFontSmall}" Text="{extensions:Translate GamePageReleaseDateAmerica}" />
@@ -219,8 +199,6 @@
                     </StackLayout>
                     <StackLayout
                         Grid.Row="10"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,0"
                         Orientation="Horizontal">
                         <Label FontSize="{StaticResource TrakFontSmall}" Text="{extensions:Translate GamePageReleaseDateEurope}" />
@@ -228,8 +206,6 @@
                     </StackLayout>
                     <StackLayout
                         Grid.Row="11"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,0"
                         Orientation="Horizontal">
                         <Label FontSize="{StaticResource TrakFontSmall}" Text="{extensions:Translate GamePageReleaseDateJapan}" />
@@ -239,54 +215,42 @@
                     <!--  Franchise  -->
                     <Label
                         Grid.Row="12"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,15,20,0"
                         FontSize="{StaticResource TrakFontSmall}"
-                        IsVisible="{Binding FranchiseTitle, Converter={StaticResource StringEmptyConverter}}"
+                        IsVisible="{Binding FranchiseTitle, Converter={StaticResource IsNotNullOrEmptyConverter}}"
                         Style="{StaticResource BaseBoldLabelStyle}"
                         Text="{extensions:Translate GamePageFranchise}" />
                     <Label
                         Grid.Row="13"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,0,20,0"
                         FontSize="{StaticResource TrakFontSmall}"
-                        IsVisible="{Binding FranchiseTitle, Converter={StaticResource StringEmptyConverter}}"
+                        IsVisible="{Binding FranchiseTitle, Converter={StaticResource IsNotNullOrEmptyConverter}}"
                         Text="{Binding FranchiseTitle}" />
 
                     <!--  Game modes  -->
                     <Label
                         Grid.Row="14"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,15,20,0"
                         FontSize="{StaticResource TrakFontSmall}"
-                        IsVisible="{Binding GameModes, Converter={StaticResource StringEmptyConverter}}"
+                        IsVisible="{Binding GameModes, Converter={StaticResource IsNotNullOrEmptyConverter}}"
                         Style="{StaticResource BaseBoldLabelStyle}"
                         Text="{extensions:Translate GamePageGameModes}" />
                     <Label
                         Grid.Row="15"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,0"
                         FontSize="{StaticResource TrakFontSmall}"
-                        IsVisible="{Binding GameModes, Converter={StaticResource StringEmptyConverter}}"
+                        IsVisible="{Binding GameModes, Converter={StaticResource IsNotNullOrEmptyConverter}}"
                         Text="{Binding GameModes}" />
 
                     <!--  Age rating  -->
                     <Label
                         Grid.Row="16"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,15,20,0"
                         FontSize="{StaticResource TrakFontSmall}"
                         Style="{StaticResource BaseBoldLabelStyle}"
                         Text="{extensions:Translate GamePageAgeRating}" />
                     <Label
                         Grid.Row="17"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,0"
                         FontSize="{StaticResource TrakFontSmall}"
                         Text="{Binding AgeRating, Converter={StaticResource EnumDescriptionConverter}}" />
@@ -294,8 +258,6 @@
                     <!--  Displays which status the game is currently assigned to.  -->
                     <games:GameUserEntryStatusControl
                         Grid.Row="18"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,15,20,0"
                         IsEnabled="{Binding InLibrary}"
                         IsVisible="{Binding InLibrary}"
@@ -303,8 +265,6 @@
 
                     <Label
                         Grid.Row="19"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,25,20,10"
                         FontSize="{StaticResource TrakFontMedium}"
                         LineBreakMode="WordWrap"
@@ -315,8 +275,6 @@
                     <!--  List that is displayed if there are any results returned from the initial request.  -->
                     <StackLayout
                         Grid.Row="20"
-                        Grid.Column="0"
-                        Grid.ColumnSpan="2"
                         Margin="20,0"
                         BindableLayout.ItemsSource="{Binding SimilarGames}">
                         <BindableLayout.ItemTemplate>

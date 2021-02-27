@@ -3,10 +3,10 @@
     x:Class="SparkyStudios.TrakLibrary.Views.Games.GameLibraryListPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:behaviors="http://prismlibrary.com"
     xmlns:common="clr-namespace:SparkyStudios.TrakLibrary.Controls.Common;assembly=SparkyStudios.TrakLibrary"
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
     xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     Title="{extensions:Translate GameLibraryListPageTitle}"
     x:DataType="games:GameLibraryListViewModel"
     AutomationId="GameLibraryListPage"
@@ -33,7 +33,7 @@
                 TextColor="{StaticResource TrakWhite}"
                 VerticalTextAlignment="End">
                 <SearchBar.Behaviors>
-                    <behaviors:EventToCommandBehavior
+                    <xct:EventToCommandBehavior
                         Command="{Binding SearchCommand}"
                         CommandParameter="{Binding SearchQuery}"
                         EventName="Unfocused" />
@@ -52,9 +52,9 @@
                 Grid.Row="2"
                 Command="{Binding SearchCommand}"
                 CommandParameter="{Binding SearchQuery}"
-                IsEnabled="{Binding IsSearching, Converter={StaticResource NegateBooleanConverter}}"
+                IsEnabled="{Binding IsSearching, Converter={StaticResource InvertedBoolConverter}}"
                 IsRefreshing="{Binding IsLoading}"
-                IsVisible="{Binding IsSearching, Converter={StaticResource NegateBooleanConverter}}">
+                IsVisible="{Binding IsSearching, Converter={StaticResource InvertedBoolConverter}}">
                 <CollectionView
                     ItemsSource="{Binding Items}"
                     RemainingItemsThreshold="0"

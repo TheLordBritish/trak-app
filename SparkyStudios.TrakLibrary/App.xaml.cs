@@ -59,6 +59,7 @@ namespace SparkyStudios.TrakLibrary
             // Services
             containerRegistry.Register<IFormsDevice, XamarinFormsDevice>();
             containerRegistry.Register<IStorageService, SecureStorageService>();
+            containerRegistry.RegisterSingleton<IConnectionService, XamarinConnectionService>();
             containerRegistry.RegisterInstance(UserDialogs.Instance);
             containerRegistry.RegisterInstance(typeof(IScheduler), RxApp.MainThreadScheduler);
             containerRegistry.RegisterInstance(typeof(SecurityTokenHandler), new JwtSecurityTokenHandler());

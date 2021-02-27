@@ -26,6 +26,8 @@ namespace SparkyStudios.TrakLibrary.Model.Games
         
         public IEnumerable<GameUserEntryPlatform> GameUserEntryPlatforms { get; set; }
         
+        public IEnumerable<GameUserEntryDownloadableContent> GameUserEntryDownloadableContents { get; set; }
+        
         public long Version { get; set; }
     }
 }

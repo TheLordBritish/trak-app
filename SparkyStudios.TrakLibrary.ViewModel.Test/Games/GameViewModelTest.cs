@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Moq;
 using NUnit.Framework;
@@ -63,6 +64,24 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             // Assert
             _restService
                 .Verify(mock => mock.GetAsync<GameDetails>(It.IsAny<string>()), Times.Never);
+        }
+        
+        [Test]
+        public void LoadGameDetailsCommand_ThrowsTaskCanceledException_SetsIsErrorToTrue()
+        {
+            // Arrange
+            _gameViewModel.ShouldReload = true;
+            
+            _restService
+                .Setup(mock => mock.GetAsync<GameDetails>(It.IsAny<string>()))
+                .Throws(new TaskCanceledException());
+
+            // Act
+            _gameViewModel.LoadGameDetailsCommand.Execute().Catch(Observable.Return(Unit.Default)).Subscribe();
+            _scheduler.Start();
+
+            // Assert
+            Assert.IsTrue(_gameViewModel.IsError, "vm.IsError should be true if an API exception is thrown.");
         }
         
         [Test]

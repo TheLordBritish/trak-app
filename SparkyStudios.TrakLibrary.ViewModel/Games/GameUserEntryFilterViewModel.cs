@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AppCenter.Crashes;
@@ -15,6 +16,7 @@ using SparkyStudios.TrakLibrary.Model.Games;
 using SparkyStudios.TrakLibrary.Service;
 using SparkyStudios.TrakLibrary.Service.Exception;
 using SparkyStudios.TrakLibrary.ViewModel.Common;
+using SparkyStudios.TrakLibrary.ViewModel.Resources;
 
 namespace SparkyStudios.TrakLibrary.ViewModel.Games
 {
@@ -45,9 +47,18 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             LoadGameFiltersCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                if (!(ex is ApiException))
+                switch (ex)
                 {
-                    Crashes.TrackError(ex);
+                    case TaskCanceledException _:
+                        ErrorMessage = Messages.ErrorMessageNoInternet;
+                        break;
+                    case ApiException _:
+                        ErrorMessage = Messages.ErrorMessageApiError;
+                        break;
+                    default:
+                        ErrorMessage = Messages.ErrorMessageGeneric;
+                        Crashes.TrackError(ex);
+                        break;
                 }
             });
 
@@ -276,7 +287,9 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             if (parameters.GetNavigationMode() == NavigationMode.New)
             {
                 // Load the game filters immediately on navigation.
-                LoadGameFiltersCommand.Execute().Subscribe();
+                LoadGameFiltersCommand.Execute()
+                    .Catch(Observable.Return(Unit.Default))
+                    .Subscribe();
             }
         }
 

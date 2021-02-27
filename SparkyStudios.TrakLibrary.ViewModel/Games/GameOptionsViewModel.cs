@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Microsoft.AppCenter.Crashes;
@@ -56,9 +57,18 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             LoadGameDetailsCommand.ThrownExceptions.Subscribe(ex =>
             {
                 IsError = true;
-                if (!(ex is ApiException))
+                switch (ex)
                 {
-                    Crashes.TrackError(ex);
+                    case TaskCanceledException _:
+                        ErrorMessage = Messages.ErrorMessageNoInternet;
+                        break;
+                    case ApiException _:
+                        ErrorMessage = Messages.ErrorMessageApiError;
+                        break;
+                    default:
+                        ErrorMessage = Messages.ErrorMessageGeneric;
+                        Crashes.TrackError(ex);
+                        break;
                 }
             });
 
@@ -71,6 +81,16 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                     
                 item.IsSelected = !item.IsSelected;
                 Platforms[index] = item;
+            });
+            OnDownloadableContentTappedCommand = ReactiveCommand.Create<ItemEntryViewModel>(item =>
+            {
+                ErrorMessage = string.Empty;
+                if (item == null) return;
+                
+                var index = DownloadableContents.IndexOf(item);
+                    
+                item.IsSelected = !item.IsSelected;
+                DownloadableContents[index] = item;
             });
             OnRatingTappedCommand = ReactiveCommand.Create<string>(rating =>
             {
@@ -94,17 +114,21 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             // Report errors if an exception was thrown.
             AddGameCommand.ThrownExceptions.Subscribe(ex =>
             {
-                if (ex is ApiException)
+                switch (ex)
                 {
-                    ErrorMessage = Messages.ErrorMessageApiError;
-                }
-                else
-                {
-                    ErrorMessage = Messages.ErrorMessageGeneric;
-                    Crashes.TrackError(ex, new Dictionary<string, string>
-                    {
-                        {"Game ID", _gameId.ToString()}
-                    });
+                    case TaskCanceledException _:
+                        ErrorMessage = Messages.ErrorMessageNoInternet;
+                        break;
+                    case ApiException _:
+                        ErrorMessage = Messages.ErrorMessageApiError;
+                        break;
+                    default:
+                        ErrorMessage = Messages.ErrorMessageGeneric;
+                        Crashes.TrackError(ex, new Dictionary<string, string>
+                        {
+                            {"Game ID", _gameId.ToString()}
+                        });
+                        break;
                 }
             });
 
@@ -112,18 +136,22 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             // Report errors if an exception was thrown.
             UpdateGameCommand.ThrownExceptions.Subscribe(ex =>
             {
-                if (ex is ApiException)
+                switch (ex)
                 {
-                    ErrorMessage = Messages.ErrorMessageApiError;
-                }
-                else
-                {
-                    ErrorMessage = Messages.ErrorMessageGeneric;
-                    Crashes.TrackError(ex, new Dictionary<string, string>
-                    {
-                        {"Game ID", _gameId.ToString()},
-                        {"Game User Entry ID", _gameUserEntryId.ToString()}
-                    });
+                    case TaskCanceledException _:
+                        ErrorMessage = Messages.ErrorMessageNoInternet;
+                        break;
+                    case ApiException _:
+                        ErrorMessage = Messages.ErrorMessageApiError;
+                        break;
+                    default:
+                        ErrorMessage = Messages.ErrorMessageGeneric;
+                        Crashes.TrackError(ex, new Dictionary<string, string>
+                        {
+                            {"Game ID", _gameId.ToString()},
+                            {"Game User Entry ID", _gameUserEntryId.ToString()}
+                        });
+                        break;
                 }
             });
 
@@ -131,18 +159,22 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             // Report errors if an exception was thrown.
             DeleteGameCommand.ThrownExceptions.Subscribe(ex =>
             {
-                if (ex is ApiException)
+                switch (ex)
                 {
-                    ErrorMessage = Messages.ErrorMessageApiError;
-                }
-                else
-                {
-                    ErrorMessage = Messages.ErrorMessageGeneric;
-                    Crashes.TrackError(ex, new Dictionary<string, string>
-                    {
-                        {"Game ID", _gameId.ToString()},
-                        {"Game User Entry ID", _gameUserEntryId.ToString()}
-                    });
+                    case TaskCanceledException _:
+                        ErrorMessage = Messages.ErrorMessageNoInternet;
+                        break;
+                    case ApiException _:
+                        ErrorMessage = Messages.ErrorMessageApiError;
+                        break;
+                    default:
+                        ErrorMessage = Messages.ErrorMessageGeneric;
+                        Crashes.TrackError(ex, new Dictionary<string, string>
+                        {
+                            {"Game ID", _gameId.ToString()},
+                            {"Game User Entry ID", _gameUserEntryId.ToString()}
+                        });
+                        break;
                 }
             });
 
@@ -183,8 +215,16 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// A <see cref="IEnumerable{T}" /> that contains all the platforms for the given game.
         /// </summary>
         [Reactive]
-        public ObservableCollection<ItemEntryViewModel> Platforms { get; set; } = new ObservableCollection<ItemEntryViewModel>();
+        public ObservableCollection<ItemEntryViewModel> Platforms { get; set; } = 
+            new ObservableCollection<ItemEntryViewModel>();
 
+        /// <summary>
+        /// A <see cref="IEnumerable{T}" /> that contains all the dlc for the given game.
+        /// </summary>
+        [Reactive]
+        public ObservableCollection<ItemEntryViewModel> DownloadableContents { get; set; } =
+            new ObservableCollection<ItemEntryViewModel>();
+                
         /// <summary>
         /// A <see cref="GameUserEntryStatus"/> that represents the currently selected status. Set to
         /// <code>null</code> by default.
@@ -200,10 +240,16 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         public short Rating { get; set; }
 
         /// <summary>
-        /// Command that is invoked each a platform is tapped on the view. When called, it will reserve the selected
+        /// Command that is invoked each time a platform is tapped on the view. When called, it will reserve the selected
         /// state of the given <see cref="ItemEntryViewModel"/>.
         /// </summary>
         public ReactiveCommand<ItemEntryViewModel, Unit> OnPlatformTappedCommand { get; }
+        
+        /// <summary>
+        /// Command that is invoked each time a dlc is tapped on the view. When called, it will reserve the selected
+        /// state of the given <see cref="ItemEntryViewModel"/>.
+        /// </summary>
+        public ReactiveCommand<ItemEntryViewModel, Unit> OnDownloadableContentTappedCommand { get; }
         
         /// <summary>
         /// Command that is invoked each time the page is first navigated to. When called, the command will
@@ -276,7 +322,9 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             GameUrl = parameters.GetValue<Uri>("game-url");
             _gameId = parameters.GetValue<long>("game-id");
 
-            LoadGameDetailsCommand.Execute().Subscribe();
+            LoadGameDetailsCommand.Execute()
+                .Catch(Observable.Return(Unit.Default))
+                .Subscribe();
         }
 
         /// <summary>
@@ -303,6 +351,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 Name = p.Name
             }).ToList();
 
+            var dlcSelections = gameDetails.DownloadableContents.Select(d => new ItemEntryViewModel
+            {
+                Id = d.Id,
+                Name = d.Name
+            }).ToList();
+            
             // Get the ID of the user currently logged in.
             var userId = await _storageService.GetUserIdAsync();
 
@@ -330,9 +384,20 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                         platform.IsSelected = true;
                     }
                 }
+
+                foreach (var gameUserEntryDownloadableContent in entry.GameUserEntryDownloadableContents)
+                {
+                    foreach (var downloadableContent in dlcSelections.Where(dlc =>
+                        dlc.Id == gameUserEntryDownloadableContent.DownloadableContentId))
+                    {
+                        downloadableContent.IsSelected = true;
+                    }
+                }
             }
 
             Platforms = new ObservableCollection<ItemEntryViewModel>(platformSelections);
+            DownloadableContents = new ObservableCollection<ItemEntryViewModel>(dlcSelections);
+            
             HasLoaded = true;
         }
 
@@ -368,7 +433,8 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 GameId = _gameId,
                 Rating = Rating,
                 Status = Status,
-                PlatformIds = Platforms.Where(p => p.IsSelected).Select(p => p.Id).ToList()
+                PlatformIds = Platforms.Where(p => p.IsSelected).Select(p => p.Id).ToList(),
+                DownloadableContentIds = DownloadableContents.Where(d => d.IsSelected).Select(d => d.Id).ToList()
             };
 
             var result = await _restService.PostAsync<GameUserEntry, GameUserEntryRequest>("games/entries", request);
@@ -413,7 +479,8 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 GameId = _gameId,
                 Rating = Rating,
                 Status = Status,
-                PlatformIds = Platforms.Where(p => p.IsSelected).Select(p => p.Id).ToList()
+                PlatformIds = Platforms.Where(p => p.IsSelected).Select(p => p.Id).ToList(),
+                DownloadableContentIds = DownloadableContents.Where(d => d.IsSelected).Select(d => d.Id).ToList()
             };
 
             var result = await _restService.PutAsync<GameUserEntry, GameUserEntryRequest>("games/entries", request);

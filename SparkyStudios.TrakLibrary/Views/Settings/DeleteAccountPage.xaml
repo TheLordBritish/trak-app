@@ -3,10 +3,10 @@
     x:Class="SparkyStudios.TrakLibrary.Views.Settings.DeleteAccountPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:behaviors="http://prismlibrary.com"
     xmlns:controls="clr-namespace:SparkyStudios.TrakLibrary.Controls;assembly=SparkyStudios.TrakLibrary"
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
     xmlns:settings="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Settings;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     Title="{extensions:Translate DeleteAccountPageTitle}"
     x:DataType="settings:DeleteAccountViewModel"
     AutomationId="DeleteAccountPage">
@@ -73,7 +73,7 @@
                         BorderThickness="1"
                         Text="{Binding DeleteMe.Value}">
                         <controls:BorderedEntry.Behaviors>
-                            <behaviors:EventToCommandBehavior
+                            <xct:EventToCommandBehavior
                                 Command="{Binding ClearValidationCommand}"
                                 CommandParameter="DeleteMe"
                                 EventName="Focused" />
@@ -89,8 +89,8 @@
                     </controls:BorderedEntry>
                     <!--  Email address validation errors  -->
                     <Label
-                        IsEnabled="{Binding DeleteMe.IsValid, Converter={StaticResource NegateBooleanConverter}}"
-                        IsVisible="{Binding DeleteMe.IsValid, Converter={StaticResource NegateBooleanConverter}}"
+                        IsEnabled="{Binding DeleteMe.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                        IsVisible="{Binding DeleteMe.IsValid, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource ValidationLabelStyle}"
                         Text="{Binding DeleteMe.FirstError}" />
 
@@ -108,7 +108,7 @@
                         Margin="0,20,0,0"
                         AutomationId="DeleteAccountPageDeleteButton"
                         Command="{Binding DeleteAccountCommand}"
-                        IsVisible="{Binding IsLoading, Converter={StaticResource NegateBooleanConverter}}"
+                        IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
                         Style="{StaticResource PrimaryButtonStyle}"
                         Text="{extensions:Translate DeleteAccountPageDelete}" />
                     <ActivityIndicator

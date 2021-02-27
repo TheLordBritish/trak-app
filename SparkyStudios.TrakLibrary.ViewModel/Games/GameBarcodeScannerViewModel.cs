@@ -101,6 +101,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             {
                 await AttemptBarcodeScanAsync();
             }
+            catch (TaskCanceledException e)
+            {
+                HandleTaskCanceledException(e);
+                IsBusy = false;
+            }
             catch (ApiException e)
             {
                 HandleApiException(e);
@@ -141,6 +146,27 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 await NavigationService.NavigateAsync("GamePage", parameters));
         }
 
+        /// <summary>
+        /// Private method that is invoked by the <see cref="ScanAsync" /> method when the <see cref="AttemptBarcodeScanAsync" />
+        /// throws an <see cref="TaskCanceledException" />. If an <see cref="TaskCanceledException" /> is thrown, it can be assumed
+        /// that the device is not currently connected to the internet.
+        ///
+        /// The user will be presented with an error message telling them that there is no internet, with an opportunity to retry
+        /// once they've reconnected.
+        /// </summary>
+        private void HandleTaskCanceledException(TaskCanceledException e)
+        {
+            var alertConfig = new AlertConfig()
+                .SetTitle(Messages.TrakTitle)
+                .SetMessage(Messages.ErrorMessageNoInternet);
+
+            _formsDevice.BeginInvokeOnMainThread(async () =>
+            {
+                await _userDialogs.AlertAsync(alertConfig);
+                IsAnalyzing = true;
+            });
+        }
+        
         /// <summary>
         /// Private method that is invoked by the <see cref="ScanAsync" /> method when the
         /// <see cref="AttemptBarcodeScanAsync" /> throws a <see cref="ApiException" />. This method

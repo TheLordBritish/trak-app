@@ -723,4 +723,16 @@
   <data name="GameOptionsPageSelectDlc" xml:space="preserve">
     <value>Select DLC</value>
   </data>
+  <data name="HomePageGames" xml:space="preserve">
+    <value>Games</value>
+  </data>
+  <data name="HomePageBooks" xml:space="preserve">
+    <value>Books</value>
+  </data>
+  <data name="HomePageAnime" xml:space="preserve">
+    <value>Anime</value>
+  </data>
+  <data name="HomePageManga" xml:space="preserve">
+    <value>Manga</value>
+  </data>
 </root>

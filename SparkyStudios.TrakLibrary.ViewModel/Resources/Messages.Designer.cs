@@ -1087,6 +1087,42 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anime.
+        /// </summary>
+        public static string HomePageAnime {
+            get {
+                return ResourceManager.GetString("HomePageAnime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Books.
+        /// </summary>
+        public static string HomePageBooks {
+            get {
+                return ResourceManager.GetString("HomePageBooks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Games.
+        /// </summary>
+        public static string HomePageGames {
+            get {
+                return ResourceManager.GetString("HomePageGames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manga.
+        /// </summary>
+        public static string HomePageManga {
+            get {
+                return ResourceManager.GetString("HomePageManga", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keep track of all your collections here in your library..
         /// </summary>
         public static string HomePageSubtitle {

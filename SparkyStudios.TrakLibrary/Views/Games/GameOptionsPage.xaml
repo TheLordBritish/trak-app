@@ -3,13 +3,11 @@
     x:Class="SparkyStudios.TrakLibrary.Views.Games.GameOptionsPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:behaviors="http://prismlibrary.com"
     xmlns:common="clr-namespace:SparkyStudios.TrakLibrary.Controls.Common;assembly=SparkyStudios.TrakLibrary"
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
     xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel"
     xmlns:gc="clr-namespace:SparkyStudios.TrakLibrary.Controls.Games;assembly=SparkyStudios.TrakLibrary"
     xmlns:vmCommon="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Common;assembly=SparkyStudios.TrakLibrary.ViewModel"
-    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     x:Name="GameOptions"
     x:DataType="games:GameOptionsViewModel"
     BackgroundColor="{StaticResource TrakPrimaryBlue}">

@@ -190,7 +190,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                 Links = new Dictionary<string, HateoasLink>
                 {
                     {
-                        "image", new HateoasLink
+                        "medium_image", new HateoasLink
                         {
                             Href = new Uri("https://traklibrary.com/image")
                         }
@@ -241,7 +241,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             _scheduler.Start();
 
             // Assert
-            Assert.AreEqual(gameDetails.GetLink("image").OriginalString, _gameViewModel.ImageUrl.OriginalString,
+            Assert.AreEqual(gameDetails.GetLink("medium_image").OriginalString, _gameViewModel.ImageUrl.OriginalString,
                 "The image url should match.");
             Assert.AreEqual(gameDetails.Title, _gameViewModel.GameTitle, "The titles should match.");
             Assert.AreEqual(gameDetails.Description, _gameViewModel.Description, "The titles should match.");
@@ -322,7 +322,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                 Links = new Dictionary<string, HateoasLink>
                 {
                     {
-                        "image", new HateoasLink
+                        "medium_image", new HateoasLink
                         {
                             Href = new Uri("https://traklibrary.com/image")
                         }
@@ -387,7 +387,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             _scheduler.Start();
 
             // Assert
-            Assert.AreEqual(gameDetails.GetLink("image").OriginalString, _gameViewModel.ImageUrl.OriginalString,
+            Assert.AreEqual(gameDetails.GetLink("medium_image").OriginalString, _gameViewModel.ImageUrl.OriginalString,
                 "The image url should match.");
             Assert.AreEqual(gameDetails.Title, _gameViewModel.GameTitle, "The titles should match.");
             Assert.AreEqual(gameDetails.Description, _gameViewModel.Description, "The titles should match.");

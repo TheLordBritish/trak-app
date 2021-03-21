@@ -274,7 +274,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             // Retrieve the game and set some game information on the view.
             var gameDetails = await _restService.GetAsync<GameDetails>(GameUrl.OriginalString);
             _gameId = gameDetails.Id;
-            ImageUrl = gameDetails.GetLink("image");
+            ImageUrl = gameDetails.GetLink("medium_image");
             GameTitle = gameDetails.Title;
             Description = gameDetails.Description;
             Publishers = gameDetails.Publishers;
@@ -361,7 +361,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             foreach (var game in games)
                 similarGames.Add(new ListItemViewModel
                 {
-                    ImageUrl = game.GetLink("image"),
+                    ImageUrl = game.GetLink("small_image"),
                     HeaderDetails = game.Platforms.Select(x => new ItemEntryViewModel
                     {
                         Name = x.Name,

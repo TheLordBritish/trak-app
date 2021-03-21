@@ -256,7 +256,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 
             return new ListItemViewModel
             {
-                ImageUrl = gameDetails.GetLink("image"),
+                ImageUrl = gameDetails.GetLink("small_image"),
                 HeaderDetails = platforms,
                 ItemTitle = gameDetails.Title,
                 ItemSubTitle = string.Join(", ", gameDetails.Publishers.Select(x => x.Name)),

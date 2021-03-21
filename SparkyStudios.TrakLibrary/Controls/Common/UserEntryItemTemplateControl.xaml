@@ -7,7 +7,6 @@
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Name="UserEntryItemTemplateControlView"
-    HeightRequest="150"
     RowSpacing="0"
     mc:Ignorable="d">
     <Grid.GestureRecognizers>
@@ -26,13 +25,14 @@
         Aspect="AspectFit"
         Source="{Binding ImageUrl}"
         VerticalOptions="Start"
-        WidthRequest="75" />
+        WidthRequest="100" />
     <ActivityIndicator
         Grid.Row="0"
         Grid.Column="0"
         BindingContext="{x:Reference ListViewItemImage}"
         IsRunning="{Binding IsLoading}"
-        IsVisible="{Binding IsLoading}" />
+        IsVisible="{Binding IsLoading}"
+        WidthRequest="80" />
 
     <Grid
         Grid.Row="0"
@@ -50,7 +50,7 @@
             Grid.Row="0"
             Divider="|"
             FontSize="{StaticResource TrakFontSmall}"
-            HeightRequest="15"
+            HeightRequest="18"
             ItemsSource="{Binding HeaderDetails}" />
 
         <!--  The user entry item title  -->

@@ -8,6 +8,7 @@ using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Microsoft.AppCenter.Crashes;
+using Prism.Commands;
 using Prism.Navigation;
 using ReactiveUI;
 using ReactiveUI.Fody.Helpers;
@@ -84,7 +85,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         public bool ShouldReload { get; set; }
 
         /// <summary>
-        /// A <see cref="Uri"/> which specifies the URI from which the <see cref="game_details"/> was loaded from.
+        /// A <see cref="Uri"/> which specifies the URI from which the <see cref="GameDetails"/> was loaded from.
         /// </summary>
         [Reactive]
         public Uri GameUrl { get; set; }
@@ -350,7 +351,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 
         /// <summary>
         /// Private method that is invoked within the <see cref="LoadGameDetailsAsync" /> method. Its purpose
-        /// is to convert the provided <see cref="IEnumerable{T}" /> of <see cref="game_details" /> instances into
+        /// is to convert the provided <see cref="IEnumerable{T}" /> of <see cref="GameDetails" /> instances into
         /// <see cref="ListItemViewModel" /> instances for displaying within the list on the game page view.
         /// </summary>
         /// <param name="games">The <see cref="IEnumerable{T}" /> to convert into <see cref="ListItemViewModel" /> instances.</param>
@@ -367,7 +368,16 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                         IsSelected = true
                     }).OrderBy(x => x.Name).ToList(),
                     ItemTitle = game.Title,
-                    ItemSubTitle = string.Join(", ", game.Publishers.Select(x => x.Name))
+                    ItemSubTitle = string.Join(", ", game.Publishers.Select(x => x.Name)),
+                    TapCommand = new DelegateCommand(async () =>
+                    {
+                        var parameters = new NavigationParameters
+                        {
+                            {"game-url", game.GetLink("self")}
+                        };
+
+                        await NavigationService.NavigateAsync("GamePage", parameters);
+                    })
                 });
 
             SimilarGames = similarGames;
@@ -378,7 +388,8 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             foreach (var platform in platforms)
             {
                 platform.HasNext = false;
-                platform.IsSelected = selectedPlatformIds.Contains(platform.Id);
+                var platformIds = selectedPlatformIds as long[] ?? selectedPlatformIds.ToArray();
+                platform.IsSelected = platformIds.Contains(platform.Id);
             }
 
             var sortedPlatforms = platforms.OrderBy(x => !x.IsSelected)

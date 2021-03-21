@@ -60,11 +60,10 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
             var content = new StringContent(JsonConvert.SerializeObject(userCredentials, _serializerSettings),
                 Encoding.UTF8, "application/json");
-            using var response = await client.PostAsync("auth", content);
+            using var response = await client.PostAsync("auth/token", content);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -89,8 +88,7 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
-            
+
             var content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
             using var response = await client.PutAsync($"auth/users/{username}/verify?verification-code={verificationCode}", content);
 
@@ -117,7 +115,6 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
             
             var content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
             using var response = await client.PutAsync($"auth/users/{username}/reverify", content);
@@ -142,7 +139,6 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
             var content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
             using var response = await client.PutAsync($"auth/users/recover?email-address={emailAddress}", content);
@@ -167,7 +163,6 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
             var content = new StringContent(JsonConvert.SerializeObject(registrationRequest, _serializerSettings),
                 Encoding.UTF8, "application/json");
@@ -196,7 +191,6 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
             var content = new StringContent(JsonConvert.SerializeObject(recoveryRequest, _serializerSettings),
                 Encoding.UTF8, "application/json");
@@ -225,7 +219,6 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
             
             var content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
             using var response = await client.PutAsync($"auth/users/{username}/request-change-password", content);
@@ -250,7 +243,6 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
             var content = new StringContent(JsonConvert.SerializeObject(changePasswordRequest, _serializerSettings),
                 Encoding.UTF8, "application/json");
@@ -279,7 +271,6 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             using var client = _httpClientFactory.CreateClient("TrakAuth");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
 
             var content = new StringContent(JsonConvert.SerializeObject(changeEmailAddressRequest, _serializerSettings),
                 Encoding.UTF8, "application/json");

@@ -19,7 +19,7 @@ namespace SparkyStudios.TrakLibrary.Service.Handlers
         {
             var uri = request.RequestUri.OriginalString;
 
-            if (uri.EndsWith("/api/auth") && request.Method == HttpMethod.Post ||
+            if (uri.EndsWith("/api/auth/token") && request.Method == HttpMethod.Post ||
                 uri.EndsWith("/api/auth/users") && request.Method == HttpMethod.Post ||
                 uri.EndsWith("/api/auth/users") && request.Method == HttpMethod.Put ||
                 uri.EndsWith("/api/auth/users/recover") && request.Method == HttpMethod.Put)

@@ -37,8 +37,7 @@ namespace SparkyStudios.TrakLibrary.Service
                 })
                 .AddPolicyHandler(retryPolicy)
                 .AddPolicyHandler(timeoutPolicy)
-                .AddHttpMessageHandler(c => new AuthTokenHandler(storageService))
-                .AddHttpMessageHandler(c => new RefreshTokenHandler(storageService));
+                .AddHttpMessageHandler(c => new AuthTokenHandler(storageService));
 
             serviceCollection
                 .AddHttpClient("TrakAuth", client =>
@@ -46,8 +45,7 @@ namespace SparkyStudios.TrakLibrary.Service
                     client.BaseAddress = new Uri(environmentUrl);
                 })
                 .AddPolicyHandler(Policy.TimeoutAsync<HttpResponseMessage>(20))
-                .AddHttpMessageHandler(c => new AuthTokenHandler(storageService))
-                .AddHttpMessageHandler(c => new RefreshTokenHandler(storageService));
+                .AddHttpMessageHandler(c => new AuthTokenHandler(storageService));
 
             var serviceProvider = serviceCollection.BuildServiceProvider();
             

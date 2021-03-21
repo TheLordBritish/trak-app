@@ -15,7 +15,7 @@
                 Binding="{Binding Rating, Source={x:Reference RatingUserControlView}, Converter={extensions:GreaterThanOrEqual Value=1}}"
                 TargetType="Image"
                 Value="True">
-                <Setter Property="Source" Value="star_white.png" />
+                <Setter Property="Source" Value="star_purple.png" />
             </DataTrigger>
         </Image.Triggers>
         <Image.GestureRecognizers>
@@ -31,7 +31,7 @@
                 Binding="{Binding Rating, Source={x:Reference RatingUserControlView}, Converter={extensions:GreaterThanOrEqual Value=2}}"
                 TargetType="Image"
                 Value="True">
-                <Setter Property="Source" Value="star_white.png" />
+                <Setter Property="Source" Value="star_purple.png" />
             </DataTrigger>
         </Image.Triggers>
         <Image.GestureRecognizers>
@@ -47,7 +47,7 @@
                 Binding="{Binding Rating, Source={x:Reference RatingUserControlView}, Converter={extensions:GreaterThanOrEqual Value=3}}"
                 TargetType="Image"
                 Value="True">
-                <Setter Property="Source" Value="star_white.png" />
+                <Setter Property="Source" Value="star_purple.png" />
             </DataTrigger>
         </Image.Triggers>
         <Image.GestureRecognizers>
@@ -63,7 +63,7 @@
                 Binding="{Binding Rating, Source={x:Reference RatingUserControlView}, Converter={extensions:GreaterThanOrEqual Value=4}}"
                 TargetType="Image"
                 Value="True">
-                <Setter Property="Source" Value="star_white.png" />
+                <Setter Property="Source" Value="star_purple.png" />
             </DataTrigger>
         </Image.Triggers>
         <Image.GestureRecognizers>
@@ -79,7 +79,7 @@
                 Binding="{Binding Rating, Source={x:Reference RatingUserControlView}, Converter={extensions:GreaterThanOrEqual Value=5}}"
                 TargetType="Image"
                 Value="True">
-                <Setter Property="Source" Value="star_white.png" />
+                <Setter Property="Source" Value="star_purple.png" />
             </DataTrigger>
         </Image.Triggers>
         <Image.GestureRecognizers>

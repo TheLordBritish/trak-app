@@ -122,7 +122,7 @@
                     <!--  Game platforms  -->
                     <common:DividerControl
                         Grid.Row="2"
-                        Margin="20,0"
+                        Margin="20,10,20,0"
                         Divider="|"
                         FontSize="{StaticResource TrakFontMedium}"
                         HeightRequest="25"
@@ -263,14 +263,19 @@
                         IsVisible="{Binding InLibrary}"
                         Status="{Binding Status}" />
 
-                    <Label
+                    <StackLayout
                         Grid.Row="19"
                         Margin="20,25,20,10"
-                        FontSize="{StaticResource TrakFontMedium}"
-                        LineBreakMode="WordWrap"
-                        MaxLines="2"
-                        Style="{StaticResource TitleLabelStyle}"
-                        Text="{extensions:Translate GamePageSimilarGames}" />
+                        Orientation="Horizontal">
+                        <Label
+                            FontSize="{StaticResource TrakFontMedium}"
+                            HorizontalOptions="StartAndExpand"
+                            LineBreakMode="WordWrap"
+                            MaxLines="2"
+                            Style="{StaticResource TitleLabelStyle}"
+                            Text="{extensions:Translate GamePageSimilarGames}" />
+                        <Image HorizontalOptions="End" Source="arrow_right_purple.png" />
+                    </StackLayout>
 
                     <!--  List that is displayed if there are any results returned from the initial request.  -->
                     <StackLayout
@@ -279,7 +284,7 @@
                         BindableLayout.ItemsSource="{Binding SimilarGames}">
                         <BindableLayout.ItemTemplate>
                             <DataTemplate>
-                                <common:UserEntryItemTemplateControl Margin="0,10" />
+                                <common:UserEntryItemTemplateControl Margin="0,5" />
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </StackLayout>

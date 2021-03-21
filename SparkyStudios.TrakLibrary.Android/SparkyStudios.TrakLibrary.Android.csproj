@@ -97,9 +97,8 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\arrow_left_purple.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\arrow_left_white.png" />
     <AndroidResource Include="Resources\drawable-hdpi\arrow_right_purple.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\expand_white.png" />
     <AndroidResource Include="Resources\drawable-hdpi\hamburger.png" />
     <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-hdpi\logo_background.png" />
@@ -109,11 +108,10 @@
     <AndroidResource Include="Resources\drawable-hdpi\refresh_white.png" />
     <AndroidResource Include="Resources\drawable-hdpi\splashscreen.xml" />
     <AndroidResource Include="Resources\drawable-hdpi\star_grey.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\star_white.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\star_purple.png" />
     <AndroidResource Include="Resources\drawable-hdpi\trash_can.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\arrow_left_purple.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\arrow_left_white.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\arrow_right_purple.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\expand_white.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\hamburger.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\logo_background.png" />
@@ -123,11 +121,10 @@
     <AndroidResource Include="Resources\drawable-xhdpi\refresh_white.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\splashscreen.xml" />
     <AndroidResource Include="Resources\drawable-xhdpi\star_grey.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\star_white.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\star_purple.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\trash_can.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\arrow_left_purple.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\arrow_left_white.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\arrow_right_purple.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\expand_white.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\hamburger.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\logo_background.png" />
@@ -137,11 +134,10 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\refresh_white.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\splashscreen.xml" />
     <AndroidResource Include="Resources\drawable-xxhdpi\star_grey.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\star_white.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\star_purple.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\trash_can.png" />
-    <AndroidResource Include="Resources\drawable\arrow_left_purple.png" />
-    <AndroidResource Include="Resources\drawable\arrow_left_white.png" />
     <AndroidResource Include="Resources\drawable\arrow_right_purple.png" />
+    <AndroidResource Include="Resources\drawable\expand_white.png" />
     <AndroidResource Include="Resources\drawable\hamburger.png" />
     <AndroidResource Include="Resources\drawable\logo.png" />
     <AndroidResource Include="Resources\drawable\logo_background.png" />
@@ -151,7 +147,7 @@
     <AndroidResource Include="Resources\drawable\refresh_white.png" />
     <AndroidResource Include="Resources\drawable\splashscreen.xml" />
     <AndroidResource Include="Resources\drawable\star_grey.png" />
-    <AndroidResource Include="Resources\drawable\star_white.png" />
+    <AndroidResource Include="Resources\drawable\star_purple.png" />
     <AndroidResource Include="Resources\drawable\trash_can.png" />
     <AndroidResource Include="Resources\font\mulish.xml" />
     <AndroidResource Include="Resources\font\mulish_bold.ttf" />

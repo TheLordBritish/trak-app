@@ -42,7 +42,25 @@
                         AutomationId="HomePageGamesButton"
                         Command="{Binding LoadGamesCommand}"
                         Style="{StaticResource SecondaryButtonStyle}"
-                        Text="Games" />
+                        Text="{extensions:Translate HomePageGames}" />
+                    <!--  Games list button  -->
+                    <Button
+                        Margin="0,10"
+                        AutomationId="HomePageBooksButton"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Text="{extensions:Translate HomePageBooks}" />
+                    <!--  Games list button  -->
+                    <Button
+                        Margin="0,10"
+                        AutomationId="HomePageAnimeButton"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Text="{extensions:Translate HomePageAnime}" />
+                    <!--  Games list button  -->
+                    <Button
+                        Margin="0,10"
+                        AutomationId="HomePageMangaButton"
+                        Style="{StaticResource SecondaryButtonStyle}"
+                        Text="{extensions:Translate HomePageManga}" />
                 </StackLayout>
             </Grid>
         </ScrollView>

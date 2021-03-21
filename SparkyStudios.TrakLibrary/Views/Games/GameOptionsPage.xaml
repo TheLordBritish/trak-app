@@ -150,7 +150,7 @@
                                     <Label
                                         Grid.Column="0"
                                         LineBreakMode="WordWrap"
-                                        MaxLines="2"
+                                        MaxLines="3"
                                         Text="{Binding Name}"
                                         TextColor="{StaticResource TrakGrey}"
                                         VerticalOptions="StartAndExpand">

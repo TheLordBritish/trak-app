@@ -51,7 +51,8 @@
             Divider="|"
             FontSize="{StaticResource TrakFontSmall}"
             HeightRequest="18"
-            ItemsSource="{Binding HeaderDetails}" />
+            ItemsSource="{Binding HeaderDetails}"
+            Limit="3" />
 
         <!--  The user entry item title  -->
         <Label

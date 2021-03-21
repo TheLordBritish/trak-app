@@ -126,7 +126,8 @@
                         Divider="|"
                         FontSize="{StaticResource TrakFontMedium}"
                         HeightRequest="25"
-                        ItemsSource="{Binding Platforms}" />
+                        ItemsSource="{Binding Platforms}"
+                        Limit="3" />
 
                     <!--  Game title  -->
                     <Label

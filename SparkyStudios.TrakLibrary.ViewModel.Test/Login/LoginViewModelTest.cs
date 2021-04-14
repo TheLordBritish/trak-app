@@ -65,7 +65,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _scheduler.Start();
 
             // Assert
-            _authService.Verify(a => a.GetTokenAsync(It.IsAny<UserCredentials>()), Times.Never);
+            _authService.Verify(a => a.GetTokenAsync(It.IsAny<LoginRequest>()), Times.Never);
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _scheduler.Start();
 
             // Assert
-            _authService.Verify(a => a.GetTokenAsync(It.IsAny<UserCredentials>()), Times.Never);
+            _authService.Verify(a => a.GetTokenAsync(It.IsAny<LoginRequest>()), Times.Never);
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _loginViewModel.Username.Value = "Username";
             _loginViewModel.Password.Value = "Password";
 
-            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<UserCredentials>()))
+            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<LoginRequest>()))
                 .Throws(new TaskCanceledException());
 
             // Act
@@ -109,7 +109,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _loginViewModel.Username.Value = "Username";
             _loginViewModel.Password.Value = "Password";
 
-            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<UserCredentials>()))
+            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<LoginRequest>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.Unauthorized});
 
             // Act
@@ -129,7 +129,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _loginViewModel.Username.Value = "Username";
             _loginViewModel.Password.Value = "Password";
 
-            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<UserCredentials>()))
+            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<LoginRequest>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.Conflict});
 
             // Act
@@ -149,7 +149,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _loginViewModel.Username.Value = "Username";
             _loginViewModel.Password.Value = "Password";
 
-            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<UserCredentials>()))
+            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<LoginRequest>()))
                 .Throws(new Exception());
 
             // Act
@@ -169,7 +169,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _loginViewModel.Username.Value = "Username";
             _loginViewModel.Password.Value = "Password";
 
-            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<UserCredentials>()))
+            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<LoginRequest>()))
                 .ReturnsAsync("token");
             
             _securityTokenHandler.Setup(mock => mock.ReadToken(It.IsAny<string>()))
@@ -211,7 +211,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _loginViewModel.Username.Value = "Username";
             _loginViewModel.Password.Value = "Password";
 
-            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<UserCredentials>()))
+            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<LoginRequest>()))
                 .ReturnsAsync("token");
             
             _securityTokenHandler.Setup(mock => mock.ReadToken(It.IsAny<string>()))

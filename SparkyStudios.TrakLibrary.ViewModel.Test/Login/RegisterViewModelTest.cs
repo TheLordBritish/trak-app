@@ -214,7 +214,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             Assert.IsTrue(_registerViewModel.IsError, "vm.IsError should be true if the user response has an error.");
             Assert.AreEqual("error", _registerViewModel.ErrorMessage, "The error message is incorrect.");
 
-            _authService.Verify(s => s.GetTokenAsync(It.IsAny<UserCredentials>()), Times.Never);
+            _authService.Verify(s => s.GetTokenAsync(It.IsAny<LoginRequest>()), Times.Never);
         }
 
         [Test]
@@ -236,7 +236,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
                     }
                 });
 
-            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<UserCredentials>()))
+            _authService.Setup(mock => mock.GetTokenAsync(It.IsAny<LoginRequest>()))
                 .ReturnsAsync("token");
 
             _storageService.Setup(mock => mock.SetAuthTokenAsync(It.IsAny<string>()))

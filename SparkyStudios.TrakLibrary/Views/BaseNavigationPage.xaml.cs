@@ -1,4 +1,4 @@
-﻿namespace SparkyStudios.TrakLibrary
+﻿namespace SparkyStudios.TrakLibrary.Views
 {
     public partial class BaseNavigationPage
     {

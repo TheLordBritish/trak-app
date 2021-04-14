@@ -5,7 +5,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:common="clr-namespace:SparkyStudios.TrakLibrary.Controls.Common;assembly=SparkyStudios.TrakLibrary"
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
-    xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel">
+    xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}">
     <ContentPage.Content>
         <Grid x:DataType="games:GameUserEntryFilterViewModel">
             <Grid.RowDefinitions>

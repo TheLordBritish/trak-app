@@ -49,6 +49,18 @@
                 <Setter Property="PlaceholderColor" Value="{StaticResource TrakGrey}" />
             </Style>
 
+            <Style TargetType="{x:Type NavigationPage}">
+                <Setter Property="BackgroundColor" Value="{DynamicResource AppBackgroundColor}" />
+            </Style>
+
+            <Style TargetType="{x:Type ContentPage}">
+                <Setter Property="BackgroundColor" Value="{DynamicResource AppBackgroundColor}" />
+            </Style>
+
+            <Style TargetType="{x:Type TabbedPage}">
+                <Setter Property="BackgroundColor" Value="{DynamicResource AppBackgroundColor}" />
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </prism:PrismApplication>

@@ -15,7 +15,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             var validator = new UserCredentialsValidator();
 
             // Act
-            var result = validator.Validate(new UserCredentials {Password = "Password"});
+            var result = validator.Validate(new LoginRequest {Password = "Password"});
 
             // Assert
             Assert.AreEqual(Messages.LoginErrorMessageUsernameEmpty,
@@ -30,7 +30,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             var validator = new UserCredentialsValidator();
 
             // Act
-            var result = validator.Validate(new UserCredentials {Username = string.Empty, Password = "Password"});
+            var result = validator.Validate(new LoginRequest {Username = string.Empty, Password = "Password"});
 
             // Assert
             Assert.AreEqual(Messages.LoginErrorMessageUsernameEmpty,
@@ -45,7 +45,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             var validator = new UserCredentialsValidator();
 
             // Act
-            var result = validator.Validate(new UserCredentials {Username = "Username"});
+            var result = validator.Validate(new LoginRequest {Username = "Username"});
 
             // Assert
             Assert.AreEqual(Messages.LoginErrorMessagePasswordEmpty,
@@ -60,7 +60,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             var validator = new UserCredentialsValidator();
 
             // Act
-            var result = validator.Validate(new UserCredentials {Username = "Username", Password = string.Empty});
+            var result = validator.Validate(new LoginRequest {Username = "Username", Password = string.Empty});
 
             // Assert
             Assert.AreEqual(Messages.LoginErrorMessagePasswordEmpty,
@@ -75,7 +75,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             var validator = new UserCredentialsValidator();
 
             // Act
-            var result = validator.Validate(new UserCredentials {Username = "Username", Password = "Password"});
+            var result = validator.Validate(new LoginRequest {Username = "Username", Password = "Password"});
 
             // Assert
             Assert.IsTrue(result.IsValid, "result.IsValid should be true for valid user credentials.");

@@ -8,7 +8,8 @@
     xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Games;assembly=SparkyStudios.TrakLibrary.ViewModel"
     Title="{extensions:Translate GameBarcodeScannerPageTitle}"
     x:DataType="games:GameBarcodeScannerViewModel"
-    AutomationId="GameBarcodeScannerPage">
+    AutomationId="GameBarcodeScannerPage"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}">
     <ContentPage.Content>
         <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
             <Grid.RowDefinitions>

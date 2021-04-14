@@ -38,6 +38,7 @@ namespace SparkyStudios.TrakLibrary.Droid
             TimePromptConfig.DefaultAndroidStyleId = dialogStyle;
             LoginConfig.DefaultAndroidStyleId = dialogStyle;
             
+            
             // We only want to generate a notification channel for push notifications if google play is available
             // on the device running it. 
             if (GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this) == ConnectionResult.Success)

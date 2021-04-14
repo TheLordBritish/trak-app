@@ -34,6 +34,8 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 
         private long _gameId;
 
+        private Uri _previousGameUrl;
+        
         /// <summary>
         /// Constructor that is invoked by the Prism DI framework to inject all of the needed dependencies.
         /// The constructors should never be invoked outside of the Prism DI framework. All instantiation
@@ -89,7 +91,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// </summary>
         [Reactive]
         public Uri GameUrl { get; set; }
-
+        
         /// <summary>
         /// A <see cref="Uri" /> that contains the URL of the image that is associated with the game within this view model.
         /// </summary>
@@ -207,6 +209,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// </summary>
         public ReactiveCommand<Unit, Unit> LoadGameDetailsCommand { get; }
 
+        public override void OnNavigatedFrom(INavigationParameters parameters)
+        {
+            if (parameters.GetNavigationMode() == NavigationMode.Back && _previousGameUrl != null)
+            {
+                parameters.Add("game-url", _previousGameUrl);
+                parameters.Add("reload", true);
+            }
+        }
+
         /// <summary>
         /// Overriden method that is automatically invoked when the page is navigated to. Its purpose is to retrieve
         /// values from the <see cref="NavigationParameters" /> before invoking <see cref="LoadGameDetailsAsync" /> to
@@ -215,15 +226,18 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// <param name="parameters">The <see cref="NavigationParameters" />, which contains information for display purposes.</param>
         public override void OnNavigatedTo(INavigationParameters parameters)
         {
+            _previousGameUrl = parameters.GetValue<Uri>("previous-game-url");
+            var reload = parameters.GetValue<bool>("reload");
+            
             // Retrieve the url we're going to use to retrieve the base game data.
             ShouldReload = parameters.GetNavigationMode() == NavigationMode.New ||
-                           parameters.GetNavigationMode() == NavigationMode.Forward;
-
+                           parameters.GetNavigationMode() == NavigationMode.Forward || reload;
+            
             GameUrl = parameters.GetValue<Uri>("game-url");
             Rating = parameters.GetValue<short>("rating");
             Status = parameters.GetValue<GameUserEntryStatus>("status");
             InLibrary = parameters.GetValue<bool>("in-library");
-            
+                
             // They'll only be selected platform ID's if the page is being navigated to from the game
             // options page. 
             var selectedPlatformIds = parameters.GetValue<IEnumerable<long>>("selected-platforms");
@@ -373,7 +387,8 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                     {
                         var parameters = new NavigationParameters
                         {
-                            {"game-url", game.GetLink("self")}
+                            {"game-url", game.GetLink("self")},
+                            {"previous-game-url", GameUrl}
                         };
 
                         await NavigationService.NavigateAsync("GamePage", parameters);

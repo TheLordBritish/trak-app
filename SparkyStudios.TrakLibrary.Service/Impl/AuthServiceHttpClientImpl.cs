@@ -50,7 +50,7 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             };
         }
 
-        public async Task<string> GetTokenAsync(UserCredentials userCredentials)
+        public async Task<string> GetTokenAsync(LoginRequest loginRequest)
         {
             if (!_connectionService.IsConnected())
             {
@@ -61,7 +61,7 @@ namespace SparkyStudios.TrakLibrary.Service.Impl
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/vnd.traklibrary.v1+json"));
 
-            var content = new StringContent(JsonConvert.SerializeObject(userCredentials, _serializerSettings),
+            var content = new StringContent(JsonConvert.SerializeObject(loginRequest, _serializerSettings),
                 Encoding.UTF8, "application/json");
             using var response = await client.PostAsync("auth/token", content);
 

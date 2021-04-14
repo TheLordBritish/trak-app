@@ -9,6 +9,7 @@
     Title="{extensions:Translate GameUserEntriesTabbedPageTitle}"
     x:DataType="vms:GameUserEntriesTabbedViewModel"
     AutomationId="GameUserEntriesTabbedPage"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}"
     BarBackgroundColor="{StaticResource TrakPrimaryBlue}">
     <TabbedPage.Children>
         <games:GameUserEntryTabbedListPage

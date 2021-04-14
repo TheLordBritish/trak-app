@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <NavigationPage
-    x:Class="SparkyStudios.TrakLibrary.BaseNavigationPage"
+    x:Class="SparkyStudios.TrakLibrary.Views.BaseNavigationPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:viewModel="clr-namespace:SparkyStudios.TrakLibrary.ViewModel;assembly=SparkyStudios.TrakLibrary.ViewModel"
     Title="Title"
-    x:DataType="viewModel:NavigationViewModel"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}"
+    BarBackgroundColor="{StaticResource TrakPrimaryBlue}"
     BarTextColor="{StaticResource TrakWhite}"
     NavigationPage.BackButtonTitle=" " />

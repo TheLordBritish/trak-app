@@ -248,7 +248,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
             {
                 // If there are no issues, retrieve the authenticated token.
                 var user = userCreationResponse.Data;
-                var token = await _authService.GetTokenAsync(new UserCredentials
+                var token = await _authService.GetTokenAsync(new LoginRequest
                 {
                     Username = user.Username,
                     Password = Password.Value

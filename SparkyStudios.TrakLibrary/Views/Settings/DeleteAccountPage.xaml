@@ -9,7 +9,8 @@
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     Title="{extensions:Translate DeleteAccountPageTitle}"
     x:DataType="settings:DeleteAccountViewModel"
-    AutomationId="DeleteAccountPage">
+    AutomationId="DeleteAccountPage"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}">
     <ContentPage.Content>
         <ScrollView
             Padding="35"

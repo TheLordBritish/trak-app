@@ -30,7 +30,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
     /// The <see cref="LoginViewModel"/> also provides methods to validate fields on the login page view. Any
     /// validation errors or generic errors are stored within the view model for use on the view.
     /// </summary>
-    public class LoginViewModel : ReactiveViewModel, IValidate<UserCredentials>
+    public class LoginViewModel : ReactiveViewModel, IValidate<LoginRequest>
     {
         private readonly IAuthService _authService;
         private readonly IStorageService _storageService;
@@ -147,23 +147,23 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
         /// </summary>
         public void SetupForValidation()
         {
-            Username = new Validatable<string>(nameof(UserCredentials.Username));
-            Password = new Validatable<string>(nameof(UserCredentials.Password));
+            Username = new Validatable<string>(nameof(LoginRequest.Username));
+            Password = new Validatable<string>(nameof(LoginRequest.Password));
 
             _validator = new UserCredentialsValidator();
             _validatables = new Validatables(Username, Password);
         }
 
         /// <summary>
-        /// Validates the specified <see cref="UserCredentials"/> model with the validation rules specified within
+        /// Validates the specified <see cref="LoginRequest"/> model with the validation rules specified within
         /// this class, which are contained within the <see cref="UserCredentialsValidator"/>. The results, regardless
         /// of whether they are true or false are applied to the validatable variable. 
         /// </summary>
-        /// <param name="model">The <see cref="UserCredentials"/> instance to validate against the <see cref="UserCredentialsValidator"/>.</param>
+        /// <param name="model">The <see cref="LoginRequest"/> instance to validate against the <see cref="UserCredentialsValidator"/>.</param>
         /// <returns>A <see cref="OverallValidationResult"/> which will contain a list of any errors.</returns>
-        public OverallValidationResult Validate(UserCredentials model)
+        public OverallValidationResult Validate(LoginRequest model)
         {
-            return _validator.Validate(new ValidationContext<UserCredentials>(model))
+            return _validator.Validate(new ValidationContext<LoginRequest>(model))
                 .ApplyResultsTo(_validatables);
         }
 
@@ -192,12 +192,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
         {
             IsError = false;
 
-            var registration = _validatables.Populate<UserCredentials>();
+            var registration = _validatables.Populate<LoginRequest>();
             var validationResult = Validate(registration);
             
             if (validationResult.IsValidOverall)
             {
-                var token = await _authService.GetTokenAsync(new UserCredentials
+                var token = await _authService.GetTokenAsync(new LoginRequest
                 {
                     Username = Username.Value,
                     Password = Password.Value

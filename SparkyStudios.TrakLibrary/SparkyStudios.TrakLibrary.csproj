@@ -94,6 +94,10 @@
     <Compile Update="Styles\LabelStyles.xaml.cs">
       <DependentUpon>LabelStyles.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\BaseNavigationPage.xaml.cs">
+      <DependentUpon>BaseNavigationPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

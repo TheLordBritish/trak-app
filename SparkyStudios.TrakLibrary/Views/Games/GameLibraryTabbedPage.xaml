@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-
 <TabbedPage
     x:Class="SparkyStudios.TrakLibrary.Views.Games.GameLibraryTabbedPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
     Title="{extensions:Translate GameLibraryTabbedPage}"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}"
     BarBackgroundColor="{StaticResource TrakPrimaryBlue}" />

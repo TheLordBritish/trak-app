@@ -7,7 +7,8 @@
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
     xmlns:login="clr-namespace:SparkyStudios.TrakLibrary.ViewModel.Login;assembly=SparkyStudios.TrakLibrary.ViewModel"
     xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
-    AutomationId="VerificationPage">
+    AutomationId="VerificationPage"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}">
     <ContentPage.Content>
         <ScrollView
             Padding="20"

@@ -3,7 +3,7 @@
 namespace SparkyStudios.TrakLibrary.Model.Login
 {
     [ExcludeFromCodeCoverage]
-    public class UserCredentials
+    public class LoginRequest
     {
         public string Username { get; set; }
         

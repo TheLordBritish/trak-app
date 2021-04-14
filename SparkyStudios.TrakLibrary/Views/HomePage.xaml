@@ -6,7 +6,8 @@
     xmlns:extensions="clr-namespace:SparkyStudios.TrakLibrary.Extensions;assembly=SparkyStudios.TrakLibrary"
     xmlns:viewModel="clr-namespace:SparkyStudios.TrakLibrary.ViewModel;assembly=SparkyStudios.TrakLibrary.ViewModel"
     x:DataType="viewModel:HomeViewModel"
-    AutomationId="HomePage">
+    AutomationId="HomePage"
+    BackgroundColor="{StaticResource TrakPrimaryBlue}">
     <ContentPage.Content>
         <ScrollView Padding="20">
             <Grid>

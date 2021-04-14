@@ -7,7 +7,7 @@
     xmlns:viewModel="clr-namespace:SparkyStudios.TrakLibrary.ViewModel;assembly=SparkyStudios.TrakLibrary.ViewModel"
     Title="Title"
     AutomationId="BaseMasterDetailContentPage"
-    BackgroundColor="Transparent">
+    BackgroundColor="{StaticResource TrakPrimaryBlue}">
     <ContentPage.Content>
         <ScrollView Padding="35" x:DataType="viewModel:BaseFlyoutViewModel">
             <Grid>

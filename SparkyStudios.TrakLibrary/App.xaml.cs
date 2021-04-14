@@ -67,7 +67,7 @@ namespace SparkyStudios.TrakLibrary
 
             // Xamarin pages.
             containerRegistry.RegisterForNavigation<BaseFlyoutPage, BaseFlyoutViewModel>();
-            containerRegistry.RegisterForNavigation<BaseNavigationPage, NavigationViewModel>("NavigationPage");
+            containerRegistry.RegisterForNavigation<BaseNavigationPage>("NavigationPage");
 
             // Login pages.
             containerRegistry.RegisterForNavigation<LoadingPage, LoadingViewModel>();

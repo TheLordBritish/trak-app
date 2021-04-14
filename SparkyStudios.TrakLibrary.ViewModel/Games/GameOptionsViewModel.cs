@@ -302,7 +302,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         public override void OnNavigatedFrom(INavigationParameters parameters)
         {
             parameters.Add("game-url", GameUrl);
-            parameters.Add("game-id", _gameId);
             parameters.Add("in-library", InLibrary);
             parameters.Add("status", Status);
             parameters.Add("rating", Rating);

@@ -14,9 +14,8 @@ namespace SparkyStudios.TrakLibrary.Model.Games
         public string Title { get; set; }
         
         public string Description { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        public AgeRating AgeRating { get; set; }
+        
+        public IEnumerable<AgeRating> AgeRatings { get; set; }
         
         [JsonProperty(ItemConverterType = typeof(StringEnumConverter))]
         public IEnumerable<GameMode> GameModes { get; set; }

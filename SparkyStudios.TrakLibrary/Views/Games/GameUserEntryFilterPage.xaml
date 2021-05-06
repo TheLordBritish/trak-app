@@ -92,15 +92,6 @@
                         ItemTappedCommand="{Binding GameModeTappedCommand}"
                         ItemsSource="{Binding GameModes}" />
 
-                    <!--  Age rating filters  -->
-                    <common:FilterControl
-                        Margin="0,15,0,0"
-                        GroupTappedCommand="{Binding AgeRatingGroupTappedCommand}"
-                        Header="{extensions:Translate GameUserEntryFilterPageAgeRatings}"
-                        IsGroupExpanded="{Binding IsAgeRatingGroupExpanded}"
-                        ItemTappedCommand="{Binding AgeRatingTappedCommand}"
-                        ItemsSource="{Binding AgeRatings}" />
-
                     <!--  Statuses filters  -->
                     <common:FilterControl
                         Margin="0,15,0,0"

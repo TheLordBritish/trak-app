@@ -74,10 +74,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             {
                 IsGameModeGroupExpanded = !IsGameModeGroupExpanded;
             });
-            AgeRatingGroupTappedCommand = ReactiveCommand.Create<bool>(b =>
-            {
-                IsAgeRatingGroupExpanded = !IsAgeRatingGroupExpanded;
-            });
             StatusGroupTappedCommand = ReactiveCommand.Create<bool>(b =>
             {
                 IsStatusGroupExpanded = !IsStatusGroupExpanded;
@@ -111,16 +107,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
 
                 item.IsSelected = !item.IsSelected;
                 GameModes[index] = item;
-            });
-
-            AgeRatingTappedCommand = ReactiveCommand.Create<ItemEntryViewModel>(item =>
-            {
-                if (item == null) return;
-
-                var index = AgeRatings.IndexOf(item);
-
-                item.IsSelected = !item.IsSelected;
-                AgeRatings[index] = item;
             });
 
             StatusTappedCommand = ReactiveCommand.Create<ItemEntryViewModel>(item =>
@@ -158,12 +144,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         public bool IsGameModeGroupExpanded { get; set; }
 
         /// <summary>
-        /// A <see cref="bool"/> that specifies whether the age rating filters have been expanded on the view.
-        /// </summary>
-        [Reactive]
-        public bool IsAgeRatingGroupExpanded { get; set; }
-
-        /// <summary>
         /// A <see cref="bool"/> that specifies whether the statuses filters have been expanded on the view.
         /// </summary>
         [Reactive]
@@ -186,13 +166,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// </summary>
         [Reactive]
         public ObservableCollection<ItemEntryViewModel> GameModes { get; set; }
-
-        /// <summary>
-        /// A <see cref="ObservableCollection{T}" /> that contains all the selectable age rating filters.
-        /// </summary>
-        [Reactive]
-        public ObservableCollection<ItemEntryViewModel> AgeRatings { get; set; }
-
+        
         /// <summary>
         /// A <see cref="ObservableCollection{T}" /> that contains all the selectable status filters.
         /// </summary>
@@ -222,13 +196,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// the command switch the <see cref="IsGameModeGroupExpanded"/> state.
         /// </summary>
         public ReactiveCommand<bool, Unit> GameModeGroupTappedCommand { get; }
-
-        /// <summary>
-        /// Command that is invoked each time the user taps the "Age rating" group header on the view. When called,
-        /// the command switch the <see cref="IsAgeRatingGroupExpanded"/> state.
-        /// </summary>
-        public ReactiveCommand<bool, Unit> AgeRatingGroupTappedCommand { get; }
-
+        
         /// <summary>
         /// Command that is invoked each time the user taps the "Age rating" group header on the view. When called,
         /// the command switch the <see cref="IsStatusGroupExpanded"/> state.
@@ -255,14 +223,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         /// view with the new information.
         /// </summary>
         public ReactiveCommand<ItemEntryViewModel, Unit> GameModeTappedCommand { get; }
-
-        /// <summary>
-        /// Command that is invoked any of the items within the "Age rating" group is tapped. When tapped, it will
-        /// store the state of the current checked status in the <see cref="ItemEntryViewModel"/> and update the
-        /// view with the new information.
-        /// </summary>
-        public ReactiveCommand<ItemEntryViewModel, Unit> AgeRatingTappedCommand { get; }
-
+        
         /// <summary>
         /// Command that is invoked any of the items within the "Status" group is tapped. When tapped, it will
         /// store the state of the current checked status in the <see cref="ItemEntryViewModel"/> and update the
@@ -333,15 +294,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                     Id = (int) p,
                     Name = p.GetAttributeValue<DescriptionAttribute, string>(s => s.Description)
                 }).ToList());
-
-            // Convert the age rating filters into a selectable list.
-            AgeRatings = new ObservableCollection<ItemEntryViewModel>(gameUserEntryFilters.AgeRatings.Select(p =>
-                new ItemEntryViewModel
-                {
-                    Id = (int) p,
-                    Name = p.GetAttributeValue<DescriptionAttribute, string>(s => s.Description)
-                }).ToList());
-
+            
             // Convert the age rating filters into a selectable list.
             Statuses = new ObservableCollection<ItemEntryViewModel>(gameUserEntryFilters.Statuses.Select(p =>
                 new ItemEntryViewModel
@@ -372,10 +325,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 .Select(g => ((GameMode) g.Id).GetAttributeValue<EnumMemberAttribute, string>(e => e.Value))
                 .ToList();
 
-            var ageRatings = AgeRatings.Where(a => a.IsSelected)
-                .Select(a => ((AgeRating) a.Id).GetAttributeValue<EnumMemberAttribute, string>(e => e.Value))
-                .ToList();
-
             var statuses = Statuses.Where(s => s.IsSelected)
                 .Select(s => ((GameUserEntryStatus) s.Id).GetAttributeValue<EnumMemberAttribute, string>(e => e.Value))
                 .ToList();
@@ -384,7 +333,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                       "?platform-ids" + (platformIds.Count > 0 ? $"={string.Join(",", platformIds)}" : string.Empty) +
                       "&genre-ids" + (genreIds.Count > 0 ? $"={string.Join(",", genreIds)}" : string.Empty) +
                       "&game-modes" + (gameModes.Count > 0 ? $"={string.Join(",", gameModes)}" : string.Empty) +
-                      "&age-ratings" + (ageRatings.Count > 0 ? $"={string.Join(",", ageRatings)}" : string.Empty) +
                       "&statuses" + (statuses.Count > 0 ? $"={string.Join(",", statuses)}" : string.Empty);
 
             await NavigationService.NavigateAsync("GameUserEntryListPage", new NavigationParameters

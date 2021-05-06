@@ -754,11 +754,11 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Age rating.
+        ///   Looks up a localized string similar to Age ratings.
         /// </summary>
-        public static string GamePageAgeRating {
+        public static string GamePageAgeRatings {
             get {
-                return ResourceManager.GetString("GamePageAgeRating", resourceCulture);
+                return ResourceManager.GetString("GamePageAgeRatings", resourceCulture);
             }
         }
         

@@ -56,10 +56,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
             
             // Assert
             Assert.IsTrue(parameters.ContainsKey("game-url"), "Parameters doesn't contain Game URL.");
-            Assert.IsTrue(parameters.ContainsKey("game-id"), "Parameters doesn't contain Game ID.");
             Assert.IsTrue(parameters.ContainsKey("in-library"), "Parameters doesn't contain in library.");
             Assert.IsTrue(parameters.ContainsKey("status"), "Parameters doesn't contain status.");
             Assert.IsTrue(parameters.ContainsKey("rating"), "Parameters doesn't contain rating.");
+            Assert.IsTrue(parameters.ContainsKey("selected-platforms"), "Parameters doesn't contain selected platforms.");
         }
         
         [Test]

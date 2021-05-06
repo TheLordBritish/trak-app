@@ -178,17 +178,18 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
         public string GameModes { get; set; }
         
         /// <summary>
+        /// An <see cref="IEnumerable{T}" /> that contains all of the <see cref="AgeRating"/> objects associated with the given
+        /// <see cref="Game"/>.
+        /// </summary>
+        [Reactive]
+        public IEnumerable<AgeRating> AgeRatings { get; set; }
+        
+        /// <summary>
         /// A <see cref="GameUserEntryStatus" /> that represents the current status of the game. If the game being
         /// displayed isn't within the users collection, the status will be set to <see cref="GameUserEntryStatus.Backlog" />.
         /// </summary>
         [Reactive]
         public GameUserEntryStatus Status { get; private set; }
-
-        /// <summary>
-        /// The current assigned <see cref="AgeRating"/> of the <see cref="Game"/>.
-        /// </summary>
-        [Reactive]
-        public AgeRating AgeRating { get; private set; }
         
         /// <summary>
         /// A <see cref="ObservableCollection{T}" /> that is used to represent a short collection of games that
@@ -297,8 +298,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
             GameModes = string.Join(", ", gameDetails.GameModes
                 .Select(gameMode => gameMode.GetAttributeValue<DescriptionAttribute, string>(x => x.Description))
                 .ToArray());
-
-            AgeRating = gameDetails.AgeRating;
+            AgeRatings = gameDetails.AgeRatings;
             
             var platforms = gameDetails.Platforms.Select(p => new ItemEntryViewModel
             {

@@ -243,18 +243,19 @@
                         IsVisible="{Binding GameModes, Converter={StaticResource IsNotNullOrEmptyConverter}}"
                         Text="{Binding GameModes}" />
 
-                    <!--  Age rating  -->
+                    <!--  Age ratings  -->
                     <Label
                         Grid.Row="16"
                         Margin="20,15,20,0"
                         FontSize="{StaticResource TrakFontSmall}"
+                        IsVisible="{Binding AgeRatings, Converter={StaticResource IsNotNullOrEmptyConverter}}"
                         Style="{StaticResource BaseBoldLabelStyle}"
-                        Text="{extensions:Translate GamePageAgeRating}" />
-                    <Label
+                        Text="{extensions:Translate GamePageAgeRatings}" />
+
+                    <games:AgeRatingControl
                         Grid.Row="17"
-                        Margin="20,0"
-                        FontSize="{StaticResource TrakFontSmall}"
-                        Text="{Binding AgeRating, Converter={StaticResource EnumDescriptionConverter}}" />
+                        Margin="20,15,20,0"
+                        AgeRatings="{Binding AgeRatings}" />
 
                     <!--  Displays which status the game is currently assigned to.  -->
                     <games:GameUserEntryStatusControl

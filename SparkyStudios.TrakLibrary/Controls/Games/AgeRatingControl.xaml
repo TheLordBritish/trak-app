@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<StackLayout
+    x:Class="SparkyStudios.TrakLibrary.Controls.Games.AgeRatingControl"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:games="clr-namespace:SparkyStudios.TrakLibrary.Model.Games;assembly=SparkyStudios.TrakLibrary.Model"
+    x:Name="AgeRatingControlView"
+    BindableLayout.ItemsSource="{Binding AgeRatings, Source={x:Reference AgeRatingControlView}}"
+    Orientation="Horizontal">
+    <BindableLayout.ItemTemplate>
+        <DataTemplate x:DataType="games:AgeRating">
+            <Image
+                Aspect="AspectFit"
+                VerticalOptions="End"
+                WidthRequest="60">
+                <Image.Triggers>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Esrb}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="0" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="esrb_everyone.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Esrb}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="1" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="esrb_everyone_ten_plus.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Esrb}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="2" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="esrb_teen.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Esrb}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="3" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="esrb_mature.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Esrb}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="4" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="esrb_adults_only.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Esrb}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="5" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="esrb_rating_pending.png" />
+                    </MultiTrigger>
+
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Pegi}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="0" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="pegi_3.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Pegi}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="1" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="pegi_7.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Pegi}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="2" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="pegi_12.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Pegi}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="3" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="pegi_16.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Pegi}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="4" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="pegi_18.png" />
+                    </MultiTrigger>
+
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Cero}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="0" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="cero_a.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Cero}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="1" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="cero_b.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Cero}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="2" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="cero_c.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Cero}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="3" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="cero_d.png" />
+                    </MultiTrigger>
+                    <MultiTrigger TargetType="Image">
+                        <MultiTrigger.Conditions>
+                            <BindingCondition Binding="{Binding Classification}" Value="{x:Static games:AgeRatingClassification.Cero}" />
+                            <BindingCondition Binding="{Binding Rating}" Value="4" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Source" Value="cero_z.png" />
+                    </MultiTrigger>
+                </Image.Triggers>
+            </Image>
+        </DataTemplate>
+    </BindableLayout.ItemTemplate>
+</StackLayout>

@@ -1,32 +1,19 @@
-﻿using System.ComponentModel;
-using System.Runtime.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace SparkyStudios.TrakLibrary.Model.Games
 {
-    public enum AgeRating
+    [ExcludeFromCodeCoverage]
+    public class AgeRating
     {
-        [Description("Everyone")]
-        [EnumMember(Value = "EVERYONE")]
-        Everyone,
+        public long Id { get; set; }
         
-        [Description("Everyone 10+")]
-        [EnumMember(Value = "EVERYONE_TEN_PLUS")]
-        EveryoneTenPlus,
+        [JsonConverter(typeof(StringEnumConverter))]
+        public AgeRatingClassification Classification { get; set; }
         
-        [Description("Teen")]
-        [EnumMember(Value = "TEEN")]
-        Teen,
+        public short Rating { get; set; }
         
-        [Description("Mature")]
-        [EnumMember(Value = "MATURE")]
-        Mature,
-        
-        [Description("Adults Only")]
-        [EnumMember(Value = "ADULTS_ONLY")]
-        AdultsOnly,
-        
-        [Description("Rating Pending")]
-        [EnumMember(Value = "RATING_PENDING")]
-        Pending
+        public long? Version { get; set; }
     }
 }

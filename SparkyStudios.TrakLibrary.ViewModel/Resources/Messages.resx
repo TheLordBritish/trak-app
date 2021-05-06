@@ -633,8 +633,8 @@
   <data name="GameOptionsPageRemoveFromLibrary" xml:space="preserve">
     <value>Remove from library</value>
   </data>
-  <data name="GamePageAgeRating" xml:space="preserve">
-    <value>Age rating</value>
+  <data name="GamePageAgeRatings" xml:space="preserve">
+    <value>Age ratings</value>
   </data>
   <data name="GamePageGameModes" xml:space="preserve">
     <value>Game modes</value>

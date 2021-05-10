@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using SparkyStudios.TrakLibrary.Model.Response;
 
 namespace SparkyStudios.TrakLibrary.Model.Games
 {
-    public class DownloadableContent
+    [ExcludeFromCodeCoverage]
+    public class DownloadableContent : HateoasResource
     {
         public long Id { get; set; }
         

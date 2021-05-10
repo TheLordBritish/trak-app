@@ -12,7 +12,8 @@
             <Image
                 Aspect="AspectFit"
                 VerticalOptions="End"
-                WidthRequest="60">
+                WidthRequest="70"
+                HeightRequest="90">
                 <Image.Triggers>
                     <MultiTrigger TargetType="Image">
                         <MultiTrigger.Conditions>

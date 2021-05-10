@@ -146,6 +146,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                         {
                             Href = new Uri("https://traklibrary.com/image")
                         }
+                    },
+                    {
+                        "downloadable_content", new HateoasLink
+                        {
+                            Href = new Uri("https://test.traklibrary.com/dlc")
+                        }
                     }
                 }
             };
@@ -154,6 +160,22 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                 .Setup(mock => mock.GetAsync<GameDetails>(It.IsAny<string>()))
                 .ReturnsAsync(gameDetails);
 
+            _restService
+                .Setup(mock => mock.GetAsync<HateoasCollection<DownloadableContent>>(It.IsAny<string>()))
+                .ReturnsAsync(new HateoasCollection<DownloadableContent>
+                {
+                    Embedded = new HateoasResources<DownloadableContent>
+                    {
+                        Data = new []
+                        {
+                            new DownloadableContent
+                            {
+                                Id = 2L
+                            }
+                        }
+                    }
+                });
+            
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(0L);
 
@@ -166,7 +188,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
 
             // Assert
             Assert.AreEqual(gameDetails.Title, _gameOptionsViewModel.GameTitle, "The titles should match.");
-            Assert.AreEqual(2, _gameOptionsViewModel.Platforms.Count(), "There should be two platforms stored within the view model.");
+            Assert.AreEqual(2, _gameOptionsViewModel.Platforms.Count, "There should be two platforms stored within the view model.");
             Assert.IsFalse(_gameOptionsViewModel.InLibrary, "The game shouldn't be flagged as in the users library.");
         }
         
@@ -198,7 +220,13 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                     {
                         "entries", new HateoasLink
                         {
-                            Href = new Uri("https://traklibrary.com/image")
+                            Href = new Uri("https://test.traklibrary.com/image")
+                        }
+                    },
+                    {
+                        "downloadable_content", new HateoasLink
+                        {
+                            Href = new Uri("https://test.traklibrary.com/dlc")
                         }
                     }
                 }
@@ -208,6 +236,22 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                 .Setup(mock => mock.GetAsync<GameDetails>(It.IsAny<string>()))
                 .ReturnsAsync(gameDetails);
 
+            _restService
+                .Setup(mock => mock.GetAsync<HateoasCollection<DownloadableContent>>(It.IsAny<string>()))
+                .ReturnsAsync(new HateoasCollection<DownloadableContent>
+                {
+                    Embedded = new HateoasResources<DownloadableContent>
+                    {
+                        Data = new []
+                        {
+                            new DownloadableContent
+                            {
+                                Id = 2L
+                            }
+                        }
+                    }
+                });
+            
             _storageService.Setup(mock => mock.GetUserIdAsync())
                 .ReturnsAsync(0L);
             

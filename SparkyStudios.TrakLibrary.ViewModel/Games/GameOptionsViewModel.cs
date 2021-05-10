@@ -350,11 +350,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Games
                 Name = p.Name
             }).ToList();
 
-            var dlcSelections = gameDetails.DownloadableContents.Select(d => new ItemEntryViewModel
+            // Retrieve the DLC for the given game.
+            var downloadableContents = await _restService.GetAsync<HateoasCollection<DownloadableContent>>(
+                gameDetails.GetLink("downloadable_content").OriginalString);
+            
+            var dlcSelections = downloadableContents.Embedded != null ? downloadableContents.Embedded?.Data.Select(d => new ItemEntryViewModel
             {
                 Id = d.Id,
                 Name = d.Name
-            }).ToList();
+            }).ToList() : new List<ItemEntryViewModel>();
             
             // Get the ID of the user currently logged in.
             var userId = await _storageService.GetUserIdAsync();

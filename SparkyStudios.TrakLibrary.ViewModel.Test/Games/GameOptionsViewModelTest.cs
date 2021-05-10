@@ -139,14 +139,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                         Name = "name-2"
                     }
                 },
-                DownloadableContents = new List<DownloadableContent>
-                {
-                    new DownloadableContent
-                    {
-                        Id = 1L,
-                        Name = "dlc-1"
-                    }
-                },
                 Links = new Dictionary<string, HateoasLink>
                 {
                     {
@@ -199,19 +191,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Games
                     {
                         Id = 2L,
                         Name = "name-2"
-                    }
-                },
-                DownloadableContents = new List<DownloadableContent>
-                {
-                    new DownloadableContent
-                    {
-                        Id = 1,
-                        Name = "dlc-1"
-                    },
-                    new DownloadableContent
-                    {
-                        Id = 2,
-                        Name = "dlc-2"
                     }
                 },
                 Links = new Dictionary<string, HateoasLink>

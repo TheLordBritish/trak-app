@@ -201,9 +201,9 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task AttemptVerificationAsync(string verificationCode)
         {
-            var username = await _storageService.GetUsernameAsync();
+            var userId = await _storageService.GetUserIdAsync();
 
-            var response = await _authService.VerifyAsync(username, verificationCode);
+            var response = await _authService.VerifyAsync(userId, verificationCode);
             if (!response.Data)
             {
                 IsError = response.Error;
@@ -230,10 +230,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
             IsError = false;
 
             // Retrieve the needed credentials from the store.
-            var username = await _storageService.GetUsernameAsync();
+            var userId = await _storageService.GetUserIdAsync();
 
             // Send the re-verification request.
-            await _authService.ReVerifyAsync(username);
+            await _authService.ReVerifyAsync(userId);
 
             // On successful request, display a popup to the user stating that the email has been sent.
             await _userDialogs.AlertAsync(Messages.VerificationPageConfirmation, Messages.TrakTitle);

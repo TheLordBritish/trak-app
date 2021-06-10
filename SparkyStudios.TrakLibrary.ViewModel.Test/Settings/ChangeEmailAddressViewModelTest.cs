@@ -61,7 +61,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             _scheduler.Start();
 
             // Assert
-            _authService.Verify(a => a.ChangeEmailAddressAsync(It.IsAny<string>(), It.IsAny<ChangeEmailAddressRequest>()), Times.Never);
+            _authService.Verify(a => a.ChangeEmailAddressAsync(It.IsAny<long>(), It.IsAny<ChangeEmailAddressRequest>()), Times.Never);
         }
         
         [Test]
@@ -70,10 +70,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             // Arrange
             _changeEmailAddressViewModel.EmailAddress.Value = "test@traklibrary.com";
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<string>(), It.IsAny<ChangeEmailAddressRequest>()))
+            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<long>(), It.IsAny<ChangeEmailAddressRequest>()))
                 .Throws(new TaskCanceledException());
 
             // Act
@@ -95,10 +95,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             // Arrange
             _changeEmailAddressViewModel.EmailAddress.Value = "test@traklibrary.com";
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<string>(), It.IsAny<ChangeEmailAddressRequest>()))
+            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<long>(), It.IsAny<ChangeEmailAddressRequest>()))
                 .Throws(new ApiException());
 
             // Act
@@ -120,10 +120,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             // Arrange
             _changeEmailAddressViewModel.EmailAddress.Value = "test@traklibrary.com";
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<string>(), It.IsAny<ChangeEmailAddressRequest>()))
+            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<long>(), It.IsAny<ChangeEmailAddressRequest>()))
                 .Throws(new Exception());
 
             // Act
@@ -145,8 +145,8 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             // Arrange
             _changeEmailAddressViewModel.EmailAddress.Value = "test@traklibrary.com";
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
             var response = new CheckedResponse<bool>
             {
@@ -154,7 +154,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
                 ErrorMessage = "error-message"
             };
             
-            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<string>(), It.IsAny<ChangeEmailAddressRequest>()))
+            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<long>(), It.IsAny<ChangeEmailAddressRequest>()))
                 .ReturnsAsync(response);
             
             // Act
@@ -176,18 +176,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             // Arrange
             _changeEmailAddressViewModel.EmailAddress.Value = "test@traklibrary.com";
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
             
-            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<string>(), It.IsAny<ChangeEmailAddressRequest>()))
+            _authService.Setup(m => m.ChangeEmailAddressAsync(It.IsAny<long>(), It.IsAny<ChangeEmailAddressRequest>()))
                 .ReturnsAsync(new CheckedResponse<bool>
                 {
                     Error = false
                 });
-
-            _storageService.Setup(m => m.GetUserIdAsync())
-                .ReturnsAsync(0L);
-
+            
             _storageService.Setup(m => m.GetDeviceIdAsync())
                 .ReturnsAsync(Guid.Empty);
             

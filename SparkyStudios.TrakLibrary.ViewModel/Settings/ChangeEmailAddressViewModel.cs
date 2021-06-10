@@ -173,10 +173,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
         private async Task ExecuteChangeEmailAddressAsync()
         {
             // Get details from the storage service.
-            var username = await _storageService.GetUsernameAsync();
+            var userId = await _storageService.GetUserIdAsync();
 
             // Send the request to try and change the password.
-            var response = await _authService.ChangeEmailAddressAsync(username, new ChangeEmailAddressRequest
+            var response = await _authService.ChangeEmailAddressAsync(userId, new ChangeEmailAddressRequest
             {
                 EmailAddress = EmailAddress.Value
             });
@@ -190,7 +190,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
             else
             {
                 // Email address changing was successful, continue with standard log out procedure. 
-                var userId = await _storageService.GetUserIdAsync();
                 var deviceId = await _storageService.GetDeviceIdAsync();
 
                 // Need to ensure the correct details are registered for push notifications.

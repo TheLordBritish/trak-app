@@ -31,7 +31,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
     public class ChangePasswordViewModel : ReactiveViewModel, IValidate<ChangePasswordDetails>
     {
         private readonly IStorageService _storageService;
-        private readonly IRestService _restService;
         private readonly IAuthService _authService;
         private readonly IUserDialogs _userDialogs;
 
@@ -46,15 +45,13 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
         /// <param name="scheduler">The <see cref="IScheduler"/> instance to inject.</param>
         /// <param name="navigationService">The <see cref="INavigationService"/> instance to inject.</param>
         /// <param name="storageService">The <see cref="IStorageService"/> instance to inject.</param>
-        /// <param name="restService">The <see cref="IRestService"/> instance to inject.</param>
         /// <param name="authService">The <see cref="IAuthService"/> instance to inject.</param>
         /// <param name="userDialogs">The <see cref="IUserDialogs"/> instance to inject.</param>
         public ChangePasswordViewModel(IScheduler scheduler, INavigationService navigationService,
-            IStorageService storageService, IRestService restService, IAuthService authService,
-            IUserDialogs userDialogs) : base(scheduler, navigationService)
+            IStorageService storageService, IAuthService authService, IUserDialogs userDialogs) 
+            : base(scheduler, navigationService)
         {
             _storageService = storageService;
-            _restService = restService;
             _authService = authService;
             _userDialogs = userDialogs;
 
@@ -90,7 +87,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
         /// A <see cref="Validatable{T}"/> that contains the currently populated reset token with
         /// additional validation information.
         /// </summary>
-        public Validatable<string> ResetToken { get; private set; }
+        public Validatable<string> CurrentPassword { get; private set; }
 
         /// <summary>
         /// A <see cref="Validatable{T}"/> that contains the currently populated new password with
@@ -127,12 +124,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
         /// </summary>
         public void SetupForValidation()
         {
-            ResetToken = new Validatable<string>(nameof(ChangePasswordDetails.RecoveryToken));
+            CurrentPassword = new Validatable<string>(nameof(ChangePasswordDetails.CurrentPassword));
             NewPassword = new Validatable<string>(nameof(ChangePasswordDetails.NewPassword));
             ConfirmNewPassword = new Validatable<string>(nameof(ChangePasswordDetails.ConfirmNewPassword));
 
             _validator = new ChangePasswordDetailsValidator();
-            _validatables = new Validatables(ResetToken, NewPassword, ConfirmNewPassword);
+            _validatables = new Validatables(CurrentPassword, NewPassword, ConfirmNewPassword);
         }
 
         /// <summary>
@@ -192,13 +189,13 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
         private async Task ExecuteChangeAsync()
         {
             // Get details from the storage service.
-            var username = await _storageService.GetUsernameAsync();
+            var userId = await _storageService.GetUserIdAsync();
 
             // Send the request to try and change the password.
-            var response = await _authService.ChangePasswordAsync(username, new ChangePasswordRequest
+            var response = await _authService.ChangePasswordAsync(userId, new ChangePasswordRequest
             {
-                NewPassword = NewPassword.Value,
-                RecoveryToken = ResetToken.Value
+                CurrentPassword = CurrentPassword.Value,
+                NewPassword = NewPassword.Value
             });
 
             // If there are errors, it's either due to the user not being found, the password not matching the criteria 
@@ -210,19 +207,8 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
             }
             else
             {
-                // Password changing was successful, continue with standard log out procedure. 
-                var userId = await _storageService.GetUserIdAsync();
-                var deviceId = await _storageService.GetDeviceIdAsync();
-
-                // Need to ensure the correct details are registered for push notifications.
-                await _restService.DeleteAsync(
-                    $"notifications/unregister?user-id={userId}&device-guid={deviceId}");
-
-                // Remove all of the identifiable information from the secure store.
-                await _storageService.ClearCredentialsAsync();
-
                 // Navigate back to the login page.
-                await NavigationService.NavigateAsync("/LoginPage");
+                await NavigationService.NavigateAsync("HomePage");
 
                 var alertConfig = new AlertConfig()
                     .SetTitle(Messages.TrakTitle)

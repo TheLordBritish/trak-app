@@ -172,13 +172,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
         private async Task ExecuteDeleteAccountAsync()
         {
             // Get details from the storage service.
-            var username = await _storageService.GetUsernameAsync();
+            var userId = await _storageService.GetUserIdAsync();
 
             // Send the request to delete the account.
-            await _authService.DeleteByUsernameAsync(username);
+            await _authService.DeleteByIdAsync(userId);
             
             // Deletion was successful, continue with standard log out procedure. 
-            var userId = await _storageService.GetUserIdAsync();
             var deviceId = await _storageService.GetDeviceIdAsync();
 
             // Need to ensure the correct details are registered for push notifications.

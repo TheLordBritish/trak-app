@@ -525,9 +525,6 @@
   <data name="ChangePasswordPageChange" xml:space="preserve">
     <value>Change</value>
   </data>
-  <data name="ChangePasswordPageResetToken" xml:space="preserve">
-    <value>Reset token</value>
-  </data>
   <data name="RequestChangePasswordPageTitle" xml:space="preserve">
     <value>Request change password</value>
   </data>
@@ -544,7 +541,7 @@
     <value>Tap here</value>
   </data>
   <data name="ChangePasswordPageSuccess" xml:space="preserve">
-    <value>Password successfully changed. Please login with your new credentials.</value>
+    <value>Password changed successfully.</value>
   </data>
   <data name="SettingsPageChangeEmailAddress" xml:space="preserve">
     <value>Change Email Address</value>
@@ -734,5 +731,14 @@
   </data>
   <data name="HomePageManga" xml:space="preserve">
     <value>Manga</value>
+  </data>
+  <data name="ChangePasswordErrorMessageCurrentPasswordEmpty" xml:space="preserve">
+    <value>Current password cannot be empty or only contain whitespace.</value>
+  </data>
+  <data name="ChangePasswordErrorMessageCurrentPasswordWhitespace" xml:space="preserve">
+    <value>Current password should not contain any spaces.</value>
+  </data>
+  <data name="RegisterPageUseMultiFactorAuthentication" xml:space="preserve">
+    <value>Enable two-factor authentication</value>
   </data>
 </root>

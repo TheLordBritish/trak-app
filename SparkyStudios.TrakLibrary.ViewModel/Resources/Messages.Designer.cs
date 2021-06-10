@@ -223,6 +223,24 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current password cannot be empty or only contain whitespace..
+        /// </summary>
+        public static string ChangePasswordErrorMessageCurrentPasswordEmpty {
+            get {
+                return ResourceManager.GetString("ChangePasswordErrorMessageCurrentPasswordEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current password should not contain any spaces..
+        /// </summary>
+        public static string ChangePasswordErrorMessageCurrentPasswordWhitespace {
+            get {
+                return ResourceManager.GetString("ChangePasswordErrorMessageCurrentPasswordWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change.
         /// </summary>
         public static string ChangePasswordPageChange {
@@ -259,16 +277,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Reset token.
-        /// </summary>
-        public static string ChangePasswordPageResetToken {
-            get {
-                return ResourceManager.GetString("ChangePasswordPageResetToken", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Password successfully changed. Please login with your new credentials..
+        ///   Looks up a localized string similar to Password changed successfully..
         /// </summary>
         public static string ChangePasswordPageSuccess {
             get {
@@ -1542,6 +1551,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Resources {
         public static string RegisterPageTitle {
             get {
                 return ResourceManager.GetString("RegisterPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable two-factor authentication.
+        /// </summary>
+        public static string RegisterPageUseMultiFactorAuthentication {
+            get {
+                return ResourceManager.GetString("RegisterPageUseMultiFactorAuthentication", resourceCulture);
             }
         }
         

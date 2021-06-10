@@ -10,60 +10,44 @@
     BackgroundColor="{StaticResource TrakPrimaryBlue}">
     <ContentPage.Content>
         <ScrollView Padding="20">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="1*" />
-                </Grid.ColumnDefinitions>
+            <StackLayout>
                 <!--  App logo  -->
                 <Image
-                    Grid.Row="0"
-                    Grid.Column="0"
                     Margin="0,20,0,0"
                     HorizontalOptions="StartAndExpand"
                     Source="logo.png" />
-
-                <StackLayout
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="2">
-                    <!--  Subtitle  -->
-                    <Label
-                        Margin="0,20,0,15"
-                        FontSize="Large"
-                        LineHeight="1.2"
-                        Text="{extensions:Translate HomePageSubtitle}" />
-                    <!--  Games list button  -->
-                    <Button
-                        Margin="0,10"
-                        AutomationId="HomePageGamesButton"
-                        Command="{Binding LoadGamesCommand}"
-                        Style="{StaticResource SecondaryButtonStyle}"
-                        Text="{extensions:Translate HomePageGames}" />
-                    <!--  Games list button  -->
-                    <Button
-                        Margin="0,10"
-                        AutomationId="HomePageBooksButton"
-                        Style="{StaticResource SecondaryButtonStyle}"
-                        Text="{extensions:Translate HomePageBooks}" />
-                    <!--  Games list button  -->
-                    <Button
-                        Margin="0,10"
-                        AutomationId="HomePageAnimeButton"
-                        Style="{StaticResource SecondaryButtonStyle}"
-                        Text="{extensions:Translate HomePageAnime}" />
-                    <!--  Games list button  -->
-                    <Button
-                        Margin="0,10"
-                        AutomationId="HomePageMangaButton"
-                        Style="{StaticResource SecondaryButtonStyle}"
-                        Text="{extensions:Translate HomePageManga}" />
-                </StackLayout>
-            </Grid>
+                <!--  Subtitle  -->
+                <Label
+                    Margin="0,20,0,15"
+                    FontSize="Large"
+                    LineHeight="1.2"
+                    Text="{extensions:Translate HomePageSubtitle}" />
+                <!--  Games list button  -->
+                <Button
+                    Margin="0,10"
+                    AutomationId="HomePageGamesButton"
+                    Command="{Binding LoadGamesCommand}"
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    Text="{extensions:Translate HomePageGames}" />
+                <!--  Games list button  -->
+                <Button
+                    Margin="0,10"
+                    AutomationId="HomePageBooksButton"
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    Text="{extensions:Translate HomePageBooks}" />
+                <!--  Games list button  -->
+                <Button
+                    Margin="0,10"
+                    AutomationId="HomePageAnimeButton"
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    Text="{extensions:Translate HomePageAnime}" />
+                <!--  Games list button  -->
+                <Button
+                    Margin="0,10"
+                    AutomationId="HomePageMangaButton"
+                    Style="{StaticResource SecondaryButtonStyle}"
+                    Text="{extensions:Translate HomePageManga}" />
+            </StackLayout>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

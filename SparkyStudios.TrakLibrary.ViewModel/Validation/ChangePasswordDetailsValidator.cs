@@ -14,16 +14,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Validation
     {
         public ChangePasswordDetailsValidator()
         {
-            RuleFor(r => r.RecoveryToken)
+            RuleFor(r => r.CurrentPassword)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                .WithMessage(Messages.RecoveryErrorMessageRecoveryTokenEmpty)
+                .WithMessage(Messages.ChangePasswordErrorMessageCurrentPasswordEmpty)
                 .Must(p => !p.Any(char.IsWhiteSpace))
-                .WithMessage(Messages.RecoveryErrorMessageRecoveryTokenWhitespace)
-                .Length(30)
-                .WithMessage(Messages.RecoveryErrorMessageRecoveryTokenLength)
-                .Matches("^[a-zA-Z][a-zA-Z0-9]*$")
-                .WithMessage(Messages.RecoveryErrorMessageRecoveryTokenAlphanumeric);
+                .WithMessage(Messages.ChangePasswordErrorMessageCurrentPasswordWhitespace);
             
             RuleFor(r => r.NewPassword)
                 .Cascade(CascadeMode.Stop)

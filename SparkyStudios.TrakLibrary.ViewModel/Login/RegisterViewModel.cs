@@ -115,6 +115,13 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
         public Validatable<string> ConfirmPassword { get; private set; }
 
         /// <summary>
+        /// A <see cref="bool"/> that signifies whether the user wants to use two-factor authentication
+        /// by default.
+        /// </summary>
+        [Reactive]
+        public bool MultiFactorAuthentication { get; set; }
+        
+        /// <summary>
         /// Command that is invoked each time that a validatable field on the view is changed, which
         /// for the <see cref="RegisterViewModel"/> is the username, email address, password and confirm
         /// password code. When the view is changed, the name is passed through and the request propagated
@@ -231,33 +238,34 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
         private async Task AttemptRegistrationAsync(string username, string emailAddress, string password)
         {
             // Attempt to register the new account.
-            var userCreationResponse = await _authService.RegisterAsync(new RegistrationRequest
+            var registrationResponse = await _authService.RegisterAsync(new RegistrationRequest
             {
                 Username = username,
                 EmailAddress = emailAddress,
-                Password = password
+                Password = password,
+                UseMultiFactorAuthentication = MultiFactorAuthentication
             });
 
             // If there are errors with the registration, display them to the user.
-            if (userCreationResponse.Error)
+            if (registrationResponse.Error)
             {
                 IsError = true;
-                ErrorMessage = userCreationResponse.ErrorMessage;
+                ErrorMessage = registrationResponse.ErrorMessage;
             }
             else
             {
                 // If there are no issues, retrieve the authenticated token.
-                var user = userCreationResponse.Data;
+                var response = registrationResponse.Data;
                 var token = await _authService.GetTokenAsync(new LoginRequest
                 {
-                    Username = user.Username,
+                    Username = username,
                     Password = Password.Value
                 });
 
                 // Store the needed credentials in the store.
                 await _storageService.SetAuthTokenAsync(token);
                 await _storageService.SetUsernameAsync(username);
-                await _storageService.SetUserIdAsync(user.Id);
+                await _storageService.SetUserIdAsync(response.UserId);
 
                 // Need to ensure the correct details are registered for push notifications.
                 await _restService.PostAsync("notifications/register",
@@ -269,7 +277,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Login
                     });
 
                 // Navigate to the verification page for the user to verify their account before use.
-                await NavigationService.NavigateAsync("VerificationPage");
+                await NavigationService.NavigateAsync("VerificationPage", new NavigationParameters
+                {
+                    { "qr-code", response.QrData }
+                });
             }
         }
 

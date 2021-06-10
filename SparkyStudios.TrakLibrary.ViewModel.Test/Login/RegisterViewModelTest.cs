@@ -204,7 +204,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _registerViewModel.ConfirmPassword.Value = "Password123";
 
             _authService.Setup(mock => mock.RegisterAsync(It.IsAny<RegistrationRequest>()))
-                .ReturnsAsync(new CheckedResponse<UserResponse> {Error = true, ErrorMessage = "error"});
+                .ReturnsAsync(new CheckedResponse<RegistrationResponse> {Error = true, ErrorMessage = "error"});
 
             // Act
             _registerViewModel.RegisterCommand.Execute().Subscribe();
@@ -227,12 +227,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _registerViewModel.ConfirmPassword.Value = "Password123";
 
             _authService.Setup(mock => mock.RegisterAsync(It.IsAny<RegistrationRequest>()))
-                .ReturnsAsync(new CheckedResponse<UserResponse>
+                .ReturnsAsync(new CheckedResponse<RegistrationResponse>
                 {
-                    Data = new UserResponse
+                    Data = new RegistrationResponse
                     {
-                        Id = 5L,
-                        Username = "Username"
+                        UserId = 5L,
+                        QrData = new byte[] {}
                     }
                 });
 
@@ -262,7 +262,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
 
             _storageService.Verify();
             _restService.Verify();
-            _navigationService.Verify(s => s.NavigateAsync("VerificationPage"), Times.Once);
+            _navigationService.Verify(s => s.NavigateAsync("VerificationPage", It.IsAny<NavigationParameters>()), Times.Once);
         }
 
         [Test]

@@ -58,7 +58,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             _scheduler.Start();
 
             // Assert
-            _storageService.Verify(s => s.GetUsernameAsync(), Times.Never);
+            _storageService.Verify(s => s.GetUserIdAsync(), Times.Never);
         }
 
         [Test]
@@ -67,10 +67,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             // Arrange
             _verificationViewModel.VerificationCode.Value = "SV1SD";
 
-            _storageService.Setup(mock => mock.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
+            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<long>(), It.IsAny<string>()))
                 .Throws(new TaskCanceledException());
 
             // Act
@@ -89,10 +89,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             // Arrange
             _verificationViewModel.VerificationCode.Value = "SV1SD";
 
-            _storageService.Setup(mock => mock.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
+            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<long>(), It.IsAny<string>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.Unauthorized});
 
             // Act
@@ -111,10 +111,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             // Arrange
             _verificationViewModel.VerificationCode.Value = "SV1SD";
 
-            _storageService.Setup(mock => mock.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
+            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<long>(), It.IsAny<string>()))
                 .Throws(new Exception());
 
             // Act
@@ -133,10 +133,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             // Arrange
             _verificationViewModel.VerificationCode.Value = "SV1SD";
 
-            _storageService.Setup(mock => mock.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
+            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<long>(), It.IsAny<string>()))
                 .ReturnsAsync(new CheckedResponse<bool> {Data = false, Error = true, ErrorMessage = "error message"});
 
             // Act
@@ -158,10 +158,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
             // Arrange
             _verificationViewModel.VerificationCode.Value = "SV1SD";
 
-            _storageService.Setup(mock => mock.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(1L);
             
-            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<string>(), It.IsAny<string>()))
+            _authService.Setup(mock => mock.VerifyAsync(It.IsAny<long>(), It.IsAny<string>()))
                 .ReturnsAsync(new CheckedResponse<bool> {Data = true});
 
             _navigationService.Setup(mock => mock.NavigateAsync("/BaseFlyoutPage/NavigationPage/HomePage"))
@@ -182,10 +182,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
         public void ResendVerificationCommand_ThrowsTaskCanceledException_SetsErrorMessageAsNoInternet()
         {
             // Arrange
-            _storageService.Setup(mock => mock.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(1L);
             
-            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<string>()))
+            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<long>()))
                 .Throws(new TaskCanceledException());
 
             // Act
@@ -203,10 +203,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
         public void ResendVerificationCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {
             // Arrange
-            _storageService.Setup(mock => mock.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(1L);
             
-            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<string>()))
+            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<long>()))
                 .Throws(new ApiException {StatusCode = HttpStatusCode.Unauthorized});
 
             // Act
@@ -224,10 +224,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
         public void ResendVerificationCommand_ThrowsNonApiException_SetsErrorMessageAsGeneric()
         {
             // Arrange
-            _storageService.Setup(mock => mock.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(1L);
             
-            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<string>()))
+            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<long>()))
                 .Throws(new Exception());
 
             // Act
@@ -245,10 +245,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Login
         public void ResendVerificationCommand_WithNoErrors_SendsEmailAndDisplaysAlert()
         {
             // Arrange
-            _storageService.Setup(mock => mock.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(mock => mock.GetUserIdAsync())
+                .ReturnsAsync(1L);
             
-            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<string>()))
+            _authService.Setup(mock => mock.ReVerifyAsync(It.IsAny<long>()))
                 .Verifiable();
 
             _userDialogs.Setup(mock => mock.AlertAsync(It.IsAny<string>(), It.IsAny<string>(), null, null))

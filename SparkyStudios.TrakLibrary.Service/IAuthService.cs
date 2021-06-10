@@ -9,22 +9,20 @@ namespace SparkyStudios.TrakLibrary.Service
     {
         Task<string> GetTokenAsync(LoginRequest userCredentials);
         
-        Task<CheckedResponse<bool>> VerifyAsync(string username, string verificationCode);
+        Task<CheckedResponse<bool>> VerifyAsync(long userId, string verificationCode);
 
-        Task ReVerifyAsync(string username);
+        Task ReVerifyAsync(long userId);
 
         Task RequestRecoveryAsync(string emailAddress);
         
-        Task<CheckedResponse<UserResponse>> RegisterAsync(RegistrationRequest registrationRequest);
+        Task<CheckedResponse<RegistrationResponse>> RegisterAsync(RegistrationRequest registrationRequest);
 
         Task<CheckedResponse<UserResponse>> RecoverAsync(RecoveryRequest recoveryRequest);
+        
+        Task<CheckedResponse<bool>> ChangePasswordAsync(long userId, ChangePasswordRequest changePasswordRequest);
 
-        Task RequestChangePasswordAsync(string username);
+        Task<CheckedResponse<bool>> ChangeEmailAddressAsync(long userId, ChangeEmailAddressRequest changeEmailAddressRequest);
 
-        Task<CheckedResponse<bool>> ChangePasswordAsync(string username, ChangePasswordRequest changePasswordRequest);
-
-        Task<CheckedResponse<bool>> ChangeEmailAddressAsync(string username, ChangeEmailAddressRequest changeEmailAddressRequest);
-
-        Task DeleteByUsernameAsync(string username);
+        Task DeleteByIdAsync(long userId);
     }
 }

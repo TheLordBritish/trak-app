@@ -14,7 +14,36 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <!--  Rows for username  -->
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <!--  Rows for email address  -->
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <!--  Rows for password  -->
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <!--  Rows for confirm password  -->
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <!--  Row for using MFA  -->
+                    <RowDefinition Height="Auto" />
+                    <!--  Row for privacy policy  -->
+                    <RowDefinition Height="Auto" />
+                    <!--  Row for password rules  -->
+                    <RowDefinition Height="Auto" />
+                    <!--  Row for server error message  -->
+                    <RowDefinition Height="Auto" />
+                    <!--  Row for sign up button  -->
+                    <RowDefinition Height="Auto" />
+                    <!--  Row for existing account  -->
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*" />
@@ -33,193 +62,259 @@
                     </Image.GestureRecognizers>
                 </Image>
 
-                <StackLayout
+                <!--  Page title  -->
+                <Label
                     Grid.Row="1"
                     Grid.Column="0"
-                    Grid.ColumnSpan="2">
+                    Grid.ColumnSpan="2"
+                    Margin="0,25,0,20"
+                    LineBreakMode="WordWrap"
+                    Style="{StaticResource TitleLabelStyle}"
+                    Text="{extensions:Translate RegisterPageTitle}" />
 
-                    <!--  Page title  -->
-                    <Label
-                        Margin="0,25,0,20"
-                        LineBreakMode="WordWrap"
-                        Style="{StaticResource TitleLabelStyle}"
-                        Text="{extensions:Translate RegisterPageTitle}" />
+                <!--  Username label and entry box.  -->
+                <Label
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Style="{StaticResource EntryLabelStyle}"
+                    Text="{extensions:Translate RegisterPageUsername}" />
+                <controls:BorderedEntry
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    AutomationId="RegisterPageUsernameEntry"
+                    BorderColor="{StaticResource TrakWhite}"
+                    BorderThickness="4"
+                    Text="{Binding Username.Value}">
+                    <controls:BorderedEntry.Behaviors>
+                        <xct:EventToCommandBehavior
+                            Command="{Binding ClearValidationCommand}"
+                            CommandParameter="Username"
+                            EventName="Focused" />
+                    </controls:BorderedEntry.Behaviors>
+                    <controls:BorderedEntry.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Username.IsValid}"
+                            TargetType="controls:BorderedEntry"
+                            Value="False">
+                            <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
+                        </DataTrigger>
+                    </controls:BorderedEntry.Triggers>
+                </controls:BorderedEntry>
+                <Label
+                    Grid.Row="4"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    IsEnabled="{Binding Username.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                    IsVisible="{Binding Username.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                    Style="{StaticResource ValidationLabelStyle}"
+                    Text="{Binding Username.FirstError}" />
 
-                    <!--  Username label and entry box.  -->
-                    <Label Style="{StaticResource EntryLabelStyle}" Text="{extensions:Translate RegisterPageUsername}" />
-                    <controls:BorderedEntry
-                        AutomationId="RegisterPageUsernameEntry"
-                        BorderColor="{StaticResource TrakWhite}"
-                        BorderThickness="4"
-                        Text="{Binding Username.Value}">
-                        <controls:BorderedEntry.Behaviors>
-                            <xct:EventToCommandBehavior
-                                Command="{Binding ClearValidationCommand}"
-                                CommandParameter="Username"
-                                EventName="Focused" />
-                        </controls:BorderedEntry.Behaviors>
-                        <controls:BorderedEntry.Triggers>
-                            <DataTrigger
-                                Binding="{Binding Username.IsValid}"
-                                TargetType="controls:BorderedEntry"
-                                Value="False">
-                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
-                            </DataTrigger>
-                        </controls:BorderedEntry.Triggers>
-                    </controls:BorderedEntry>
-                    <Label
-                        IsEnabled="{Binding Username.IsValid, Converter={StaticResource InvertedBoolConverter}}"
-                        IsVisible="{Binding Username.IsValid, Converter={StaticResource InvertedBoolConverter}}"
-                        Style="{StaticResource ValidationLabelStyle}"
-                        Text="{Binding Username.FirstError}" />
+                <!--  Email address label and entry box.  -->
+                <Label
+                    Grid.Row="5"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,20,0,0"
+                    Style="{StaticResource EntryLabelStyle}"
+                    Text="{extensions:Translate RegisterPageEmailAddress}" />
+                <controls:BorderedEntry
+                    Grid.Row="6"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    AutomationId="RegisterPageEmailAddressEntry"
+                    BorderColor="{StaticResource TrakWhite}"
+                    BorderThickness="4"
+                    Text="{Binding EmailAddress.Value}">
+                    <controls:BorderedEntry.Behaviors>
+                        <xct:EventToCommandBehavior
+                            Command="{Binding ClearValidationCommand}"
+                            CommandParameter="EmailAddress"
+                            EventName="Focused" />
+                    </controls:BorderedEntry.Behaviors>
+                    <controls:BorderedEntry.Triggers>
+                        <DataTrigger
+                            Binding="{Binding EmailAddress.IsValid}"
+                            TargetType="controls:BorderedEntry"
+                            Value="False">
+                            <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
+                        </DataTrigger>
+                    </controls:BorderedEntry.Triggers>
+                </controls:BorderedEntry>
+                <Label
+                    Grid.Row="7"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    IsEnabled="{Binding EmailAddress.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                    IsVisible="{Binding EmailAddress.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                    Style="{StaticResource ValidationLabelStyle}"
+                    Text="{Binding EmailAddress.FirstError}" />
 
-                    <!--  Email address label and entry box.  -->
-                    <Label
-                        Margin="0,20,0,0"
-                        Style="{StaticResource EntryLabelStyle}"
-                        Text="{extensions:Translate RegisterPageEmailAddress}" />
-                    <controls:BorderedEntry
-                        AutomationId="RegisterPageEmailAddressEntry"
-                        BorderColor="{StaticResource TrakWhite}"
-                        BorderThickness="4"
-                        Text="{Binding EmailAddress.Value}">
-                        <controls:BorderedEntry.Behaviors>
-                            <xct:EventToCommandBehavior
-                                Command="{Binding ClearValidationCommand}"
-                                CommandParameter="EmailAddress"
-                                EventName="Focused" />
-                        </controls:BorderedEntry.Behaviors>
-                        <controls:BorderedEntry.Triggers>
-                            <DataTrigger
-                                Binding="{Binding EmailAddress.IsValid}"
-                                TargetType="controls:BorderedEntry"
-                                Value="False">
-                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
-                            </DataTrigger>
-                        </controls:BorderedEntry.Triggers>
-                    </controls:BorderedEntry>
-                    <Label
-                        IsEnabled="{Binding EmailAddress.IsValid, Converter={StaticResource InvertedBoolConverter}}"
-                        IsVisible="{Binding EmailAddress.IsValid, Converter={StaticResource InvertedBoolConverter}}"
-                        Style="{StaticResource ValidationLabelStyle}"
-                        Text="{Binding EmailAddress.FirstError}" />
+                <!--  Password label and entry box.  -->
+                <Label
+                    Grid.Row="8"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,20,0,0"
+                    Style="{StaticResource EntryLabelStyle}"
+                    Text="{extensions:Translate RegisterPagePassword}" />
+                <controls:BorderedEntry
+                    Grid.Row="9"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    AutomationId="RegisterPagePasswordEntry"
+                    BorderColor="{StaticResource TrakWhite}"
+                    BorderThickness="4"
+                    IsPassword="True"
+                    Text="{Binding Password.Value}">
+                    <controls:BorderedEntry.Behaviors>
+                        <xct:EventToCommandBehavior
+                            Command="{Binding ClearValidationCommand}"
+                            CommandParameter="Password"
+                            EventName="Focused" />
+                    </controls:BorderedEntry.Behaviors>
+                    <controls:BorderedEntry.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Password.IsValid}"
+                            TargetType="controls:BorderedEntry"
+                            Value="False">
+                            <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
+                        </DataTrigger>
+                    </controls:BorderedEntry.Triggers>
+                </controls:BorderedEntry>
+                <Label
+                    Grid.Row="10"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    IsEnabled="{Binding Password.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                    IsVisible="{Binding Password.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                    Style="{StaticResource ValidationLabelStyle}"
+                    Text="{Binding Password.FirstError}" />
 
-                    <!--  Password label and entry box.  -->
-                    <Label
-                        Margin="0,20,0,0"
-                        Style="{StaticResource EntryLabelStyle}"
-                        Text="{extensions:Translate RegisterPagePassword}" />
-                    <controls:BorderedEntry
-                        AutomationId="RegisterPagePasswordEntry"
-                        BorderColor="{StaticResource TrakWhite}"
-                        BorderThickness="4"
-                        IsPassword="True"
-                        Text="{Binding Password.Value}">
-                        <controls:BorderedEntry.Behaviors>
-                            <xct:EventToCommandBehavior
-                                Command="{Binding ClearValidationCommand}"
-                                CommandParameter="Password"
-                                EventName="Focused" />
-                        </controls:BorderedEntry.Behaviors>
-                        <controls:BorderedEntry.Triggers>
-                            <DataTrigger
-                                Binding="{Binding Password.IsValid}"
-                                TargetType="controls:BorderedEntry"
-                                Value="False">
-                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
-                            </DataTrigger>
-                        </controls:BorderedEntry.Triggers>
-                    </controls:BorderedEntry>
-                    <Label
-                        IsEnabled="{Binding Password.IsValid, Converter={StaticResource InvertedBoolConverter}}"
-                        IsVisible="{Binding Password.IsValid, Converter={StaticResource InvertedBoolConverter}}"
-                        Style="{StaticResource ValidationLabelStyle}"
-                        Text="{Binding Password.FirstError}" />
+                <!--  Confirm password label and entry box.  -->
+                <Label
+                    Grid.Row="11"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,20,0,0"
+                    Style="{StaticResource EntryLabelStyle}"
+                    Text="{extensions:Translate RegisterPageConfirmPassword}" />
+                <controls:BorderedEntry
+                    Grid.Row="12"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    AutomationId="RegisterPageConfirmPasswordEntry"
+                    BorderColor="{StaticResource TrakWhite}"
+                    BorderThickness="4"
+                    IsPassword="True"
+                    Text="{Binding ConfirmPassword.Value}">
+                    <controls:BorderedEntry.Behaviors>
+                        <xct:EventToCommandBehavior
+                            Command="{Binding ClearValidationCommand}"
+                            CommandParameter="ConfirmPassword"
+                            EventName="Focused" />
+                    </controls:BorderedEntry.Behaviors>
+                    <controls:BorderedEntry.Triggers>
+                        <DataTrigger
+                            Binding="{Binding ConfirmPassword.IsValid}"
+                            TargetType="controls:BorderedEntry"
+                            Value="False">
+                            <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
+                        </DataTrigger>
+                    </controls:BorderedEntry.Triggers>
+                </controls:BorderedEntry>
+                <Label
+                    Grid.Row="13"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    IsEnabled="{Binding ConfirmPassword.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                    IsVisible="{Binding ConfirmPassword.IsValid, Converter={StaticResource InvertedBoolConverter}}"
+                    Style="{StaticResource ValidationLabelStyle}"
+                    Text="{Binding ConfirmPassword.FirstError}" />
 
-                    <!--  Confirm password label and entry box.  -->
-                    <Label
-                        Margin="0,20,0,0"
-                        Style="{StaticResource EntryLabelStyle}"
-                        Text="{extensions:Translate RegisterPageConfirmPassword}" />
-                    <controls:BorderedEntry
-                        AutomationId="RegisterPageConfirmPasswordEntry"
-                        BorderColor="{StaticResource TrakWhite}"
-                        BorderThickness="4"
-                        IsPassword="True"
-                        Text="{Binding ConfirmPassword.Value}">
-                        <controls:BorderedEntry.Behaviors>
-                            <xct:EventToCommandBehavior
-                                Command="{Binding ClearValidationCommand}"
-                                CommandParameter="ConfirmPassword"
-                                EventName="Focused" />
-                        </controls:BorderedEntry.Behaviors>
-                        <controls:BorderedEntry.Triggers>
-                            <DataTrigger
-                                Binding="{Binding ConfirmPassword.IsValid}"
-                                TargetType="controls:BorderedEntry"
-                                Value="False">
-                                <Setter Property="BorderColor" Value="{StaticResource TrakPrimaryPurple}" />
-                            </DataTrigger>
-                        </controls:BorderedEntry.Triggers>
-                    </controls:BorderedEntry>
-                    <Label
-                        IsEnabled="{Binding ConfirmPassword.IsValid, Converter={StaticResource InvertedBoolConverter}}"
-                        IsVisible="{Binding ConfirmPassword.IsValid, Converter={StaticResource InvertedBoolConverter}}"
-                        Style="{StaticResource ValidationLabelStyle}"
-                        Text="{Binding ConfirmPassword.FirstError}" />
+                <!--  Multi factor authentication  -->
+                <Label
+                    Grid.Row="14"
+                    Grid.Column="0"
+                    Text="{extensions:Translate RegisterPageUseMultiFactorAuthentication}" />
+                <Switch
+                    Grid.Row="14"
+                    Grid.Column="1"
+                    IsToggled="{Binding MultiFactorAuthentication}" />
 
-                    <!--  Privacy policy and terms of use label.  -->
-                    <Label
-                        Margin="0,10,0,0"
-                        AutomationId="RegisterPagePrivacyPolicyLabel"
-                        FontSize="{StaticResource TrakFontSmall}"
-                        Text="{extensions:Translate RegisterPagePrivacyPolicyAndTermsOfUse}" />
+                <!--  Privacy policy and terms of use label.  -->
+                <Label
+                    Grid.Row="15"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,10,0,0"
+                    AutomationId="RegisterPagePrivacyPolicyLabel"
+                    FontSize="{StaticResource TrakFontSmall}"
+                    Text="{extensions:Translate RegisterPagePrivacyPolicyAndTermsOfUse}" />
 
-                    <!--  Password rules label.  -->
-                    <Label
-                        Margin="0,10,0,0"
-                        Style="{StaticResource ValidationLabelStyle}"
-                        Text="{extensions:Translate PasswordRules}" />
+                <!--  Password rules label.  -->
+                <Label
+                    Grid.Row="16"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,10,0,0"
+                    Style="{StaticResource ValidationLabelStyle}"
+                    Text="{extensions:Translate PasswordRules}" />
 
-                    <!--  Display error messages if anything went wrong.  -->
-                    <Label
-                        Margin="0,5"
-                        AutomationId="RegisterPageErrorMessage"
-                        IsEnabled="{Binding IsError}"
-                        IsVisible="{Binding IsError}"
-                        Style="{StaticResource ValidationLabelStyle}"
-                        Text="{Binding ErrorMessage}" />
+                <!--  Display error messages if anything went wrong.  -->
+                <Label
+                    Grid.Row="17"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,5"
+                    AutomationId="RegisterPageErrorMessage"
+                    IsEnabled="{Binding IsError}"
+                    IsVisible="{Binding IsError}"
+                    Style="{StaticResource ValidationLabelStyle}"
+                    Text="{Binding ErrorMessage}" />
 
-                    <!--  Sign up button and activity indicator.  -->
-                    <Button
-                        Margin="0,20,0,0"
-                        AutomationId="RegisterPageSignUpButton"
-                        Command="{Binding RegisterCommand}"
-                        IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
-                        Style="{StaticResource PrimaryButtonStyle}"
-                        Text="{extensions:Translate RegisterPageSignUp}" />
-                    <ActivityIndicator
-                        Margin="0,20,0,0"
-                        IsRunning="{Binding IsLoading}"
-                        IsVisible="{Binding IsLoading}" />
+                <!--  Sign up button and activity indicator.  -->
+                <Button
+                    Grid.Row="18"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,20,0,0"
+                    AutomationId="RegisterPageSignUpButton"
+                    Command="{Binding RegisterCommand}"
+                    IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Text="{extensions:Translate RegisterPageSignUp}" />
+                <ActivityIndicator
+                    Grid.Row="18"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,20,0,0"
+                    IsRunning="{Binding IsLoading}"
+                    IsVisible="{Binding IsLoading}" />
 
-                    <!--  Log in label.  -->
-                    <Label
-                        Margin="0,20,0,0"
-                        FontSize="{StaticResource TrakFontSmall}"
-                        HorizontalOptions="Center"
-                        Text="{extensions:Translate RegisterPageAlreadyHaveAccount}"
-                        VerticalOptions="EndAndExpand" />
-                    <Label
-                        FontSize="{StaticResource TrakFontSmall}"
-                        HorizontalOptions="Center"
-                        Style="{StaticResource BaseBoldLabelStyle}"
-                        Text="{extensions:Translate RegisterPageLogIn}">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding LoginCommand}" NumberOfTapsRequired="1" />
-                        </Label.GestureRecognizers>
-                    </Label>
-                </StackLayout>
+                <!--  Log in label.  -->
+                <Label
+                    Grid.Row="19"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,20,0,0"
+                    FontSize="{StaticResource TrakFontSmall}"
+                    HorizontalOptions="Center"
+                    Text="{extensions:Translate RegisterPageAlreadyHaveAccount}"
+                    VerticalOptions="EndAndExpand" />
+                <Label
+                    Grid.Row="20"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    FontSize="{StaticResource TrakFontSmall}"
+                    HorizontalOptions="Center"
+                    Style="{StaticResource BaseBoldLabelStyle}"
+                    Text="{extensions:Translate RegisterPageLogIn}">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding LoginCommand}" NumberOfTapsRequired="1" />
+                    </Label.GestureRecognizers>
+                </Label>
             </Grid>
         </ScrollView>
     </ContentPage.Content>

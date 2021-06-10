@@ -10,5 +10,7 @@ namespace SparkyStudios.TrakLibrary.Model.Login
         public string EmailAddress { get; set; }
 
         public string Password { get; set; }
+
+        public bool UseMultiFactorAuthentication { get; set; }
     }
 }

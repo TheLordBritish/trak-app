@@ -96,7 +96,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Settings
         /// <returns>A <see cref="Task"/> which specifies whether the asynchronous task completed successfully.</returns>
         private async Task ChangePasswordAsync()
         {
-            await NavigationService.NavigateAsync("RequestChangePasswordPage");
+            await NavigationService.NavigateAsync("ChangePasswordPage");
         }
         
         /// <summary>

@@ -22,7 +22,6 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
     {
         private Mock<INavigationService> _navigationService;
         private Mock<IStorageService> _storageService;
-        private Mock<IRestService> _restService;
         private Mock<IAuthService> _authService;
         private Mock<IUserDialogs> _userDialogs;
         private TestScheduler _scheduler;
@@ -34,13 +33,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
         {
             _navigationService = new Mock<INavigationService>();
             _storageService = new Mock<IStorageService>();
-            _restService = new Mock<IRestService>();
             _authService = new Mock<IAuthService>();
             _userDialogs = new Mock<IUserDialogs>();
             _scheduler = new TestScheduler();
 
             _changePasswordViewModel = new ChangePasswordViewModel(_scheduler, _navigationService.Object,
-                _storageService.Object, _restService.Object, _authService.Object, _userDialogs.Object);
+                _storageService.Object, _authService.Object, _userDialogs.Object);
         }
 
         [Test]
@@ -62,21 +60,21 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             _scheduler.Start();
 
             // Assert
-            _authService.Verify(a => a.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()), Times.Never);
+            _authService.Verify(a => a.ChangePasswordAsync(It.IsAny<long>(), It.IsAny<ChangePasswordRequest>()), Times.Never);
         }
 
         [Test]
         public void ChangeCommand_ThrowsTaskCanceledException_SetsErrorMessageAsNoInternet()
         {
             // Arrange
-            _changePasswordViewModel.ResetToken.Value = string.Concat(Enumerable.Repeat("a", 30));
+            _changePasswordViewModel.CurrentPassword.Value = string.Concat(Enumerable.Repeat("a", 30));
             _changePasswordViewModel.NewPassword.Value = "Password123";
             _changePasswordViewModel.ConfirmNewPassword.Value = "Password123";
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()))
+            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<long>(), It.IsAny<ChangePasswordRequest>()))
                 .Throws(new TaskCanceledException());
 
             // Act
@@ -96,14 +94,14 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
         public void ChangeCommand_ThrowsApiException_SetsErrorMessageAsApiError()
         {
             // Arrange
-            _changePasswordViewModel.ResetToken.Value = string.Concat(Enumerable.Repeat("a", 30));
+            _changePasswordViewModel.CurrentPassword.Value = string.Concat(Enumerable.Repeat("a", 30));
             _changePasswordViewModel.NewPassword.Value = "Password123";
             _changePasswordViewModel.ConfirmNewPassword.Value = "Password123";
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()))
+            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<long>(), It.IsAny<ChangePasswordRequest>()))
                 .Throws(new ApiException());
 
             // Act
@@ -123,14 +121,14 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
         public void ChangeCommand_ThrowsException_SetsErrorMessageAsApiGeneric()
         {
             // Arrange
-            _changePasswordViewModel.ResetToken.Value = string.Concat(Enumerable.Repeat("a", 30));
+            _changePasswordViewModel.CurrentPassword.Value = string.Concat(Enumerable.Repeat("a", 30));
             _changePasswordViewModel.NewPassword.Value = "Password123";
             _changePasswordViewModel.ConfirmNewPassword.Value = "Password123";
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()))
+            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<long>(), It.IsAny<ChangePasswordRequest>()))
                 .Throws(new Exception());
 
             // Act
@@ -150,12 +148,12 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
         public void ChangeCommand_WithCheckedResponseError_SetsErrorMessage()
         {
             // Arrange
-            _changePasswordViewModel.ResetToken.Value = string.Concat(Enumerable.Repeat("a", 30));
+            _changePasswordViewModel.CurrentPassword.Value = string.Concat(Enumerable.Repeat("a", 30));
             _changePasswordViewModel.NewPassword.Value = "Password123";
             _changePasswordViewModel.ConfirmNewPassword.Value = "Password123";
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
             var response = new CheckedResponse<bool>
             {
@@ -163,7 +161,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
                 ErrorMessage = "error-message"
             };
             
-            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()))
+            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<long>(), It.IsAny<ChangePasswordRequest>()))
                 .ReturnsAsync(response);
             
             // Act
@@ -183,32 +181,20 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
         public void ChangeCommand_WithSuccessfulCheckedResponse_LogsOutAndNavigatesToLoginPage()
         {
             // Arrange
-            _changePasswordViewModel.ResetToken.Value = string.Concat(Enumerable.Repeat("a", 30));
+            _changePasswordViewModel.CurrentPassword.Value = string.Concat(Enumerable.Repeat("a", 30));
             _changePasswordViewModel.NewPassword.Value = "Password123";
             _changePasswordViewModel.ConfirmNewPassword.Value = "Password123";
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
             
-            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<string>(), It.IsAny<ChangePasswordRequest>()))
+            _authService.Setup(m => m.ChangePasswordAsync(It.IsAny<long>(), It.IsAny<ChangePasswordRequest>()))
                 .ReturnsAsync(new CheckedResponse<bool>
                 {
                     Error = false
                 });
-
-            _storageService.Setup(m => m.GetUserIdAsync())
-                .ReturnsAsync(0L);
-
-            _storageService.Setup(m => m.GetDeviceIdAsync())
-                .ReturnsAsync(Guid.Empty);
             
-            _restService.Setup(m => m.DeleteAsync(It.IsAny<string>()))
-                .Verifiable();
-
-            _storageService.Setup(m => m.ClearCredentialsAsync())
-                .Verifiable();
-
-            _navigationService.Setup(m => m.NavigateAsync("/LoginPage"))
+            _navigationService.Setup(m => m.NavigateAsync("HomePage"))
                 .ReturnsAsync(new NavigationResult());
 
             _userDialogs.Setup(m => m.AlertAsync(It.IsAny<AlertConfig>(), null))
@@ -220,8 +206,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             
             // Assert
             Assert.IsFalse(_changePasswordViewModel.IsError, "vm.IsError should be false if login was successful.");
-
-            _restService.Verify();
+            
             _storageService.Verify();
             _userDialogs.Verify();
         }

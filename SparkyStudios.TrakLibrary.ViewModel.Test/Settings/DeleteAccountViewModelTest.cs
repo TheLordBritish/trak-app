@@ -62,7 +62,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             _scheduler.Start();
 
             // Assert
-            _authService.Verify(a => a.DeleteByUsernameAsync(It.IsAny<string>()), Times.Never);
+            _authService.Verify(a => a.DeleteByIdAsync(It.IsAny<long>()), Times.Never);
         }
 
         [Test]
@@ -71,10 +71,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             // Arrange
             _deleteAccountViewModel.DeleteMe.Value = Messages.DeleteAccountPageDeleteMe;
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(m => m.DeleteByUsernameAsync(It.IsAny<string>()))
+            _authService.Setup(m => m.DeleteByIdAsync(It.IsAny<long>()))
                 .Throws(new TaskCanceledException());
 
             // Act
@@ -96,10 +96,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             // Arrange
             _deleteAccountViewModel.DeleteMe.Value = Messages.DeleteAccountPageDeleteMe;
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(m => m.DeleteByUsernameAsync(It.IsAny<string>()))
+            _authService.Setup(m => m.DeleteByIdAsync(It.IsAny<long>()))
                 .Throws(new ApiException());
 
             // Act
@@ -121,10 +121,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             // Arrange
             _deleteAccountViewModel.DeleteMe.Value = Messages.DeleteAccountPageDeleteMe;
             
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
 
-            _authService.Setup(m => m.DeleteByUsernameAsync(It.IsAny<string>()))
+            _authService.Setup(m => m.DeleteByIdAsync(It.IsAny<long>()))
                 .Throws(new Exception());
             
             // Act
@@ -146,10 +146,10 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
             // Arrange
             _deleteAccountViewModel.DeleteMe.Value = Messages.DeleteAccountPageDeleteMe;
 
-            _storageService.Setup(m => m.GetUsernameAsync())
-                .ReturnsAsync("username");
+            _storageService.Setup(m => m.GetUserIdAsync())
+                .ReturnsAsync(1L);
             
-            _authService.Setup(m => m.DeleteByUsernameAsync(It.IsAny<string>()))
+            _authService.Setup(m => m.DeleteByIdAsync(It.IsAny<long>()))
                 .Verifiable();
 
             _storageService.Setup(m => m.GetUserIdAsync())

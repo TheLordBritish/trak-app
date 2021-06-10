@@ -30,7 +30,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Settings
         [Test]
         public void ChangePasswordCommand_WithNoData_DoesntThrowException()
         {
-            _navigationService.Setup(mock => mock.NavigateAsync("RequestChangePasswordPage"))
+            _navigationService.Setup(mock => mock.NavigateAsync("ChangePasswordPage"))
                 .Verifiable();
             
             Assert.DoesNotThrow(() =>

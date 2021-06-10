@@ -85,8 +85,7 @@ namespace SparkyStudios.TrakLibrary
             containerRegistry.RegisterForNavigation<ChangeEmailAddressPage, ChangeEmailAddressViewModel>();
             containerRegistry.RegisterForNavigation<ChangePasswordPage, ChangePasswordViewModel>();
             containerRegistry.RegisterForNavigation<DeleteAccountPage, DeleteAccountViewModel>();
-            containerRegistry.RegisterForNavigation<RequestChangePasswordPage, RequestChangePasswordViewModel>();
-            
+
             // Game pages
             containerRegistry.Register<GameUserEntryBacklogListViewModel>();
             containerRegistry.Register<GameUserEntryInProgressListViewModel>();

@@ -5,7 +5,7 @@ namespace SparkyStudios.TrakLibrary.Model.Settings.Validation
     [ExcludeFromCodeCoverage]
     public class ChangePasswordDetails
     {
-        public string RecoveryToken { get; set; }
+        public string CurrentPassword { get; set; }
         
         public string NewPassword { get; set; }
         

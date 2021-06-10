@@ -11,9 +11,9 @@
         <DataTemplate x:DataType="games:AgeRating">
             <Image
                 Aspect="AspectFit"
+                HeightRequest="90"
                 VerticalOptions="End"
-                WidthRequest="70"
-                HeightRequest="90">
+                WidthRequest="70">
                 <Image.Triggers>
                     <MultiTrigger TargetType="Image">
                         <MultiTrigger.Conditions>

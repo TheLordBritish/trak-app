@@ -10,7 +10,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
     public class ChangePasswordDetailsValidatorTest
     {
         [Test]
-        public void Validate_WithNullRecoveryToken_ValidationFails()
+        public void Validate_WithNullCurrentPassword_ValidationFails()
         {
             // Arrange
             var validator = new ChangePasswordDetailsValidator();
@@ -19,13 +19,13 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             var result = validator.Validate(new ChangePasswordDetails());
 
             // Assert
-            Assert.AreEqual(Messages.RecoveryErrorMessageRecoveryTokenEmpty,
+            Assert.AreEqual(Messages.ChangePasswordErrorMessageCurrentPasswordEmpty,
                 result.Errors.First().ErrorMessage);
             Assert.IsFalse(result.IsValid, "result.IsValid should be false for a null recovery token.");
         }
 
         [Test]
-        public void Validate_WithEmptyRecoveryToken_ValidationFails()
+        public void Validate_WithEmptyCurrentPassword_ValidationFails()
         {
             // Arrange
             var validator = new ChangePasswordDetailsValidator();
@@ -33,17 +33,17 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = string.Empty
+                CurrentPassword = string.Empty
             });
 
             // Assert
-            Assert.AreEqual(Messages.RecoveryErrorMessageRecoveryTokenEmpty,
+            Assert.AreEqual(Messages.ChangePasswordErrorMessageCurrentPasswordEmpty,
                 result.Errors.First().ErrorMessage);
             Assert.IsFalse(result.IsValid, "result.IsValid should be false for an empty recovery token.");
         }
 
         [Test]
-        public void Validate_WithRecoveryTokenContainingWhitespace_ValidationFails()
+        public void Validate_WithCurrentPasswordContainingWhitespace_ValidationFails()
         {
             // Arrange
             var validator = new ChangePasswordDetailsValidator();
@@ -51,54 +51,15 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = "token   "
+                CurrentPassword = "password   "
             });
 
             // Assert
-            Assert.AreEqual(Messages.RecoveryErrorMessageRecoveryTokenWhitespace,
+            Assert.AreEqual(Messages.ChangePasswordErrorMessageCurrentPasswordWhitespace,
                 result.Errors.First().ErrorMessage);
             Assert.IsFalse(result.IsValid,
                 "result.IsValid should be false for a recovery token containing white space.");
         }
-
-        [Test]
-        public void Validate_WithRecoveryTokenOfIncorrectLength_ValidationFails()
-        {
-            // Arrange
-            var validator = new ChangePasswordDetailsValidator();
-
-            // Act
-            var result = validator.Validate(new ChangePasswordDetails
-            {
-                RecoveryToken = "token"
-            });
-
-            // Assert
-            Assert.AreEqual(Messages.RecoveryErrorMessageRecoveryTokenLength,
-                result.Errors.First().ErrorMessage);
-            Assert.IsFalse(result.IsValid,
-                "result.IsValid should be false if a recovery token is not 30 characters long.");
-        }
-
-        [Test]
-        public void Validate_WithRecoveryTokenWithNonAlphaNumericCharacters_ValidationFails()
-        {
-            // Arrange
-            var validator = new ChangePasswordDetailsValidator();
-
-            // Act
-            var result = validator.Validate(new ChangePasswordDetails
-            {
-                RecoveryToken = string.Concat(Enumerable.Repeat("a", 29)) + "@"
-            });
-
-            // Assert
-            Assert.AreEqual(Messages.RecoveryErrorMessageRecoveryTokenAlphanumeric,
-                result.Errors.First().ErrorMessage);
-            Assert.IsFalse(result.IsValid,
-                "result.IsValid should be false if a recovery token contains non-alphanumeric characters.");
-        }
-
         
         [Test]
         public void Validate_WithNullNewPassword_ValidationFails()
@@ -109,7 +70,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = string.Concat(Enumerable.Repeat("a", 30)),
+                CurrentPassword = string.Concat(Enumerable.Repeat("a", 30)),
                 ConfirmNewPassword = "Password123"
             });
 
@@ -128,7 +89,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = string.Concat(Enumerable.Repeat("a", 30)),
+                CurrentPassword = string.Concat(Enumerable.Repeat("a", 30)),
                 NewPassword = string.Empty,
                 ConfirmNewPassword = "Password123"
             });
@@ -148,7 +109,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = string.Concat(Enumerable.Repeat("a", 30)),
+                CurrentPassword = string.Concat(Enumerable.Repeat("a", 30)),
                 NewPassword = "Less1",
                 ConfirmNewPassword = "Password123"
             });
@@ -168,7 +129,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = string.Concat(Enumerable.Repeat("a", 30)),
+                CurrentPassword = string.Concat(Enumerable.Repeat("a", 30)),
                 NewPassword = "password123",
                 ConfirmNewPassword = "Password123"
             });
@@ -189,7 +150,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = string.Concat(Enumerable.Repeat("a", 30)),
+                CurrentPassword = string.Concat(Enumerable.Repeat("a", 30)),
                 NewPassword = "PASSWORD123",
                 ConfirmNewPassword = "Password123"
             });
@@ -210,7 +171,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = string.Concat(Enumerable.Repeat("a", 30)),
+                CurrentPassword = string.Concat(Enumerable.Repeat("a", 30)),
                 NewPassword = "PasswordIsLong",
                 ConfirmNewPassword = "Password123"
             });
@@ -230,7 +191,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = string.Concat(Enumerable.Repeat("a", 30)),
+                CurrentPassword = string.Concat(Enumerable.Repeat("a", 30)),
                 NewPassword = "Password 123",
                 ConfirmNewPassword = "Password123"
             });
@@ -251,7 +212,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = string.Concat(Enumerable.Repeat("a", 30)),
+                CurrentPassword = string.Concat(Enumerable.Repeat("a", 30)),
                 NewPassword = "Password123"
             });
             
@@ -270,7 +231,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = string.Concat(Enumerable.Repeat("a", 30)),
+                CurrentPassword = string.Concat(Enumerable.Repeat("a", 30)),
                 NewPassword = "Password123",
                 ConfirmNewPassword = string.Empty
             });
@@ -290,7 +251,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = string.Concat(Enumerable.Repeat("a", 30)),
+                CurrentPassword = string.Concat(Enumerable.Repeat("a", 30)),
                 NewPassword = "Password1234",
                 ConfirmNewPassword = "Password123"
             });
@@ -310,7 +271,7 @@ namespace SparkyStudios.TrakLibrary.ViewModel.Test.Validation
             // Act
             var result = validator.Validate(new ChangePasswordDetails
             {
-                RecoveryToken = string.Concat(Enumerable.Repeat("a", 30)),
+                CurrentPassword = string.Concat(Enumerable.Repeat("a", 30)),
                 NewPassword = "Password123",
                 ConfirmNewPassword = "Password123"
             });
